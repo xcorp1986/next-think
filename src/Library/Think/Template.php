@@ -1,13 +1,6 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
+
     namespace Think;
     /**
      * 内置模板引擎类
@@ -89,7 +82,6 @@
          * @param string $templateFile 模板文件
          * @param string $prefix       模板标识前缀
          * @return string
-         * @throws ThinkExecption
          */
         public function loadTemplate($templateFile, $prefix = '')
         {
@@ -259,7 +251,11 @@
             return $content;
         }
 
-        // 解析模板中的extend标签
+        /**
+         * 解析模板中的extend标签
+         * @param $content
+         * @return mixed|string
+         */
         protected function parseExtend($content)
         {
             $begin = $this->config['taglib_begin'];
@@ -499,9 +495,7 @@
         public function parseTag($tagStr)
         {
             if (is_array($tagStr)) $tagStr = $tagStr[2];
-            //if (MAGIC_QUOTES_GPC) {
             $tagStr = stripslashes($tagStr);
-            //}
             $flag = substr($tagStr, 0, 1);
             $flag2 = substr($tagStr, 1, 1);
             $name = substr($tagStr, 1);

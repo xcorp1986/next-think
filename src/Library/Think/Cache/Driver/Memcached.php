@@ -1,13 +1,5 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2013 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: 何辉 <runphp@qq.com>
-// +----------------------------------------------------------------------
+
 
     namespace Think\Cache\Driver;
 
@@ -61,10 +53,10 @@
         /**
          * 写入缓存
          * @access public
-         * @param string  $name   缓存变量名
-         * @param mixed   $value  存储数据
-         * @param integer $expire 有效时间（秒）
-         * @return boolean
+         * @param string $name   缓存变量名
+         * @param mixed  $value  存储数据
+         * @param int    $expire 有效时间（秒）
+         * @return bool
          */
         public function set($name, $value, $expire = null)
         {
@@ -89,7 +81,7 @@
          * 删除缓存
          * @access public
          * @param string $name 缓存变量名
-         * @return boolean
+         * @return bool
          */
         public function rm($name, $ttl = false)
         {
@@ -103,7 +95,7 @@
         /**
          * 清除缓存
          * @access public
-         * @return boolean
+         * @return bool
          */
         public function clear()
         {

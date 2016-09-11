@@ -1,23 +1,16 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
+
     namespace Think;
     /**
-     * 控制器基类 抽象类
+     * 控制器基类
      */
     abstract class Controller
     {
 
         /**
          * 视图实例对象
-         * @var view
+         * @var \Think\View $view
          * @access protected
          */
         protected $view = null;
@@ -111,7 +104,7 @@
          * 模板主题设置
          * @access protected
          * @param string $theme 模版主题
-         * @return Action
+         * @return $this
          */
         protected function theme($theme)
         {
@@ -125,7 +118,7 @@
          * @access protected
          * @param mixed $name  要显示的模板变量
          * @param mixed $value 变量的值
-         * @return Action
+         * @return $this
          */
         protected function assign($name, $value = '')
         {
@@ -159,7 +152,7 @@
          * 检测模板变量的值
          * @access public
          * @param string $name 名称
-         * @return boolean
+         * @return bool
          */
         public function __isset($name)
         {
@@ -256,10 +249,10 @@
         /**
          * Action跳转(URL重定向） 支持指定模块和延时跳转
          * @access protected
-         * @param string  $url    跳转的URL表达式
-         * @param array   $params 其它URL参数
-         * @param integer $delay  延时跳转的时间 单位为秒
-         * @param string  $msg    跳转提示信息
+         * @param string $url    跳转的URL表达式
+         * @param array  $params 其它URL参数
+         * @param int    $delay  延时跳转的时间 单位为秒
+         * @param string $msg    跳转提示信息
          * @return void
          */
         protected function redirect($url, $params = [], $delay = 0, $msg = '')

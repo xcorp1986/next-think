@@ -1,20 +1,12 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2009 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
+
     namespace Org\Util;
     /**
      * ArrayList实现类
      * @category    Think
      * @package     Think
      * @subpackage  Util
-     * @author      liu21st <liu21st@gmail.com>
      */
     class ArrayList implements \IteratorAggregate
     {
@@ -52,7 +44,7 @@
          * 增加元素
          * @access public
          * @param mixed $element 要添加的元素
-         * @return boolean
+         * @return bool
          */
         public function add($element)
         {
@@ -75,7 +67,7 @@
          * 增加元素列表
          * @access public
          * @param ArrayList $list 元素列表
-         * @return boolean
+         * @return bool
          */
         public function addAll($list)
         {
@@ -111,7 +103,7 @@
         /**
          * 根据索引取得元素
          * @access public
-         * @param integer $index 索引
+         * @param int $index 索引
          * @return mixed
          */
         public function get($index)
@@ -134,7 +126,7 @@
         /**
          * 判断元素是否为空
          * @access public
-         * @return boolean
+         * @return bool
          */
         public function isEmpty()
         {
@@ -165,7 +157,7 @@
          * 根据索引移除元素
          * 返回被移除的元素
          * @access public
-         * @param integer $index 索引
+         * @param int $index 索引
          * @return mixed
          */
         public function remove($index)
@@ -181,8 +173,8 @@
         /**
          * 移出一定范围的数组列表
          * @access public
-         * @param integer $offset 开始移除位置
-         * @param integer $length 移除长度
+         * @param int $offset 开始移除位置
+         * @param int $length 移除长度
          */
         public function removeRange($offset, $length)
         {
@@ -201,8 +193,8 @@
         /**
          * 取出一定范围的数组列表
          * @access public
-         * @param integer $offset 开始位置
-         * @param integer $length 长度
+         * @param int $offset 开始位置
+         * @param int $length 长度
          */
         public function range($offset, $length = null)
         {
@@ -213,8 +205,8 @@
          * 设置列表元素
          * 返回修改之前的值
          * @access public
-         * @param integer $index   索引
-         * @param mixed   $element 元素
+         * @param int   $index   索引
+         * @param mixed $element 元素
          * @return mixed
          */
         public function set($index, $element)

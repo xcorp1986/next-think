@@ -1,13 +1,6 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
+
     namespace Behavior;
 
     use Think\Behavior;
@@ -122,9 +115,9 @@
          * 检查静态HTML文件是否有效
          * 如果无效需要重新更新
          * @access public
-         * @param string  $cacheFile 静态文件名
-         * @param integer $cacheTime 缓存有效期
-         * @return boolean
+         * @param string $cacheFile 静态文件名
+         * @param int    $cacheTime 缓存有效期
+         * @return bool
          */
         static public function checkHTMLCache($cacheFile = '', $cacheTime = '')
         {

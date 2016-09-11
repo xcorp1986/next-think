@@ -1,13 +1,5 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
 
     namespace Think;
     /**
@@ -112,7 +104,12 @@
             App::run();
         }
 
-        // 注册classmap
+        /**
+         * 注册classmap
+         * @deprecated
+         * @param        $class
+         * @param string $map
+         */
         static public function addMap($class, $map = '')
         {
             if (is_array($class)) {
@@ -122,7 +119,12 @@
             }
         }
 
-        // 获取classmap
+        /**
+         * 获取classmap
+         * @deprecated
+         * @param string $class
+         * @return array|mixed|null
+         */
         static public function getMap($class = '')
         {
             if ('' === $class) {
@@ -136,6 +138,7 @@
 
         /**
          * 类库自动加载
+         * @deprecated
          * @param string $class 对象类名
          * @return void
          */
@@ -257,7 +260,9 @@
             }
         }
 
-        // 致命错误捕获
+        /**
+         * 致命错误捕获
+         */
         static public function fatalError()
         {
             Log::save();

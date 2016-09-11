@@ -1,13 +1,6 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
+
     namespace Behavior;
 
     use Think\Behavior;
@@ -58,7 +51,7 @@
          * 如果无效则需要重新编译
          * @access public
          * @param string $tmplTemplateFile 模板文件名
-         * @return boolean
+         * @return bool
          */
         protected function checkCache($tmplTemplateFile, $prefix = '')
         {
@@ -91,7 +84,7 @@
          * 如果无效则需要重新编译
          * @access public
          * @param string $tmplContent 模板内容
-         * @return boolean
+         * @return bool
          */
         protected function checkContentCache($tmplContent, $prefix = '')
         {

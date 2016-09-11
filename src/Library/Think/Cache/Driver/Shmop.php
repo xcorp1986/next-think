@@ -1,18 +1,10 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
+
     namespace Think\Cache\Driver;
 
     use Think\Cache;
 
-    defined('THINK_PATH') or exit();
 
     /**
      * Shmop缓存驱动
@@ -83,7 +75,7 @@
          * @access public
          * @param string $name  缓存变量名
          * @param mixed  $value 存储数据
-         * @return boolean
+         * @return bool
          */
         public function set($name, $value)
         {
@@ -114,7 +106,7 @@
          * 删除缓存
          * @access public
          * @param string $name 缓存变量名
-         * @return boolean
+         * @return bool
          */
         public function rm($name)
         {
@@ -175,7 +167,7 @@
          * 共享锁定
          * @access private
          * @param string $name 缓存变量名
-         * @return boolean
+         * @return bool
          */
         private function _lock()
         {
@@ -194,7 +186,7 @@
          * 解除共享锁定
          * @access private
          * @param string $name 缓存变量名
-         * @return boolean
+         * @return bool
          */
         private function _unlock(&$fp)
         {

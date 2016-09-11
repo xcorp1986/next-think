@@ -1,13 +1,5 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
 
     namespace Think;
 
@@ -25,7 +17,7 @@
          * @static
          * @access public
          * @param mixed $config 连接配置
-         * @return Object 返回数据库驱动类
+         * @return \Think\Db\Driver 返回数据库驱动类
          */
         static public function getInstance($config = [])
         {
@@ -36,7 +28,8 @@
                 // 兼容mysqli
                 if ('mysqli' == $options['type']) $options['type'] = 'mysql';
                 // 如果采用lite方式 仅支持原生SQL 包括query和execute方法
-                $class = !empty($options['lite']) ? 'Think\Db\Lite' : 'Think\\Db\\Driver\\' . ucwords(strtolower($options['type']));
+//                $class = !empty($options['lite']) ? 'Think\Db\Lite' : 'Think\\Db\\Driver\\' . ucwords(strtolower($options['type']));
+                $class = 'Think\\Db\\Driver\\' . ucwords(strtolower($options['type']));
                 if (class_exists($class)) {
                     self::$instance[$md5] = new $class($options);
                 } else {

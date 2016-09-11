@@ -1,29 +1,21 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2009 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
+
     namespace Think\Crypt\Driver;
     /**
      * Crypt 加密实现类
      * @category    ORG
      * @package     ORG
      * @subpackage  Crypt
-     * @author      liu21st <liu21st@gmail.com>
      */
     class Crypt
     {
 
         /**
          * 加密字符串
-         * @param string  $str    字符串
-         * @param string  $key    加密key
-         * @param integer $expire 有效期（秒）
+         * @param string $str    字符串
+         * @param string $key    加密key
+         * @param int    $expire 有效期（秒）
          * @return string
          */
         public static function encrypt($str, $key, $expire = 0)

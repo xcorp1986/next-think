@@ -1,19 +1,12 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
+
     namespace Think\Model;
 
     use Think\Model;
 
     /**
-     * ThinkPHP 聚合模型扩展
+     * 聚合模型扩展
      */
     class MergeModel extends Model
     {
@@ -145,7 +138,7 @@
          * 对保存到数据库的数据进行处理
          * @access protected
          * @param mixed $data 要操作的数据
-         * @return boolean
+         * @return bool
          */
         protected function _facade($data)
         {
@@ -187,7 +180,7 @@
          * @access public
          * @param mixed $data    数据
          * @param array $options 表达式
-         * @return boolean
+         * @return bool
          */
         public function save($data = '', $options = [])
         {

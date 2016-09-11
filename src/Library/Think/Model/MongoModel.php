@@ -1,13 +1,6 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2010 http://topthink.com All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
+
     namespace Think\Model;
 
     use Think\Model;
@@ -277,9 +270,9 @@
         /**
          * 字段值增长
          * @access public
-         * @param string  $field 字段名
-         * @param integer $step  增长值
-         * @return boolean
+         * @param string $field 字段名
+         * @param int    $step  增长值
+         * @return bool
          */
         public function setInc($field, $step = 1)
         {
@@ -289,9 +282,9 @@
         /**
          * 字段值减少
          * @access public
-         * @param string  $field 字段名
-         * @param integer $step  减少值
-         * @return boolean
+         * @param string $field 字段名
+         * @param int    $step  减少值
+         * @return bool
          */
         public function setDec($field, $step = 1)
         {

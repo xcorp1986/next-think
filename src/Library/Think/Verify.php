@@ -1,20 +1,12 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: 麦当苗儿 <zuojiazi@vip.qq.com> <http://www.zjzit.cn>
-// +----------------------------------------------------------------------
+
 
     namespace Think;
 
     class Verify
     {
         protected $config = [
-            'seKey'    => 'ThinkPHP.CN',   // 验证码加密密钥
+            'seKey'    => 'SecretKey',   // 验证码加密密钥
             'codeSet'  => '2345678abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRTUVWXY',             // 验证码字符集合
             'expire'   => 1800,            // 验证码过期时间（s）
             'useZh'    => false,           // 使用中文验证码
@@ -48,7 +40,7 @@
          * 使用 $this->name 获取配置
          * @access public
          * @param  string $name 配置名称
-         * @return multitype    配置值
+         * @return mixed    配置值
          */
         public function __get($name)
         {
@@ -295,7 +287,11 @@
             @imagedestroy($bgImage);
         }
 
-        /* 加密验证码 */
+        /**
+         * 加密验证码
+         * @param $str
+         * @return string
+         */
         private function authcode($str)
         {
             $key = substr(md5($this->seKey), 5, 8);

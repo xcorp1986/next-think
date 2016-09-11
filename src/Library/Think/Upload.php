@@ -1,13 +1,6 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: 麦当苗儿 <zuojiazi@vip.qq.com> <http://www.zjzit.cn>
-// +----------------------------------------------------------------------
+
+
     namespace Think;
     class Upload
     {
@@ -75,7 +68,7 @@
         /**
          * 使用 $this->name 获取配置
          * @param  string $name 配置名称
-         * @return multitype    配置值
+         * @return mixed    配置值
          */
         public function __get($name)
         {
@@ -361,7 +354,7 @@
 
         /**
          * 检查文件大小是否合法
-         * @param integer $size 数据
+         * @param int $size 数据
          */
         private function checkSize($size)
         {

@@ -1,18 +1,10 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2009 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
+
     namespace Org\Net;
     /**
      * Http 工具类
      * 提供一系列的Http方法
-     * @author    liu21st <liu21st@gmail.com>
      */
     class Http
     {
@@ -139,10 +131,10 @@
          * 如果指定了content参数，则下载该参数的内容
          * @static
          * @access public
-         * @param string  $filename 下载文件名
-         * @param string  $showname 下载显示的文件名
-         * @param string  $content  下载的内容
-         * @param integer $expire   下载内容浏览器缓存时间
+         * @param string $filename 下载文件名
+         * @param string $showname 下载显示的文件名
+         * @param string $content  下载的内容
+         * @param int    $expire   下载内容浏览器缓存时间
          * @return void
          */
         static public function download($filename, $showname = '', $content = '', $expire = 180)

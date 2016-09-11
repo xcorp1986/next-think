@@ -262,7 +262,7 @@
          * @param  string   $method  请求方法
          * @param  array    $headers 请求header
          * @param  resource $body    上传文件资源
-         * @return boolean
+         * @return bool
          */
         private function request($path, $method, $headers = null, $body = null)
         {

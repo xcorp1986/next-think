@@ -1,13 +1,5 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2009 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
 
     namespace Org\Util;
     /**
@@ -15,7 +7,6 @@
      * @category    ORG
      * @package     ORG
      * @subpackage  Date
-     * @author      liu21st <liu21st@gmail.com>
      * @version     $Id: Date.class.php 2662 2012-01-26 06:32:50Z liu21st $
      */
     class Date
@@ -197,7 +188,7 @@
          * 日期参数设置
          * @static
          * @access public
-         * @param integer $date 日期时间戳
+         * @param int $date 日期时间戳
          * @return void
          */
         public function setDate($date)
@@ -430,8 +421,8 @@
          *    n    - 分钟
          *    s    - 秒
          * @access public
-         * @param integer $number   间隔数目
-         * @param string  $interval 比较类型
+         * @param int    $number   间隔数目
+         * @param string $interval 比较类型
          * @return Date
          */
         public function dateAdd($number = 0, $interval = "d")
@@ -501,7 +492,7 @@
          * 用于日和月、周
          * @static
          * @access public
-         * @param integer $number 日期数字
+         * @param int $number 日期数字
          * @return string
          */
         public function numberToCh($number)
@@ -529,7 +520,7 @@
          * 年份数字转中文
          * @static
          * @access public
-         * @param integer $yearStr 年份数字
+         * @param int     $yearStr 年份数字
          * @param boolean $flag    是否显示公元
          * @return string
          */

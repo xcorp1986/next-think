@@ -1,16 +1,8 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
 
 //----------------------------------
-// ThinkPHP公共入口文件
+// 公共入口文件
 //----------------------------------
 
 // 记录开始运行时间
@@ -62,14 +54,6 @@
     defined('CONF_EXT') or define('CONF_EXT', '.php'); // 配置文件后缀
     defined('CONF_PARSE') or define('CONF_PARSE', '');    // 配置文件解析方法
     defined('ADDON_PATH') or define('ADDON_PATH', APP_PATH . 'Addon');
-
-// 系统信息
-    if (version_compare(PHP_VERSION, '5.4.0', '<')) {
-        ini_set('magic_quotes_runtime', 0);
-        define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc() ? true : false);
-    } else {
-        define('MAGIC_QUOTES_GPC', false);
-    }
     define('IS_CGI', (0 === strpos(PHP_SAPI, 'cgi') || false !== strpos(PHP_SAPI, 'fcgi')) ? 1 : 0);
     define('IS_WIN', strstr(PHP_OS, 'WIN') ? 1 : 0);
     define('IS_CLI', PHP_SAPI == 'cli' ? 1 : 0);

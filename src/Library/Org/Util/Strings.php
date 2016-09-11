@@ -1,13 +1,6 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2009 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
+
     namespace Org\Util;
     class Strings
     {
@@ -33,7 +26,7 @@
 
         /**
          * 生成Guid主键
-         * @return Boolean
+         * @return bool
          */
         static public function keyGen()
         {
@@ -43,7 +36,7 @@
         /**
          * 检查字符串是否是UTF8编码
          * @param string $string 字符串
-         * @return Boolean
+         * @return bool
          */
         static public function isUtf8($str)
         {
@@ -154,9 +147,9 @@
 
         /**
          * 生成一定数量的随机数，并且不重复
-         * @param integer $number 数量
-         * @param string  $len    长度
-         * @param string  $type   字串类型
+         * @param int    $number  数量
+         * @param string $len     长度
+         * @param string $type    字串类型
          *                        0 字母 1 数字 其它 混合
          * @return string
          */
@@ -186,9 +179,9 @@
         /**
          *  带格式生成随机字符 支持批量生成
          *  但可能存在重复
-         * @param string  $format 字符格式
+         * @param string $format  字符格式
          *                        # 表示数字 * 表示字母和数字 $ 表示字母
-         * @param integer $number 生成数量
+         * @param int    $number  生成数量
          * @return string | array
          */
         static public function buildFormatRand($format, $number = 1)
@@ -222,8 +215,8 @@
 
         /**
          * 获取一定范围内的随机数字 位数不足补零
-         * @param integer $min 最小值
-         * @param integer $max 最大值
+         * @param int $min 最小值
+         * @param int $max 最大值
          * @return string
          */
         static public function randNumber($min, $max)

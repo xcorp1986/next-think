@@ -1,13 +1,6 @@
 <?php
-// +----------------------------------------------------------------------
-// | TOPThink [ WE CAN DO IT JUST THINK ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2013 http://topthink.com All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
+
     namespace Think\Storage\Driver;
 
     use Think\Storage;
@@ -42,7 +35,7 @@
          * @access public
          * @param string $filename 文件名
          * @param string $content  文件内容
-         * @return boolean
+         * @return bool
          */
         public function put($filename, $content, $type = '')
         {
@@ -64,7 +57,7 @@
          * @access public
          * @param string $filename 文件名
          * @param string $content  追加的文件内容
-         * @return boolean
+         * @return bool
          */
         public function append($filename, $content, $type = '')
         {
@@ -94,7 +87,7 @@
          * 文件是否存在
          * @access public
          * @param string $filename 文件名
-         * @return boolean
+         * @return bool
          */
         public function has($filename, $type = '')
         {
@@ -105,7 +98,7 @@
          * 文件删除
          * @access public
          * @param string $filename 文件名
-         * @return boolean
+         * @return bool
          */
         public function unlink($filename, $type = '')
         {
@@ -119,7 +112,7 @@
          * @access public
          * @param string $filename 文件名
          * @param string $name     信息名 mtime或者content
-         * @return boolean
+         * @return bool
          */
         public function get($filename, $name, $type = '')
         {

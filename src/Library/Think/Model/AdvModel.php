@@ -1,13 +1,6 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
+
     namespace Think\Model;
 
     use Think\Model;
@@ -61,7 +54,7 @@
          * 对保存到数据库的数据进行处理
          * @access protected
          * @param mixed $data 要操作的数据
-         * @return boolean
+         * @return bool
          */
         protected function _facade($data)
         {
@@ -116,7 +109,7 @@
         protected function _before_update(&$data, $options = '')
         {
             // 检查乐观锁
-            $pk = $this->getPK();
+            $pk = $this->getPk();
             if (isset($options['where'][$pk])) {
                 $id = $options['where'][$pk];
                 if (!$this->checkLockVersion($id, $data)) {
@@ -216,8 +209,8 @@
         /**
          * 查找前N个记录
          * @access public
-         * @param integer $count   记录个数
-         * @param array   $options 查询表达式
+         * @param int   $count   记录个数
+         * @param array $options 查询表达式
          * @return array
          */
         public function topN($count, $options = [])
@@ -231,8 +224,8 @@
          * 查询符合条件的第N条记录
          * 0 表示第一条记录 -1 表示最后一条记录
          * @access public
-         * @param integer $position 记录位置
-         * @param array   $options  查询表达式
+         * @param int   $position 记录位置
+         * @param array $options  查询表达式
          * @return mixed
          */
         public function getN($position = 0, $options = [])
@@ -573,7 +566,7 @@
          * 批处理的指令都认为是execute操作
          * @access public
          * @param array $sql SQL批处理指令
-         * @return boolean
+         * @return bool
          */
         public function patchQuery($sql = [])
         {

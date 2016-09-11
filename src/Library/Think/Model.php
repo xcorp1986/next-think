@@ -1,13 +1,6 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
+
     namespace Think;
     /**
      * Model模型类
@@ -200,7 +193,7 @@
          * 检测数据对象的值
          * @access public
          * @param string $name 名称
-         * @return boolean
+         * @return bool
          */
         public function __isset($name)
         {
@@ -267,7 +260,7 @@
          * 对保存到数据库的数据进行处理
          * @access protected
          * @param mixed $data 要操作的数据
-         * @return boolean
+         * @return bool
          */
         protected function _facade($data)
         {
@@ -405,7 +398,7 @@
          * @param string $fields  要插入的数据表字段名
          * @param string $table   要插入的数据表名
          * @param array  $options 表达式
-         * @return boolean
+         * @return bool
          */
         public function selectAdd($fields = '', $table = '', $options = [])
         {
@@ -428,7 +421,7 @@
          * @access public
          * @param mixed $data    数据
          * @param array $options 表达式
-         * @return boolean
+         * @return bool
          */
         public function save($data = '', $options = [])
         {
@@ -879,8 +872,8 @@
         /**
          * 处理字段映射
          * @access public
-         * @param array   $data 当前数据
-         * @param integer $type 类型 0 写入 1 读取
+         * @param array $data 当前数据
+         * @param int   $type 类型 0 写入 1 读取
          * @return array
          */
         public function parseFieldsMap($data, $type = 1)
@@ -911,7 +904,7 @@
          * @access public
          * @param string|array $field 字段名
          * @param string       $value 字段值
-         * @return boolean
+         * @return bool
          */
         public function setField($field, $value = '')
         {
@@ -927,10 +920,10 @@
         /**
          * 字段值增长
          * @access public
-         * @param string  $field    字段名
-         * @param integer $step     增长值
-         * @param integer $lazyTime 延时时间(s)
-         * @return boolean
+         * @param string $field    字段名
+         * @param int    $step     增长值
+         * @param int    $lazyTime 延时时间(s)
+         * @return bool
          */
         public function setInc($field, $step = 1, $lazyTime = 0)
         {
@@ -951,10 +944,10 @@
         /**
          * 字段值减少
          * @access public
-         * @param string  $field    字段名
-         * @param integer $step     减少值
-         * @param integer $lazyTime 延时时间(s)
-         * @return boolean
+         * @param string $field    字段名
+         * @param int    $step     减少值
+         * @param int    $lazyTime 延时时间(s)
+         * @return bool
          */
         public function setDec($field, $step = 1, $lazyTime = 0)
         {
@@ -976,9 +969,9 @@
          * 延时更新检查 返回false表示需要延时
          * 否则返回实际写入的数值
          * @access public
-         * @param string  $guid     写入标识
-         * @param integer $step     写入步进值
-         * @param integer $lazyTime 延时时间(s)
+         * @param string $guid     写入标识
+         * @param int    $step     写入步进值
+         * @param int    $lazyTime 延时时间(s)
          * @return false|integer
          */
         protected function lazyWrite($guid, $step, $lazyTime)
@@ -1153,8 +1146,6 @@
                 foreach ($data as $key => $val) {
                     if (!in_array($key, $fields)) {
                         unset($data[$key]);
-                    } elseif (MAGIC_QUOTES_GPC && is_string($val)) {
-                        $data[$key] = stripslashes($val);
                     }
                 }
             }
@@ -1200,7 +1191,7 @@
          * @access public
          * @param string $value 要验证的数据
          * @param string $rule  验证规则
-         * @return boolean
+         * @return bool
          */
         public function regex($value, $rule)
         {
@@ -1286,7 +1277,7 @@
          * @access protected
          * @param array  $data 创建数据
          * @param string $type 创建类型
-         * @return boolean
+         * @return bool
          */
         protected function autoValidation($data, $type)
         {
@@ -1346,7 +1337,7 @@
          * @access protected
          * @param array $data 创建数据
          * @param array $val  验证因子
-         * @return boolean
+         * @return bool
          */
         protected function _validationField($data, $val)
         {
@@ -1370,7 +1361,7 @@
          * @access protected
          * @param array $data 创建数据
          * @param array $val  验证因子
-         * @return boolean
+         * @return bool
          */
         protected function _validationFieldItem($data, $val)
         {
@@ -1424,7 +1415,7 @@
          * @param string $value 验证数据
          * @param mixed  $rule  验证表达式
          * @param string $type  验证方式 默认为正则验证
-         * @return boolean
+         * @return bool
          */
         public function check($value, $rule, $type = 'regex')
         {
@@ -1553,10 +1544,10 @@
         /**
          * 切换当前的数据库连接
          * @access public
-         * @param integer $linkNum 连接序号
+         * @param int     $linkNum 连接序号
          * @param mixed   $config  数据库连接信息
          * @param boolean $force   强制重新连接
-         * @return Model
+         * @return $this
          */
         public function db($linkNum = '', $config = '', $force = false)
         {
@@ -1646,7 +1637,7 @@
         /**
          * 提交事务
          * @access public
-         * @return boolean
+         * @return bool
          */
         public function commit()
         {
@@ -1656,7 +1647,7 @@
         /**
          * 事务回滚
          * @access public
-         * @return boolean
+         * @return bool
          */
         public function rollback()
         {
@@ -1754,7 +1745,7 @@
          * 设置数据对象值
          * @access public
          * @param mixed $data 数据
-         * @return Model
+         * @return $this
          */
         public function data($data = '')
         {
@@ -1777,7 +1768,7 @@
          * 指定当前的数据表
          * @access public
          * @param mixed $table
-         * @return Model
+         * @return $this
          */
         public function table($table)
         {
@@ -1799,7 +1790,7 @@
          * USING支持 用于多表删除
          * @access public
          * @param mixed $using
-         * @return Model
+         * @return $this
          */
         public function using($using)
         {
@@ -1822,7 +1813,7 @@
          * @access public
          * @param mixed  $join
          * @param string $type JOIN类型
-         * @return Model
+         * @return $this
          */
         public function join($join, $type = 'INNER')
         {
@@ -1851,7 +1842,7 @@
          * @access public
          * @param mixed   $union
          * @param boolean $all
-         * @return Model
+         * @return $this
          */
         public function union($union, $all = false)
         {
@@ -1888,10 +1879,10 @@
         /**
          * 查询缓存
          * @access public
-         * @param mixed   $key
-         * @param integer $expire
-         * @param string  $type
-         * @return Model
+         * @param mixed  $key
+         * @param int    $expire
+         * @param string $type
+         * @return $this
          */
         public function cache($key = true, $expire = null, $type = '')
         {
@@ -1911,7 +1902,7 @@
          * @access public
          * @param mixed   $field
          * @param boolean $except 是否排除
-         * @return Model
+         * @return $this
          */
         public function field($field, $except = false)
         {
@@ -1935,7 +1926,7 @@
          * @access public
          * @param mixed $scope 命名范围名称 支持多个 和直接定义
          * @param array $args  参数
-         * @return Model
+         * @return $this
          */
         public function scope($scope = '', $args = null)
         {
@@ -1972,7 +1963,7 @@
          * @access public
          * @param mixed $where 条件表达式
          * @param mixed $parse 预处理参数
-         * @return Model
+         * @return $this
          */
         public function where($where, $parse = null)
         {
@@ -2005,7 +1996,7 @@
          * @access public
          * @param mixed $offset 起始位置
          * @param mixed $length 查询数量
-         * @return Model
+         * @return $this
          */
         public function limit($offset, $length = null)
         {
@@ -2022,7 +2013,7 @@
          * @access public
          * @param mixed $page     页数
          * @param mixed $listRows 每页数量
-         * @return Model
+         * @return $this
          */
         public function page($page, $listRows = null)
         {
@@ -2038,7 +2029,7 @@
          * 查询注释
          * @access public
          * @param string $comment 注释
-         * @return Model
+         * @return $this
          */
         public function comment($comment)
         {
@@ -2051,7 +2042,7 @@
          * 获取执行的SQL语句
          * @access public
          * @param boolean $fetch 是否返回sql
-         * @return Model
+         * @return $this
          */
         public function fetchSql($fetch = true)
         {
@@ -2065,7 +2056,7 @@
          * @access public
          * @param string $key   参数名
          * @param mixed  $value 绑定的变量及绑定参数
-         * @return Model
+         * @return $this
          */
         public function bind($key, $value = false)
         {
@@ -2090,7 +2081,7 @@
          * @access public
          * @param string $name  名称
          * @param mixed  $value 值
-         * @return Model
+         * @return $this
          */
         public function setProperty($name, $value)
         {

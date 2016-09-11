@@ -1,13 +1,5 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
 
     /**
      * 系统函数库
@@ -101,8 +93,8 @@
 
     /**
      * 抛出异常处理
-     * @param string  $msg  异常消息
-     * @param integer $code 异常代码 默认为0
+     * @param string $msg  异常消息
+     * @param int    $code 异常代码 默认为0
      * @throws Think\Exception
      * @return void
      */
@@ -123,9 +115,9 @@
      * 如果end标记位没有定义，则会自动以当前作为标记位
      * 其中统计内存使用需要 MEMORY_LIMIT_ON 常量为true才有效
      * </code>
-     * @param string         $start 开始标签
-     * @param string         $end   结束标签
-     * @param integer|string $dec   小数位或者m
+     * @param string     $start 开始标签
+     * @param string     $end   结束标签
+     * @param int|string $dec   小数位或者m
      * @return mixed
      */
     function G($start, $end = '', $dec = 4)
@@ -447,7 +439,7 @@
      * echo N('read'); // 获取当前页面读取次数
      * </code>
      * @param string  $key  标识位置
-     * @param integer $step 步进值
+     * @param int     $step 步进值
      * @param boolean $save 是否保存结果
      * @return mixed
      */
@@ -472,8 +464,8 @@
     /**
      * 字符串命名风格转换
      * type 0 将Java风格转换为C的风格 1 将C风格转换为Java的风格
-     * @param string  $name 字符串
-     * @param integer $type 转换类型
+     * @param string $name 字符串
+     * @param int    $type 转换类型
      * @return string
      */
     function parse_name($name, $type = 0)
@@ -490,7 +482,7 @@
     /**
      * 优化的require_once
      * @param string $filename 文件地址
-     * @return boolean
+     * @return bool
      */
     function require_cache($filename)
     {
@@ -510,7 +502,7 @@
     /**
      * 区分大小写的文件存在判断
      * @param string $filename 文件地址
-     * @return boolean
+     * @return bool
      */
     function file_exists_case($filename)
     {
@@ -532,7 +524,7 @@
      * @param string $class   类库命名空间字符串
      * @param string $baseUrl 起始路径
      * @param string $ext     导入的文件扩展名
-     * @return boolean
+     * @return bool
      */
     function import($class, $baseUrl = '', $ext = EXT)
     {
@@ -656,9 +648,9 @@
     /**
      * 解析资源地址并导入类库文件
      * 例如 module/controller addon://module/behavior
-     * @param string  $name  资源地址 格式：[扩展://][模块/]资源名
-     * @param string  $layer 分层名称
-     * @param integer $level 控制器层次
+     * @param string $name  资源地址 格式：[扩展://][模块/]资源名
+     * @param string $layer 分层名称
+     * @param int    $level 控制器层次
      * @return string
      */
     function parse_res_name($name, $layer, $level = 1)
@@ -720,9 +712,9 @@
 
     /**
      * 实例化多层控制器 格式：[资源://][模块/]控制器
-     * @param string  $name  资源地址
-     * @param string  $layer 控制层名称
-     * @param integer $level 控制器层次
+     * @param string $name  资源地址
+     * @param string $layer 控制层名称
+     * @param int    $level 控制器层次
      * @return Think\Controller|false
      */
     function A($name, $layer = '', $level = 0)
@@ -852,9 +844,9 @@
     /**
      * 自定义异常处理
      * @deprecated
-     * @param string  $msg  异常消息
-     * @param string  $type 异常类型 默认为Think\Exception
-     * @param integer $code 异常代码 默认为0
+     * @param string $msg  异常消息
+     * @param string $type 异常类型 默认为Think\Exception
+     * @param int    $code 异常代码 默认为0
      * @return void
      */
     function throw_exception($msg, $type = 'Think\\Exception', $code = 0)
@@ -1094,7 +1086,7 @@
 
     /**
      * 判断是否SSL协议
-     * @return boolean
+     * @return bool
      */
     function is_ssl()
     {
@@ -1109,9 +1101,9 @@
 
     /**
      * URL重定向
-     * @param string  $url  重定向的URL地址
-     * @param integer $time 重定向的等待时间（秒）
-     * @param string  $msg  重定向前的提示信息
+     * @param string $url  重定向的URL地址
+     * @param int    $time 重定向的等待时间（秒）
+     * @param string $msg  重定向前的提示信息
      * @return void
      */
     function redirect($url, $time = 0, $msg = '')
@@ -1470,7 +1462,7 @@
                 if (0 === strpos($value, 'think:')) {
                     $value = substr($value, 6);
 
-                    return array_map('urldecode', json_decode(MAGIC_QUOTES_GPC ? stripslashes($value) : $value, true));
+                    return array_map('urldecode', json_decode($value, true));
                 } else {
                     return $value;
                 }
@@ -1524,7 +1516,7 @@
 
     /**
      * 获取客户端IP地址
-     * @param integer $type 返回类型 0 返回IP地址 1 返回IPV4地址数字
+     * @param int     $type 返回类型 0 返回IP地址 1 返回IPV4地址数字
      * @param boolean $adv  是否进行高级模式获取（有可能被伪装）
      * @return mixed
      */
@@ -1556,7 +1548,7 @@
 
     /**
      * 发送HTTP状态
-     * @param integer $code 状态码
+     * @param int $code 状态码
      * @return void
      */
     function send_http_status($code)

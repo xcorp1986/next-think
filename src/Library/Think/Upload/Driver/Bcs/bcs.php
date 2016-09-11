@@ -296,7 +296,7 @@
          * 删除bucket
          * @param string $bucket (Required)
          * @param array  $opt    (Optional)
-         * @return boolean|BCS_ResponseCore
+         * @return bool|BCS_ResponseCore
          */
         public function delete_bucket($bucket, $opt = [])
         {
@@ -320,7 +320,7 @@
          * @param string $bucket (Required)
          * @param string $acl    (Required)
          * @param array  $opt    (Optional)
-         * @return boolean|BCS_ResponseCore
+         * @return bool|BCS_ResponseCore
          */
         public function set_bucket_acl($bucket, $acl, $opt = [])
         {
@@ -919,7 +919,7 @@
          * @param string $object (Required)
          * @param array  $opt    (Optional)
          * @throws BCS_Exception
-         * @return boolean true|boolean false|BCS_ResponseCore
+         * @return bool true|boolean false|BCS_ResponseCore
          *                       true：object存在
          *                       false：不存在
          *                       BCS_ResponseCore其他错误
@@ -1111,7 +1111,7 @@
          * 2. 不能以数字作为Bucket开头
          * 3. 不能以'-'作为Bucket的开头或者结尾
          * @param string $bucket
-         * @return boolean
+         * @return bool
          */
         public static function validate_bucket($bucket)
         {
@@ -1128,7 +1128,7 @@
          * 校验object是否合法，object命名规范
          * 1. object必须以'/'开头
          * @param string $object
-         * @return boolean
+         * @return bool
          */
         public static function validate_object($object)
         {
@@ -1236,7 +1236,7 @@
         /**
          * 生成签名
          * @param array $opt
-         * @return boolean|string
+         * @return bool|string
          */
         private function format_signature($opt)
         {
@@ -1313,7 +1313,7 @@
         /**
          * 构造url
          * @param array $opt
-         * @return boolean|string
+         * @return bool|string
          */
         private function format_url($opt)
         {

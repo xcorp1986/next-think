@@ -1,13 +1,5 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: 麦当苗儿 <zuojiazi@vip.qq.com> <http://www.zjzit.cn>
-// +----------------------------------------------------------------------
+
 
     namespace Think\Upload\Driver;
     class Local
@@ -35,7 +27,7 @@
         /**
          * 检测上传根目录
          * @param string $rootpath 根目录
-         * @return boolean true-检测通过，false-检测失败
+         * @return bool true-检测通过，false-检测失败
          */
         public function checkRootPath($rootpath)
         {
@@ -52,7 +44,7 @@
         /**
          * 检测上传目录
          * @param  string $savepath 上传目录
-         * @return boolean          检测结果，true-通过，false-失败
+         * @return bool          检测结果，true-通过，false-失败
          */
         public function checkSavePath($savepath)
         {
@@ -75,7 +67,7 @@
          * 保存指定文件
          * @param  array   $file    保存的文件信息
          * @param  boolean $replace 同名文件是否覆盖
-         * @return boolean          保存状态，true-成功，false-失败
+         * @return bool          保存状态，true-成功，false-失败
          */
         public function save($file, $replace = true)
         {
@@ -101,7 +93,7 @@
         /**
          * 创建目录
          * @param  string $savepath 要创建的穆里
-         * @return boolean          创建状态，true-成功，false-失败
+         * @return bool          创建状态，true-成功，false-失败
          */
         public function mkdir($savepath)
         {

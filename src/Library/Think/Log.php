@@ -1,13 +1,6 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
+
     namespace Think;
     /**
      * 日志处理类
@@ -61,8 +54,8 @@
          * 日志保存
          * @static
          * @access public
-         * @param integer $type        日志记录方式
-         * @param string  $destination 写入目标
+         * @param int    $type        日志记录方式
+         * @param string $destination 写入目标
          * @return void
          */
         static function save($type = '', $destination = '')
@@ -87,10 +80,10 @@
          * 日志直接写入
          * @static
          * @access public
-         * @param string  $message     日志信息
-         * @param string  $level       日志级别
-         * @param integer $type        日志记录方式
-         * @param string  $destination 写入目标
+         * @param string $message     日志信息
+         * @param string $level       日志级别
+         * @param int    $type        日志记录方式
+         * @param string $destination 写入目标
          * @return void
          */
         static function write($message, $level = self::ERR, $type = '', $destination = '')

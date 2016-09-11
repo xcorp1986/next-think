@@ -1,14 +1,7 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2011 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: luofei614 <weibo.com/luofei614>　
-// +----------------------------------------------------------------------
+
     namespace Think;
+
         /**
          * 权限认证类
          * 功能特性：
@@ -99,7 +92,7 @@
          * @param uid      int           认证用户的id
          * @param string   mode        执行check的模式
          * @param relation string    如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
-         * @return boolean           通过验证返回true;失败返回false
+         * @return bool           通过验证返回true;失败返回false
          */
         public function check($name, $uid, $type = 1, $mode = 'url', $relation = 'or')
         {
@@ -166,8 +159,8 @@
 
         /**
          * 获得权限列表
-         * @param integer $uid 用户id
-         * @param integer $type
+         * @param int $uid 用户id
+         * @param int $type
          */
         protected function getAuthList($uid, $type)
         {

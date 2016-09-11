@@ -1,15 +1,6 @@
 <?php
-// +----------------------------------------------------------------------
-// | TOPThink [ WE CAN DO IT JUST THINK ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2010 http://topthink.com All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: 麦当苗儿 <zuojiazi@vip.qq.com> <http://www.zjzit.cn>
-// +----------------------------------------------------------------------
-// | GIF.class.php 2013-03-09
-// +----------------------------------------------------------------------
+
+
     namespace Think\Image\Driver;
     class GIF
     {
@@ -51,7 +42,7 @@
         /**
          * 设置或获取当前帧的数据
          * @param  string $stream 二进制数据流
-         * @return boolean        获取到的数据
+         * @return bool        获取到的数据
          */
         public function image($stream = null)
         {
@@ -147,9 +138,9 @@
                 ($GIF_red | ($GIF_grn << 8) | ($GIF_blu << 16)) : -1;
 
             for ($i = 0; $i < count($GIF_src); $i++) {
-                if (strToLower($GIF_mod) == "url") {
+                if (strtolower($GIF_mod) == "url") {
                     $this->BUF [] = fread(fopen($GIF_src [$i], "rb"), filesize($GIF_src [$i]));
-                } else if (strToLower($GIF_mod) == "bin") {
+                } else if (strtolower($GIF_mod) == "bin") {
                     $this->BUF [] = $GIF_src [$i];
                 } else {
                     printf("%s: %s ( %s )!", $this->VER, $this->ERR ['ERR02'], $GIF_mod);

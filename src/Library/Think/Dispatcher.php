@@ -1,13 +1,6 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
+
     namespace Think;
     /**
      * 内置的Dispatcher类
@@ -164,8 +157,8 @@
                     C(load_config(MODULE_PATH . 'Conf/' . APP_STATUS . CONF_EXT));
 
                 // 加载模块别名定义
-                if (is_file(MODULE_PATH . 'Conf/alias.php'))
-                    Think::addMap(include MODULE_PATH . 'Conf/alias.php');
+//                if (is_file(MODULE_PATH . 'Conf/alias.php'))
+//                    Think::addMap(include MODULE_PATH . 'Conf/alias.php');
                 // 加载模块tags文件定义
                 if (is_file(MODULE_PATH . 'Conf/tags.php'))
                     Hook::import(include MODULE_PATH . 'Conf/tags.php');
@@ -251,7 +244,7 @@
             define('__ACTION__', __CONTROLLER__ . $depr . (defined('ACTION_ALIAS') ? ACTION_ALIAS : ACTION_NAME));
 
             //保证$_REQUEST正常取值
-            $_REQUEST = array_merge($_POST, $_GET, $_COOKIE);    // -- 加了$_COOKIE.  保证哦..
+            $_REQUEST = array_merge($_POST, $_GET, $_COOKIE);
         }
 
         /**

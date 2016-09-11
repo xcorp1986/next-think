@@ -313,7 +313,7 @@
         /**
          * Sets the length in bytes to read from the stream while streaming up.
          *
-         * @param integer $size (Required) The length in bytes to read from the stream.
+         * @param int $size (Required) The length in bytes to read from the stream.
          * @return $this A reference to the current instance.
          */
         public function set_read_stream_size($size)
@@ -329,7 +329,7 @@
          * <php:ftell()>.
          *
          * @param resource $resource (Required) The readable resource to read from.
-         * @param integer  $size     (Optional) The size of the stream to read.
+         * @param int      $size     (Optional) The size of the stream to read.
          * @return $this A reference to the current instance.
          */
         public function set_read_stream($resource, $size = null)
@@ -410,7 +410,7 @@
         /**
          * Set the intended starting seek position.
          *
-         * @param integer $position (Required) The byte-position of the stream to begin reading from.
+         * @param int $position (Required) The byte-position of the stream to begin reading from.
          * @return $this A reference to the current instance.
          */
         public function set_seek_position($position)
@@ -487,7 +487,7 @@
          *
          * @param resource $curl_handle (Required) The cURL handle for the request.
          * @param resource $file_handle (Required) The open file handle resource.
-         * @param integer  $length      (Required) The maximum number of bytes to read.
+         * @param int      $length      (Required) The maximum number of bytes to read.
          * @return binary Binary data from a stream.
          */
         public function streaming_read_callback($curl_handle, $file_handle, $length)
@@ -647,7 +647,7 @@
 
         /**
          * is the environment BAE?
-         * @return boolean the result of the answer
+         * @return bool the result of the answer
          */
         private function isBaeEnv()
         {
@@ -887,10 +887,10 @@
         /**
          * Constructs a new instance of this class.
          *
-         * @param array   $header (Required) Associative array of HTTP headers (typically returned by
+         * @param array  $header  (Required) Associative array of HTTP headers (typically returned by
          *                        <BCS_RequestCore::get_response_header()>).
-         * @param string  $body   (Required) XML-formatted response from AWS.
-         * @param integer $status (Optional) HTTP response status code from the request.
+         * @param string $body    (Required) XML-formatted response from AWS.
+         * @param int    $status  (Optional) HTTP response status code from the request.
          * @return object Contains an <php:array> `header` property (HTTP headers as an associative array), a
          *                        <php:SimpleXMLElement> or <php:string> `body` property, and an <php:integer> `status`
          *                        code.
@@ -907,9 +907,9 @@
         /**
          * Did we receive the status code we expected?
          *
-         * @param integer|array $codes (Optional) The status code(s) to expect. Pass an <php:integer> for a single
+         * @param int|array $codes     (Optional) The status code(s) to expect. Pass an <php:integer> for a single
          *                             acceptable value, or an <php:array> of integers for multiple acceptable values.
-         * @return boolean Whether we received the expected status code or not.
+         * @return bool Whether we received the expected status code or not.
          */
         public function isOK($codes = [200, 201, 204, 206])
         {

@@ -1,19 +1,10 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
 
     namespace Think\Db;
 
     use PDO;
-//    use Think\Config;
-//    use Think\Debug;
+
 
     abstract class Driver
     {
@@ -284,7 +275,7 @@
         /**
          * 用于非自动提交状态下面的查询提交
          * @access public
-         * @return boolean
+         * @return bool
          */
         public function commit()
         {
@@ -304,7 +295,7 @@
         /**
          * 事务回滚
          * @access public
-         * @return boolean
+         * @return bool
          */
         public function rollback()
         {

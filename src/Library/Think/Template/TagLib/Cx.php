@@ -1,13 +1,6 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
+
     namespace Think\Template\TagLib;
 
     use Think\Template\TagLib;
@@ -526,10 +519,10 @@
                     }
                     switch ($type) {
                         case 'js':
-                            $parseStr .= '<script type="text/javascript" src="' . $val . '"></script>';
+                            $parseStr .= '<script src="' . $val . '"></script>';
                             break;
                         case 'css':
-                            $parseStr .= '<link rel="stylesheet" type="text/css" href="' . $val . '" />';
+                            $parseStr .= '<link rel="stylesheet" href="' . $val . '" />';
                             break;
                         case 'php':
                             $parseStr .= '<?php require_cache("' . $val . '"); ?>';
@@ -550,10 +543,10 @@
                     }
                     switch ($type) {
                         case 'js':
-                            $parseStr .= '<script type="text/javascript" src="' . $basepath . '/' . str_replace(['.', '#'], ['/', '.'], $val) . '.js' . ($version ? '?' . $version : '') . '"></script>';
+                            $parseStr .= '<script src="' . $basepath . '/' . str_replace(['.', '#'], ['/', '.'], $val) . '.js' . ($version ? '?' . $version : '') . '"></script>';
                             break;
                         case 'css':
-                            $parseStr .= '<link rel="stylesheet" type="text/css" href="' . $basepath . '/' . str_replace(['.', '#'], ['/', '.'], $val) . '.css' . ($version ? '?' . $version : '') . '" />';
+                            $parseStr .= '<link rel="stylesheet" href="' . $basepath . '/' . str_replace(['.', '#'], ['/', '.'], $val) . '.css' . ($version ? '?' . $version : '') . '" />';
                             break;
                         case 'php':
                             $parseStr .= '<?php import("' . $val . '"); ?>';

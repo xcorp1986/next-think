@@ -1,13 +1,6 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
+
+
     namespace Think\Template\TagLib;
 
     use Think\Template\TagLib;
@@ -47,10 +40,10 @@
             $type = $tag['type'];
             switch (strtoupper($type)) {
                 case 'FCKEDITOR':
-                    $parseStr = '<!-- 编辑器调用开始 --><script type="text/javascript" src="__ROOT__/Public/Js/FCKeditor/fckeditor.js"></script><textarea id="' . $id . '" name="' . $name . '">' . $content . '</textarea><script type="text/javascript"> var oFCKeditor = new FCKeditor( "' . $id . '","' . $width . '","' . $height . '" ) ; oFCKeditor.BasePath = "__ROOT__/Public/Js/FCKeditor/" ; oFCKeditor.ReplaceTextarea() ;function resetEditor(){setContents("' . $id . '",document.getElementById("' . $id . '").value)}; function saveEditor(){document.getElementById("' . $id . '").value = getContents("' . $id . '");} function InsertHTML(html){ var oEditor = FCKeditorAPI.GetInstance("' . $id . '") ;if (oEditor.EditMode == FCK_EDITMODE_WYSIWYG ){oEditor.InsertHtml(html) ;}else	alert( "FCK必须处于WYSIWYG模式!" ) ;}</script> <!-- 编辑器调用结束 -->';
+                    $parseStr = '<!-- 编辑器调用开始 --><script src="__ROOT__/Public/Js/FCKeditor/fckeditor.js"></script><textarea id="' . $id . '" name="' . $name . '">' . $content . '</textarea><script> var oFCKeditor = new FCKeditor( "' . $id . '","' . $width . '","' . $height . '" ) ; oFCKeditor.BasePath = "__ROOT__/Public/Js/FCKeditor/" ; oFCKeditor.ReplaceTextarea() ;function resetEditor(){setContents("' . $id . '",document.getElementById("' . $id . '").value)}; function saveEditor(){document.getElementById("' . $id . '").value = getContents("' . $id . '");} function InsertHTML(html){ var oEditor = FCKeditorAPI.GetInstance("' . $id . '") ;if (oEditor.EditMode == FCK_EDITMODE_WYSIWYG ){oEditor.InsertHtml(html) ;}else	alert( "FCK必须处于WYSIWYG模式!" ) ;}</script> <!-- 编辑器调用结束 -->';
                     break;
                 case 'FCKMINI':
-                    $parseStr = '<!-- 编辑器调用开始 --><script type="text/javascript" src="__ROOT__/Public/Js/FCKMini/fckeditor.js"></script><textarea id="' . $id . '" name="' . $name . '">' . $content . '</textarea><script type="text/javascript"> var oFCKeditor = new FCKeditor( "' . $id . '","' . $width . '","' . $height . '" ) ; oFCKeditor.BasePath = "__ROOT__/Public/Js/FCKMini/" ; oFCKeditor.ReplaceTextarea() ;function resetEditor(){setContents("' . $id . '",document.getElementById("' . $id . '").value)}; function saveEditor(){document.getElementById("' . $id . '").value = getContents("' . $id . '");} function InsertHTML(html){ var oEditor = FCKeditorAPI.GetInstance("' . $id . '") ;if (oEditor.EditMode == FCK_EDITMODE_WYSIWYG ){oEditor.InsertHtml(html) ;}else	alert( "FCK必须处于WYSIWYG模式!" ) ;}</script> <!-- 编辑器调用结束 -->';
+                    $parseStr = '<!-- 编辑器调用开始 --><script src="__ROOT__/Public/Js/FCKMini/fckeditor.js"></script><textarea id="' . $id . '" name="' . $name . '">' . $content . '</textarea><script> var oFCKeditor = new FCKeditor( "' . $id . '","' . $width . '","' . $height . '" ) ; oFCKeditor.BasePath = "__ROOT__/Public/Js/FCKMini/" ; oFCKeditor.ReplaceTextarea() ;function resetEditor(){setContents("' . $id . '",document.getElementById("' . $id . '").value)}; function saveEditor(){document.getElementById("' . $id . '").value = getContents("' . $id . '");} function InsertHTML(html){ var oEditor = FCKeditorAPI.GetInstance("' . $id . '") ;if (oEditor.EditMode == FCK_EDITMODE_WYSIWYG ){oEditor.InsertHtml(html) ;}else	alert( "FCK必须处于WYSIWYG模式!" ) ;}</script> <!-- 编辑器调用结束 -->';
                     break;
                 case 'EWEBEDITOR':
                     $parseStr = "<!-- 编辑器调用开始 --><script type='text/javascript' src='__ROOT__/Public/Js/eWebEditor/js/edit.js'></script><input type='hidden'  id='{$id}' name='{$name}'  value='{$conent}'><iframe src='__ROOT__/Public/Js/eWebEditor/ewebeditor.htm?id={$name}' frameborder=0 scrolling=no width='{$width}' height='{$height}'></iframe><script type='text/javascript'>function saveEditor(){document.getElementById('{$id}').value = getHTML();} </script><!-- 编辑器调用结束 -->";
@@ -59,10 +52,10 @@
                     $parseStr = '<!-- 编辑器调用开始 --><textarea id="' . $id . '" name="' . $name . '" style="display:none">' . $content . '</textarea><iframe ID="Editor" name="Editor" src="__ROOT__/Public/Js/HtmlEditor/index.html?ID=' . $name . '" frameBorder="0" marginHeight="0" marginWidth="0" scrolling="No" style="height:' . $height . ';width:' . $width . '"></iframe><!-- 编辑器调用结束 -->';
                     break;
                 case 'UBB':
-                    $parseStr = '<script type="text/javascript" src="__ROOT__/Public/Js/UbbEditor.js"></script><div style="padding:1px;width:' . $width . ';border:1px solid silver;float:left;"><script LANGUAGE="JavaScript"> showTool(); </script></div><div><TEXTAREA id="UBBEditor" name="' . $name . '"  style="clear:both;float:none;width:' . $width . ';height:' . $height . '" >' . $content . '</TEXTAREA></div><div style="padding:1px;width:' . $width . ';border:1px solid silver;float:left;"><script LANGUAGE="JavaScript">showEmot();  </script></div>';
+                    $parseStr = '<script src="__ROOT__/Public/Js/UbbEditor.js"></script><div style="padding:1px;width:' . $width . ';border:1px solid silver;float:left;"><script LANGUAGE="JavaScript"> showTool(); </script></div><div><TEXTAREA id="UBBEditor" name="' . $name . '"  style="clear:both;float:none;width:' . $width . ';height:' . $height . '" >' . $content . '</TEXTAREA></div><div style="padding:1px;width:' . $width . ';border:1px solid silver;float:left;"><script LANGUAGE="JavaScript">showEmot();  </script></div>';
                     break;
                 case 'KINDEDITOR':
-                    $parseStr = '<script type="text/javascript" src="__ROOT__/Public/Js/KindEditor/kindeditor.js"></script><script type="text/javascript"> KE.show({ id : \'' . $id . '\'  ,urlType : "absolute"});</script><textarea id="' . $id . '" style="' . $style . '" name="' . $name . '" >' . $content . '</textarea>';
+                    $parseStr = '<script src="__ROOT__/Public/Js/KindEditor/kindeditor.js"></script><script> KE.show({ id : \'' . $id . '\'  ,urlType : "absolute"});</script><textarea id="' . $id . '" style="' . $style . '" name="' . $name . '" >' . $content . '</textarea>';
                     break;
                 default :
                     $parseStr = '<textarea id="' . $id . '" style="' . $style . '" name="' . $name . '" >' . $content . '</textarea>';
@@ -265,7 +258,7 @@
             if (!empty($key)) $colNum++;
 
             //显示开始
-            $parseStr = "<!-- Think 系统列表组件开始 -->\n";
+            $parseStr = "<!-- 系统列表组件开始 -->\n";
             $parseStr .= '<table id="' . $id . '" class="' . $style . '" cellpadding=0 cellspacing=0 >';
             $parseStr .= '<tr><td height="5" colspan="' . $colNum . '" class="topTd" ></td></tr>';
             $parseStr .= '<tr class="row" >';
@@ -368,7 +361,7 @@
                 }
             }
             $parseStr .= '</tr></volist><tr><td height="5" colspan="' . $colNum . '" class="bottomTd"></td></tr></table>';
-            $parseStr .= "\n<!-- Think 系统列表组件结束 -->\n";
+            $parseStr .= "\n<!-- 系统列表组件结束 -->\n";
 
             return $parseStr;
         }
@@ -414,7 +407,7 @@
             if (!empty($key)) $colNum++;
 
             //显示开始
-            $parseStr = "<!-- Think 系统列表组件开始 -->\n";
+            $parseStr = "<!-- 系统列表组件开始 -->\n";
             $parseStr .= '<table id="' . $id . '" class="' . $style . '" cellpadding=0 cellspacing=0 >';
             $parseStr .= '<tr><td height="5" colspan="' . $colNum . '" class="topTd" ></td></tr>';
             $parseStr .= '<tr class="row" >';
@@ -532,7 +525,7 @@
                 }
             }
             $parseStr .= '</tr></volist><tr><td height="5" colspan="' . $colNum . '" class="bottomTd"></td></tr></table>';
-            $parseStr .= "\n<!-- Think 系统列表组件结束 -->\n";
+            $parseStr .= "\n<!-- 系统列表组件结束 -->\n";
 
             return $parseStr;
         }
