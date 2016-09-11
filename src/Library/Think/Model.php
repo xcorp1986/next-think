@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
     namespace Think;
     /**
-     * ThinkPHP Model模型类
+     * Model模型类
      * 实现了ORM和ActiveRecords模式
      */
     class Model

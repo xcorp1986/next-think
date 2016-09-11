@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
     namespace Think;
     /**
-     * ThinkPHP内置的Dispatcher类
+     * 内置的Dispatcher类
      * 完成URL解析、路由和调度
      */
     class Dispatcher

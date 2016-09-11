@@ -23,7 +23,7 @@
 
         /**
          * 模板主题
-         * @var theme
+         * @var $theme
          * @access protected
          */
         protected $theme = '';
