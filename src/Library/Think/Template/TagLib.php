@@ -9,8 +9,10 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
     namespace Think\Template;
+    use Think\Think;
+
     /**
-     * ThinkPHP标签库TagLib解析基类
+     * 标签库TagLib解析基类
      */
     class TagLib
     {
@@ -66,7 +68,7 @@
         public function __construct()
         {
             $this->tagLib = strtolower(substr(get_class($this), 6));
-            $this->tpl = \Think\Think::instance('Think\\Template');
+            $this->tpl = Think::instance(\Think\Template::class);
         }
 
         /**

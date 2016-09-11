@@ -32,7 +32,7 @@
                     //载入模版缓存文件
                     Storage::load(C('CACHE_PATH') . $_data['prefix'] . md5($_content) . C('TMPL_CACHFILE_SUFFIX'), $_data['var']);
                 } else {
-                    $tpl = Think::instance('Think\\Template');
+                    $tpl = Think::instance(\Think\Template::class);
                     // 编译并加载模板文件
                     $tpl->fetch($_content, $_data['var'], $_data['prefix']);
                 }
