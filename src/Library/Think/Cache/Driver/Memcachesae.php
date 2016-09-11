@@ -1,9 +1,6 @@
 <?php
 
 
-// | Copyright (c) 2006-2012 http://thinkphp.cn All rights reserved.
-
-
     namespace Think\Cache\Driver;
 
     use Think\Cache;

@@ -1,11 +1,9 @@
 <?php
 
-
     /**
      * 默认的调试模式配置文件
+     * 调试模式下面默认设置 可以在应用配置目录下重新定义 debug.php 覆盖
      */
-    defined('THINK_PATH') or exit();
-// 调试模式下面默认设置 可以在应用配置目录下重新定义 debug.php 覆盖
     return [
         'LOG_RECORD'           => true,  // 进行日志记录
         'LOG_EXCEPTION_RECORD' => true,    // 是否记录异常信息日志

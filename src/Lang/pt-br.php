@@ -1,6 +1,5 @@
 <?php
 
-
     /**
      * Portuguese language package
      */

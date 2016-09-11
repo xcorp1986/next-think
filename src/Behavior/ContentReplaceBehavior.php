@@ -6,7 +6,7 @@
     use Think\Behavior;
 
     /**
-     * 系统行为扩展：模板内容输出替换
+     * 模板内容输出替换
      */
     class ContentReplaceBehavior extends Behavior
     {

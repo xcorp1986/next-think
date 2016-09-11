@@ -1,9 +1,6 @@
 <?php
 
 
-// | Copyright (c) 2006-2012 http://thinkphp.cn All rights reserved.
-
-
     namespace Behavior;
 
     use Think\Behavior;
@@ -17,8 +14,7 @@
         // 行为扩展的执行入口必须是run
         public function run(&$params)
         {
-            // 检测语言
-            $this->checkLanguage();
+            self::_checkLanguage();
         }
 
         /**
@@ -27,7 +23,7 @@
          * @access private
          * @return void
          */
-        private function checkLanguage()
+        private static function _checkLanguage()
         {
             // 不开启语言包功能，仅仅加载框架语言文件直接返回
             if (!C('LANG_SWITCH_ON', null, false)) {
@@ -57,22 +53,22 @@
             define('LANG_SET', strtolower($langSet));
 
             // 读取框架语言包
-            $file = THINK_PATH . 'Lang/' . LANG_SET . '.php';
+            $file = THINK_PATH . 'Lang/' . LANG_SET . EXT;
             if (LANG_SET != C('DEFAULT_LANG') && is_file($file))
                 L(include $file);
 
             // 读取应用公共语言包
-            $file = LANG_PATH . LANG_SET . '.php';
+            $file = LANG_PATH . LANG_SET . EXT;
             if (is_file($file))
                 L(include $file);
 
             // 读取模块语言包
-            $file = MODULE_PATH . 'Lang/' . LANG_SET . '.php';
+            $file = MODULE_PATH . 'Lang/' . LANG_SET . EXT;
             if (is_file($file))
                 L(include $file);
 
             // 读取当前控制器语言包
-            $file = MODULE_PATH . 'Lang/' . LANG_SET . '/' . strtolower(CONTROLLER_NAME) . '.php';
+            $file = MODULE_PATH . 'Lang/' . LANG_SET . '/' . strtolower(CONTROLLER_NAME) . EXT;
             if (is_file($file))
                 L(include $file);
         }

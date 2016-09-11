@@ -1,7 +1,11 @@
 <?php
 
-
     namespace Org\Util;
+    /**
+     * 编码转换
+     * Class CodeSwitch
+     * @package Org\Util
+     */
     class CodeSwitch
     {
         // 错误信息

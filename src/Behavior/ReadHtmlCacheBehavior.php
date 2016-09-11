@@ -8,7 +8,7 @@
     use Think\Think;
 
     /**
-     * 系统行为扩展：静态缓存读取
+     * 静态缓存读取
      */
     class ReadHtmlCacheBehavior extends Behavior
     {

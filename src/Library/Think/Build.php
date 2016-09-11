@@ -24,7 +24,10 @@ class [MODEL]Model extends Model {
 
 }';
 
-        // 检测应用目录是否需要自动创建
+        /**
+         * 检测应用目录是否需要自动创建
+         * @param $module
+         */
         static public function checkDir($module)
         {
             if (!is_dir(APP_PATH . $module)) {
@@ -36,7 +39,10 @@ class [MODEL]Model extends Model {
             }
         }
 
-        // 创建应用和模块的目录结构
+        /**
+         * 创建应用和模块的目录结构
+         * @param $module
+         */
         static public function buildAppDir($module)
         {
             // 没有创建的话自动创建
@@ -67,10 +73,10 @@ class [MODEL]Model extends Model {
 //                self::buildDirSecure($dirs);
                 // 写入应用配置文件
                 if (!is_file(CONF_PATH . 'config' . CONF_EXT))
-                    file_put_contents(CONF_PATH . 'config' . CONF_EXT, '.php' == CONF_EXT ? "<?php\nreturn array(\n\t//'配置项'=>'配置值'\n);" : '');
+                    file_put_contents(CONF_PATH . 'config' . CONF_EXT, '.php' == CONF_EXT ? "<?php\nreturn [\n\t//'配置项'=>'配置值'\n];" : '');
                 // 写入模块配置文件
                 if (!is_file(APP_PATH . $module . '/Conf/config' . CONF_EXT))
-                    file_put_contents(APP_PATH . $module . '/Conf/config' . CONF_EXT, '.php' == CONF_EXT ? "<?php\nreturn array(\n\t//'配置项'=>'配置值'\n);" : '');
+                    file_put_contents(APP_PATH . $module . '/Conf/config' . CONF_EXT, '.php' == CONF_EXT ? "<?php\nreturn [\n\t//'配置项'=>'配置值'\n];" : '');
                 // 生成模块的测试控制器
                 if (defined('BUILD_CONTROLLER_LIST')) {
                     // 自动生成的控制器列表（注意大小写）
@@ -96,7 +102,10 @@ class [MODEL]Model extends Model {
             }
         }
 
-        // 检查缓存目录(Runtime) 如果不存在则自动创建
+        /**
+         * 检查缓存目录(Runtime) 如果不存在则自动创建
+         * @return bool
+         */
         static public function buildRuntime()
         {
             if (!is_dir(RUNTIME_PATH)) {
@@ -112,7 +121,11 @@ class [MODEL]Model extends Model {
             return true;
         }
 
-        // 创建控制器类
+        /**
+         * 创建控制器类
+         * @param        $module
+         * @param string $controller
+         */
         static public function buildController($module, $controller = 'Index')
         {
             $file = APP_PATH . $module . '/Controller/' . $controller . 'Controller' . EXT;
@@ -129,7 +142,11 @@ class [MODEL]Model extends Model {
             }
         }
 
-        // 创建模型类
+        /**
+         * 创建模型类
+         * @param $module
+         * @param $model
+         */
         static public function buildModel($module, $model)
         {
             $file = APP_PATH . $module . '/Model/' . $model . 'Model' . EXT;
@@ -146,7 +163,11 @@ class [MODEL]Model extends Model {
             }
         }
 
-        // 生成目录安全文件
+        /**
+         * 生成目录安全文件
+         * @deprecated
+         * @param array $dirs
+         */
         static public function buildDirSecure($dirs = [])
         {
             // 目录安全写入（默认开启）

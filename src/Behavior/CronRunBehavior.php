@@ -39,7 +39,7 @@
                     if (empty($cron[2]) || $_SERVER['REQUEST_TIME'] >= $cron[2]) {
                         // 到达时间 执行cron文件
                         G('cronStart');
-                        include COMMON_PATH . 'Cron/' . $cron[0] . '.php';
+                        include COMMON_PATH . 'Cron/' . $cron[0] . EXT;
                         G('cronEnd');
                         $_useTime = G('cronStart', 'cronEnd', 6);
                         // 更新cron记录

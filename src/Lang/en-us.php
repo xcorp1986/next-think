@@ -1,6 +1,5 @@
 <?php
 
-
     /**
      * English language package
      */

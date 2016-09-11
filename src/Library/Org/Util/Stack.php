@@ -5,9 +5,6 @@
 
     /**
      * Stack实现类
-     * @category    ORG
-     * @package     ORG
-     * @subpackage  Util
      */
     class Stack extends ArrayList
     {

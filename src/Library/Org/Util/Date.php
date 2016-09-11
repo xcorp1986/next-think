@@ -4,10 +4,6 @@
     namespace Org\Util;
     /**
      * 日期时间操作类
-     * @category    ORG
-     * @package     ORG
-     * @subpackage  Date
-     * @version     $Id: Date.class.php 2662 2012-01-26 06:32:50Z liu21st $
      */
     class Date
     {

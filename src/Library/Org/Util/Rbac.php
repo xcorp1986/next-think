@@ -6,71 +6,74 @@
     use Think\Db;
 
     /**
-     * +------------------------------------------------------------------------------
      * 基于角色的数据库方式验证类
-     * +------------------------------------------------------------------------------
+     *
+     * 配置文件增加设置
+     * USER_AUTH_ON 是否需要认证
+     * USER_AUTH_TYPE 认证类型
+     * USER_AUTH_KEY 认证识别号
+     * REQUIRE_AUTH_MODULE  需要
+     * NOT_AUTH_MODULE 无需认证模块
+     * USER_AUTH_GATEWAY 认证网关
+     * RBAC_DB_DSN  数据库连接DSN
+     * RBAC_ROLE_TABLE 角色表名称
+     * RBAC_USER_TABLE 用户表名称
+     * RBAC_ACCESS_TABLE 权限表名称
+     * RBAC_NODE_TABLE 节点表名称
+     *
+     * <code>
+     * CREATE TABLE IF NOT EXISTS `think_access` (
+     * `role_id` smallint(6) unsigned NOT NULL,
+     * `node_id` smallint(6) unsigned NOT NULL,
+     * `level` tinyint(1) NOT NULL,
+     * `module` varchar(50) DEFAULT NULL,
+     * KEY `groupId` (`role_id`),
+     * KEY `nodeId` (`node_id`)
+     * ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+     *
+     * CREATE TABLE IF NOT EXISTS `think_node` (
+     * `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
+     * `name` varchar(20) NOT NULL,
+     * `title` varchar(50) DEFAULT NULL,
+     * `status` tinyint(1) DEFAULT '0',
+     * `remark` varchar(255) DEFAULT NULL,
+     * `sort` smallint(6) unsigned DEFAULT NULL,
+     * `pid` smallint(6) unsigned NOT NULL,
+     * `level` tinyint(1) unsigned NOT NULL,
+     * PRIMARY KEY (`id`),
+     * KEY `level` (`level`),
+     * KEY `pid` (`pid`),
+     * KEY `status` (`status`),
+     * KEY `name` (`name`)
+     * ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+     *
+     * CREATE TABLE IF NOT EXISTS `think_role` (
+     * `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
+     * `name` varchar(20) NOT NULL,
+     * `pid` smallint(6) DEFAULT NULL,
+     * `status` tinyint(1) unsigned DEFAULT NULL,
+     * `remark` varchar(255) DEFAULT NULL,
+     * PRIMARY KEY (`id`),
+     * KEY `pid` (`pid`),
+     * KEY `status` (`status`)
+     * ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
+     *
+     * CREATE TABLE IF NOT EXISTS `think_role_user` (
+     * `role_id` mediumint(9) unsigned DEFAULT NULL,
+     * `user_id` char(32) DEFAULT NULL,
+     * KEY `group_id` (`role_id`),
+     * KEY `user_id` (`user_id`)
+     * ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+     * </code>
      */
-// 配置文件增加设置
-// USER_AUTH_ON 是否需要认证
-// USER_AUTH_TYPE 认证类型
-// USER_AUTH_KEY 认证识别号
-// REQUIRE_AUTH_MODULE  需要认证模块
-// NOT_AUTH_MODULE 无需认证模块
-// USER_AUTH_GATEWAY 认证网关
-// RBAC_DB_DSN  数据库连接DSN
-// RBAC_ROLE_TABLE 角色表名称
-// RBAC_USER_TABLE 用户表名称
-// RBAC_ACCESS_TABLE 权限表名称
-// RBAC_NODE_TABLE 节点表名称
-    /*
-    -- --------------------------------------------------------
-    CREATE TABLE IF NOT EXISTS `think_access` (
-      `role_id` smallint(6) unsigned NOT NULL,
-      `node_id` smallint(6) unsigned NOT NULL,
-      `level` tinyint(1) NOT NULL,
-      `module` varchar(50) DEFAULT NULL,
-      KEY `groupId` (`role_id`),
-      KEY `nodeId` (`node_id`)
-    ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-    CREATE TABLE IF NOT EXISTS `think_node` (
-      `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
-      `name` varchar(20) NOT NULL,
-      `title` varchar(50) DEFAULT NULL,
-      `status` tinyint(1) DEFAULT '0',
-      `remark` varchar(255) DEFAULT NULL,
-      `sort` smallint(6) unsigned DEFAULT NULL,
-      `pid` smallint(6) unsigned NOT NULL,
-      `level` tinyint(1) unsigned NOT NULL,
-      PRIMARY KEY (`id`),
-      KEY `level` (`level`),
-      KEY `pid` (`pid`),
-      KEY `status` (`status`),
-      KEY `name` (`name`)
-    ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
-    CREATE TABLE IF NOT EXISTS `think_role` (
-      `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
-      `name` varchar(20) NOT NULL,
-      `pid` smallint(6) DEFAULT NULL,
-      `status` tinyint(1) unsigned DEFAULT NULL,
-      `remark` varchar(255) DEFAULT NULL,
-      PRIMARY KEY (`id`),
-      KEY `pid` (`pid`),
-      KEY `status` (`status`)
-    ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
-
-    CREATE TABLE IF NOT EXISTS `think_role_user` (
-      `role_id` mediumint(9) unsigned DEFAULT NULL,
-      `user_id` char(32) DEFAULT NULL,
-      KEY `group_id` (`role_id`),
-      KEY `user_id` (`user_id`)
-    ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-    */
-
     class Rbac
     {
-        // 认证方法
+        /**
+         * 认证方法
+         * @param        $map
+         * @param string $model
+         * @return mixed
+         */
         static public function authenticate($map, $model = '')
         {
             if (empty($model)) $model = C('USER_AUTH_MODEL');
@@ -79,7 +82,10 @@
             return M($model)->where($map)->find();
         }
 
-        //用于检测用户权限的方法,并保存到Session中
+        /**
+         * 用于检测用户权限的方法,并保存到Session中
+         * @param null $authId
+         */
         static function saveAccessList($authId = null)
         {
             if (null === $authId) $authId = $_SESSION[C('USER_AUTH_KEY')];
@@ -91,7 +97,12 @@
             return;
         }
 
-        // 取得模块的所属记录访问权限列表 返回有权限的记录ID数组
+        /**
+         * 取得模块的所属记录访问权限列表 返回有权限的记录ID数组
+         * @param null   $authId
+         * @param string $module
+         * @return array
+         */
         static function getRecordAccessList($authId = null, $module = '')
         {
             if (null === $authId) $authId = $_SESSION[C('USER_AUTH_KEY')];
@@ -102,7 +113,10 @@
             return $accessList;
         }
 
-        //检查当前操作是否需要认证
+        /**
+         * 检查当前操作是否需要认证
+         * @return bool
+         */
         static function checkAccess()
         {
             //如果项目要求认证，并且当前模块需要认证，则进行权限认证
@@ -139,7 +153,10 @@
             return false;
         }
 
-        // 登录检查
+        /**
+         * 登录检查
+         * @return bool
+         */
         static public function checkLogin()
         {
             //检查当前操作是否需要认证
@@ -161,7 +178,11 @@
             return true;
         }
 
-        //权限认证的过滤器方法
+        /**
+         * 权限认证的过滤器方法
+         * @param mixed|string $appName
+         * @return bool
+         */
         static public function AccessDecision($appName = MODULE_NAME)
         {
             //检查是否需要认证
@@ -199,13 +220,9 @@
         }
 
         /**
-         * +----------------------------------------------------------
          * 取得当前认证号的所有权限列表
-         * +----------------------------------------------------------
-         * @param int $authId     用户ID
-         *                        +----------------------------------------------------------
+         * @param int $authId 用户ID
          * @access public
-         *                        +----------------------------------------------------------
          */
         static public function getAccessList($authId)
         {
@@ -276,7 +293,12 @@
             return $access;
         }
 
-        // 读取模块所属的记录访问权限
+        /**
+         * 读取模块所属的记录访问权限
+         * @param $authId
+         * @param $module
+         * @return array
+         */
         static public function getModuleAccessList($authId, $module)
         {
             // Db方式

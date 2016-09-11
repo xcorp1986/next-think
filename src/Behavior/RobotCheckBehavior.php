@@ -7,7 +7,6 @@
 
     /**
      * 机器人检测
-     * @author   liu21st <liu21st@gmail.com>
      */
     class RobotCheckBehavior extends Behavior
     {
@@ -15,13 +14,13 @@
         public function run(&$params)
         {
             // 机器人访问检测
-            if (C('LIMIT_ROBOT_VISIT', null, true) && self::isRobot()) {
+            if (C('LIMIT_ROBOT_VISIT', null, true) && self::_isRobot()) {
                 // 禁止机器人访问
                 exit('Access Denied');
             }
         }
 
-        static private function isRobot()
+        static private function _isRobot()
         {
             static $_robot = null;
             if (is_null($_robot)) {

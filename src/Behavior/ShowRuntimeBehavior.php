@@ -6,7 +6,7 @@
     use Think\Behavior;
 
     /**
-     * 系统行为扩展：运行时间信息显示
+     * 运行时间信息显示
      */
     class ShowRuntimeBehavior extends Behavior
     {

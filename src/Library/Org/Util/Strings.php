@@ -1,7 +1,7 @@
 <?php
 
-
     namespace Org\Util;
+
     class Strings
     {
 

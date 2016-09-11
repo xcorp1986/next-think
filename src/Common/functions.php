@@ -62,6 +62,7 @@
                 return include $file;
             case 'ini':
                 return parse_ini_file($file);
+            //@todo yaml_parse_file need pecl yaml extension
             case 'yaml':
                 return yaml_parse_file($file);
             case 'xml':
@@ -74,20 +75,6 @@
                 } else {
                     E(L('_NOT_SUPPORT_') . ':' . $ext);
                 }
-        }
-    }
-
-    /**
-     * 解析yaml文件返回一个数组
-     * @param string $file 配置文件名
-     * @return array
-     */
-    if (!function_exists('yaml_parse_file')) {
-        function yaml_parse_file($file)
-        {
-            vendor('spyc.Spyc');
-
-            return Spyc::YAMLLoad($file);
         }
     }
 
@@ -1176,7 +1163,7 @@
     function F($name, $value = '', $path = DATA_PATH)
     {
         static $_cache = [];
-        $filename = $path . $name . '.php';
+        $filename = $path . $name . EXT;
         if ('' !== $value) {
             if (is_null($value)) {
                 // 删除缓存
@@ -1498,7 +1485,7 @@
         if ($files = C('LOAD_EXT_FILE')) {
             $files = explode(',', $files);
             foreach ($files as $file) {
-                $file = $path . 'Common/' . $file . '.php';
+                $file = $path . 'Common/' . $file . EXT;
                 if (is_file($file)) include $file;
             }
         }

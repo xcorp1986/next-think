@@ -6,7 +6,7 @@
     use Think\Behavior;
 
     /**
-     * 行为扩展：代理检测
+     * 代理检测
      */
     class AgentCheckBehavior extends Behavior
     {

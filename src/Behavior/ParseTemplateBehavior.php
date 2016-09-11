@@ -8,7 +8,7 @@
     use Think\Think;
 
     /**
-     * 系统行为扩展：模板解析
+     * 模板解析
      */
     class ParseTemplateBehavior extends Behavior
     {

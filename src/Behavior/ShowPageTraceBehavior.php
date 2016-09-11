@@ -6,7 +6,7 @@
     use Think\Behavior;
 
     /**
-     * 系统行为扩展：页面Trace显示输出
+     * 页面Trace显示输出
      */
     class ShowPageTraceBehavior extends Behavior
     {

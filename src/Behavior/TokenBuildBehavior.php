@@ -6,7 +6,7 @@
     use Think\Behavior;
 
     /**
-     * 系统行为扩展：表单令牌生成
+     * 表单令牌生成
      */
     class TokenBuildBehavior extends Behavior
     {
@@ -14,7 +14,7 @@
         public function run(&$content)
         {
             if (C('TOKEN_ON')) {
-                list($tokenName, $tokenKey, $tokenValue) = $this->getToken();
+                list($tokenName, $tokenKey, $tokenValue) = self::_getToken();
                 $input_token = '<input type="hidden" name="' . $tokenName . '" value="' . $tokenKey . '_' . $tokenValue . '" />';
                 $meta_token = '<meta name="' . $tokenName . '" content="' . $tokenKey . '_' . $tokenValue . '" />';
                 if (strpos($content, '{__TOKEN__}')) {
@@ -31,7 +31,7 @@
         }
 
         //获得token
-        private function getToken()
+        private static function _getToken()
         {
             $tokenName = C('TOKEN_NAME', null, '__hash__');
             $tokenType = C('TOKEN_TYPE', null, 'md5');

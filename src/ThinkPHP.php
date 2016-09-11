@@ -42,7 +42,6 @@
     defined('CORE_PATH') or define('CORE_PATH', LIB_PATH . 'Think/'); // Think类库目录
     defined('BEHAVIOR_PATH') or define('BEHAVIOR_PATH', LIB_PATH . 'Behavior/'); // 行为类库目录
     defined('MODE_PATH') or define('MODE_PATH', THINK_PATH . 'Mode/'); // 系统应用模式目录
-    defined('VENDOR_PATH') or define('VENDOR_PATH', LIB_PATH . 'Vendor/'); // 第三方类库目录
     defined('COMMON_PATH') or define('COMMON_PATH', APP_PATH . 'Common/'); // 应用公共目录
     defined('CONF_PATH') or define('CONF_PATH', COMMON_PATH . 'Conf/'); // 应用配置目录
     defined('LANG_PATH') or define('LANG_PATH', COMMON_PATH . 'Lang/'); // 应用语言目录
@@ -51,7 +50,7 @@
     defined('TEMP_PATH') or define('TEMP_PATH', RUNTIME_PATH . 'Temp/'); // 应用缓存目录
     defined('DATA_PATH') or define('DATA_PATH', RUNTIME_PATH . 'Data/'); // 应用数据目录
     defined('CACHE_PATH') or define('CACHE_PATH', RUNTIME_PATH . 'Cache/'); // 应用模板缓存目录
-    defined('CONF_EXT') or define('CONF_EXT', '.php'); // 配置文件后缀
+    defined('CONF_EXT') or define('CONF_EXT', EXT); // 配置文件后缀
     defined('CONF_PARSE') or define('CONF_PARSE', '');    // 配置文件解析方法
     defined('ADDON_PATH') or define('ADDON_PATH', APP_PATH . 'Addon');
     define('IS_CGI', (0 === strpos(PHP_SAPI, 'cgi') || false !== strpos(PHP_SAPI, 'fcgi')) ? 1 : 0);

@@ -33,11 +33,11 @@
         /**
          * 若要获得迭代因子，通过getIterator方法实现
          * @access public
-         * @return ArrayObject
+         * @return \ArrayObject
          */
         public function getIterator()
         {
-            return new ArrayObject($this->_elements);
+            return new \ArrayObject($this->_elements);
         }
 
         /**
