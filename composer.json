@@ -1,0 +1,29 @@
+{
+  "name": "cheukpang/next-think",
+  "description": "ThinkPHP refactor base on v3.2.3",
+  "keywords": [
+    "ThinkPHP",
+    "refactor",
+    "composer"
+  ],
+  "minimum-stability": "dev",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "kwan",
+      "email": "303198069@qq.com",
+      "role": "developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Think\\": "src/Library/Think"
+    },
+    "files": [
+      "src/ThinkPHP.php"
+    ]
+  }
+}
