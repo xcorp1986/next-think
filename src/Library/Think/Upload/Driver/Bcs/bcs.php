@@ -1217,7 +1217,7 @@
             if (is_array($acl)) {
                 //(1).a
                 $result ['content'] = $this->check_user_acl($acl);
-            } else if (is_string($acl)) {
+            } elseif (is_string($acl)) {
                 if (in_array($acl, self::$ACL_TYPES)) {
                     //(2).a
                     $result ["headers"] = [

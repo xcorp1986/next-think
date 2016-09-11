@@ -247,7 +247,7 @@
                         $parseStr = 'C("' . $vars[2] . '")';
                         break;
                 }
-            } else if (count($vars) == 2) {
+            } elseif (count($vars) == 2) {
                 switch ($vars[1]) {
                     case 'NOW':
                         $parseStr = "date('Y-m-d g:i a',time())";

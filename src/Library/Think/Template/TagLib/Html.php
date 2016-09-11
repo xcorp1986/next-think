@@ -153,7 +153,7 @@
                     $parseStr .= '<option value="<?php echo $key ?>"><?php echo $val ?></option>';
                 }
                 $parseStr .= '<?php } ?>';
-            } else if (!empty($values)) {
+            } elseif (!empty($values)) {
                 $parseStr .= '<?php  for($i=0;$i<count($' . $values . ');$i++) { ?>';
                 if (!empty($selected)) {
                     $parseStr .= '<?php if(isset($' . $selected . ') && ((is_string($' . $selected . ') && $' . $selected . ' == $' . $values . '[$i]) || (is_array($' . $selected . ') && in_array($' . $values . '[$i],$' . $selected . ')))) { ?>';

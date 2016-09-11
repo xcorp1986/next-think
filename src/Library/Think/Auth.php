@@ -116,7 +116,7 @@
                     if (in_array($auth, $name) && $intersect == $param) {  //如果节点相符且url参数满足
                         $list[] = $auth;
                     }
-                } else if (in_array($auth, $name)) {
+                } elseif (in_array($auth, $name)) {
                     $list[] = $auth;
                 }
             }

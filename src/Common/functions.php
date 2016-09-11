@@ -813,7 +813,7 @@
                             if (is_string($tokens[$k]) && $tokens[$k] == ';') {
                                 $i = $k;
                                 break;
-                            } else if ($tokens[$k][0] == T_CLOSE_TAG) {
+                            } elseif ($tokens[$k][0] == T_CLOSE_TAG) {
                                 break;
                             }
                         }

@@ -132,9 +132,9 @@
                     $url = $this->downLink($key);
                     if ($param['imageInfo']) {
                         $url .= '?imageInfo';
-                    } else if ($param['exif']) {
+                    } elseif ($param['exif']) {
                         $url .= '?exif';
-                    } else if ($param['imageView']) {
+                    } elseif ($param['imageView']) {
                         $url .= '?imageView/' . $param['mode'];
                         if ($param['w'])
                             $url .= "/w/{$param['w']}";
