@@ -188,6 +188,7 @@
 
         /**
          * 用于标签属性里面的特殊模板变量解析
+         * @todo 与\Think\Template::parseThinkVar()重复定义了
          * 格式 以 Think. 打头的变量属于特殊模板变量
          * @access public
          * @param string $varStr 变量字符串

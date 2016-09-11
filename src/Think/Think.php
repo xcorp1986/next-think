@@ -67,7 +67,7 @@
                     Hook::import(include CONF_PATH . 'tags.php');
 
                 // 加载框架底层语言包
-                L(include THINK_PATH . 'Lang/' . strtolower(C('DEFAULT_LANG')) . '.php');
+                L(include THINK_PATH . 'Lang/' . strtolower(C('DEFAULT_LANG')) . EXT);
 
                 if (!APP_DEBUG) {
                     $content .= "\nnamespace { Think\\Think::addMap(" . var_export(self::$_map, true) . ");";
