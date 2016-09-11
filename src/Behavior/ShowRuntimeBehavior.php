@@ -9,10 +9,12 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
     namespace Behavior;
+    use Think\Behavior;
+
     /**
      * 系统行为扩展：运行时间信息显示
      */
-    class ShowRuntimeBehavior
+    class ShowRuntimeBehavior extends Behavior
     {
 
         // 行为扩展的执行入口必须是run

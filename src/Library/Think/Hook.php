@@ -114,7 +114,7 @@
          * @param string $name   插件名称
          * @param string $tag    方法名（标签名）
          * @param Mixed  $params 传入的参数
-         * @return void
+         * @return mixed
          */
         static public function exec($name, $tag, &$params = null)
         {

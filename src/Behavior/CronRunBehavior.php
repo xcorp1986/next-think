@@ -9,10 +9,12 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
     namespace Behavior;
+    use Think\Behavior;
+
     /**
      * 自动执行任务
      */
-    class CronRunBehavior
+    class CronRunBehavior extends Behavior
     {
 
         public function run(&$params)

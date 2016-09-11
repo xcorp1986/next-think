@@ -10,13 +10,14 @@
 // +----------------------------------------------------------------------
     namespace Behavior;
 
+    use Think\Behavior;
     use Think\Storage;
     use Think\Think;
 
     /**
      * 系统行为扩展：模板解析
      */
-    class ParseTemplateBehavior
+    class ParseTemplateBehavior extends Behavior
     {
 
         // 行为扩展的执行入口必须是run

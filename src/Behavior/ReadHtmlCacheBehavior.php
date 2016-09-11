@@ -10,13 +10,14 @@
 // +----------------------------------------------------------------------
     namespace Behavior;
 
+    use Think\Behavior;
     use Think\Storage;
     use Think\Think;
 
     /**
      * 系统行为扩展：静态缓存读取
      */
-    class ReadHtmlCacheBehavior
+    class ReadHtmlCacheBehavior extends Behavior
     {
         // 行为扩展的执行入口必须是run
         public function run(&$params)

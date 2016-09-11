@@ -12,8 +12,8 @@
     namespace Think\Db;
 
     use PDO;
-    use Think\Config;
-    use Think\Debug;
+//    use Think\Config;
+//    use Think\Debug;
 
     class Lite
     {

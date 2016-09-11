@@ -528,6 +528,7 @@
 
     /**
      * 导入所需的类库 同java的Import 本函数有缓存功能
+     * @deprecated
      * @param string $class   类库命名空间字符串
      * @param string $baseUrl 起始路径
      * @param string $ext     导入的文件扩展名
@@ -572,6 +573,7 @@
     /**
      * 基于命名空间方式导入函数库
      * load('@.Util.Array')
+     * @deprecated
      * @param string $name    函数库命名空间字符串
      * @param string $baseUrl 起始路径
      * @param string $ext     导入的文件扩展名
@@ -593,21 +595,6 @@
         if (substr($baseUrl, -1) != '/')
             $baseUrl .= '/';
         require_cache($baseUrl . $name . $ext);
-    }
-
-    /**
-     * 快速导入第三方框架类库 所有第三方框架的类库文件统一放到 系统的Vendor目录下面
-     * @param string $class   类库
-     * @param string $baseUrl 基础目录
-     * @param string $ext     类库后缀
-     * @return boolean
-     */
-    function vendor($class, $baseUrl = '', $ext = '.php')
-    {
-        if (empty($baseUrl))
-            $baseUrl = VENDOR_PATH;
-
-        return import($class, $baseUrl, $ext);
     }
 
     /**
@@ -645,6 +632,7 @@
 
     /**
      * 实例化一个没有模型文件的Model
+     * @deprecated
      * @param string $name        Model名称 支持指定基础模型 例如 MongoModel:User
      * @param string $tablePrefix 表前缀
      * @param mixed  $connection  数据库连接信息
@@ -794,6 +782,7 @@
 
     /**
      * 执行某个行为
+     * @deprecated
      * @param string $name   行为名称
      * @param string $tag    标签名称（行为类无需传入）
      * @param Mixed  $params 传入的参数
@@ -862,6 +851,7 @@
 
     /**
      * 自定义异常处理
+     * @deprecated
      * @param string  $msg  异常消息
      * @param string  $type 异常类型 默认为Think\Exception
      * @param integer $code 异常代码 默认为0
@@ -913,6 +903,7 @@
 
     /**
      * 设置当前页面的布局
+     * @deprecated
      * @param string|false $layout 布局名称 为false的时候表示关闭布局
      * @return void
      */

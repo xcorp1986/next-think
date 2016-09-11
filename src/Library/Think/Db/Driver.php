@@ -12,8 +12,8 @@
     namespace Think\Db;
 
     use PDO;
-    use Think\Config;
-    use Think\Debug;
+//    use Think\Config;
+//    use Think\Debug;
 
     abstract class Driver
     {
@@ -90,6 +90,7 @@
         /**
          * 连接数据库方法
          * @access public
+         * @throws \PDOException
          */
         public function connect($config = '', $linkNum = 0, $autoConnection = false)
         {
@@ -142,6 +143,7 @@
          * @access public
          * @param string  $str      sql指令
          * @param boolean $fetchSql 不执行只是获取SQL
+         * @throws \PDOException
          * @return mixed
          */
         public function query($str, $fetchSql = false)
@@ -201,6 +203,7 @@
          * @access public
          * @param string  $str      sql指令
          * @param boolean $fetchSql 不执行只是获取SQL
+         * @throws \PDOException
          * @return mixed
          */
         public function execute($str, $fetchSql = false)

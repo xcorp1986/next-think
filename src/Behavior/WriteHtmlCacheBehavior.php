@@ -10,12 +10,13 @@
 // +----------------------------------------------------------------------
     namespace Behavior;
 
+    use Think\Behavior;
     use Think\Storage;
 
     /**
      * 系统行为扩展：静态缓存写入
      */
-    class WriteHtmlCacheBehavior
+    class WriteHtmlCacheBehavior extends Behavior
     {
 
         // 行为扩展的执行入口必须是run

@@ -9,10 +9,12 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
     namespace Behavior;
+    use Think\Behavior;
+
     /**
      * 系统行为扩展：模板内容输出替换
      */
-    class ContentReplaceBehavior
+    class ContentReplaceBehavior extends Behavior
     {
 
         // 行为扩展的执行入口必须是run

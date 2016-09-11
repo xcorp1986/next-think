@@ -9,10 +9,12 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
     namespace Behavior;
+    use Think\Behavior;
+
     /**
      * 浏览器防刷新检测
      */
-    class BrowserCheckBehavior
+    class BrowserCheckBehavior extends Behavior
     {
         public function run(&$params)
         {

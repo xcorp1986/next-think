@@ -9,10 +9,12 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
     namespace Behavior;
+    use Think\Behavior;
+
     /**
      * 行为扩展：代理检测
      */
-    class AgentCheckBehavior
+    class AgentCheckBehavior extends Behavior
     {
         public function run(&$params)
         {

@@ -9,10 +9,12 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
     namespace Behavior;
+    use Think\Behavior;
+
     /**
      * 语言检测 并自动加载语言包
      */
-    class CheckLangBehavior
+    class CheckLangBehavior extends Behavior
     {
 
         // 行为扩展的执行入口必须是run
