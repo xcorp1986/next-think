@@ -114,11 +114,9 @@
             if ('Behavior' == substr($name, -8)) {
                 // 行为扩展必须用run入口方法
                 $tag = 'run';
-                $addon = new $name();
-
-                return $addon->$tag($params);
             }
+            $addon = new $name();
 
-            return false;
+            return $addon->$tag($params);
         }
     }
