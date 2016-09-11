@@ -22,7 +22,7 @@
     "psr-4": {
       "Think\\": "src/Think",
       "Behavior\\": "src/Behavior",
-      "Org\\": "src/Org",
+      "Org\\": "src/Org"
     },
     "files": [
       "src/ThinkPHP.php"
