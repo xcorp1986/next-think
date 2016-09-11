@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 
     /**
-     * ThinkPHP 普通模式定义
+     * 普通模式定义
      */
     return [
         // 配置文件
@@ -36,35 +36,35 @@
         'core'   => [
             THINK_PATH . 'Common/functions.php',
             COMMON_PATH . 'Common/function.php',
-            CORE_PATH . 'Hook' . EXT,
-            CORE_PATH . 'App' . EXT,
-            CORE_PATH . 'Dispatcher' . EXT,
-            CORE_PATH . 'Route' . EXT,
-            CORE_PATH . 'Controller' . EXT,
-            CORE_PATH . 'View' . EXT,
-            BEHAVIOR_PATH . 'BuildLiteBehavior' . EXT,
-            BEHAVIOR_PATH . 'ParseTemplateBehavior' . EXT,
-            BEHAVIOR_PATH . 'ContentReplaceBehavior' . EXT,
+//            CORE_PATH . 'Hook' . EXT,
+//            CORE_PATH . 'App' . EXT,
+//            CORE_PATH . 'Dispatcher' . EXT,
+//            CORE_PATH . 'Route' . EXT,
+//            CORE_PATH . 'Controller' . EXT,
+//            CORE_PATH . 'View' . EXT,
+//            BEHAVIOR_PATH . 'BuildLiteBehavior' . EXT,
+//            BEHAVIOR_PATH . 'ParseTemplateBehavior' . EXT,
+//            BEHAVIOR_PATH . 'ContentReplaceBehavior' . EXT,
         ],
         // 行为扩展定义
         'tags'   => [
             'app_init'        => [
-//                'Behavior\BuildLiteBehavior', // 生成运行Lite文件
+                \Behavior\BuildLiteBehavior::class, // 生成运行Lite文件
             ],
             'app_begin'       => [
-                'Behavior\ReadHtmlCacheBehavior', // 读取静态缓存
+                \Behavior\ReadHtmlCacheBehavior::class, // 读取静态缓存
             ],
             'app_end'         => [
-                'Behavior\ShowPageTraceBehavior', // 页面Trace显示
+                \Behavior\ShowPageTraceBehavior::class, // 页面Trace显示
             ],
             'view_parse'      => [
-                'Behavior\ParseTemplateBehavior', // 模板解析 支持PHP、内置模板引擎和第三方模板引擎
+                \Behavior\ParseTemplateBehavior::class, // 模板解析 支持PHP、内置模板引擎和第三方模板引擎
             ],
             'template_filter' => [
-                'Behavior\ContentReplaceBehavior', // 模板输出替换
+                \Behavior\ContentReplaceBehavior::class, // 模板输出替换
             ],
             'view_filter'     => [
-                'Behavior\WriteHtmlCacheBehavior', // 写入静态缓存
+                \Behavior\WriteHtmlCacheBehavior::class, // 写入静态缓存
             ],
         ],
     ];
