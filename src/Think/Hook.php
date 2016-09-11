@@ -104,6 +104,7 @@
 
         /**
          * 执行某个插件
+         * @todo $name 这传参方式真的有点- -
          * @param string $name   插件名称
          * @param string $tag    方法名（标签名）
          * @param Mixed  $params 传入的参数
@@ -113,6 +114,7 @@
         {
             if ('Behavior' == substr($name, -8)) {
                 // 行为扩展必须用run入口方法
+                //@todo 注意，这里还必须区分，$tag还可能不是run！这标识符设计还真有点坑
                 $tag = 'run';
             }
             $addon = new $name();
