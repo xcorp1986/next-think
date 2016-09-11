@@ -20,8 +20,9 @@
   },
   "autoload": {
     "psr-4": {
-      "Think\\": "src/Library/Think",
-      "Behavior\\": "src/Behavior"
+      "Think\\": "src/Think",
+      "Behavior\\": "src/Behavior",
+      "Org\\": "src/Org",
     },
     "files": [
       "src/ThinkPHP.php"
