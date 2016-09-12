@@ -1,2 +1,6 @@
+!*.md
 .idea/
-composer.phar
+*.phar
+*.zip
+/.phpstorm.meta.php
+/vendor/
