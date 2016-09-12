@@ -29,7 +29,7 @@
             $filelist = is_file(CONF_PATH . 'lite.php') ?
                 include CONF_PATH . 'lite.php' :
                 [
-                    THINK_PATH . 'Common/functions.php',
+                    THINK_PATH . 'Common/function.php',
                     COMMON_PATH . 'Common/function.php',
                     CORE_PATH . 'Think' . EXT,
                     CORE_PATH . 'Hook' . EXT,

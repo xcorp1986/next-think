@@ -26,7 +26,7 @@
 
         // 函数和类文件
         'core'   => [
-            THINK_PATH . 'Common/functions.php',
+            THINK_PATH . 'Common/function.php',
             COMMON_PATH . 'Common/function.php',
 //            CORE_PATH . 'Hook' . EXT,
 //            CORE_PATH . 'App' . EXT,
