@@ -41,7 +41,7 @@
         // 行为扩展定义
         'tags'   => [
             'app_init'        => [
-                \Behavior\BuildLiteBehavior::class, // 生成运行Lite文件
+//                \Behavior\BuildLiteBehavior::class, // 生成运行Lite文件
             ],
             'app_begin'       => [
                 \Behavior\ReadHtmlCacheBehavior::class, // 读取静态缓存
