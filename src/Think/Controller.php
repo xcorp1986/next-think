@@ -1,9 +1,12 @@
 <?php
 
-
     namespace Think;
+
     /**
      * 控制器基类
+     * Class Controller
+     * @package Think
+     * @method _init() 控制器初始化附加方法
      */
     abstract class Controller
     {
@@ -32,8 +35,9 @@
             //实例化视图类
             $this->view = Think::instance(\Think\View::class);
             //控制器初始化
-            if (method_exists($this, '_initialize'))
-                $this->_initialize();
+            if (method_exists($this, '_init')) {
+                $this->_init();
+            }
         }
 
         /**

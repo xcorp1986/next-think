@@ -2,9 +2,12 @@
 
 
     namespace Think;
+
     /**
      * Model模型类
      * 实现了ORM和ActiveRecords模式
+     * Class Model
+     * @package Think
      */
     class Model
     {
@@ -66,8 +69,9 @@
          */
         public function __construct($name = '', $tablePrefix = '', $connection = '')
         {
-            // 模型初始化
-            $this->_initialize();
+            if (method_exists($this, '_init')) {
+                $this->_init();
+            }
             // 获取模型名称
             if (!empty($name)) {
                 // 支持 数据库名.模型名的 定义
@@ -255,8 +259,10 @@
             }
         }
 
-        // 回调方法 初始化模型
-        protected function _initialize()
+        /**
+         * 附加方法
+         */
+        protected function _init()
         {
         }
 
@@ -1546,7 +1552,7 @@
 
         /**
          * 存储过程返回多数据集
-         * @todo check
+         * @todo   check
          * @access public
          * @param string $sql   SQL指令
          * @param mixed  $parse 是否需要解析SQL

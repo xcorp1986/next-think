@@ -1,7 +1,7 @@
 <?php
 
-
     namespace Think;
+
     /**
      * 引导类
      */

@@ -1,10 +1,12 @@
 <?php
 
-
     namespace Think;
+
     /**
      * 内置的Dispatcher类
      * 完成URL解析、路由和调度
+     * Class Dispatcher
+     * @package Think
      */
     class Dispatcher
     {

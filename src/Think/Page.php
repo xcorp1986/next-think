@@ -1,8 +1,12 @@
 <?php
 
-
     namespace Think;
 
+    /**
+     * 分页类
+     * Class Page
+     * @package Think
+     */
     class Page
     {
         public $firstRow; // 起始行数

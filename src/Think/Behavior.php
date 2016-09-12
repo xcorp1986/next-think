@@ -2,8 +2,11 @@
 
 
     namespace Think;
+
     /**
-     * Behavior基础类
+     * 系统行为基类
+     * Class Behavior
+     * @package Think
      */
     abstract class Behavior
     {

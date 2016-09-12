@@ -1,7 +1,12 @@
 <?php
 
-
     namespace Think;
+
+    /**
+     * 文件上传类
+     * Class Upload
+     * @package Think
+     */
     class Upload
     {
         /**

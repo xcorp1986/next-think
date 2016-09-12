@@ -1,9 +1,11 @@
 <?php
 
-
     namespace Think;
+
     /**
      * 日志处理类
+     * Class Log
+     * @package Think
      */
     class Log
     {

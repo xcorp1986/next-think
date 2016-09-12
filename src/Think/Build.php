@@ -1,9 +1,11 @@
 <?php
 
-
     namespace Think;
+
     /**
      * 自动生成类
+     * Class Build
+     * @package Think
      */
     class Build
     {

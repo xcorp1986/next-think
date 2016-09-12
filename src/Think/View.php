@@ -1,9 +1,11 @@
 <?php
 
-
     namespace Think;
+
     /**
      * 视图类
+     * Class View
+     * @package Think
      */
     class View
     {

@@ -1,11 +1,12 @@
 <?php
 
-
     namespace Think;
 
     /**
      * 图片处理驱动类，可配置图片处理库
      * 目前支持GD库和imagick
+     * Class Image
+     * @package Think
      */
     class Image
     {

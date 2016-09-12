@@ -2,8 +2,11 @@
 
 
     namespace Think;
+
     /**
      * 加密解密类
+     * Class Crypt
+     * @package Think
      */
     class Crypt
     {

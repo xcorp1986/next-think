@@ -1,7 +1,7 @@
 <?php
 
-
     namespace Think;
+
     /**
      * 文件存储类
      * Class Storage

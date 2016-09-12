@@ -1,9 +1,11 @@
 <?php
 
-
     namespace Think;
+
     /**
      * 系统钩子实现
+     * Class Hook
+     * @package Think
      */
     class Hook
     {

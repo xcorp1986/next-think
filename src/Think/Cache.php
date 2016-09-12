@@ -1,9 +1,11 @@
 <?php
 
-
     namespace Think;
+
     /**
      * 缓存管理类
+     * Class Cache
+     * @package Think
      */
     class Cache
     {

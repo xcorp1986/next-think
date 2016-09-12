@@ -1,9 +1,11 @@
 <?php
 
-
     namespace Think;
+
     /**
      * 路由解析类
+     * Class Route
+     * @package Think
      */
     class Route
     {

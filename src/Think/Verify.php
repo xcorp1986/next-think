@@ -1,8 +1,12 @@
 <?php
 
-
     namespace Think;
 
+    /**
+     * 验证码类
+     * Class Verify
+     * @package Think
+     */
     class Verify
     {
         protected $config = [

@@ -1,10 +1,11 @@
 <?php
 
-
     namespace Think;
 
     /**
      * 数据库中间层实现类
+     * Class Db
+     * @package Think
      */
     class Db
     {
