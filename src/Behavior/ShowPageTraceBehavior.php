@@ -12,11 +12,14 @@
     {
         protected $tracePageTabs = ['BASE' => '基本', 'FILE' => '文件', 'INFO' => '流程', 'ERR|NOTIC' => '错误', 'SQL' => 'SQL', 'DEBUG' => '调试'];
 
-        // 行为扩展的执行入口必须是run
+        /**
+         * 执行入口
+         * @param mixed $params
+         */
         public function run(&$params)
         {
             if (!IS_AJAX && !IS_CLI && C('SHOW_PAGE_TRACE')) {
-                echo $this->showTrace();
+                echo $this->_showTrace();
             }
         }
 
@@ -24,7 +27,7 @@
          * 显示页面Trace信息
          * @access private
          */
-        private function showTrace()
+        private function _showTrace()
         {
             // 系统默认显示信息
             $files = get_included_files();
@@ -53,15 +56,19 @@
             $tabs = C('TRACE_PAGE_TABS', null, $this->tracePageTabs);
             foreach ($tabs as $name => $title) {
                 switch (strtoupper($name)) {
-                    case 'BASE':// 基本信息
+                    // 基本信息
+                    case 'BASE':
                         $trace[$title] = $base;
                         break;
-                    case 'FILE': // 文件信息
+                    // 文件信息
+                    case 'FILE':
                         $trace[$title] = $info;
                         break;
-                    default:// 调试信息
+                    // 调试信息
+                    default:
                         $name = strtoupper($name);
-                        if (strpos($name, '|')) {// 多组信息
+                        // 多组信息
+                        if (strpos($name, '|')) {
                             $names = explode('|', $name);
                             $result = [];
                             foreach ($names as $name) {
@@ -73,8 +80,10 @@
                         }
                 }
             }
-            if ($save = C('PAGE_TRACE_SAVE')) { // 保存页面Trace日志
-                if (is_array($save)) {// 选择选项卡保存
+            if ($save = C('PAGE_TRACE_SAVE')) {
+                // 保存页面Trace日志
+                if (is_array($save)) {
+                    // 选择选项卡保存
                     $tabs = C('TRACE_PAGE_TABS', null, $this->tracePageTabs);
                     $array = [];
                     foreach ($save as $tab) {

@@ -11,7 +11,10 @@
     class ShowRuntimeBehavior extends Behavior
     {
 
-        // 行为扩展的执行入口必须是run
+        /**
+         * 执行入口
+         * @param mixed $content
+         */
         public function run(&$content)
         {
             if (C('SHOW_RUN_TIME')) {

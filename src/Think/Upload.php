@@ -178,7 +178,8 @@
                         $info[$key] = $data;
                         continue;
                     } elseif ($this->removeTrash) {
-                        call_user_func($this->removeTrash, $data);//删除垃圾据
+                        //删除垃圾数据
+                        call_user_func($this->removeTrash, $data);
                     }
                 }
 
@@ -265,7 +266,7 @@
             $class = strpos($driver, '\\') ? $driver : 'Think\\Upload\\Driver\\' . ucfirst(strtolower($driver));
             $this->uploader = new $class($config);
             if (!$this->uploader) {
-                E("不存在上传驱动：{$name}");
+                E("不存在上传驱动：{$driver}");
             }
         }
 
@@ -435,14 +436,16 @@
         private function getName($rule, $filename)
         {
             $name = '';
-            if (is_array($rule)) { //数组规则
+            //数组规则
+            if (is_array($rule)) {
                 $func = $rule[0];
                 $param = (array)$rule[1];
                 foreach ($param as &$value) {
                     $value = str_replace('__FILE__', $filename, $value);
                 }
                 $name = call_user_func_array($func, $param);
-            } elseif (is_string($rule)) { //字符串规则
+                //字符串规则
+            } elseif (is_string($rule)) {
                 if (function_exists($rule)) {
                     $name = call_user_func($rule);
                 } else {

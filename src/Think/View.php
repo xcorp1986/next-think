@@ -88,7 +88,8 @@
             if (empty($contentType)) $contentType = C('TMPL_CONTENT_TYPE');
             // 网页字符编码
             header('Content-Type:' . $contentType . '; charset=' . $charset);
-            header('Cache-control: ' . C('HTTP_CACHE_CONTROL'));  // 页面缓存控制
+            // 页面缓存控制
+            header('Cache-control: ' . C('HTTP_CACHE_CONTROL'));
             header('X-Powered-By:CheukPang');
             // 输出模板文件
             echo $content;
@@ -114,7 +115,8 @@
             // 页面缓存
             ob_start();
             ob_implicit_flush(0);
-            if ('php' == strtolower(C('TMPL_ENGINE_TYPE'))) { // 使用PHP原生模板
+            // 使用PHP原生模板
+            if ('php' == strtolower(C('TMPL_ENGINE_TYPE'))) {
                 $_content = $content;
                 // 模板阵列变量分解成为独立变量
                 extract($this->tVar, EXTR_OVERWRITE);
@@ -150,7 +152,8 @@
 
             // 获取当前模块
             $module = MODULE_NAME;
-            if (strpos($template, '@')) { // 跨模块调用模版文件
+            // 跨模块调用模版文件
+            if (strpos($template, '@')) {
                 list($module, $template) = explode('@', $template);
             }
             // 获取当前主题的模版路径
@@ -183,7 +186,8 @@
             // 获取当前主题名称
             $theme = $this->getTemplateTheme();
             // 获取当前主题的模版路径
-            $tmplPath = C('VIEW_PATH'); // 模块设置独立的视图目录
+            // 模块设置独立的视图目录
+            $tmplPath = C('VIEW_PATH');
             if (!$tmplPath) {
                 // 定义TMPL_PATH 则改变全局的视图目录到模块之外
                 $tmplPath = defined('TMPL_PATH') ? TMPL_PATH . $module . '/' : APP_PATH . $module . '/' . C('DEFAULT_V_LAYER') . '/';
@@ -217,7 +221,8 @@
             } else {
                 /* 获取模板主题名称 */
                 $theme = C('DEFAULT_THEME');
-                if (C('TMPL_DETECT_THEME')) {// 自动侦测模板主题
+                // 自动侦测模板主题
+                if (C('TMPL_DETECT_THEME')) {
                     $t = C('VAR_TEMPLATE');
                     if (isset($_GET[$t])) {
                         $theme = $_GET[$t];
@@ -230,7 +235,9 @@
                     cookie('think_template', $theme, 864000);
                 }
             }
-            defined('THEME_NAME') || define('THEME_NAME', $theme);                  // 当前模板主题名称
+            // 当前模板主题名称
+            defined('THEME_NAME') || define('THEME_NAME', $theme);
+
             return $theme ? $theme . '/' : '';
         }
 

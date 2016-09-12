@@ -16,8 +16,8 @@
         'MULTI_MODULE'           => true, // 是否允许多模块 如果为false 则必须设置 DEFAULT_MODULE
         'MODULE_DENY_LIST'       => ['Common', 'Runtime'],
         'CONTROLLER_LEVEL'       => 1,
-        'APP_AUTOLOAD_LAYER'     => 'Controller,Model', // 自动加载的应用类库层 关闭APP_USE_NAMESPACE后有效
-        'APP_AUTOLOAD_PATH'      => '', // 自动加载的路径 关闭APP_USE_NAMESPACE后有效
+        'APP_AUTOLOAD_LAYER'     => 'Controller,Model', // 自动加载的应用类库层 关闭APP_USE_NAMESPACE后有效 @todo remove in future
+        'APP_AUTOLOAD_PATH'      => '', // 自动加载的路径 关闭APP_USE_NAMESPACE后有效 @todo remove in future
 
         /* Cookie设置 */
         'COOKIE_EXPIRE'          => 0,       // Cookie有效期
@@ -105,6 +105,7 @@
         'TMPL_DENY_PHP'          => false, // 默认模板引擎是否禁用PHP原生代码
         'TMPL_L_DELIM'           => '{',            // 模板引擎普通标签开始标记
         'TMPL_R_DELIM'           => '}',            // 模板引擎普通标签结束标记
+        //@todo 统一标识为数组，模板统一一下语法，记住多种语法累不？
         'TMPL_VAR_IDENTIFY'      => 'array',     // 模板变量识别。留空自动判断,参数为'obj'则表示对象
         'TMPL_STRIP_SPACE'       => true,       // 是否去除模板文件里面的html空格与换行
         'TMPL_CACHE_ON'          => true,        // 是否开启模板编译缓存,设为false则每次都会重新编译

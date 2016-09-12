@@ -5,6 +5,9 @@
     {
         protected $lifeTime = 3600;
         protected $sessionName = '';
+        /**
+         * @var \Memcache $handle
+         */
         protected $handle = null;
 
         /**

@@ -331,7 +331,8 @@
         static public function trace($value = '[think]', $label = '', $level = 'DEBUG', $record = false)
         {
             static $_trace = [];
-            if ('[think]' === $value) { // 获取trace信息
+            // 获取trace信息
+            if ('[think]' === $value) {
                 return $_trace;
             } else {
                 $info = ($label ? $label . ':' : '') . print_r($value, true);

@@ -13,7 +13,6 @@
     {
 
         /**
-         * 架构函数
          * @access public
          */
         public function __construct($options = [])

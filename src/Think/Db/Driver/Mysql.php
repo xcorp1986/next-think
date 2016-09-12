@@ -3,6 +3,7 @@
 
     namespace Think\Db\Driver;
 
+    use PDO;
     use Think\Db\Driver;
 
     /**
@@ -28,7 +29,7 @@
 
             if (!empty($config['charset'])) {
                 //为兼容各版本PHP,用两种方式设置编码
-                $this->options[\PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES ' . $config['charset'];
+                $this->options[PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES ' . $config['charset'];
                 $dsn .= ';charset=' . $config['charset'];
             }
 
@@ -54,7 +55,7 @@
             $info = [];
             if ($result) {
                 foreach ($result as $key => $val) {
-                    if (\PDO::CASE_LOWER != $this->_linkID->getAttribute(\PDO::ATTR_CASE)) {
+                    if (PDO::CASE_LOWER != $this->_linkID->getAttribute(PDO::ATTR_CASE)) {
                         $val = array_change_key_case($val, CASE_LOWER);
                     }
                     $info[$val['field']] = [
@@ -165,17 +166,21 @@
             }
             $updates = [];
             foreach ((array)$duplicate as $key => $val) {
-                if (is_numeric($key)) { // array('field1', 'field2', 'field3') 解析为 ON DUPLICATE KEY UPDATE field1=VALUES(field1), field2=VALUES(field2), field3=VALUES(field3)
+                if (is_numeric($key)) {
+                    // array('field1', 'field2', 'field3') 解析为 ON DUPLICATE KEY UPDATE field1=VALUES(field1), field2=VALUES(field2), field3=VALUES(field3)
                     $updates[] = $this->parseKey($val) . "=VALUES(" . $this->parseKey($val) . ")";
                 } else {
-                    if (is_scalar($val)) // 兼容标量传值方式
+                    // 兼容标量传值方式
+                    if (is_scalar($val))
                         $val = ['value', $val];
                     if (!isset($val[1])) continue;
                     switch ($val[0]) {
-                        case 'exp': // 表达式
+                        // 表达式
+                        case 'exp':
                             $updates[] = $this->parseKey($key) . "=($val[1])";
                             break;
-                        case 'value': // 值
+                        // 值
+                        case 'value':
                         default:
                             $name = count($this->bind);
                             $updates[] = $this->parseKey($key) . "=:" . $name;
@@ -200,7 +205,7 @@
         public function procedure($str, $fetchSql = false)
         {
             $this->initConnect(false);
-            $this->_linkID->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_WARNING);
+            $this->_linkID->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
             if (!$this->_linkID) return false;
             $this->queryStr = $str;
             if ($fetchSql) {
@@ -209,7 +214,8 @@
             //释放前次的查询结果
             if (!empty($this->PDOStatement)) $this->free();
             $this->queryTimes++;
-            N('db_query', 1); // 兼容代码
+            // 记录数据库查询次数
+            N('db_query', 1);
             // 调试开始
             $this->debug(true);
             $this->PDOStatement = $this->_linkID->prepare($str);
@@ -223,17 +229,17 @@
                 // 调试结束
                 $this->debug(false);
                 do {
-                    $result = $this->PDOStatement->fetchAll(\PDO::FETCH_ASSOC);
+                    $result = $this->PDOStatement->fetchAll(PDO::FETCH_ASSOC);
                     if ($result) {
                         $resultArr[] = $result;
                     }
                 } while ($this->PDOStatement->nextRowset());
-                $this->_linkID->setAttribute(\PDO::ATTR_ERRMODE, $this->options[\PDO::ATTR_ERRMODE]);
+                $this->_linkID->setAttribute(PDO::ATTR_ERRMODE, $this->options[PDO::ATTR_ERRMODE]);
 
                 return $resultArr;
             } catch (\PDOException $e) {
                 $this->error();
-                $this->_linkID->setAttribute(\PDO::ATTR_ERRMODE, $this->options[\PDO::ATTR_ERRMODE]);
+                $this->_linkID->setAttribute(PDO::ATTR_ERRMODE, $this->options[PDO::ATTR_ERRMODE]);
 
                 return false;
             }

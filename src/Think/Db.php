@@ -102,7 +102,7 @@
          * @static
          * @access private
          * @param string $dsnStr
-         * @return array
+         * @return array|bool
          */
         static private function parseDsn($dsnStr)
         {
@@ -132,7 +132,12 @@
             return $dsn;
         }
 
-        // 调用驱动类的方法
+        /**
+         * 静态调用驱动类的方法
+         * @param $method
+         * @param $params
+         * @return mixed
+         */
         static public function __callStatic($method, $params)
         {
             return call_user_func_array([self::$_instance, $method], $params);

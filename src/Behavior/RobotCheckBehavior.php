@@ -11,6 +11,10 @@
     class RobotCheckBehavior extends Behavior
     {
 
+        /**
+         * 执行入口
+         * @param mixed $params
+         */
         public function run(&$params)
         {
             // 机器人访问检测

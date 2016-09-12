@@ -157,13 +157,14 @@
                             E(L('_PARAM_ERROR_') . ':' . $name);
                         }
                     }
-                    // 开启绑定参数过滤机制
+                    // 开启绑定参数过滤机制 @todo 检查一下这段代码是否有存在的必要
                     if (C('URL_PARAMS_SAFE')) {
                         $filters = C('URL_PARAMS_FILTER') ?: C('DEFAULT_FILTER');
                         if ($filters) {
                             $filters = explode(',', $filters);
                             foreach ($filters as $filter) {
-                                $args = array_map_recursive($filter, $args); // 参数过滤
+                                // 参数过滤
+                                $args = array_map_recursive($filter, $args);
                             }
                         }
                     }
@@ -194,7 +195,7 @@
         {
             // 应用初始化标签
             Hook::listen('app_init');
-            App::init();
+            self::init();
             // 应用开始标签
             Hook::listen('app_begin');
             // Session初始化
@@ -203,7 +204,7 @@
             }
             // 记录应用初始化时间
             G('initTime');
-            App::exec();
+            self::exec();
             // 应用结束标签
             Hook::listen('app_end');
 

@@ -6,9 +6,16 @@
     use PDO;
 
 
+    /**
+     * Class Driver
+     * @package Think\Db
+     * @method getFields($tableName) 取得数据表的字段信息
+     */
     abstract class Driver
     {
-        // PDO操作实例
+        /**
+         * @var \PDOStatement $PDOStatement PDO操作实例
+         */
         protected $PDOStatement = null;
         // 当前操作所属的模型名
         protected $model = '_think_';
@@ -25,7 +32,9 @@
         protected $error = '';
         // 数据库连接ID 支持多个连接
         protected $linkID = [];
-        // 当前连接ID
+        /**
+         * @var \PDO $_linkID 当前连接ID
+         */
         protected $_linkID = null;
         // 数据库连接参数配置
         protected $config = [
@@ -47,7 +56,22 @@
             'db_like_fields' => '',
         ];
         // 数据库表达式
-        protected $exp = ['eq' => '=', 'neq' => '<>', 'gt' => '>', 'egt' => '>=', 'lt' => '<', 'elt' => '<=', 'notlike' => 'NOT LIKE', 'like' => 'LIKE', 'in' => 'IN', 'notin' => 'NOT IN', 'not in' => 'NOT IN', 'between' => 'BETWEEN', 'not between' => 'NOT BETWEEN', 'notbetween' => 'NOT BETWEEN'];
+        protected $exp = [
+            'eq'          => '=',
+            'neq'         => '<>',
+            'gt'          => '>',
+            'egt'         => '>=',
+            'lt'          => '<',
+            'elt'         => '<=',
+            'notlike'     => 'NOT LIKE',
+            'like'        => 'LIKE',
+            'in'          => 'IN',
+            'notin'       => 'NOT IN',
+            'not in'      => 'NOT IN',
+            'between'     => 'BETWEEN',
+            'not between' => 'NOT BETWEEN',
+            'notbetween'  => 'NOT BETWEEN',
+        ];
         // 查询表达式
         protected $selectSql = 'SELECT%DISTINCT% %FIELD% FROM %TABLE%%FORCE%%JOIN%%WHERE%%GROUP%%HAVING%%ORDER%%LIMIT% %UNION%%LOCK%%COMMENT%';
         // 查询次数
@@ -61,10 +85,11 @@
             PDO::ATTR_ORACLE_NULLS      => PDO::NULL_NATURAL,
             PDO::ATTR_STRINGIFY_FETCHES => false,
         ];
-        protected $bind = []; // 参数绑定
+        // 参数绑定
+        protected $bind = [];
 
         /**
-         * 架构函数 读取数据库配置信息
+         * 读取数据库配置信息
          * @access public
          * @param array $config 数据库配置数组
          */
@@ -82,6 +107,7 @@
          * 连接数据库方法
          * @access public
          * @throws \PDOException
+         * @return \PDO|mixed
          */
         public function connect($config = '', $linkNum = 0, $autoConnection = false)
         {
@@ -154,7 +180,8 @@
             //释放前次的查询结果
             if (!empty($this->PDOStatement)) $this->free();
             $this->queryTimes++;
-            N('db_query', 1); // 兼容代码
+            // 记录查询操作
+            N('db_query', 1);
             // 调试开始
             $this->debug(true);
             $this->PDOStatement = $this->_linkID->prepare($str);
@@ -214,7 +241,8 @@
             //释放前次的查询结果
             if (!empty($this->PDOStatement)) $this->free();
             $this->executeTimes++;
-            N('db_write', 1); // 兼容代码
+            // 记录写入操作
+            N('db_write', 1);
             // 记录开始执行时间
             $this->debug(true);
             $this->PDOStatement = $this->_linkID->prepare($str);
@@ -257,7 +285,7 @@
         /**
          * 启动事务
          * @access public
-         * @return void
+         * @return mixed
          */
         public function startTrans()
         {
@@ -300,7 +328,7 @@
         public function rollback()
         {
             if ($this->transTimes > 0) {
-                $result = $this->_linkID->rollback();
+                $result = $this->_linkID->rollBack();
                 $this->transTimes = 0;
                 if (!$result) {
                     $this->error();
@@ -557,7 +585,8 @@
                         // 多条件支持
                         $multi = is_array($val) && isset($val['_multi']);
                         $key = trim($key);
-                        if (strpos($key, '|')) { // 支持 name|title|nickname 方式定义查询字段
+                        // 支持 name|title|nickname 方式定义查询字段
+                        if (strpos($key, '|')) {
                             $array = explode('|', $key);
                             $str = [];
                             foreach ($array as $m => $k) {
@@ -585,16 +614,23 @@
             return empty($whereStr) ? '' : ' WHERE ' . $whereStr;
         }
 
-        // where子单元分析
+        /**
+         * where子单元解析
+         * @param $key
+         * @param $val
+         * @return string
+         */
         protected function parseWhereItem($key, $val)
         {
             $whereStr = '';
             if (is_array($val)) {
                 if (is_string($val[0])) {
                     $exp = strtolower($val[0]);
-                    if (preg_match('/^(eq|neq|gt|egt|lt|elt)$/', $exp)) { // 比较运算
+                    // 比较运算
+                    if (preg_match('/^(eq|neq|gt|egt|lt|elt)$/', $exp)) {
                         $whereStr .= $key . ' ' . $this->exp[$exp] . ' ' . $this->parseValue($val[1]);
-                    } elseif (preg_match('/^(notlike|like)$/', $exp)) {// 模糊查找
+                        // 模糊查找
+                    } elseif (preg_match('/^(notlike|like)$/', $exp)) {
                         if (is_array($val[1])) {
                             $likeLogic = isset($val[2]) ? strtoupper($val[2]) : 'OR';
                             if (in_array($likeLogic, ['AND', 'OR', 'XOR'])) {
@@ -607,11 +643,14 @@
                         } else {
                             $whereStr .= $key . ' ' . $this->exp[$exp] . ' ' . $this->parseValue($val[1]);
                         }
-                    } elseif ('bind' == $exp) { // 使用表达式
+                        // 使用表达式
+                    } elseif ('bind' == $exp) {
                         $whereStr .= $key . ' = :' . $val[1];
-                    } elseif ('exp' == $exp) { // 使用表达式
+                        // 使用表达式
+                    } elseif ('exp' == $exp) {
                         $whereStr .= $key . ' ' . $val[1];
-                    } elseif (preg_match('/^(notin|not in|in)$/', $exp)) { // IN 运算
+                        // IN 运算
+                    } elseif (preg_match('/^(notin|not in|in)$/', $exp)) {
                         if (isset($val[2]) && 'exp' == $val[2]) {
                             $whereStr .= $key . ' ' . $this->exp[$exp] . ' ' . $val[1];
                         } else {
@@ -621,7 +660,8 @@
                             $zone = implode(',', $this->parseValue($val[1]));
                             $whereStr .= $key . ' ' . $this->exp[$exp] . ' (' . $zone . ')';
                         }
-                    } elseif (preg_match('/^(notbetween|not between|between)$/', $exp)) { // BETWEEN运算
+                        // BETWEEN运算
+                    } elseif (preg_match('/^(notbetween|not between|between)$/', $exp)) {
                         $data = is_string($val[1]) ? explode(',', $val[1]) : $val[1];
                         $whereStr .= $key . ' ' . $this->exp[$exp] . ' ' . $this->parseValue($data[0]) . ' AND ' . $this->parseValue($data[1]);
                     } else {
@@ -868,7 +908,8 @@
                 } elseif (is_null($val)) {
                     $fields[] = $this->parseKey($key);
                     $values[] = 'NULL';
-                } elseif (is_scalar($val)) { // 过滤非标量数据
+                    // 过滤非标量数据
+                } elseif (is_scalar($val)) {
                     $fields[] = $this->parseKey($key);
                     if (0 === strpos($val, ':') && in_array($val, array_keys($this->bind))) {
                         $values[] = $this->parseValue($val);
@@ -961,7 +1002,8 @@
             $this->parseBind(!empty($options['bind']) ? $options['bind'] : []);
             $table = $this->parseTable($options['table']);
             $sql = 'UPDATE ' . $table . $this->parseSet($data);
-            if (strpos($table, ',')) {// 多表更新支持JOIN操作
+            // 多表更新支持JOIN操作
+            if (strpos($table, ',')) {
                 $sql .= $this->parseJoin(!empty($options['join']) ? $options['join'] : '');
             }
             $sql .= $this->parseWhere(!empty($options['where']) ? $options['where'] : '');
@@ -987,7 +1029,8 @@
             $this->parseBind(!empty($options['bind']) ? $options['bind'] : []);
             $table = $this->parseTable($options['table']);
             $sql = 'DELETE FROM ' . $table;
-            if (strpos($table, ',')) {// 多表删除支持USING和JOIN操作
+            // 多表删除支持USING和JOIN操作
+            if (strpos($table, ',')) {
                 if (!empty($options['using'])) {
                     $sql .= ' USING ' . $this->parseTable($options['using']) . ' ';
                 }
@@ -1163,7 +1206,7 @@
          * 连接分布式服务器
          * @access protected
          * @param boolean $master 主服务器
-         * @return void
+         * @return mixed
          */
         protected function multiConnect($master = false)
         {
@@ -1184,16 +1227,19 @@
                     // 主服务器写入
                     $r = $m;
                 else {
-                    if (is_numeric($this->config['slave_no'])) {// 指定服务器读
+                    // 指定服务器读
+                    if (is_numeric($this->config['slave_no'])) {
                         $r = $this->config['slave_no'];
                     } else {
                         // 读操作连接从服务器
-                        $r = floor(mt_rand($this->config['master_num'], count($_config['hostname']) - 1));   // 每次随机连接的数据库
+                        // 每次随机连接的数据库
+                        $r = floor(mt_rand($this->config['master_num'], count($_config['hostname']) - 1));
                     }
                 }
             } else {
                 // 读写操作不区分服务器
-                $r = floor(mt_rand(0, count($_config['hostname']) - 1));   // 每次随机连接的数据库
+                // 每次随机连接的数据库
+                $r = floor(mt_rand(0, count($_config['hostname']) - 1));
             }
 
             if ($m != $r) {

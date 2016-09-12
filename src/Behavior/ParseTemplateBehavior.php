@@ -13,13 +13,17 @@
     class ParseTemplateBehavior extends Behavior
     {
 
-        // 行为扩展的执行入口必须是run
+        /**
+         * 执行入口
+         * @param mixed $_data
+         */
         public function run(&$_data)
         {
             $engine = strtolower(C('TMPL_ENGINE_TYPE'));
             $_content = empty($_data['content']) ? $_data['file'] : $_data['content'];
             $_data['prefix'] = !empty($_data['prefix']) ? $_data['prefix'] : C('TMPL_CACHE_PREFIX');
-            if ('think' == $engine) { // 采用Think模板引擎
+            if ('think' == $engine) {
+                // 采用Think模板引擎
                 if ((!empty($_data['content']) && $this->checkContentCache($_data['content'], $_data['prefix']))
                     || $this->checkCache($_data['file'], $_data['prefix'])
                 ) { // 缓存有效
@@ -40,7 +44,8 @@
                 if (class_exists($class)) {
                     $tpl = new $class;
                     $tpl->fetch($_content, $_data['var']);
-                } else {  // 类没有定义
+                } else {
+                    // 类没有定义
                     E(L('_NOT_SUPPORT_') . ': ' . $class);
                 }
             }
@@ -55,7 +60,8 @@
          */
         protected function checkCache($tmplTemplateFile, $prefix = '')
         {
-            if (!C('TMPL_CACHE_ON')) // 优先对配置设定检测
+            // 优先对配置设定检测
+            if (!C('TMPL_CACHE_ON'))
                 return false;
             $tmplCacheFile = C('CACHE_PATH') . $prefix . md5($tmplTemplateFile) . C('TMPL_CACHFILE_SUFFIX');
             if (!Storage::has($tmplCacheFile)) {

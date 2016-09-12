@@ -23,7 +23,7 @@
         protected $config = [];
 
         /**
-         * 架构函数 取得模板对象实例
+         * 取得模板对象实例
          * @access public
          */
         public function __construct()

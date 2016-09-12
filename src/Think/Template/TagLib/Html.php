@@ -73,12 +73,18 @@
          */
         public function _imageBtn($tag)
         {
-            $name = $tag['name'];                //名称
-            $value = $tag['value'];                //文字
-            $id = isset($tag['id']) ? $tag['id'] : '';                //ID
-            $style = isset($tag['style']) ? $tag['style'] : '';                //样式名
-            $click = isset($tag['click']) ? $tag['click'] : '';                //点击
-            $type = empty($tag['type']) ? 'button' : $tag['type'];                //按钮类型
+            //input name
+            $name = $tag['name'];
+            //input value
+            $value = $tag['value'];
+            //html id
+            $id = isset($tag['id']) ? $tag['id'] : '';
+            //html class
+            $style = isset($tag['style']) ? $tag['style'] : '';
+            //html input onclick
+            $click = isset($tag['click']) ? $tag['click'] : '';
+            //input type
+            $type = empty($tag['type']) ? 'button' : $tag['type'];
 
             if (!empty($name)) {
                 $parseStr = '<div class="' . $style . '" ><input type="' . $type . '" id="' . $id . '" name="' . $name . '" value="' . $value . '" onclick="' . $click . '" class="' . $name . ' imgButton"></div>';
@@ -98,12 +104,18 @@
          */
         public function _imgLink($tag)
         {
-            $name = $tag['name'];                //名称
-            $alt = $tag['alt'];                //文字
-            $id = $tag['id'];                //ID
-            $style = $tag['style'];                //样式名
-            $click = $tag['click'];                //点击
-            $type = $tag['type'];                //点击
+            //input name
+            $name = $tag['name'];
+            //alt文字
+            $alt = $tag['alt'];
+            //html ID
+            $id = $tag['id'];
+            //Html class
+            $style = $tag['style'];
+            //html input onclick
+            $click = $tag['click'];
+            //input type
+            $type = $tag['type'];
             if (empty($type)) {
                 $type = 'button';
             }
@@ -271,7 +283,8 @@
             if (!empty($key)) {
                 $parseStr .= '<th width="12">No</th>';
             }
-            foreach ($fields as $field) {//显示指定的字段
+            //显示指定的字段
+            foreach ($fields as $field) {
                 $property = explode('|', $field[0]);
                 $showname = explode('|', $field[1]);
                 if (isset($showname[1])) {
@@ -281,7 +294,8 @@
                 }
                 $parseStr .= $showname[0] . '</th>';
             }
-            if (!empty($action)) {//如果指定显示操作功能列
+            //如果指定显示操作功能列
+            if (!empty($action)) {
                 $parseStr .= '<th >操作</th>';
             }
             $parseStr .= '</tr>';
@@ -337,8 +351,10 @@
                 $parseStr .= '</td>';
 
             }
-            if (!empty($action)) {//显示功能操作
-                if (!empty($actionlist[0])) {//显示指定的功能项
+            //显示功能操作
+            if (!empty($action)) {
+                //显示指定的功能项
+                if (!empty($actionlist[0])) {
                     $parseStr .= '<td>';
                     foreach ($actionlist as $val) {
                         if (strpos($val, ':')) {
@@ -375,22 +391,30 @@
          */
         public function _list($tag)
         {
-            $id = $tag['id'];                       //表格ID
-            $datasource = $tag['datasource'];               //列表显示的数据源VoList名称
-            $pk = empty($tag['pk']) ? 'id' : $tag['pk'];//主键名，默认为id
-            $style = $tag['style'];                    //样式名
-            $name = !empty($tag['name']) ? $tag['name'] : 'vo';                 //Vo对象名
-            $action = $tag['action'] == 'true' ? true : false;                   //是否显示功能操作
+            //表格ID
+            $id = $tag['id'];
+            //列表显示的数据源VoList名称
+            $datasource = $tag['datasource'];
+            //主键名，默认为id
+            $pk = empty($tag['pk']) ? 'id' : $tag['pk'];
+            //样式名
+            $style = $tag['style'];
+            //Vo对象名
+            $name = !empty($tag['name']) ? $tag['name'] : 'vo';
+            //是否显示功能操作
+            $action = $tag['action'] == 'true' ? true : false;
             $key = !empty($tag['key']) ? true : false;
             $sort = $tag['sort'] == 'false' ? false : true;
-            $checkbox = $tag['checkbox'];                 //是否显示Checkbox
+            //是否显示Checkbox
+            $checkbox = $tag['checkbox'];
             if (isset($tag['actionlist'])) {
                 if (substr($tag['actionlist'], 0, 1) == '$') {
                     $actionlist = $this->tpl->get(substr($tag['actionlist'], 1));
                 } else {
                     $actionlist = $tag['actionlist'];
                 }
-                $actionlist = explode(',', trim($actionlist));    //指定功能列表
+                //指定功能列表
+                $actionlist = explode(',', trim($actionlist));
             }
 
             if (substr($tag['show'], 0, 1) == '$') {
@@ -398,7 +422,8 @@
             } else {
                 $show = $tag['show'];
             }
-            $show = explode(',', $show);                //列表显示字段列表
+            //列表显示字段列表
+            $show = explode(',', $show);
 
             //计算表格的列数
             $colNum = count($show);
@@ -422,7 +447,8 @@
             if (!empty($key)) {
                 $parseStr .= '<th width="12">No</th>';
             }
-            foreach ($fields as $field) {//显示指定的字段
+            //显示指定的字段
+            foreach ($fields as $field) {
                 $property = explode('|', $field[0]);
                 $showname = explode('|', $field[1]);
                 if (isset($showname[1])) {
@@ -438,17 +464,20 @@
                 }
 
             }
-            if (!empty($action)) {//如果指定显示操作功能列
+            //如果指定显示操作功能列
+            if (!empty($action)) {
                 $parseStr .= '<th >操作</th>';
             }
 
             $parseStr .= '</tr>';
-            $parseStr .= '<volist name="' . $datasource . '" id="' . $name . '" ><tr class="row" ';    //支持鼠标移动单元行颜色变化 具体方法在js中定义
+            //支持鼠标移动单元行颜色变化 具体方法在js中定义
+            $parseStr .= '<volist name="' . $datasource . '" id="' . $name . '" ><tr class="row" ';
             if (!empty($checkbox)) {
                 //    $parseStr .= 'onmouseover="over(event)" onmouseout="out(event)" onclick="change(event)" ';
             }
             $parseStr .= '>';
-            if (!empty($checkbox)) {//如果需要显示checkbox 则在每行开头显示checkbox
+            //如果需要显示checkbox 则在每行开头显示checkbox
+            if (!empty($checkbox)) {
                 $parseStr .= '<td><input type="checkbox" name="key"	value="{$' . $name . '.' . $pk . '}"></td>';
             }
             if (!empty($key)) {
@@ -501,8 +530,10 @@
                 $parseStr .= '</td>';
 
             }
-            if (!empty($action)) {//显示功能操作
-                if (!empty($actionlist[0])) {//显示指定的功能项
+            //显示功能操作
+            if (!empty($action)) {
+                //显示指定的功能项
+                if (!empty($actionlist[0])) {
                     $parseStr .= '<td>';
                     foreach ($actionlist as $val) {
                         if (strpos($val, ':')) {

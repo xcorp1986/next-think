@@ -117,7 +117,6 @@
         protected $Week = ["日", "一", "二", "三", "四", "五", "六"];
 
         /**
-         * 架构函数
          * 创建一个Date对象
          * @param mixed $date 日期
          * @static

@@ -64,7 +64,7 @@
     defined('CACHE_PATH') or define('CACHE_PATH', RUNTIME_PATH . 'Cache/'); // 应用模板缓存目录
     defined('CONF_EXT') or define('CONF_EXT', EXT); // 配置文件后缀
     defined('CONF_PARSE') or define('CONF_PARSE', '');    // 配置文件解析方法
-//    defined('ADDON_PATH') or define('ADDON_PATH', APP_PATH . 'Addon');
+    defined('ADDON_PATH') or define('ADDON_PATH', APP_PATH . 'Addon');
     define('IS_CGI', (0 === strpos(PHP_SAPI, 'cgi') || false !== strpos(PHP_SAPI, 'fcgi')) ? 1 : 0);
     define('IS_WIN', strstr(PHP_OS, 'WIN') ? 1 : 0);
     define('IS_CLI', PHP_SAPI == 'cli' ? 1 : 0);

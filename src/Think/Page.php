@@ -28,7 +28,6 @@
         ];
 
         /**
-         * 架构函数
          * @param array $totalRows 总的记录数
          * @param array $listRows  每页显示记录数
          * @param array $parameter 分页跳转的参数

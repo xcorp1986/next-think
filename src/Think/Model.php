@@ -16,7 +16,9 @@
         const EXISTS_VALIDATE = 0;      // 表单存在字段则验证
         const VALUE_VALIDATE = 2;      // 表单值不为空则验证
 
-        // 当前数据库操作对象
+        /**
+         * @var \Think\Db|\Think\Db\Driver|\PDO $db 当前数据库操作对象
+         */
         protected $db = null;
         // 数据库对象池
         private $_db = [];
@@ -56,7 +58,6 @@
         protected $methods = ['strict', 'order', 'alias', 'having', 'group', 'lock', 'distinct', 'auto', 'filter', 'validate', 'result', 'token', 'index', 'force'];
 
         /**
-         * 架构函数
          * 取得DB类的实例对象 字段检查
          * @access public
          * @param string $name        模型名称
@@ -69,7 +70,8 @@
             $this->_initialize();
             // 获取模型名称
             if (!empty($name)) {
-                if (strpos($name, '.')) { // 支持 数据库名.模型名的 定义
+                // 支持 数据库名.模型名的 定义
+                if (strpos($name, '.')) {
                     list($this->dbName, $this->name) = explode('.', $name);
                 } else {
                     $this->name = $name;
@@ -78,7 +80,8 @@
                 $this->name = $this->getModelName();
             }
             // 设置表前缀
-            if (is_null($tablePrefix)) {// 前缀为Null表示没有前缀
+            // 前缀为Null表示没有前缀
+            if (is_null($tablePrefix)) {
                 $this->tablePrefix = '';
             } elseif ('' != $tablePrefix) {
                 $this->tablePrefix = $tablePrefix;
@@ -242,7 +245,8 @@
                 $where[$name] = $args[0];
 
                 return $this->where($where)->getField($args[1]);
-            } elseif (isset($this->_scope[$method])) {// 命名范围的单独调用支持
+            } elseif (isset($this->_scope[$method])) {
+                // 命名范围的单独调用支持
                 return $this->scope($method, $args[0]);
             } else {
                 E(__CLASS__ . ':' . $method . L('_METHOD_NOT_EXIST_'));
@@ -492,12 +496,20 @@
             return $result;
         }
 
-        // 更新数据前的回调方法
+        /**
+         * 更新数据前的回调方法
+         * @param $data
+         * @param $options
+         */
         protected function _before_update(&$data, $options)
         {
         }
 
-        // 更新成功后的回调方法
+        /**
+         * 更新成功后的回调方法
+         * @param $data
+         * @param $options
+         */
         protected function _after_update($data, $options)
         {
         }
@@ -569,12 +581,19 @@
             return $result;
         }
 
-        // 删除数据前的回调方法
+        /**
+         * 删除数据前的回调方法
+         * @param $options
+         */
         protected function _before_delete($options)
         {
         }
 
-        // 删除成功后的回调方法
+        /**
+         * 删除成功后的回调方法
+         * @param $data
+         * @param $options
+         */
         protected function _after_delete($data, $options)
         {
         }
@@ -613,7 +632,8 @@
                 } else {
                     return false;
                 }
-            } elseif (false === $options) { // 用于子查询 不查询只返回SQL
+            } elseif (false === $options) {
+                // 用于子查询 不查询只返回SQL
                 $options['fetch_sql'] = true;
             }
             // 分析表达式
@@ -631,14 +651,16 @@
             if (false === $resultSet) {
                 return false;
             }
-            if (!empty($resultSet)) { // 有查询结果
+            if (!empty($resultSet)) {
+                // 有查询结果
                 if (is_string($resultSet)) {
                     return $resultSet;
                 }
 
                 $resultSet = array_map([$this, '_read_data'], $resultSet);
                 $this->_after_select($resultSet, $options);
-                if (isset($options['index'])) { // 对数据集进行索引
+                if (isset($options['index'])) {
+                    // 对数据集进行索引
                     $index = explode(',', $options['index']);
                     foreach ($resultSet as $result) {
                         $_key = $result[$index[0]];
@@ -659,7 +681,11 @@
             return $resultSet;
         }
 
-        // 查询成功后的回调方法
+        /**
+         * 查询成功后的回调方法
+         * @param $resultSet
+         * @param $options
+         */
         protected function _after_select(&$resultSet, $options)
         {
         }
@@ -726,7 +752,10 @@
             return $options;
         }
 
-        // 表达式过滤回调方法
+        /**
+         * 表达式过滤回调方法
+         * @param $options
+         */
         protected function _options_filter(&$options)
         {
         }
@@ -847,11 +876,21 @@
             return $this->data;
         }
 
-        // 查询成功的回调方法
+        /**
+         * 查询成功的回调方法
+         * @param $result
+         * @param $options
+         */
         protected function _after_find(&$result, $options)
         {
         }
 
+        /**
+         * 返回数据类型
+         * @param        $data
+         * @param string $type
+         * @return mixed|string
+         */
         protected function returnResult($data, $type = '')
         {
             if ($type) {
@@ -1109,7 +1148,8 @@
             $data = $this->parseFieldsMap($data, 0);
 
             // 检测提交字段的合法性
-            if (isset($this->options['field'])) { // $this->field('field1,field2...')->create()
+            if (isset($this->options['field'])) {
+                // $this->field('field1,field2...')->create()
                 $fields = $this->options['field'];
                 unset($this->options['field']);
             } elseif ($type == self::MODEL_INSERT && isset($this->insertFields)) {
@@ -1141,7 +1181,8 @@
             }
 
             // 验证完成生成数据对象
-            if ($this->autoCheckFields) { // 开启字段检测 则过滤非法字段数据
+            if ($this->autoCheckFields) {
+                // 开启字段检测 则过滤非法字段数据
                 $fields = $this->getDbFields();
                 foreach ($data as $key => $val) {
                     if (!in_array($key, $fields)) {
@@ -1159,22 +1200,30 @@
             return $data;
         }
 
-        // 自动表单令牌验证
-        // TODO  ajax无刷新多次提交暂不能满足
+        /**
+         * 自动表单令牌验证
+         * @todo ajax无刷新多次提交暂不能满足
+         * @param $data
+         * @return bool
+         */
         public function autoCheckToken($data)
         {
             // 支持使用token(false) 关闭令牌验证
             if (isset($this->options['token']) && !$this->options['token']) return true;
             if (C('TOKEN_ON')) {
                 $name = C('TOKEN_NAME', null, '__hash__');
-                if (!isset($data[$name]) || !isset($_SESSION[$name])) { // 令牌数据无效
+                // 令牌数据无效
+                if (!isset($data[$name]) || !isset($_SESSION[$name])) {
                     return false;
                 }
 
                 // 令牌验证
                 list($key, $value) = explode('_', $data[$name]);
-                if (isset($_SESSION[$name][$key]) && $value && $_SESSION[$name][$key] === $value) { // 防止重复提交
-                    unset($_SESSION[$name][$key]); // 验证完成销毁session
+                // 防止重复提交
+                if (isset($_SESSION[$name][$key]) && $value && $_SESSION[$name][$key] === $value) {
+                    // 验证完成销毁session
+                    unset($_SESSION[$name][$key]);
+
                     return true;
                 }
                 // 开启TOKEN重置
@@ -1237,12 +1286,15 @@
                 foreach ($_auto as $auto) {
                     // 填充因子定义格式
                     // array('field','填充内容','填充条件','附加规则',[额外参数])
-                    if (empty($auto[2])) $auto[2] = self::MODEL_INSERT; // 默认为新增的时候自动填充
+                    // 默认为新增的时候自动填充
+                    if (empty($auto[2])) $auto[2] = self::MODEL_INSERT;
                     if ($type == $auto[2] || $auto[2] == self::MODEL_BOTH) {
                         if (empty($auto[3])) $auto[3] = 'string';
                         switch (trim($auto[3])) {
-                            case 'function':    //  使用函数进行填充 字段的值作为参数
-                            case 'callback': // 使用回调方法
+                            //  使用函数进行填充 字段的值作为参数
+                            case 'function':
+                                // 使用回调方法
+                            case 'callback':
                                 $args = isset($auto[4]) ? (array)$auto[4] : [];
                                 if (isset($data[$auto[0]])) {
                                     array_unshift($args, $data[$auto[0]]);
@@ -1253,15 +1305,18 @@
                                     $data[$auto[0]] = call_user_func_array([&$this, $auto[1]], $args);
                                 }
                                 break;
-                            case 'field':    // 用其它字段的值进行填充
+                            // 用其它字段的值进行填充
+                            case 'field':
                                 $data[$auto[0]] = $data[$auto[1]];
                                 break;
-                            case 'ignore': // 为空忽略
+                            // 为空忽略
+                            case 'ignore':
                                 if ($auto[1] === $data[$auto[0]])
                                     unset($data[$auto[0]]);
                                 break;
+                            // 默认作为字符串填充
                             case 'string':
-                            default: // 默认作为字符串填充
+                            default:
                                 $data[$auto[0]] = $auto[1];
                         }
                         if (isset($data[$auto[0]]) && false === $data[$auto[0]]) unset($data[$auto[0]]);
@@ -1292,8 +1347,10 @@
                 $_validate = $this->_validate;
             }
             // 属性验证
-            if (isset($_validate)) { // 如果设置了数据自动验证则进行数据验证
-                if ($this->patchValidate) { // 重置验证错误信息
+            // 如果设置了数据自动验证则进行数据验证
+            if (isset($_validate)) {
+                if ($this->patchValidate) {
+                    // 重置验证错误信息
                     $this->error = [];
                 }
                 foreach ($_validate as $key => $val) {
@@ -1308,16 +1365,19 @@
                         $val[4] = isset($val[4]) ? $val[4] : 'regex';
                         // 判断验证条件
                         switch ($val[3]) {
-                            case self::MUST_VALIDATE:   // 必须验证 不管表单是否有设置该字段
+                            // 必须验证 不管表单是否有设置该字段
+                            case self::MUST_VALIDATE:
                                 if (false === $this->_validationField($data, $val))
                                     return false;
                                 break;
-                            case self::VALUE_VALIDATE:    // 值不为空的时候才验证
+                            // 值不为空的时候才验证
+                            case self::VALUE_VALIDATE:
                                 if ('' != trim($data[$val[0]]))
                                     if (false === $this->_validationField($data, $val))
                                         return false;
                                 break;
-                            default:    // 默认表单存在该字段就验证
+                            // 默认表单存在该字段就验证
+                            default:
                                 if (isset($data[$val[0]]))
                                     if (false === $this->_validationField($data, $val))
                                         return false;
@@ -1342,7 +1402,8 @@
         protected function _validationField($data, $val)
         {
             if ($this->patchValidate && isset($this->error[$val[0]]))
-                return; //当前字段已经有规则验证没有通过
+                //当前字段已经有规则验证没有通过
+                return;
             if (false === $this->_validationFieldItem($data, $val)) {
                 if ($this->patchValidate) {
                     $this->error[$val[0]] = $val[2];
@@ -1366,8 +1427,10 @@
         protected function _validationFieldItem($data, $val)
         {
             switch (strtolower(trim($val[4]))) {
-                case 'function':// 使用函数进行验证
-                case 'callback':// 调用方法进行验证
+                // 使用函数进行验证
+                case 'function':
+                    // 调用方法进行验证
+                case 'callback':
                     $args = isset($val[6]) ? (array)$val[6] : [];
                     if (is_string($val[0]) && strpos($val[0], ','))
                         $val[0] = explode(',', $val[0]);
@@ -1384,9 +1447,11 @@
                     } else {
                         return call_user_func_array([&$this, $val[1]], $args);
                     }
-                case 'confirm': // 验证两个字段是否相同
+                // 验证两个字段是否相同
+                case 'confirm':
                     return $data[$val[0]] == $data[$val[1]];
-                case 'unique': // 验证某个值是否唯一
+                // 验证某个值是否唯一
+                case 'unique':
                     if (is_string($val[0]) && strpos($val[0], ','))
                         $val[0] = explode(',', $val[0]);
                     $map = [];
@@ -1398,13 +1463,15 @@
                         $map[$val[0]] = $data[$val[0]];
                     }
                     $pk = $this->getPk();
-                    if (!empty($data[$pk]) && is_string($pk)) { // 完善编辑的时候验证唯一
+                    if (!empty($data[$pk]) && is_string($pk)) {
+                        // 完善编辑的时候验证唯一
                         $map[$pk] = ['neq', $data[$pk]];
                     }
                     if ($this->where($map)->find()) return false;
 
                     return true;
-                default:  // 检查附加规则
+                // 检查附加规则
+                default:
                     return $this->check($data[$val[0]], $val[1], $val[4]);
             }
         }
@@ -1421,13 +1488,16 @@
         {
             $type = strtolower(trim($type));
             switch ($type) {
-                case 'in': // 验证是否在某个指定范围之内 逗号分隔字符串或者数组
+                // 验证是否在某个指定范围之内 逗号分隔字符串或者数组
+                case 'in':
                 case 'notin':
                     $range = is_array($rule) ? $rule : explode(',', $rule);
 
                     return $type == 'in' ? in_array($value, $range) : !in_array($value, $range);
-                case 'between': // 验证是否在某个范围
-                case 'notbetween': // 验证是否不在某个范围
+                // 验证是否在某个范围
+                case 'between':
+                    // 验证是否不在某个范围
+                case 'notbetween':
                     if (is_array($rule)) {
                         $min = $rule[0];
                         $max = $rule[1];
@@ -1436,30 +1506,39 @@
                     }
 
                     return $type == 'between' ? $value >= $min && $value <= $max : $value < $min || $value > $max;
-                case 'equal': // 验证是否等于某个值
-                case 'notequal': // 验证是否等于某个值
+                // 验证是否等于某个值
+                case 'equal':
+                    // 验证是否等于某个值
+                case 'notequal':
                     return $type == 'equal' ? $value == $rule : $value != $rule;
-                case 'length': // 验证长度
+                // 验证长度
+                case 'length':
                     $length = mb_strlen($value, 'utf-8'); // 当前数据长度
-                    if (strpos($rule, ',')) { // 长度区间
+                    if (strpos($rule, ',')) {
+                        // 长度区间
                         list($min, $max) = explode(',', $rule);
 
                         return $length >= $min && $length <= $max;
-                    } else {// 指定长度
+                    } else {
+                        // 指定长度
                         return $length == $rule;
                     }
+                //验证有效期
                 case 'expire':
                     list($start, $end) = explode(',', $rule);
                     if (!is_numeric($start)) $start = strtotime($start);
                     if (!is_numeric($end)) $end = strtotime($end);
 
                     return NOW_TIME >= $start && NOW_TIME <= $end;
-                case 'ip_allow': // IP 操作许可验证
+                // IP 操作许可验证
+                case 'ip_allow':
                     return in_array(get_client_ip(), explode(',', $rule));
-                case 'ip_deny': // IP 操作禁止验证
+                // IP 操作禁止验证
+                case 'ip_deny':
                     return !in_array(get_client_ip(), explode(',', $rule));
+                // 默认使用正则验证 可以使用验证类中定义的验证名称
                 case 'regex':
-                default:    // 默认使用正则验证 可以使用验证类中定义的验证名称
+                default:
                     // 检查附加规则
                     return $this->regex($value, $rule);
             }
@@ -1467,6 +1546,7 @@
 
         /**
          * 存储过程返回多数据集
+         * @todo check
          * @access public
          * @param string $sql   SQL指令
          * @param mixed  $parse 是否需要解析SQL
@@ -1526,7 +1606,8 @@
             if (true === $parse) {
                 $options = $this->_parseOptions();
                 $sql = $this->db->parseSql($sql, $options);
-            } elseif (is_array($parse)) { // SQL预处理
+            } elseif (is_array($parse)) {
+                // SQL预处理
                 $parse = array_map([$this->db, 'escapeString'], $parse);
                 $sql = vsprintf($sql, $parse);
             } else {
@@ -1557,12 +1638,14 @@
 
             if (!isset($this->_db[$linkNum]) || $force) {
                 // 创建一个新的实例
-                if (!empty($config) && is_string($config) && false === strpos($config, '/')) { // 支持读取配置参数
+                if (!empty($config) && is_string($config) && false === strpos($config, '/')) {
+                    // 支持读取配置参数
                     $config = C($config);
                 }
                 $this->_db[$linkNum] = Db::getInstance($config);
             } elseif (null === $config) {
-                $this->_db[$linkNum]->close(); // 关闭数据库连接
+                $this->_db[$linkNum]->close();
+                // 关闭数据库连接
                 unset($this->_db[$linkNum]);
 
                 return;
@@ -1591,7 +1674,8 @@
         {
             if (empty($this->name)) {
                 $name = substr(get_class($this), 0, -strlen(C('DEFAULT_M_LAYER')));
-                if ($pos = strrpos($name, '\\')) {//有命名空间
+                if ($pos = strrpos($name, '\\')) {
+                    //有命名空间
                     $this->name = substr($name, $pos + 1);
                 } else {
                     $this->name = $name;
@@ -1694,7 +1778,10 @@
             return $this->db->getLastSql($this->name);
         }
 
-        // 鉴于getLastSql比较常用 增加_sql 别名
+        /**
+         * getLastSql别名
+         * @return string
+         */
         public function _sql()
         {
             return $this->getLastSql();
@@ -1717,7 +1804,8 @@
          */
         public function getDbFields()
         {
-            if (isset($this->options['table'])) {// 动态指定表名
+            if (isset($this->options['table'])) {
+                // 动态指定表名
                 if (is_array($this->options['table'])) {
                     $table = key($this->options['table']);
                 } else {
@@ -1937,7 +2025,8 @@
                 } else {
                     return $this;
                 }
-            } elseif (is_string($scope)) { // 支持多个命名范围调用 用逗号分割
+            } elseif (is_string($scope)) {
+                // 支持多个命名范围调用 用逗号分割
                 $scopes = explode(',', $scope);
                 $options = [];
                 foreach ($scopes as $name) {
@@ -1947,7 +2036,8 @@
                 if (!empty($args) && is_array($args)) {
                     $options = array_merge($options, $args);
                 }
-            } elseif (is_array($scope)) { // 直接传入命名范围定义
+            } elseif (is_array($scope)) {
+                // 直接传入命名范围定义
                 $options = $scope;
             }
 

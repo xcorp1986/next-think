@@ -11,6 +11,10 @@
     class TokenBuildBehavior extends Behavior
     {
 
+        /**
+         * 执行入口
+         * @param mixed $content
+         */
         public function run(&$content)
         {
             if (C('TOKEN_ON')) {
@@ -30,7 +34,10 @@
             }
         }
 
-        //获得token
+        /**
+         * 获得token
+         * @return array
+         */
         private static function _getToken()
         {
             $tokenName = C('TOKEN_NAME', null, '__hash__');
@@ -40,13 +47,15 @@
             }
             // 标识当前页面唯一性
             $tokenKey = md5($_SERVER['REQUEST_URI']);
-            if (isset($_SESSION[$tokenName][$tokenKey])) {// 相同页面不重复生成session
+            if (isset($_SESSION[$tokenName][$tokenKey])) {
+                // 相同页面不重复生成session
                 $tokenValue = $_SESSION[$tokenName][$tokenKey];
             } else {
                 $tokenValue = is_callable($tokenType) ? $tokenType(microtime(true)) : md5(microtime(true));
                 $_SESSION[$tokenName][$tokenKey] = $tokenValue;
                 if (IS_AJAX && C('TOKEN_RESET', null, true))
-                    header($tokenName . ': ' . $tokenKey . '_' . $tokenValue); //ajax需要获得这个header并替换页面中meta中的token值
+                    //ajax需要获得这个header并替换页面中meta中的token值
+                    header($tokenName . ': ' . $tokenKey . '_' . $tokenValue);
             }
 
             return [$tokenName, $tokenKey, $tokenValue];

@@ -17,7 +17,8 @@
         private $error = ''; //上传错误信息
 
         /**
-         * 构造函数，用于设置上传根路径
+         * Local constructor.
+         * @param null $config
          */
         public function __construct($config = null)
         {

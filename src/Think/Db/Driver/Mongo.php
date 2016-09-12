@@ -19,7 +19,7 @@
         protected $comparison = ['neq' => 'ne', 'ne' => 'ne', 'gt' => 'gt', 'egt' => 'gte', 'gte' => 'gte', 'lt' => 'lt', 'elt' => 'lte', 'lte' => 'lte', 'in' => 'in', 'not in' => 'nin', 'nin' => 'nin'];
 
         /**
-         * 架构函数 读取数据库配置信息
+         * 读取数据库配置信息
          * @access public
          * @param array $config 数据库配置数组
          */

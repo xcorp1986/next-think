@@ -19,7 +19,6 @@
         protected $_elements = [];
 
         /**
-         * 架构函数
          * @access public
          * @param string $elements 初始化数组元素
          */

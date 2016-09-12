@@ -1,12 +1,16 @@
 <?php
 
-
     namespace Behavior;
-// 创建Lite运行文件
-// 可以替换框架入口文件运行
-// 建议绑定位置app_init
+
     use Think\Behavior;
 
+    /**
+     * 创建Lite运行文件
+     * 可以替换框架入口文件运行
+     * 建议绑定位置app_init
+     * Class BuildLiteBehavior
+     * @package Behavior
+     */
     class BuildLiteBehavior extends Behavior
     {
         public function run(&$params)

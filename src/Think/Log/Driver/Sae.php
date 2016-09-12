@@ -9,7 +9,11 @@
             'log_time_format' => ' c ',
         ];
 
-        // 实例化并传入参数
+        /**
+         * Sae constructor.
+         * 实例化并传入参数
+         * @param array $config
+         */
         public function __construct($config = [])
         {
             $this->config = array_merge($this->config, $config);

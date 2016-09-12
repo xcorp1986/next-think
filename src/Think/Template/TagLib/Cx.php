@@ -373,23 +373,45 @@
             return $parseStr;
         }
 
-        // range标签的别名 用于in判断
+        /**
+         * range标签的别名 用于in判断
+         * @param $tag
+         * @param $content
+         * @return string
+         */
         public function _in($tag, $content)
         {
             return $this->_range($tag, $content, 'in');
         }
 
-        // range标签的别名 用于notin判断
+        /**
+         * range标签的别名 用于notin判断
+         * @param $tag
+         * @param $content
+         * @return string
+         */
         public function _notin($tag, $content)
         {
             return $this->_range($tag, $content, 'notin');
         }
 
+        /**
+         * 判断变量是否在某个区间范围内
+         * @param $tag
+         * @param $content
+         * @return string
+         */
         public function _between($tag, $content)
         {
             return $this->_range($tag, $content, 'between');
         }
 
+        /**
+         * 判断变量是否不在某个区间范围内
+         * @param $tag
+         * @param $content
+         * @return string
+         */
         public function _notbetween($tag, $content)
         {
             return $this->_range($tag, $content, 'notbetween');
@@ -433,7 +455,7 @@
 
         /**
          * empty标签解析
-         * 如果某个变量为empty 则输出内容
+         * 如果某个变量为empty则输出内容
          * 格式： <empty name="" >content</empty>
          * @access public
          * @param array  $tag     标签属性
@@ -449,6 +471,12 @@
             return $parseStr;
         }
 
+        /**
+         * 如果某个变量不为empty则输出内容
+         * @param $tag
+         * @param $content
+         * @return string
+         */
         public function _notempty($tag, $content)
         {
             $name = $tag['name'];
@@ -473,6 +501,12 @@
             return $parseStr;
         }
 
+        /**
+         * 判断是否未某常量
+         * @param $tag
+         * @param $content
+         * @return string
+         */
         public function _notdefined($tag, $content)
         {
             $name = $tag['name'];
@@ -484,6 +518,7 @@
         /**
          * import 标签解析 <import file="Js.Base" />
          * <import file="Css.Base" type="css" />
+         * @deprecated
          * @access public
          * @param array   $tag     标签属性
          * @param string  $content 标签内容
@@ -558,19 +593,39 @@
             return $parseStr . $endStr;
         }
 
-        // import别名 采用文件方式加载(要使用命名空间必须用import) 例如 <load file="__PUBLIC__/Js/Base.js" />
+        /**
+         * import别名 采用文件方式加载(要使用命名空间必须用import)
+         * <load file="__PUBLIC__/Js/Base.js" />
+         * @deprecated
+         * @param $tag
+         * @param $content
+         * @return string
+         */
         public function _load($tag, $content)
         {
             return $this->_import($tag, $content, true);
         }
 
-        // import别名使用 导入css文件 <css file="__PUBLIC__/Css/Base.css" />
+        /**
+         * import别名使用 导入css文件
+         * <css file="__PUBLIC__/Css/Base.css" />
+         * @param $tag
+         * @param $content
+         * @return string
+         */
         public function _css($tag, $content)
         {
             return $this->_import($tag, $content, true, 'css');
         }
 
-        // import别名使用 导入js文件 <js file="__PUBLIC__/Js/Base.js" />
+        /**
+         * import别名使用 导入js文件
+         * <js file="__PUBLIC__/Js/Base.js" />
+         * @deprecated
+         * @param $tag
+         * @param $content
+         * @return string
+         */
         public function _js($tag, $content)
         {
             return $this->_import($tag, $content, true, 'js');
@@ -580,6 +635,7 @@
          * assign标签解析
          * 在模板中给某个变量赋值 支持变量赋值
          * 格式： <assign name="" value="" />
+         * @deprecated
          * @access public
          * @param array  $tag     标签属性
          * @param string $content 标签内容

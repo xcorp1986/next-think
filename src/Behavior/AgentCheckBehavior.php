@@ -10,6 +10,10 @@
      */
     class AgentCheckBehavior extends Behavior
     {
+        /**
+         * 执行入口
+         * @param mixed $params
+         */
         public function run(&$params)
         {
             // 代理访问检测

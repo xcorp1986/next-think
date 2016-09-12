@@ -107,7 +107,7 @@
          * @todo $name 这传参方式真的有点- -
          * @param string $name   插件名称
          * @param string $tag    方法名（标签名）
-         * @param Mixed  $params 传入的参数
+         * @param mixed  $params 传入的参数
          * @return mixed
          */
         static public function exec($name, $tag, &$params = null)

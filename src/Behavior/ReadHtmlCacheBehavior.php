@@ -12,7 +12,10 @@
      */
     class ReadHtmlCacheBehavior extends Behavior
     {
-        // 行为扩展的执行入口必须是run
+        /**
+         * 执行入口
+         * @param mixed $params
+         */
         public function run(&$params)
         {
             // 开启静态缓存
@@ -29,8 +32,8 @@
         // 判断是否需要静态缓存
         static private function requireHtmlCache()
         {
-            // 分析当前的静态规则
-            $htmls = C('HTML_CACHE_RULES'); // 读取静态规则
+            // 读取静态规则
+            $htmls = C('HTML_CACHE_RULES');
             if (!empty($htmls)) {
                 $htmls = array_change_key_case($htmls);
                 // 静态规则文件定义格式 actionName=>array('静态规则','缓存时间','附加规则')
@@ -39,13 +42,17 @@
                 $controllerName = strtolower(CONTROLLER_NAME);
                 $actionName = strtolower(ACTION_NAME);
                 if (isset($htmls[$controllerName . ':' . $actionName])) {
-                    $html = $htmls[$controllerName . ':' . $actionName];   // 某个控制器的操作的静态规则
-                } elseif (isset($htmls[$controllerName . ':'])) {// 某个控制器的静态规则
+                    // 某个控制器的操作的静态规则
+                    $html = $htmls[$controllerName . ':' . $actionName];
+                } elseif (isset($htmls[$controllerName . ':'])) {
+                    // 某个控制器的静态规则
                     $html = $htmls[$controllerName . ':'];
                 } elseif (isset($htmls[$actionName])) {
-                    $html = $htmls[$actionName]; // 所有操作的静态规则
+                    // 所有操作的静态规则
+                    $html = $htmls[$actionName];
                 } elseif (isset($htmls['*'])) {
-                    $html = $htmls['*']; // 全局静态规则
+                    // 全局静态规则
+                    $html = $htmls['*'];
                 }
                 if (!empty($html)) {
                     // 解读静态规则
@@ -94,8 +101,12 @@
                     }, $rule);
                     $cacheTime = C('HTML_CACHE_TIME', null, 60);
                     if (is_array($html)) {
-                        if (!empty($html[2])) $rule = $html[2]($rule); // 应用附加函数
-                        $cacheTime = isset($html[1]) ? $html[1] : $cacheTime; // 缓存有效期
+                        // 应用附加函数
+                        if (!empty($html[2])) {
+                            $rule = $html[2]($rule);
+                        }
+                        // 缓存有效期
+                        $cacheTime = isset($html[1]) ? $html[1] : $cacheTime;
                     } else {
                         $cacheTime = $cacheTime;
                     }

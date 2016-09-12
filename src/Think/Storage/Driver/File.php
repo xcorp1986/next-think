@@ -5,14 +5,18 @@
 
     use Think\Storage;
 
-// 本地文件写入存储类
+    /**
+     * 本地文件存储类
+     * Class File
+     * @todo 重写成静态调用
+     * @package Think\Storage\Driver
+     */
     class File extends Storage
     {
 
         private $contents = [];
 
         /**
-         * 架构函数
          * @access public
          */
         public function __construct()
@@ -20,9 +24,11 @@
         }
 
         /**
-         * 文件内容读取
+         * 读取文件内容
          * @access public
+         * @internal
          * @param string $filename 文件名
+         * @param string $type
          * @return string
          */
         public function read($filename, $type = '')
@@ -35,6 +41,7 @@
          * @access public
          * @param string $filename 文件名
          * @param string $content  文件内容
+         * @param string $type
          * @return bool
          */
         public function put($filename, $content, $type = '')
@@ -57,6 +64,7 @@
          * @access public
          * @param string $filename 文件名
          * @param string $content  追加的文件内容
+         * @param string $type
          * @return bool
          */
         public function append($filename, $content, $type = '')
@@ -87,6 +95,7 @@
          * 文件是否存在
          * @access public
          * @param string $filename 文件名
+         * @param string $type
          * @return bool
          */
         public function has($filename, $type = '')
@@ -98,6 +107,7 @@
          * 文件删除
          * @access public
          * @param string $filename 文件名
+         * @param string $type
          * @return bool
          */
         public function unlink($filename, $type = '')
@@ -112,6 +122,7 @@
          * @access public
          * @param string $filename 文件名
          * @param string $name     信息名 mtime或者content
+         * @param string $type
          * @return bool
          */
         public function get($filename, $name, $type = '')

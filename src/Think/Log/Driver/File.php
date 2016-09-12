@@ -12,7 +12,11 @@
             'log_path'        => '',
         ];
 
-        // 实例化并传入参数
+        /**
+         * File constructor.
+         * 实例化并传入参数
+         * @param array $config
+         */
         public function __construct($config = [])
         {
             $this->config = array_merge($this->config, $config);

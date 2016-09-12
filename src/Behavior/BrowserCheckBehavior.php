@@ -10,6 +10,10 @@
      */
     class BrowserCheckBehavior extends Behavior
     {
+        /**
+         * 执行入口
+         * @param mixed $params
+         */
         public function run(&$params)
         {
             if ($_SERVER['REQUEST_METHOD'] == 'GET') {

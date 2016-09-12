@@ -11,6 +11,10 @@
     class CronRunBehavior extends Behavior
     {
 
+        /**
+         * 执行入口
+         * @param mixed $params
+         */
         public function run(&$params)
         {
             // 锁定自动执行

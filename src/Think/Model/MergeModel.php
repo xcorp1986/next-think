@@ -18,7 +18,6 @@
         protected $mapFields = [];    //  需要处理的模型映射字段，避免混淆 array( id => 'user.id'  )
 
         /**
-         * 架构函数
          * 取得DB类的实例对象 字段检查
          * @access public
          * @param string $name        模型名称

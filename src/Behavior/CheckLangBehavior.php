@@ -11,7 +11,10 @@
     class CheckLangBehavior extends Behavior
     {
 
-        // 行为扩展的执行入口必须是run
+        /**
+         * 执行入口
+         * @param mixed $params
+         */
         public function run(&$params)
         {
             self::_checkLanguage();
@@ -36,16 +39,20 @@
             // 根据是否启用自动侦测设置获取语言选择
             if (C('LANG_AUTO_DETECT', null, true)) {
                 if (isset($_GET[$varLang])) {
-                    $langSet = $_GET[$varLang];// url中设置了语言变量
+                    // url中设置了语言变量
+                    $langSet = $_GET[$varLang];
                     cookie('think_language', $langSet, 3600);
-                } elseif (cookie('think_language')) {// 获取上次用户的选择
+                } elseif (cookie('think_language')) {
+                    // 获取上次用户的选择
                     $langSet = cookie('think_language');
-                } elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {// 自动侦测浏览器语言
+                } elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+                    // 自动侦测浏览器语言
                     preg_match('/^([a-z\d\-]+)/i', $_SERVER['HTTP_ACCEPT_LANGUAGE'], $matches);
                     $langSet = $matches[1];
                     cookie('think_language', $langSet, 3600);
                 }
-                if (false === stripos($langList, $langSet)) { // 非法语言参数
+                if (false === stripos($langList, $langSet)) {
+                    // 非法语言参数
                     $langSet = C('DEFAULT_LANG');
                 }
             }
@@ -54,22 +61,26 @@
 
             // 读取框架语言包
             $file = THINK_PATH . 'Lang/' . LANG_SET . EXT;
-            if (LANG_SET != C('DEFAULT_LANG') && is_file($file))
+            if (LANG_SET != C('DEFAULT_LANG') && is_file($file)) {
                 L(include $file);
+            }
 
             // 读取应用公共语言包
             $file = LANG_PATH . LANG_SET . EXT;
-            if (is_file($file))
+            if (is_file($file)) {
                 L(include $file);
+            }
 
             // 读取模块语言包
             $file = MODULE_PATH . 'Lang/' . LANG_SET . EXT;
-            if (is_file($file))
+            if (is_file($file)) {
                 L(include $file);
+            }
 
             // 读取当前控制器语言包
             $file = MODULE_PATH . 'Lang/' . LANG_SET . '/' . strtolower(CONTROLLER_NAME) . EXT;
-            if (is_file($file))
+            if (is_file($file)) {
                 L(include $file);
+            }
         }
     }

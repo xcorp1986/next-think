@@ -17,7 +17,10 @@
          * @access protected
          */
         protected $xml = '';
-        protected $tags = [];// 标签定义
+        /**
+         * @var array $tags 标签定义
+         */
+        protected $tags = [];
         /**
          * 标签库名称
          * @var string
@@ -27,36 +30,45 @@
 
         /**
          * 标签库标签列表
-         * @var string
+         * @var array $tagList
          * @access protected
          */
         protected $tagList = [];
 
         /**
          * 标签库分析数组
-         * @var string
+         * @var array $parse
          * @access protected
          */
         protected $parse = [];
 
         /**
          * 标签库是否有效
-         * @var string
+         * @var bool $valid
+         * @deprecated
          * @access protected
          */
         protected $valid = false;
 
         /**
          * 当前模板对象
-         * @var object
+         * @var \Think\Template
          * @access protected
          */
         protected $tpl;
 
-        protected $comparison = [' nheq ' => ' !== ', ' heq ' => ' === ', ' neq ' => ' != ', ' eq ' => ' == ', ' egt ' => ' >= ', ' gt ' => ' > ', ' elt ' => ' <= ', ' lt ' => ' < '];
+        protected $comparison = [
+            ' nheq ' => ' !== ',
+            ' heq '  => ' === ',
+            ' neq '  => ' != ',
+            ' eq '   => ' == ',
+            ' egt '  => ' >= ',
+            ' gt '   => ' > ',
+            ' elt '  => ' <= ',
+            ' lt '   => ' < ',
+        ];
 
         /**
-         * 架构函数
          * @access public
          */
         public function __construct()
@@ -76,7 +88,7 @@
             //XML解析安全过滤
             $attr = str_replace('&', '___', $attr);
             $xml = '<tpl><tag ' . $attr . ' /></tpl>';
-            $xml = simplexml_load_string($xml);
+            $xml = \simplexml_load_string($xml);
             if (!$xml) {
                 E(L('_XML_TAG_ERROR_') . ' : ' . $attr);
             }
@@ -128,17 +140,21 @@
             $condition = str_ireplace(array_keys($this->comparison), array_values($this->comparison), $condition);
             $condition = preg_replace('/\$(\w+):(\w+)\s/is', '$\\1->\\2 ', $condition);
             switch (strtolower(C('TMPL_VAR_IDENTIFY'))) {
-                case 'array': // 识别为数组
+                // 识别为数组
+                case 'array':
                     $condition = preg_replace('/\$(\w+)\.(\w+)\s/is', '$\\1["\\2"] ', $condition);
                     break;
-                case 'obj':  // 识别为对象
+                // 识别为对象
+                case 'obj':
                     $condition = preg_replace('/\$(\w+)\.(\w+)\s/is', '$\\1->\\2 ', $condition);
                     break;
-                default:  // 自动判断数组或对象 只支持二维
+                // 自动判断数组或对象 只支持二维
+                default:
                     $condition = preg_replace('/\$(\w+)\.(\w+)\s/is', '(is_array($\\1)?$\\1["\\2"]:$\\1->\\2) ', $condition);
             }
-            if (false !== strpos($condition, '$Think'))
+            if (false !== strpos($condition, '$Think')) {
                 $condition = preg_replace_callback('/(\$Think.*?)\s/is', [$this, 'parseThinkVar'], $condition);
+            }
 
             return $condition;
         }
@@ -151,14 +167,17 @@
          */
         public function autoBuildVar($name)
         {
+            /*
+             * 特殊变量，指Think.xxx这样形式的，不过内置的变量有限
+             */
             if ('Think.' == substr($name, 0, 6)) {
-                // 特殊变量
                 return $this->parseThinkVar($name);
             } elseif (strpos($name, '.')) {
                 $vars = explode('.', $name);
                 $var = array_shift($vars);
                 switch (strtolower(C('TMPL_VAR_IDENTIFY'))) {
-                    case 'array': // 识别为数组
+                    // 识别为数组
+                    case 'array':
                         $name = '$' . $var;
                         foreach ($vars as $key => $val) {
                             if (0 === strpos($val, '$')) {
@@ -168,7 +187,8 @@
                             }
                         }
                         break;
-                    case 'obj':  // 识别为对象
+                    // 识别为对象
+                    case 'obj':
                         $name = '$' . $var;
                         foreach ($vars as $key => $val)
                             $name .= '->' . $val;
@@ -176,10 +196,15 @@
                     default:  // 自动判断数组或对象 只支持二维
                         $name = 'is_array($' . $var . ')?$' . $var . '["' . $vars[0] . '"]:$' . $var . '->' . $vars[0];
                 }
-            } elseif (strpos($name, ':')) {
-                // 额外的对象方式支持
-                $name = '$' . str_replace(':', '->', $name);
-            } elseif (!defined($name)) {
+            }
+            /*
+             * 移除$name:value这样的支持方式，统一$name.value By kwan 2016-9-13
+             */
+//            elseif (strpos($name, ':')) {
+//                // 额外的对象方式支持
+//                $name = '$' . str_replace(':', '->', $name);
+//            }
+            elseif (!defined($name)) {
                 $name = '$' . $name;
             }
 
@@ -188,8 +213,9 @@
 
         /**
          * 用于标签属性里面的特殊模板变量解析
-         * @todo 与\Think\Template::parseThinkVar()重复定义了
+         * @todo   与\Think\Template::parseThinkVar()重复定义了
          * 格式 以 Think. 打头的变量属于特殊模板变量
+         * @deprecated
          * @access public
          * @param string $varStr 变量字符串
          * @return string
@@ -256,15 +282,6 @@
                     case 'VERSION':
                         $parseStr = 'THINK_VERSION';
                         break;
-                    case 'TEMPLATE':
-                        $parseStr = 'C("TEMPLATE_NAME")';
-                        break;
-                    case 'LDELIM':
-                        $parseStr = 'C("TMPL_L_DELIM")';
-                        break;
-                    case 'RDELIM':
-                        $parseStr = 'C("TMPL_R_DELIM")';
-                        break;
                     default:
                         if (defined($vars[1])) $parseStr = $vars[1];
                 }
@@ -273,7 +290,10 @@
             return $parseStr;
         }
 
-        // 获取标签定义
+        /**
+         * 获取标签定义
+         * @return array
+         */
         public function getTags()
         {
             return $this->tags;

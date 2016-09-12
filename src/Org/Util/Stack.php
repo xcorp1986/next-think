@@ -10,7 +10,6 @@
     {
 
         /**
-         * 架构函数
          * @access public
          * @param array $values 初始化数组元素
          */
