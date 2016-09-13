@@ -44,7 +44,7 @@
     //@todo have effect on BuildLiteBehavior
 //    defined('CORE_PATH') or define('CORE_PATH', LIB_PATH . 'Think/'); // Think类库目录
 //    defined('BEHAVIOR_PATH') or define('BEHAVIOR_PATH', __DIR__ . '/Behavior/'); // 行为类库目录
-    defined('MODE_PATH') or define('MODE_PATH', __DIR__ . '/Mode/'); // 系统应用模式目录
+//    defined('MODE_PATH') or define('MODE_PATH', __DIR__ . '/Mode/'); // 系统应用模式目录
     defined('COMMON_PATH') or define('COMMON_PATH', APP_PATH . 'Common/'); // 应用公共目录
     defined('RUNTIME_PATH') or define('RUNTIME_PATH', APP_PATH . 'Runtime/');   // 系统运行时目录
     defined('ADDON_PATH') or define('ADDON_PATH', APP_PATH . 'Addon');
@@ -60,7 +60,7 @@
     define('IS_CGI', (0 === strpos(PHP_SAPI, 'cgi') || false !== strpos(PHP_SAPI, 'fcgi')) ? 1 : 0);
     define('IS_WIN', strpos(PHP_OS, 'WIN') ? 1 : 0);
     define('IS_CLI', PHP_SAPI == 'cli' ? 1 : 0);
-    defined('LIB_PATH') or define('LIB_PATH', __DIR__ . '/'); // 系统核心类库目录@todo remove in future
+//    defined('LIB_PATH') or define('LIB_PATH', __DIR__ . '/'); // 系统核心类库目录@todo remove in future
 
     if (!IS_CLI) {
         // 当前文件名

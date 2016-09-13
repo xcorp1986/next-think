@@ -71,8 +71,6 @@ class [MODEL]Model extends Model {
                 foreach ($dirs as $dir) {
                     if (!is_dir($dir)) mkdir($dir, 0755, true);
                 }
-                // 写入目录安全文件
-//                self::buildDirSecure($dirs);
                 // 写入应用配置文件
                 if (!is_file(CONF_PATH . 'config' . CONF_EXT))
                     file_put_contents(CONF_PATH . 'config' . CONF_EXT, '.php' == CONF_EXT ? "<?php\nreturn [\n\t//'配置项'=>'配置值'\n];" : '');
@@ -100,7 +98,7 @@ class [MODEL]Model extends Model {
                 }
             } else {
                 header('Content-Type:text/html; charset=utf-8');
-                exit('应用目录[' . APP_PATH . ']不可写，目录无法自动生成！<BR>请手动生成项目目录~');
+                \Think\Think::halt('应用目录[' . APP_PATH . ']不可写，目录无法自动生成！<BR>请手动生成项目目录~');
             }
         }
 
@@ -114,7 +112,7 @@ class [MODEL]Model extends Model {
                 mkdir(RUNTIME_PATH);
             } elseif (!is_writeable(RUNTIME_PATH)) {
                 header('Content-Type:text/html; charset=utf-8');
-                exit('目录 [ ' . RUNTIME_PATH . ' ] 不可写！');
+                \Think\Think::halt('目录 [ ' . RUNTIME_PATH . ' ] 不可写！');
             }
             mkdir(CACHE_PATH);  // 模板缓存目录
             if (!is_dir(LOG_PATH)) mkdir(LOG_PATH);    // 日志目录
