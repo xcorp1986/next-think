@@ -25,7 +25,7 @@
       "Org\\": "src/Org"
     },
     "files": [
-      "src/ThinkPHP.php"
+      "src/Bootstrap.php"
     ]
   }
 }

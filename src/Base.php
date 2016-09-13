@@ -1,14 +1,15 @@
 <?php
 
     /**
-     * 公共入口文件
+     * 系统常量定义
      */
-
     defined('APP_PATH') or die('请在入口文件中定义常量APP_PATH');
+
     /*
      * 记录开始运行时间
      */
     $GLOBALS['_beginTime'] = microtime(true);
+
     /*
      * 记录内存初始使用
      */
@@ -33,14 +34,10 @@
      */
     const EXT = '.php';
 
-    /*
-     * 系统常量定义
-     */
     defined('THINK_PATH') or define('THINK_PATH', __DIR__ . '/');
     defined('APP_STATUS') or define('APP_STATUS', null); // 应用状态 加载对应的配置文件
     defined('APP_DEBUG') or define('APP_DEBUG', false); // 是否调试模式
     defined('APP_MODE') or define('APP_MODE', 'common'); // 应用模式 默认为普通模式
-
     //@todo have effect on BuildLiteBehavior
 //    defined('CORE_PATH') or define('CORE_PATH', LIB_PATH . 'Think/'); // Think类库目录
 //    defined('BEHAVIOR_PATH') or define('BEHAVIOR_PATH', __DIR__ . '/Behavior/'); // 行为类库目录
@@ -60,29 +57,4 @@
     define('IS_CGI', (0 === strpos(PHP_SAPI, 'cgi') || false !== strpos(PHP_SAPI, 'fcgi')) ? 1 : 0);
     define('IS_WIN', strpos(PHP_OS, 'WIN') ? 1 : 0);
     define('IS_CLI', PHP_SAPI == 'cli' ? 1 : 0);
-//    defined('LIB_PATH') or define('LIB_PATH', __DIR__ . '/'); // 系统核心类库目录@todo remove in future
-
-    if (!IS_CLI) {
-        // 当前文件名
-        if (!defined('_PHP_FILE_')) {
-            if (IS_CGI) {
-                //CGI/FASTCGI模式下
-                $_temp = explode('.php', $_SERVER['PHP_SELF']);
-                define('_PHP_FILE_', rtrim(str_replace($_SERVER['HTTP_HOST'], '', $_temp[0] . '.php'), '/'));
-            } else {
-                define('_PHP_FILE_', rtrim($_SERVER['SCRIPT_NAME'], '/'));
-            }
-        }
-        if (!defined('__ROOT__')) {
-            $_root = rtrim(dirname(_PHP_FILE_), '/');
-            define('__ROOT__', (($_root == '/' || $_root == '\\') ? '' : $_root));
-        }
-    }
-    /*
-     * 加载引导类
-     */
-    require __DIR__ . '/Think/Think.php';
-    /*
-     * 应用初始化
-     */
-    Think\Think::start();
+    //    defined('LIB_PATH') or define('LIB_PATH', __DIR__ . '/'); // 系统核心类库目录@todo remove in future

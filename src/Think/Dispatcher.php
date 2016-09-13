@@ -24,7 +24,8 @@
             $varController = C('VAR_CONTROLLER');
             $varAction = C('VAR_ACTION');
             $urlCase = C('URL_CASE_INSENSITIVE');
-            if (isset($_GET[$varPath])) { // 判断URL里面是否有兼容模式参数
+            // 判断URL里面是否有兼容模式参数
+            if (isset($_GET[$varPath])) {
                 $_SERVER['PATH_INFO'] = $_GET[$varPath];
                 unset($_GET[$varPath]);
             } elseif (IS_CLI) {
@@ -49,12 +50,16 @@
                     }
                     if (!empty($domain)) {
                         $subDomain = implode('.', $domain);
-                        define('SUB_DOMAIN', $subDomain); // 当前完整子域名
-                        $domain2 = array_pop($domain); // 二级域名
-                        if ($domain) { // 存在三级域名
+                        // 当前完整子域名
+                        define('SUB_DOMAIN', $subDomain);
+                        // 二级域名
+                        $domain2 = array_pop($domain);
+                        if ($domain) {
+                            // 存在三级域名
                             $domain3 = array_pop($domain);
                         }
-                        if (isset($rules[$subDomain])) { // 子域名
+                        if (isset($rules[$subDomain])) {
+                            // 子域名
                             $rule = $rules[$subDomain];
                         } elseif (isset($rules['*.' . $domain2]) && !empty($domain3)) {
                             // 泛三级域名
@@ -244,7 +249,7 @@
                 $_GET = array_merge($var, $_GET);
             }
             // 获取控制器的命名空间（路径）
-            define('CONTROLLER_PATH', self::getSpace($varAddon, $urlCase));
+            define('CONTROLLER_PATH', self::getSpace($varAddon));
             // 获取控制器和操作名
             define('CONTROLLER_NAME', defined('BIND_CONTROLLER') ? BIND_CONTROLLER : self::getController($varController, $urlCase));
             define('ACTION_NAME', defined('BIND_ACTION') ? BIND_ACTION : self::getAction($varAction, $urlCase));
@@ -263,7 +268,7 @@
         /**
          * 获得控制器的命名空间路径 便于插件机制访问
          */
-        static private function getSpace($var, $urlCase)
+        static private function getSpace($var)
         {
             $space = !empty($_GET[$var]) ? strip_tags($_GET[$var]) : '';
             unset($_GET[$var]);
