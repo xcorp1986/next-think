@@ -189,15 +189,15 @@
             // 一般放在文件的最前面
             // 格式：<taglib name="html,mytag..." />
             // 当TAGLIB_LOAD配置为true时才会进行检测
-            if (C('TAGLIB_LOAD')) {
-                $this->getIncludeTagLib($content);
-                if (!empty($this->tagLib)) {
-                    // 对导入的TagLib进行解析
-                    foreach ($this->tagLib as $tagLibName) {
-                        $this->parseTagLib($tagLibName, $content);
-                    }
+//            if (C('TAGLIB_LOAD')) {
+            $this->getIncludeTagLib($content);
+            if (!empty($this->tagLib)) {
+                // 对导入的TagLib进行解析
+                foreach ($this->tagLib as $tagLibName) {
+                    $this->parseTagLib($tagLibName, $content);
                 }
             }
+//            }
             // 预先加载的标签库 必须使用标签库XML前缀
             if (C('TAGLIB_PRE_LOAD')) {
                 $tagLibs = explode(',', C('TAGLIB_PRE_LOAD'));
