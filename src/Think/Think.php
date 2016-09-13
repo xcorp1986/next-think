@@ -8,10 +8,14 @@
     class Think
     {
 
-        // 类映射
+        /**
+         * @var array $_map 类映射
+         */
         private static $_map = [];
 
-        // 实例化对象
+        /**
+         * @var array $_instance 实例化对象
+         */
         private static $_instance = [];
 
         /**
@@ -21,12 +25,16 @@
          */
         static public function start()
         {
-            // 设定错误和异常处理
+            /*
+             * 设定错误和异常处理
+             */
             register_shutdown_function([__CLASS__, 'fatalError']);
             set_error_handler([__CLASS__, 'appError']);
             set_exception_handler([__CLASS__, 'appException']);
 
-            // 初始化文件存储方式
+            /*
+             * 初始化文件存储方式
+             */
             Storage::connect(STORAGE_TYPE);
 
             $runtimefile = RUNTIME_PATH . APP_MODE . '_runtime.php';
@@ -36,38 +44,54 @@
                 if (Storage::has($runtimefile))
                     Storage::unlink($runtimefile);
                 $content = '';
-                // 读取应用模式
-                $mode = include is_file(CONF_PATH . 'core.php') ? CONF_PATH . 'core.php' : MODE_PATH . APP_MODE . '.php';
-                // 加载核心文件
-                foreach ($mode['core'] as $file) {
+                /**
+                 * 检查核心必须文件
+                 */
+                if (!Storage::has(__DIR__ . '/../Conf/core.php') ||
+                    !Storage::has(__DIR__ . '/../Conf/config.php') ||
+                    !Storage::has(__DIR__ . '/../Conf/tags.php') ||
+                    !Storage::has(__DIR__ . '/../Lang/' . C('DEFAULT_LANG') . EXT)
+                ) {
+                    self::halt('系统核心文件缺失');
+                }
+                /*
+                 * 加载核心文件
+                 */
+                $mode = include __DIR__ . '/../Conf/core.php';
+                foreach ($mode as $file) {
                     if (is_file($file)) {
                         include $file;
                         if (!APP_DEBUG) $content .= compile($file);
                     }
                 }
 
-                // 加载应用模式配置文件
-                foreach ($mode['config'] as $key => $file) {
+                /*
+                 * 加载应用模式配置文件
+                 */
+                $config = include __DIR__ . '/../Conf/config.php';
+                foreach ($config as $key => $file) {
                     is_numeric($key) ? C(load_config($file)) : C($key, load_config($file));
                 }
 
-                // 读取当前应用模式对应的配置文件
-                if ('common' != APP_MODE && is_file(CONF_PATH . 'config_' . APP_MODE . CONF_EXT))
-                    C(load_config(CONF_PATH . 'config_' . APP_MODE . CONF_EXT));
-
-
-                // 加载模式行为定义
-                if (isset($mode['tags'])) {
-                    Hook::import(is_array($mode['tags']) ? $mode['tags'] : include $mode['tags']);
+                /*
+                 * 加载模式行为定义
+                 */
+                $tags = include __DIR__ . '/../Conf/tags.php';
+                if (isset($tags)) {
+                    Hook::import(is_array($tags) ? $tags : include $tags);
                 }
 
-                // 加载应用行为定义
+                /*
+                 * 加载应用行为
+                 */
                 if (is_file(CONF_PATH . 'tags.php'))
-                    // 允许应用增加开发模式配置定义
                     Hook::import(include CONF_PATH . 'tags.php');
 
-                // 加载框架底层语言包
-                L(include THINK_PATH . 'Lang/' . strtolower(C('DEFAULT_LANG')) . EXT);
+                /*
+                 * 加载框架底层语言包
+                 */
+                $lang = include __DIR__ . '/../Lang/' . C('DEFAULT_LANG') . EXT;
+                L($lang);
 
                 if (!APP_DEBUG) {
                     $content .= "\nnamespace { ";
@@ -84,14 +108,20 @@
                 }
             }
 
-            // 读取当前应用状态对应的配置文件
+            /*
+             * 读取当前应用状态对应的配置文件
+             */
             if (APP_STATUS && is_file(CONF_PATH . APP_STATUS . CONF_EXT))
                 C(include CONF_PATH . APP_STATUS . CONF_EXT);
 
-            // 设置系统时区
+            /*
+             * 设置系统时区
+             */
             date_default_timezone_set(C('DEFAULT_TIMEZONE'));
 
-            // 检查应用目录结构 如果不存在则自动创建
+            /*
+             * 检查应用目录结构 如果不存在则自动创建
+             */
             if (C('CHECK_APP_DIR')) {
                 $module = defined('BIND_MODULE') ? BIND_MODULE : C('DEFAULT_MODULE');
                 if (!is_dir(APP_PATH . $module) || !is_dir(LOG_PATH)) {
@@ -100,9 +130,14 @@
                 }
             }
 
-            // 记录加载文件时间
+            /*
+             * 记录加载文件时间
+             */
             G('loadTime');
-            // 运行应用
+
+            /*
+             * 运行应用
+             */
             App::run();
         }
 
