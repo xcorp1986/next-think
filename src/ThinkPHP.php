@@ -40,7 +40,6 @@
     defined('APP_STATUS') or define('APP_STATUS', null); // 应用状态 加载对应的配置文件
     defined('APP_DEBUG') or define('APP_DEBUG', false); // 是否调试模式
     defined('APP_MODE') or define('APP_MODE', 'common'); // 应用模式 默认为普通模式
-    defined('STORAGE_TYPE') or define('STORAGE_TYPE', 'File'); // 存储类型 默认为File @todo remove in future
 
     //@todo have effect on BuildLiteBehavior
 //    defined('CORE_PATH') or define('CORE_PATH', LIB_PATH . 'Think/'); // Think类库目录

@@ -35,9 +35,9 @@
             /*
              * 初始化文件存储方式
              */
-            Storage::connect(STORAGE_TYPE);
+            Storage::connect();
 
-            $runtimefile = RUNTIME_PATH . APP_MODE . '_runtime.php';
+            $runtimefile = RUNTIME_PATH . '__runtime.php';
             if (!APP_DEBUG && Storage::has($runtimefile)) {
                 Storage::load($runtimefile);
             } else {
