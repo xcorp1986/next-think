@@ -49,8 +49,7 @@
                  */
                 if (!Storage::has(__DIR__ . '/../Conf/core.php') ||
                     !Storage::has(__DIR__ . '/../Conf/config.php') ||
-                    !Storage::has(__DIR__ . '/../Conf/tags.php') ||
-                    !Storage::has(__DIR__ . '/../Lang/' . C('DEFAULT_LANG') . EXT)
+                    !Storage::has(__DIR__ . '/../Conf/tags.php')
                 ) {
                     self::halt('系统核心文件缺失');
                 }
