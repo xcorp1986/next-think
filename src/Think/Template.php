@@ -42,7 +42,7 @@
             $this->config['taglib_end'] = $this->stripPreg(C('TAGLIB_END'));
             $this->config['tmpl_begin'] = $this->stripPreg(C('TMPL_L_DELIM'));
             $this->config['tmpl_end'] = $this->stripPreg(C('TMPL_R_DELIM'));
-//            $this->config['default_tmpl'] = C('TEMPLATE_NAME');
+            $this->config['default_tmpl'] = C('TEMPLATE_NAME');
             $this->config['layout_item'] = C('TMPL_LAYOUT_ITEM');
         }
 
@@ -184,6 +184,20 @@
             // 首先替换literal标签
             $content = preg_replace_callback('/' . $begin . 'literal' . $end . '(.*?)' . $begin . '\/literal' . $end . '/is', [$this, 'parseLiteral'], $content);
 
+            // 获取需要引入的标签库列表
+            // 标签库只需要定义一次，允许引入多个一次
+            // 一般放在文件的最前面
+            // 格式：<taglib name="html,mytag..." />
+            // 当TAGLIB_LOAD配置为true时才会进行检测
+            if (C('TAGLIB_LOAD')) {
+                $this->getIncludeTagLib($content);
+                if (!empty($this->tagLib)) {
+                    // 对导入的TagLib进行解析
+                    foreach ($this->tagLib as $tagLibName) {
+                        $this->parseTagLib($tagLibName, $content);
+                    }
+                }
+            }
             // 预先加载的标签库 必须使用标签库XML前缀
             if (C('TAGLIB_PRE_LOAD')) {
                 $tagLibs = explode(',', C('TAGLIB_PRE_LOAD'));
@@ -421,17 +435,16 @@
                     return $content;
                 }
             }
-            return false;
         }
 
         /**
          * 搜索模板页面中包含的TagLib库
          * 并返回列表
-         * @access protected
+         * @access public
          * @param string $content 模板内容
          * @return string|false
          */
-        protected function getIncludeTagLib(& $content)
+        public function getIncludeTagLib(& $content)
         {
             //搜索是否有TagLib标签
             $find = preg_match('/' . $this->config['taglib_begin'] . 'taglib\s(.+?)(\s*?)\/' . $this->config['taglib_end'] . '\W/is', $content, $matches);
@@ -443,22 +456,29 @@
                 $this->tagLib = explode(',', $array['name']);
             }
 
-            return false;
+            return;
         }
 
         /**
          * TagLib库解析
-         * @access protected
+         * @access public
          * @param string  $tagLib  要解析的标签库
          * @param string  $content 要解析的模板内容
          * @param boolean $hide    是否隐藏标签库前缀
          * @return string
          */
-        protected function parseTagLib($tagLib, &$content, $hide = false)
+        public function parseTagLib($tagLib, &$content, $hide = false)
         {
             $begin = $this->config['taglib_begin'];
             $end = $this->config['taglib_end'];
-            $tLib = Think::instance($tagLib);
+            if (strpos($tagLib, '\\')) {
+                // 支持指定标签库的命名空间
+                $className = $tagLib;
+                $tagLib = substr($tagLib, strrpos($tagLib, '\\') + 1);
+            } else {
+                $className = 'Think\\Template\TagLib\\' . ucwords($tagLib);
+            }
+            $tLib = \Think\Think::instance($className);
             $that = $this;
             foreach ($tLib->getTags() as $name => $val) {
                 $tags = [$name];
@@ -499,14 +519,14 @@
         /**
          * 解析标签库的标签
          * 需要调用对应的标签库文件解析类
-         * @access protected
+         * @access public
          * @param object $tagLib  标签库对象实例
          * @param string $tag     标签名
          * @param string $attr    标签属性
          * @param string $content 标签内容
          * @return string|false
          */
-        protected function parseXmlTag($tagLib, $tag, $attr, $content)
+        public function parseXmlTag($tagLib, $tag, $attr, $content)
         {
             if (ini_get('magic_quotes_sybase'))
                 $attr = str_replace('\"', '\'', $attr);
@@ -520,11 +540,11 @@
         /**
          * 模板标签解析
          * 格式： {TagName:args [|content] }
-         * @access protected
+         * @access public
          * @param string $tagStr 标签内容
          * @return string
          */
-        protected function parseTag($tagStr)
+        public function parseTag($tagStr)
         {
             if (is_array($tagStr)) $tagStr = $tagStr[2];
             $tagStr = stripslashes($tagStr);
@@ -555,11 +575,11 @@
         /**
          * 模板变量解析,支持使用函数
          * 格式： {$varname|function1|function2=arg1,arg2}
-         * @access protected
+         * @access public
          * @param string $varStr 变量数据
          * @return string
          */
-        protected function parseVar($varStr)
+        public function parseVar($varStr)
         {
             $varStr = trim($varStr);
             static $_varParseList = [];
@@ -665,11 +685,11 @@
         /**
          * 特殊模板变量解析
          * 格式 以 $Think. 打头的变量属于特殊模板变量
-         * @access protected
+         * @access public
          * @param string $varStr 变量字符串
          * @return string
          */
-        protected function parseThinkVar($varStr)
+        public function parseThinkVar($varStr)
         {
             $vars = explode('.', $varStr);
             $vars[1] = strtoupper(trim($vars[1]));
