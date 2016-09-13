@@ -31,10 +31,10 @@
          * @param array  $options 配置数组
          * @return void
          */
-        static public function connect($type = 'File', $options = [])
+        static public function connect($type = 'File')
         {
             $class = 'Think\\Storage\\Driver\\' . ucwords($type);
-            self::$handler = new $class($options);
+            self::$handler = \Think\Think::instance($class);
         }
 
         static public function __callstatic($method, $args)

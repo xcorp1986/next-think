@@ -14,7 +14,7 @@
     class File extends Storage
     {
 
-        private $contents = [];
+        private static $contents = [];
 
         /**
          * @access public
@@ -31,9 +31,9 @@
          * @param string $type
          * @return string
          */
-        public function read($filename, $type = '')
+        public static function read($filename, $type = '')
         {
-            return $this->get($filename, 'content', $type);
+            return self::get($filename, 'content', $type);
         }
 
         /**
@@ -44,7 +44,7 @@
          * @param string $type
          * @return bool
          */
-        public function put($filename, $content, $type = '')
+        public static function put($filename, $content, $type = '')
         {
             $dir = dirname($filename);
             if (!is_dir($dir)) {
@@ -53,7 +53,7 @@
             if (false === file_put_contents($filename, $content)) {
                 E(L('_STORAGE_WRITE_ERROR_') . ':' . $filename);
             } else {
-                $this->contents[$filename] = $content;
+                self::$contents[$filename] = $content;
 
                 return true;
             }
@@ -67,13 +67,13 @@
          * @param string $type
          * @return bool
          */
-        public function append($filename, $content, $type = '')
+        public static function append($filename, $content, $type = '')
         {
             if (is_file($filename)) {
-                $content = $this->read($filename, $type) . $content;
+                $content = self::read($filename, $type) . $content;
             }
 
-            return $this->put($filename, $content, $type);
+            return self::put($filename, $content, $type);
         }
 
         /**
@@ -83,7 +83,7 @@
          * @param array  $vars     传入变量
          * @return void
          */
-        public function load($_filename, $vars = null)
+        public static function load($_filename, $vars = null)
         {
             if (!is_null($vars)) {
                 extract($vars, EXTR_OVERWRITE);
@@ -98,7 +98,7 @@
          * @param string $type
          * @return bool
          */
-        public function has($filename, $type = '')
+        public static function has($filename, $type = '')
         {
             return is_file($filename);
         }
@@ -110,9 +110,9 @@
          * @param string $type
          * @return bool
          */
-        public function unlink($filename, $type = '')
+        public static function unlink($filename, $type = '')
         {
-            unset($this->contents[$filename]);
+            unset(self::$contents[$filename]);
 
             return is_file($filename) ? unlink($filename) : false;
         }
@@ -125,13 +125,13 @@
          * @param string $type
          * @return bool
          */
-        public function get($filename, $name, $type = '')
+        public static function get($filename, $name, $type = '')
         {
-            if (!isset($this->contents[$filename])) {
+            if (!isset(self::$contents[$filename])) {
                 if (!is_file($filename)) return false;
-                $this->contents[$filename] = file_get_contents($filename);
+                self::$contents[$filename] = file_get_contents($filename);
             }
-            $content = $this->contents[$filename];
+            $content = self::$contents[$filename];
             $info = [
                 'mtime'   => filemtime($filename),
                 'content' => $content,
