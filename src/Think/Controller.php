@@ -6,7 +6,6 @@
      * 控制器基类
      * Class Controller
      * @package Think
-     * @method _init() 控制器初始化附加方法
      */
     abstract class Controller
     {
@@ -38,6 +37,13 @@
             if (method_exists($this, '_init')) {
                 $this->_init();
             }
+        }
+
+        /**
+         * 控制器初始化附加方法
+         */
+        protected function _init()
+        {
         }
 
         /**
