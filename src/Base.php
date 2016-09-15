@@ -35,7 +35,7 @@
     const EXT = '.php';
 
     defined('THINK_PATH') or define('THINK_PATH', __DIR__ . '/');
-    defined('APP_STATUS') or define('APP_STATUS', null); // 应用状态 加载对应的配置文件
+//    defined('APP_STATUS') or define('APP_STATUS', null); // 应用状态 加载对应的配置文件
     defined('APP_DEBUG') or define('APP_DEBUG', false); // 是否调试模式
 //    defined('APP_MODE') or define('APP_MODE', 'common'); // 应用模式 默认为普通模式
     defined('COMMON_PATH') or define('COMMON_PATH', APP_PATH . 'Common/'); // 应用公共目录

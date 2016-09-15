@@ -170,8 +170,8 @@
 //                if ('common' != APP_MODE && is_file(MODULE_PATH . 'Conf/config_' . APP_MODE . CONF_EXT))
 //                    C(load_config(MODULE_PATH . 'Conf/config_' . APP_MODE . CONF_EXT));
                 // 当前应用状态对应的配置文件
-                if (APP_STATUS && is_file(MODULE_PATH . 'Conf/' . APP_STATUS . CONF_EXT))
-                    C(load_config(MODULE_PATH . 'Conf/' . APP_STATUS . CONF_EXT));
+//                if (APP_STATUS && is_file(MODULE_PATH . 'Conf/' . APP_STATUS . CONF_EXT))
+//                    C(load_config(MODULE_PATH . 'Conf/' . APP_STATUS . CONF_EXT));
 
                 // 加载模块tags文件定义
                 if (is_file(MODULE_PATH . 'Conf/tags.php'))

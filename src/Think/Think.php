@@ -110,8 +110,8 @@
             /*
              * 读取当前应用状态对应的配置文件
              */
-            if (APP_STATUS && is_file(CONF_PATH . APP_STATUS . CONF_EXT))
-                C(include CONF_PATH . APP_STATUS . CONF_EXT);
+//            if (APP_STATUS && is_file(CONF_PATH . APP_STATUS . CONF_EXT))
+//                C(include CONF_PATH . APP_STATUS . CONF_EXT);
 
             /*
              * 设置系统时区
