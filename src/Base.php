@@ -34,7 +34,7 @@
      */
     const EXT = '.php';
 
-    defined('THINK_PATH') or define('THINK_PATH', __DIR__ . '/');
+//    defined('THINK_PATH') or define('THINK_PATH', __DIR__ . '/');
 //    defined('APP_STATUS') or define('APP_STATUS', null); // 应用状态 加载对应的配置文件
     defined('APP_DEBUG') or define('APP_DEBUG', false); // 是否调试模式
 //    defined('APP_MODE') or define('APP_MODE', 'common'); // 应用模式 默认为普通模式
@@ -48,7 +48,7 @@
     defined('TEMP_PATH') or define('TEMP_PATH', RUNTIME_PATH . 'Temp/'); // 应用缓存目录
     defined('DATA_PATH') or define('DATA_PATH', RUNTIME_PATH . 'Data/'); // 应用数据目录
     defined('CACHE_PATH') or define('CACHE_PATH', RUNTIME_PATH . 'Cache/'); // 应用模板缓存目录
-    defined('CONF_EXT') or define('CONF_EXT', EXT); // 配置文件后缀
+//    defined('CONF_EXT') or define('CONF_EXT', EXT); // 配置文件后缀
     defined('CONF_PARSE') or define('CONF_PARSE', '');    // 配置文件解析方法
     define('IS_CGI', (0 === strpos(PHP_SAPI, 'cgi') || false !== strpos(PHP_SAPI, 'fcgi')) ? 1 : 0);
     define('IS_WIN', strpos(PHP_OS, 'WIN') ? 1 : 0);

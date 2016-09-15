@@ -164,8 +164,8 @@
                 Hook::listen('module_check');
 
                 // 加载模块配置文件
-                if (is_file(MODULE_PATH . 'Conf/config' . CONF_EXT))
-                    C(load_config(MODULE_PATH . 'Conf/config' . CONF_EXT));
+                if (is_file(MODULE_PATH . 'Conf/config' . EXT))
+                    C(load_config(MODULE_PATH . 'Conf/config' . EXT));
                 // 加载应用模式对应的配置文件
 //                if ('common' != APP_MODE && is_file(MODULE_PATH . 'Conf/config_' . APP_MODE . CONF_EXT))
 //                    C(load_config(MODULE_PATH . 'Conf/config_' . APP_MODE . CONF_EXT));

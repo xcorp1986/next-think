@@ -60,7 +60,7 @@
             define('LANG_SET', strtolower($langSet));
 
             // 读取框架语言包
-            $file = THINK_PATH . 'Lang/' . LANG_SET . EXT;
+            $file = __DIR__ . '/../Lang/' . LANG_SET . EXT;
             if (LANG_SET != C('DEFAULT_LANG') && is_file($file)) {
                 L(include $file);
             }

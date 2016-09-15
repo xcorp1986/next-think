@@ -100,10 +100,10 @@
                     Storage::put($runtimefile, strip_whitespace('<?php ' . $content));
                 } else {
                     // 调试模式加载系统默认的配置文件
-                    C(include THINK_PATH . 'Conf/debug.php');
+                    C(include __DIR__ . '/../Conf/debug.php');
                     // 读取应用调试配置文件
-                    if (is_file(CONF_PATH . 'debug' . CONF_EXT))
-                        C(include CONF_PATH . 'debug' . CONF_EXT);
+                    if (is_file(CONF_PATH . 'debug' . EXT))
+                        C(include CONF_PATH . 'debug' . EXT);
                 }
             }
 
@@ -146,14 +146,14 @@
          * @param        $class
          * @param string $map
          */
-        static public function addMap($class, $map = '')
-        {
-            if (is_array($class)) {
-                self::$_map = array_merge(self::$_map, $class);
-            } else {
-                self::$_map[$class] = $map;
-            }
-        }
+//        static public function addMap($class, $map = '')
+//        {
+//            if (is_array($class)) {
+//                self::$_map = array_merge(self::$_map, $class);
+//            } else {
+//                self::$_map[$class] = $map;
+//            }
+//        }
 
         /**
          * 获取classmap
@@ -161,16 +161,16 @@
          * @param string $class
          * @return array|mixed|null
          */
-        static public function getMap($class = '')
-        {
-            if ('' === $class) {
-                return self::$_map;
-            } elseif (isset(self::$_map[$class])) {
-                return self::$_map[$class];
-            } else {
-                return null;
-            }
-        }
+//        static public function getMap($class = '')
+//        {
+//            if ('' === $class) {
+//                return self::$_map;
+//            } elseif (isset(self::$_map[$class])) {
+//                return self::$_map[$class];
+//            } else {
+//                return null;
+//            }
+//        }
 
         /**
          * 类库自动加载
@@ -351,7 +351,7 @@
                 }
             }
             // 包含异常页面模板
-            $exceptionFile = C('TMPL_EXCEPTION_FILE', null, THINK_PATH . 'Tpl/think_exception.tpl');
+            $exceptionFile = C('TMPL_EXCEPTION_FILE', null, C('TMPL_EXCEPTION_FILE'));
             include $exceptionFile;
             exit;
         }
