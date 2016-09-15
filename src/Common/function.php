@@ -1296,10 +1296,10 @@
             } elseif (isset($name['id'])) {
                 session_id($name['id']);
             }
-            if ('common' == APP_MODE) {
-                // 其它模式可能不支持
-                ini_set('session.auto_start', 0);
-            }
+//            if ('common' == APP_MODE) {
+//                // 其它模式可能不支持
+//                ini_set('session.auto_start', 0);
+//            }
             if (isset($name['name'])) session_name($name['name']);
             if (isset($name['path'])) session_save_path($name['path']);
             if (isset($name['domain'])) ini_set('session.cookie_domain', $name['domain']);
