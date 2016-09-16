@@ -17,23 +17,15 @@
         private static $contents = [];
 
         /**
-         * @access public
-         */
-        public function __construct()
-        {
-        }
-
-        /**
          * 读取文件内容
          * @access public
          * @internal
          * @param string $filename 文件名
-         * @param string $type
          * @return string
          */
-        public static function read($filename, $type = '')
+        public static function read($filename)
         {
-            return self::get($filename, 'content', $type);
+            return self::get($filename, 'content');
         }
 
         /**
@@ -41,10 +33,9 @@
          * @access public
          * @param string $filename 文件名
          * @param string $content  文件内容
-         * @param string $type
          * @return bool
          */
-        public static function put($filename, $content, $type = '')
+        public static function put($filename, $content)
         {
             $dir = dirname($filename);
             if (!is_dir($dir)) {
@@ -64,16 +55,15 @@
          * @access public
          * @param string $filename 文件名
          * @param string $content  追加的文件内容
-         * @param string $type
          * @return bool
          */
-        public static function append($filename, $content, $type = '')
+        public static function append($filename, $content)
         {
             if (is_file($filename)) {
-                $content = self::read($filename, $type) . $content;
+                $content = self::read($filename) . $content;
             }
 
-            return self::put($filename, $content, $type);
+            return self::put($filename, $content);
         }
 
         /**
@@ -98,7 +88,7 @@
          * @param string $type
          * @return bool
          */
-        public static function has($filename, $type = '')
+        public static function has($filename)
         {
             return is_file($filename);
         }
@@ -107,10 +97,9 @@
          * 文件删除
          * @access public
          * @param string $filename 文件名
-         * @param string $type
          * @return bool
          */
-        public static function unlink($filename, $type = '')
+        public static function unlink($filename)
         {
             unset(self::$contents[$filename]);
 
@@ -122,10 +111,9 @@
          * @access public
          * @param string $filename 文件名
          * @param string $name     信息名 mtime或者content
-         * @param string $type
          * @return bool
          */
-        public static function get($filename, $name, $type = '')
+        public static function get($filename, $name)
         {
             if (!isset(self::$contents[$filename])) {
                 if (!is_file($filename)) return false;

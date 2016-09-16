@@ -92,13 +92,12 @@
          * @param string $templateFile 模板文件
          * @param array  $templateVar  模板变量
          * @param string $prefix       模板标识前缀
-         * @return void
          */
         public function fetch($templateFile, $templateVar, $prefix = '')
         {
             $this->tVar = $templateVar;
             $templateCacheFile = $this->loadTemplate($templateFile, $prefix);
-            Storage::load($templateCacheFile, $this->tVar, null, 'tpl');
+            return Storage::load($templateCacheFile, $this->tVar);
         }
 
         /**
@@ -137,7 +136,7 @@
             }
             // 编译模板内容
             $tmplContent = $this->compiler($tmplContent);
-            Storage::put($tmplCacheFile, trim($tmplContent), 'tpl');
+            Storage::put($tmplCacheFile, trim($tmplContent));
 
             return $tmplCacheFile;
         }
