@@ -83,8 +83,9 @@
                 /*
                  * 加载应用行为
                  */
-                if (is_file(CONF_PATH . 'tags.php'))
+                if (is_file(CONF_PATH . 'tags.php')) {
                     Hook::import(include CONF_PATH . 'tags.php');
+                }
 
                 /*
                  * 加载框架底层语言包
@@ -110,8 +111,9 @@
             /*
              * 读取当前应用状态对应的配置文件
              */
-//            if (APP_STATUS && is_file(CONF_PATH . APP_STATUS . CONF_EXT))
-//                C(include CONF_PATH . APP_STATUS . CONF_EXT);
+            if (APP_STATUS && is_file(CONF_PATH . APP_STATUS . EXT)) {
+                C(include CONF_PATH . APP_STATUS . EXT);
+            }
 
             /*
              * 设置系统时区
@@ -139,85 +141,6 @@
              */
             App::run();
         }
-
-        /**
-         * 注册classmap
-         * @deprecated
-         * @param        $class
-         * @param string $map
-         */
-//        static public function addMap($class, $map = '')
-//        {
-//            if (is_array($class)) {
-//                self::$_map = array_merge(self::$_map, $class);
-//            } else {
-//                self::$_map[$class] = $map;
-//            }
-//        }
-
-        /**
-         * 获取classmap
-         * @deprecated
-         * @param string $class
-         * @return array|mixed|null
-         */
-//        static public function getMap($class = '')
-//        {
-//            if ('' === $class) {
-//                return self::$_map;
-//            } elseif (isset(self::$_map[$class])) {
-//                return self::$_map[$class];
-//            } else {
-//                return null;
-//            }
-//        }
-
-        /**
-         * 类库自动加载
-         * @deprecated
-         * @param string $class 对象类名
-         * @return void
-         */
-//        public static function autoload($class)
-//        {
-//            // 检查是否存在映射
-//            if (isset(self::$_map[$class])) {
-//                include self::$_map[$class];
-//            } elseif (false !== strpos($class, '\\')) {
-//                $name = strstr($class, '\\', true);
-//                if (in_array($name, ['Think', 'Org', 'Behavior', 'Com', 'Vendor']) || is_dir(LIB_PATH . $name)) {
-//                    // Library目录下面的命名空间自动定位
-//                    $path = LIB_PATH;
-//                } else {
-//                    // 检测自定义命名空间 否则就以模块为命名空间
-//                    $namespace = C('AUTOLOAD_NAMESPACE');
-//                    $path = isset($namespace[$name]) ? dirname($namespace[$name]) . '/' : APP_PATH;
-//                }
-//                $filename = $path . str_replace('\\', '/', $class) . EXT;
-//                if (is_file($filename)) {
-//                    // Win环境下面严格区分大小写
-//                    if (IS_WIN && false === strpos(str_replace('/', '\\', realpath($filename)), $class . EXT)) {
-//                        return;
-//                    }
-//                    include $filename;
-//                }
-//            } elseif (!C('APP_USE_NAMESPACE')) {
-//                // 自动加载的类库层
-//                foreach (explode(',', C('APP_AUTOLOAD_LAYER')) as $layer) {
-//                    if (substr($class, -strlen($layer)) == $layer) {
-//                        if (require_cache(MODULE_PATH . $layer . '/' . $class . EXT)) {
-//                            return;
-//                        }
-//                    }
-//                }
-//                // 根据自动加载路径设置进行尝试搜索
-//                foreach (explode(',', C('APP_AUTOLOAD_PATH')) as $path) {
-//                    if (import($path . '.' . $class))
-//                        // 如果加载类成功则返回
-//                        return;
-//                }
-//            }
-//        }
 
         /**
          * 取得对象实例 支持调用类的静态方法
