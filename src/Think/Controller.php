@@ -105,7 +105,7 @@
             $content = $this->fetch($templateFile);
             $htmlpath = !empty($htmlpath) ? $htmlpath : HTML_PATH;
             $htmlfile = $htmlpath . $htmlfile . C('HTML_FILE_SUFFIX');
-            Storage::put($htmlfile, $content, 'html');
+            Storage::put($htmlfile, $content);
 
             return $content;
         }

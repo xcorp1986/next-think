@@ -26,7 +26,7 @@
                 && !preg_match('/(-[a-z0-9]{2}){3,}/i', HTML_FILE_NAME)
             ) {
                 //静态文件写入
-                Storage::put(HTML_FILE_NAME, $content, 'html');
+                Storage::put(HTML_FILE_NAME, $content);
             }
         }
     }

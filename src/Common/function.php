@@ -1186,10 +1186,10 @@
                 } else {
                     unset($_cache[$name]);
 
-                    return \Think\Storage::unlink($filename, 'F');
+                    return \Think\Storage::unlink($filename);
                 }
             } else {
-                \Think\Storage::put($filename, serialize($value), 'F');
+                \Think\Storage::put($filename, serialize($value));
                 // 缓存数据
                 $_cache[$name] = $value;
 
@@ -1199,8 +1199,8 @@
         // 获取缓存数据
         if (isset($_cache[$name]))
             return $_cache[$name];
-        if (\Think\Storage::has($filename, 'F')) {
-            $value = unserialize(\Think\Storage::read($filename, 'F'));
+        if (\Think\Storage::has($filename)) {
+            $value = unserialize(\Think\Storage::read($filename));
             $_cache[$name] = $value;
         } else {
             $value = false;
