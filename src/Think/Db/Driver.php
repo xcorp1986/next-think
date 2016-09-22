@@ -112,7 +112,9 @@
         public function connect($config = '', $linkNum = 0, $autoConnection = false)
         {
             if (!isset($this->linkID[$linkNum])) {
-                if (empty($config)) $config = $this->config;
+                if (empty($config)) {
+                    $config = $this->config;
+                }
                 try {
                     if (empty($config['dsn'])) {
                         $config['dsn'] = $this->parseDsn($config);
@@ -166,7 +168,9 @@
         public function query($str, $fetchSql = false)
         {
             $this->initConnect(false);
-            if (!$this->_linkID) return false;
+            if (!$this->_linkID) {
+                return false;
+            }
             $this->queryStr = $str;
             if (!empty($this->bind)) {
                 $that = $this;
@@ -178,7 +182,9 @@
                 return $this->queryStr;
             }
             //释放前次的查询结果
-            if (!empty($this->PDOStatement)) $this->free();
+            if (!empty($this->PDOStatement)) {
+                $this->free();
+            }
             $this->queryTimes++;
             // 记录查询操作
             N('db_query', 1);
@@ -227,7 +233,9 @@
         public function execute($str, $fetchSql = false)
         {
             $this->initConnect(true);
-            if (!$this->_linkID) return false;
+            if (!$this->_linkID) {
+                return false;
+            }
             $this->queryStr = $str;
             if (!empty($this->bind)) {
                 $that = $this;
@@ -239,7 +247,9 @@
                 return $this->queryStr;
             }
             //释放前次的查询结果
-            if (!empty($this->PDOStatement)) $this->free();
+            if (!empty($this->PDOStatement)) {
+                $this->free();
+            }
             $this->executeTimes++;
             // 记录写入操作
             N('db_write', 1);
@@ -290,7 +300,9 @@
         public function startTrans()
         {
             $this->initConnect(true);
-            if (!$this->_linkID) return false;
+            if (!$this->_linkID) {
+                return false;
+            }
             //数据rollback 支持
             if ($this->transTimes == 0) {
                 $this->_linkID->beginTransaction();
@@ -509,10 +521,11 @@
                 // 支持 'field1'=>'field2' 这样的字段别名定义
                 $array = [];
                 foreach ($fields as $key => $field) {
-                    if (!is_numeric($key))
+                    if (!is_numeric($key)) {
                         $array[] = $this->parseKey($key) . ' AS ' . $this->parseKey($field);
-                    else
+                    } else {
                         $array[] = $this->parseKey($field);
+                    }
                 }
                 $fieldsStr = implode(',', $array);
             } else {
@@ -534,10 +547,11 @@
             if (is_array($tables)) {// 支持别名定义
                 $array = [];
                 foreach ($tables as $table => $alias) {
-                    if (!is_numeric($table))
+                    if (!is_numeric($table)) {
                         $array[] = $this->parseKey($table) . ' ' . $this->parseKey($alias);
-                    else
+                    } else {
                         $array[] = $this->parseKey($alias);
+                    }
                 }
                 $tables = $array;
             } elseif (is_string($tables)) {
@@ -727,9 +741,12 @@
                         $op = ' AND ';
                     }
                     $array = [];
-                    foreach ($where as $field => $data)
+                    foreach ($where as $field => $data) {
                         $array[] = $this->parseKey($field) . ' = ' . $this->parseValue($data);
+                    }
                     $whereStr = implode($op, $array);
+                    break;
+                default:
                     break;
             }
 
@@ -871,8 +888,12 @@
          */
         protected function parseForce($index)
         {
-            if (empty($index)) return '';
-            if (is_array($index)) $index = join(",", $index);
+            if (empty($index)) {
+                return '';
+            }
+            if (is_array($index)) {
+                $index = join(",", $index);
+            }
 
             return sprintf(" FORCE INDEX ( %s ) ", $index);
         }
@@ -941,12 +962,14 @@
         {
             $values = [];
             $this->model = $options['model'];
-            if (!is_array($dataSet[0])) return false;
+            if (!is_array($dataSet[0])) {
+                return false;
+            }
             $this->parseBind(!empty($options['bind']) ? $options['bind'] : []);
             $fields = array_map([$this, 'parseKey'], array_keys($dataSet[0]));
             foreach ($dataSet as $data) {
                 $value = [];
-                foreach ($data as $key => $val) {
+                foreach ($data as $val) {
                     if (is_array($val) && 'exp' == $val[0]) {
                         $value[] = $val[1];
                     } elseif (is_null($val)) {
@@ -981,7 +1004,9 @@
         {
             $this->model = $options['model'];
             $this->parseBind(!empty($options['bind']) ? $options['bind'] : []);
-            if (is_string($fields)) $fields = explode(',', $fields);
+            if (is_string($fields)) {
+                $fields = explode(',', $fields);
+            }
             array_walk($fields, [$this, 'parseKey']);
             $sql = 'INSERT INTO ' . $this->parseTable($table) . ' (' . implode(',', $fields) . ') ';
             $sql .= $this->buildSelectSql($options);
@@ -1194,12 +1219,14 @@
          */
         protected function initConnect($master = true)
         {
-            if (!empty($this->config['deploy']))
-                // 采用分布式数据库
+            // 采用分布式数据库
+            if (!empty($this->config['deploy'])) {
                 $this->_linkID = $this->multiConnect($master);
-            else
+            } else
                 // 默认单数据库
-                if (!$this->_linkID) $this->_linkID = $this->connect();
+                if (!$this->_linkID) {
+                    $this->_linkID = $this->connect();
+                }
         }
 
         /**
@@ -1223,10 +1250,10 @@
             // 数据库读写是否分离
             if ($this->config['rw_separate']) {
                 // 主从式采用读写分离
-                if ($master)
-                    // 主服务器写入
+                // 主服务器写入
+                if ($master) {
                     $r = $m;
-                else {
+                } else {
                     // 指定服务器读
                     if (is_numeric($this->config['slave_no'])) {
                         $r = $this->config['slave_no'];

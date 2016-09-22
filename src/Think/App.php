@@ -160,16 +160,16 @@
                         }
                     }
                     // 开启绑定参数过滤机制 @todo 检查一下这段代码是否有存在的必要
-                    if (C('URL_PARAMS_SAFE')) {
-                        $filters = C('URL_PARAMS_FILTER') ?: C('DEFAULT_FILTER');
-                        if ($filters) {
-                            $filters = explode(',', $filters);
-                            foreach ($filters as $filter) {
-                                // 参数过滤
-                                $args = array_map_recursive($filter, $args);
-                            }
-                        }
-                    }
+//                    if (C('URL_PARAMS_SAFE')) {
+//                        $filters = C('URL_PARAMS_FILTER') ?: C('DEFAULT_FILTER');
+//                        if ($filters) {
+//                            $filters = explode(',', $filters);
+//                            foreach ($filters as $filter) {
+//                                // 参数过滤
+//                                $args = array_map_recursive($filter, $args);
+//                            }
+//                        }
+//                    }
                     array_walk_recursive($args, 'think_filter');
                     $method->invokeArgs($module, $args);
                 } else {

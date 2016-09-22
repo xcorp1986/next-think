@@ -35,7 +35,7 @@
             $result = $this->query('PRAGMA table_info( ' . $tableName . ' )');
             $info = [];
             if ($result) {
-                foreach ($result as $key => $val) {
+                foreach ($result as $val) {
                     $info[$val['field']] = [
                         'name'    => $val['field'],
                         'type'    => $val['type'],

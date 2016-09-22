@@ -61,8 +61,9 @@
         protected function checkCache($tmplTemplateFile, $prefix = '')
         {
             // 优先对配置设定检测
-            if (!C('TMPL_CACHE_ON'))
+            if (!C('TMPL_CACHE_ON')) {
                 return false;
+            }
             $tmplCacheFile = C('CACHE_PATH') . $prefix . md5($tmplTemplateFile) . C('TMPL_CACHFILE_SUFFIX');
             if (!Storage::has($tmplCacheFile)) {
                 return false;

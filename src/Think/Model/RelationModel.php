@@ -58,8 +58,9 @@
         protected function _after_find(&$result, $options)
         {
             // 获取关联数据 并附加到结果中
-            if (!empty($options['link']))
+            if (!empty($options['link'])) {
                 $this->getRelation($result, $options['link']);
+            }
         }
 
         // 查询数据集成功后的回调方法
@@ -74,24 +75,27 @@
         protected function _after_insert($data, $options)
         {
             // 关联写入
-            if (!empty($options['link']))
+            if (!empty($options['link'])) {
                 $this->opRelation('ADD', $data, $options['link']);
+            }
         }
 
         // 更新成功后的回调方法
         protected function _after_update($data, $options)
         {
             // 关联更新
-            if (!empty($options['link']))
+            if (!empty($options['link'])) {
                 $this->opRelation('SAVE', $data, $options['link']);
+            }
         }
 
         // 删除成功后的回调方法
         protected function _after_delete($data, $options)
         {
             // 关联删除
-            if (!empty($options['link']))
+            if (!empty($options['link'])) {
                 $this->opRelation('DEL', $data, $options['link']);
+            }
         }
 
         /**
@@ -137,18 +141,25 @@
         {
             if (!empty($this->_link)) {
                 foreach ($this->_link as $key => $val) {
-                    $mappingName = !empty($val['mapping_name']) ? $val['mapping_name'] : $key; // 映射名称
+                    // 映射名称
+                    $mappingName = !empty($val['mapping_name']) ? $val['mapping_name'] : $key;
                     if (empty($name) || true === $name || $mappingName == $name || (is_array($name) && in_array($mappingName, $name))) {
-                        $mappingType = !empty($val['mapping_type']) ? $val['mapping_type'] : $val;  //  关联类型
-                        $mappingClass = !empty($val['class_name']) ? $val['class_name'] : $key;            //  关联类名
-                        $mappingFields = !empty($val['mapping_fields']) ? $val['mapping_fields'] : '*';     // 映射字段
-                        $mappingCondition = !empty($val['condition']) ? $val['condition'] : '1=1';          // 关联条件
-                        $mappingKey = !empty($val['mapping_key']) ? $val['mapping_key'] : $this->getPk(); // 关联键名
+                        //  关联类型
+                        $mappingType = !empty($val['mapping_type']) ? $val['mapping_type'] : $val;
+                        //  关联类名
+                        $mappingClass = !empty($val['class_name']) ? $val['class_name'] : $key;
+                        // 映射字段
+                        $mappingFields = !empty($val['mapping_fields']) ? $val['mapping_fields'] : '*';
+                        // 关联条件
+                        $mappingCondition = !empty($val['condition']) ? $val['condition'] : '1=1';
+                        // 关联键名
+                        $mappingKey = !empty($val['mapping_key']) ? $val['mapping_key'] : $this->getPk();
                         if (strtoupper($mappingClass) == strtoupper($this->name)) {
                             // 自引用关联 获取父键名
                             $mappingFk = !empty($val['parent_key']) ? $val['parent_key'] : 'parent_id';
                         } else {
-                            $mappingFk = !empty($val['foreign_key']) ? $val['foreign_key'] : strtolower($this->name) . '_id';     //  关联外键
+                            //  关联外键
+                            $mappingFk = !empty($val['foreign_key']) ? $val['foreign_key'] : strtolower($this->name) . '_id';
                         }
                         // 获取关联模型对象
                         $model = D($mappingClass);
@@ -166,7 +177,8 @@
                                     // 自引用关联 获取父键名
                                     $mappingFk = !empty($val['parent_key']) ? $val['parent_key'] : 'parent_id';
                                 } else {
-                                    $mappingFk = !empty($val['foreign_key']) ? $val['foreign_key'] : strtolower($model->getModelName()) . '_id';     //  关联外键
+                                    //  关联外键
+                                    $mappingFk = !empty($val['foreign_key']) ? $val['foreign_key'] : strtolower($model->getModelName()) . '_id';
                                 }
                                 $fk = $result[$mappingFk];
                                 $mappingCondition .= " AND {$model->getPk()}='{$fk}'";
@@ -270,19 +282,24 @@
                 // 遍历关联定义
                 foreach ($this->_link as $key => $val) {
                     // 操作制定关联类型
-                    $mappingName = $val['mapping_name'] ? $val['mapping_name'] : $key; // 映射名称
+                    // 映射名称
+                    $mappingName = $val['mapping_name'] ? $val['mapping_name'] : $key;
                     if (empty($name) || true === $name || $mappingName == $name || (is_array($name) && in_array($mappingName, $name))) {
                         // 操作制定的关联
-                        $mappingType = !empty($val['mapping_type']) ? $val['mapping_type'] : $val;  //  关联类型
-                        $mappingClass = !empty($val['class_name']) ? $val['class_name'] : $key;            //  关联类名
-                        $mappingKey = !empty($val['mapping_key']) ? $val['mapping_key'] : $this->getPk(); // 关联键名
+                        //  关联类型
+                        $mappingType = !empty($val['mapping_type']) ? $val['mapping_type'] : $val;
+                        //  关联类名
+                        $mappingClass = !empty($val['class_name']) ? $val['class_name'] : $key;
+                        // 关联键名
+                        $mappingKey = !empty($val['mapping_key']) ? $val['mapping_key'] : $this->getPk();
                         // 当前数据对象主键值
                         $pk = $data[$mappingKey];
                         if (strtoupper($mappingClass) == strtoupper($this->name)) {
                             // 自引用关联 获取父键名
                             $mappingFk = !empty($val['parent_key']) ? $val['parent_key'] : 'parent_id';
                         } else {
-                            $mappingFk = !empty($val['foreign_key']) ? $val['foreign_key'] : strtolower($this->name) . '_id';     //  关联外键
+                            //  关联外键
+                            $mappingFk = !empty($val['foreign_key']) ? $val['foreign_key'] : strtolower($this->name) . '_id';
                         }
                         if (!empty($val['condition'])) {
                             $mappingCondition = $val['condition'];
@@ -297,15 +314,20 @@
                             switch ($mappingType) {
                                 case self::HAS_ONE:
                                     switch (strtoupper($opType)) {
-                                        case 'ADD': // 增加关联数据
+                                        // 增加关联数据
+                                        case 'ADD':
                                             $mappingData[$mappingFk] = $pk;
                                             $result = $model->add($mappingData);
                                             break;
-                                        case 'SAVE':    // 更新关联数据
+                                        // 更新关联数据
+                                        case 'SAVE':
                                             $result = $model->where($mappingCondition)->save($mappingData);
                                             break;
-                                        case 'DEL': // 根据外键删除关联数据
+                                        // 根据外键删除关联数据
+                                        case 'DEL':
                                             $result = $model->where($mappingCondition)->delete();
+                                            break;
+                                        default:
                                             break;
                                     }
                                     break;
@@ -313,7 +335,8 @@
                                     break;
                                 case self::HAS_MANY:
                                     switch (strtoupper($opType)) {
-                                        case 'ADD'   :  // 增加关联数据
+                                        // 增加关联数据
+                                        case 'ADD'   :
                                             $model->startTrans();
                                             foreach ($mappingData as $val) {
                                                 $val[$mappingFk] = $pk;
@@ -321,27 +344,34 @@
                                             }
                                             $model->commit();
                                             break;
-                                        case 'SAVE' :   // 更新关联数据
+                                        // 更新关联数据
+                                        case 'SAVE' :
                                             $model->startTrans();
                                             $pk = $model->getPk();
                                             foreach ($mappingData as $vo) {
-                                                if (isset($vo[$pk])) {// 更新数据
+                                                // 更新数据
+                                                if (isset($vo[$pk])) {
                                                     $mappingCondition = "$pk ={$vo[$pk]}";
                                                     $result = $model->where($mappingCondition)->save($vo);
-                                                } else { // 新增数据
+                                                    // 新增数据
+                                                } else {
                                                     $vo[$mappingFk] = $data[$mappingKey];
                                                     $result = $model->add($vo);
                                                 }
                                             }
                                             $model->commit();
                                             break;
-                                        case 'DEL' :    // 删除关联数据
+                                        // 删除关联数据
+                                        case 'DEL' :
                                             $result = $model->where($mappingCondition)->delete();
+                                            break;
+                                        default:
                                             break;
                                     }
                                     break;
                                 case self::MANY_TO_MANY:
-                                    $mappingRelationFk = $val['relation_foreign_key'] ? $val['relation_foreign_key'] : $model->getModelName() . '_id';// 关联
+                                    // 关联
+                                    $mappingRelationFk = $val['relation_foreign_key'] ? $val['relation_foreign_key'] : $model->getModelName() . '_id';
                                     $prefix = $this->tablePrefix;
                                     if (isset($val['relation_table'])) {
                                         $mappingRelationTable = preg_replace_callback("/__([A-Z_-]+)__/sU", function ($match) use ($prefix) {
@@ -352,26 +382,30 @@
                                     }
                                     if (is_array($mappingData)) {
                                         $ids = [];
-                                        foreach ($mappingData as $vo)
+                                        foreach ($mappingData as $vo) {
                                             $ids[] = $vo[$mappingKey];
+                                        }
                                         $relationId = implode(',', $ids);
                                     }
                                     switch (strtoupper($opType)) {
-                                        case 'ADD': // 增加关联数据
+                                        // 增加关联数据
+                                        case 'ADD':
                                             if (isset($relationId)) {
                                                 $this->startTrans();
                                                 // 插入关联表数据
                                                 $sql = 'INSERT INTO ' . $mappingRelationTable . ' (' . $mappingFk . ',' . $mappingRelationFk . ') SELECT a.' . $this->getPk() . ',b.' . $model->getPk() . ' FROM ' . $this->getTableName() . ' AS a ,' . $model->getTableName() . " AS b where a." . $this->getPk() . ' =' . $pk . ' AND  b.' . $model->getPk() . ' IN (' . $relationId . ") ";
                                                 $result = $model->execute($sql);
-                                                if (false !== $result)
-                                                    // 提交事务
+                                                // 提交事务
+                                                if (false !== $result) {
                                                     $this->commit();
-                                                else
-                                                    // 事务回滚
+                                                } // 事务回滚
+                                                else {
                                                     $this->rollback();
+                                                }
                                             }
                                             break;
-                                        case 'SAVE':    // 更新关联数据
+                                        // 更新关联数据
+                                        case 'SAVE':
                                             if (isset($relationId)) {
                                                 $this->startTrans();
                                                 // 删除关联表数据
@@ -379,16 +413,20 @@
                                                 // 插入关联表数据
                                                 $sql = 'INSERT INTO ' . $mappingRelationTable . ' (' . $mappingFk . ',' . $mappingRelationFk . ') SELECT a.' . $this->getPk() . ',b.' . $model->getPk() . ' FROM ' . $this->getTableName() . ' AS a ,' . $model->getTableName() . " AS b where a." . $this->getPk() . ' =' . $pk . ' AND  b.' . $model->getPk() . ' IN (' . $relationId . ") ";
                                                 $result = $model->execute($sql);
-                                                if (false !== $result)
-                                                    // 提交事务
+                                                // 提交事务
+                                                if (false !== $result) {
                                                     $this->commit();
-                                                else
-                                                    // 事务回滚
+                                                } // 事务回滚
+                                                else {
                                                     $this->rollback();
+                                                }
                                             }
                                             break;
-                                        case 'DEL': // 根据外键删除中间表关联数据
+                                        // 根据外键删除中间表关联数据
+                                        case 'DEL':
                                             $result = $this->table($mappingRelationTable)->where($mappingCondition)->delete();
+                                            break;
+                                        default:
                                             break;
                                     }
                                     break;
@@ -425,8 +463,9 @@
          */
         public function relationGet($name)
         {
-            if (empty($this->data))
+            if (empty($this->data)) {
                 return false;
+            }
 
             return $this->getRelation($this->data, $name, true);
         }

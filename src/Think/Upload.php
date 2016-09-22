@@ -120,7 +120,7 @@
 
         /**
          * 上传文件
-         * @param 文件信息数组 $files ，通常是 $_FILES数组
+         * @param mixed $files ，通常是 $_FILES数组
          */
         public function upload($files = '')
         {
@@ -156,7 +156,9 @@
             $files = $this->dealFiles($files);
             foreach ($files as $key => $file) {
                 $file['name'] = strip_tags($file['name']);
-                if (!isset($file['key'])) $file['key'] = $key;
+                if (!isset($file['key'])) {
+                    $file['key'] = $key;
+                }
                 /* 通过扩展获取文件类型，可解决FLASH上传$FILES数组返回文件类型错误的问题 */
                 if (isset($finfo)) {
                     $file['type'] = finfo_file($finfo, $file['tmp_name']);

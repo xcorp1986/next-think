@@ -269,8 +269,9 @@
             $varArray = explode('|', $name);
             $name = array_shift($varArray);
             $name = $this->autoBuildVar($name);
-            if (count($varArray) > 0)
+            if (count($varArray) > 0) {
                 $name = $this->tpl->parseVarFunction($name, $varArray);
+            }
             if ('$' == substr($value, 0, 1)) {
                 $value = $this->autoBuildVar(substr($value, 1));
             } else {
@@ -349,8 +350,9 @@
             $varArray = explode('|', $name);
             $name = array_shift($varArray);
             $name = $this->autoBuildVar($name);
-            if (count($varArray) > 0)
+            if (count($varArray) > 0) {
                 $name = $this->tpl->parseVarFunction($name, $varArray);
+            }
 
             $type = isset($tag['type']) ? $tag['type'] : $type;
 
@@ -536,10 +538,11 @@
                 $varArray = explode('|', $tag['value']);
                 $name = array_shift($varArray);
                 $name = $this->autoBuildVar($name);
-                if (!empty($varArray))
+                if (!empty($varArray)) {
                     $name = $this->tpl->parseVarFunction($name, $varArray);
-                else
+                } else {
                     $name = 'isset(' . $name . ')';
+                }
                 $parseStr .= '<?php if(' . $name . '): ?>';
                 $endStr = '<?php endif; ?>';
             }
@@ -561,6 +564,8 @@
                             break;
                         case 'php':
                             $parseStr .= '<?php require_cache("' . $val . '"); ?>';
+                            break;
+                        default:
                             break;
                     }
                 }
@@ -585,6 +590,8 @@
                             break;
                         case 'php':
                             $parseStr .= '<?php import("' . $val . '"); ?>';
+                            break;
+                        default:
                             break;
                     }
                 }
@@ -696,10 +703,11 @@
             //获取属性
             foreach ($tag as $key => $value) {
                 $value = trim($value);
-                if (':' == substr($value, 0, 1))
+                if (':' == substr($value, 0, 1)) {
                     $value = substr($value, 1);
-                elseif ('$' == substr($value, 0, 1))
+                } elseif ('$' == substr($value, 0, 1)) {
                     $value = $this->autoBuildVar(substr($value, 1));
+                }
                 switch ($key) {
                     case 'start':
                         $start = $value;
@@ -715,6 +723,8 @@
                         break;
                     case 'name':
                         $name = $value;
+                        break;
+                    default:
                         break;
                 }
             }

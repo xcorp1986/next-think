@@ -35,7 +35,9 @@
         public function execute($str, $fetchSql = false)
         {
             $this->initConnect(true);
-            if (!$this->_linkID) return false;
+            if (!$this->_linkID) {
+                return false;
+            }
             $this->queryStr = $str;
             if (!empty($this->bind)) {
                 $that = $this;
@@ -47,7 +49,9 @@
                 return $this->queryStr;
             }
             //释放前次的查询结果
-            if (!empty($this->PDOStatement)) $this->free();
+            if (!empty($this->PDOStatement)) {
+                $this->free();
+            }
             $this->executeTimes++;
             N('db_write', 1); // 兼容代码
             // 记录开始执行时间

@@ -97,6 +97,7 @@
         {
             $this->tVar = $templateVar;
             $templateCacheFile = $this->loadTemplate($templateFile, $prefix);
+
             return Storage::load($templateCacheFile, $this->tVar);
         }
 
@@ -337,12 +338,13 @@
         {
             $xml = '<tpl><tag ' . $attrs . ' /></tpl>';
             $xml = \simplexml_load_string($xml);
-            if (!$xml)
+            if (!$xml) {
                 E(L('_XML_TAG_ERROR_'));
+            }
             $xml = (array)($xml->tag->attributes());
-            $array = array_change_key_case($xml['@attributes']);
 
-            return $array;
+            return array_change_key_case($xml['@attributes']);
+
         }
 
         /**
@@ -374,7 +376,9 @@
          */
         private function restoreLiteral($tag)
         {
-            if (is_array($tag)) $tag = $tag[1];
+            if (is_array($tag)) {
+                $tag = $tag[1];
+            }
             // 还原literal标签
             $parseStr = $this->literal[$tag];
             // 销毁literal记录
@@ -527,8 +531,9 @@
          */
         public function parseXmlTag($tagLib, $tag, $attr, $content)
         {
-            if (ini_get('magic_quotes_sybase'))
+            if (ini_get('magic_quotes_sybase')) {
                 $attr = str_replace('\"', '\'', $attr);
+            }
             $parse = '_' . $tag;
             $content = trim($content);
             $tags = $tagLib->parseXmlAttr($attr, $tag);
@@ -545,7 +550,9 @@
          */
         public function parseTag($tagStr)
         {
-            if (is_array($tagStr)) $tagStr = $tagStr[2];
+            if (is_array($tagStr)) {
+                $tagStr = $tagStr[2];
+            }
             $tagStr = stripslashes($tagStr);
             $flag = substr($tagStr, 0, 1);
             $flag2 = substr($tagStr, 1, 1);
@@ -583,7 +590,9 @@
             $varStr = trim($varStr);
             static $_varParseList = [];
             //如果已经解析过该变量字串，则直接返回变量值
-            if (isset($_varParseList[$varStr])) return $_varParseList[$varStr];
+            if (isset($_varParseList[$varStr])) {
+                return $_varParseList[$varStr];
+            }
             $parseStr = '';
             if (!empty($varStr)) {
                 $varArray = explode('|', $varStr);
@@ -600,14 +609,16 @@
                         // 识别为数组
                         case 'array':
                             $name = '$' . $var;
-                            foreach ($vars as $key => $val)
+                            foreach ($vars as $key => $val) {
                                 $name .= '["' . $val . '"]';
+                            }
                             break;
                         // 识别为对象
                         case 'obj':
                             $name = '$' . $var;
-                            foreach ($vars as $key => $val)
+                            foreach ($vars as $key => $val) {
                                 $name .= '->' . $val;
+                            }
                             break;
                         // 自动判断数组或对象 只支持二维
                         default:
@@ -749,8 +760,9 @@
                         $parseStr = 'THINK_VERSION';
                         break;
                     default:
-                        if (defined($vars[1]))
+                        if (defined($vars[1])) {
                             $parseStr = $vars[1];
+                        }
                 }
             }
 
@@ -792,7 +804,9 @@
             $array = explode(',', $templateName);
             $parseStr = '';
             foreach ($array as $templateName) {
-                if (empty($templateName)) continue;
+                if (empty($templateName)) {
+                    continue;
+                }
                 if (false === strpos($templateName, $this->config['template_suffix'])) {
                     // 解析规则为 模块@主题/控制器/操作
                     $templateName = T($templateName);

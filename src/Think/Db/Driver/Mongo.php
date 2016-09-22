@@ -11,12 +11,29 @@
     class Mongo extends Driver
     {
 
-        protected $_mongo = null; // MongoDb Object
-        protected $_collection = null; // MongoCollection Object
-        protected $_dbName = ''; // dbName
-        protected $_collectionName = ''; // collectionName
-        protected $_cursor = null; // MongoCursor Object
-        protected $comparison = ['neq' => 'ne', 'ne' => 'ne', 'gt' => 'gt', 'egt' => 'gte', 'gte' => 'gte', 'lt' => 'lt', 'elt' => 'lte', 'lte' => 'lte', 'in' => 'in', 'not in' => 'nin', 'nin' => 'nin'];
+        // MongoDb Object
+        protected $_mongo = null;
+        // MongoCollection Object
+        protected $_collection = null;
+        // dbName
+        protected $_dbName = '';
+        // collectionName
+        protected $_collectionName = '';
+        // MongoCursor Object
+        protected $_cursor = null;
+        protected $comparison = [
+            'neq'    => 'ne',
+            'ne'     => 'ne',
+            'gt'     => 'gt',
+            'egt'    => 'gte',
+            'gte'    => 'gte',
+            'lt'     => 'lt',
+            'elt'    => 'lte',
+            'lte'    => 'lte',
+            'in'     => 'in',
+            'not in' => 'nin',
+            'nin'    => 'nin',
+        ];
 
         /**
          * 读取数据库配置信息
@@ -43,7 +60,9 @@
         public function connect($config = '', $linkNum = 0)
         {
             if (!isset($this->linkID[$linkNum])) {
-                if (empty($config)) $config = $this->config;
+                if (empty($config)) {
+                    $config = $this->config;
+                }
                 $host = 'mongodb://' . ($config['username'] ? "{$config['username']}" : '') . ($config['password'] ? ":{$config['password']}@" : '') . $config['hostname'] . ($config['hostport'] ? ":{$config['hostport']}" : '') . '/' . ($config['database'] ? "{$config['database']}" : '');
                 try {
                     $this->linkID[$linkNum] = new \mongoClient($host, $this->config['params']);
@@ -66,7 +85,9 @@
         public function switchCollection($collection, $db = '', $master = true)
         {
             // 当前没有连接 则首先进行数据库连接
-            if (!$this->_linkID) $this->initConnect($master);
+            if (!$this->_linkID) {
+                $this->initConnect($master);
+            }
             try {
                 if (!empty($db)) { // 传人Db则切换数据库
                     // 当前MongoDb对象
@@ -85,7 +106,7 @@
                     $this->debug(false);
                     $this->_collectionName = $collection; // 记录当前Collection名称
                 }
-            } catch (MongoException $e) {
+            } catch (\MongoException $e) {
                 E($e->getMessage());
             }
         }
@@ -391,8 +412,9 @@
                     $this->queryStr = $this->_dbName . '.' . $this->_collectionName . '.find(';
                     $this->queryStr .= $query ? json_encode($query) : '{}';
                     if (is_array($field) && count($field)) {
-                        foreach ($field as $f => $v)
+                        foreach ($field as $f => $v) {
                             $_field_array[$f] = $v ? 1 : 0;
+                        }
 
                         $this->queryStr .= $field ? ', ' . json_encode($_field_array) : ', {}';
                     }
@@ -650,7 +672,7 @@
             if (is_string($order)) {
                 $array = explode(',', $order);
                 $order = [];
-                foreach ($array as $key => $val) {
+                foreach ($array as $val) {
                     $arr = explode(' ', trim($val));
                     if (isset($arr[1])) {
                         $arr[1] = $arr[1] == 'asc' ? 1 : -1;
@@ -695,16 +717,18 @@
             if (is_string($fields)) {
                 $_fields = explode(',', $fields);
                 $fields = [];
-                foreach ($_fields as $f)
+                foreach ($_fields as $f) {
                     $fields[$f] = true;
+                }
             } elseif (is_array($fields)) {
                 $_fields = $fields;
                 $fields = [];
                 foreach ($_fields as $f => $v) {
-                    if (is_numeric($f))
+                    if (is_numeric($f)) {
                         $fields[$v] = true;
-                    else
+                    } else {
                         $fields[$f] = $v ? true : false;
+                    }
                 }
             }
 
@@ -758,11 +782,13 @@
                     }
                 }
             }
-            if ($_logic == '$and')
+            if ($_logic == '$and') {
                 return $query;
+            }
 
-            foreach ($query as $key => $val)
+            foreach ($query as $key => $val) {
                 $return[$_logic][] = [$key => $val];
+            }
 
             return $return;
         }
@@ -797,12 +823,15 @@
                 case '_string':// MongoCode查询
                     $query['$where'] = new \MongoCode($val);
                     break;
+                default:
+                    break;
             }
             //兼容 MongoClient OR条件查询方法
             if (isset($query['$or']) && !is_array(current($query['$or']))) {
                 $val = [];
-                foreach ($query['$or'] as $k => $v)
+                foreach ($query['$or'] as $k => $v) {
                     $val[] = [$k => $v];
+                }
                 $query['$or'] = $val;
             }
 
@@ -822,16 +851,21 @@
             if (is_array($val)) {
                 if (is_string($val[0])) {
                     $con = strtolower($val[0]);
-                    if (in_array($con, ['neq', 'ne', 'gt', 'egt', 'gte', 'lt', 'lte', 'elt'])) { // 比较运算
+                    // 比较运算
+                    if (in_array($con, ['neq', 'ne', 'gt', 'egt', 'gte', 'lt', 'lte', 'elt'])) {
                         $k = '$' . $this->comparison[$con];
                         $query[$key] = [$k => $val[1]];
-                    } elseif ('like' == $con) { // 模糊查询 采用正则方式
+                        // 模糊查询 采用正则方式
+                    } elseif ('like' == $con) {
                         $query[$key] = new \MongoRegex("/" . $val[1] . "/");
-                    } elseif ('mod' == $con) { // mod 查询
+                        // mod 查询
+                    } elseif ('mod' == $con) {
                         $query[$key] = ['$mod' => $val[1]];
-                    } elseif ('regex' == $con) { // 正则查询
+                        // 正则查询
+                    } elseif ('regex' == $con) {
                         $query[$key] = new \MongoRegex($val[1]);
-                    } elseif (in_array($con, ['in', 'nin', 'not in'])) { // IN NIN 运算
+                        // IN NIN 运算
+                    } elseif (in_array($con, ['in', 'nin', 'not in'])) {
                         $data = is_string($val[1]) ? explode(',', $val[1]) : $val[1];
                         $k = '$' . $this->comparison[$con];
                         $query[$key] = [$k => $data];
@@ -850,7 +884,9 @@
                         $query[$key] = ['$exists' => (bool)$val[1]];
                     } elseif ('size' == $con) { // 限制属性大小
                         $query[$key] = ['$size' => intval($val[1])];
-                    } elseif ('type' == $con) { // 限制字段类型 1 浮点型 2 字符型 3 对象或者MongoDBRef 5 MongoBinData 7 MongoId 8 布尔型 9 MongoDate 10 NULL 15 MongoCode 16 32位整型 17 MongoTimestamp 18 MongoInt64 如果是数组的话判断元素的类型
+                        // 限制字段类型 1 浮点型 2 字符型 3 对象或者MongoDBRef 5 MongoBinData 7 MongoId 8 布尔型 9 MongoDate
+                        // 10 NULL 15 MongoCode 16 32位整型 17 MongoTimestamp 18 MongoInt64 如果是数组的话判断元素的类型
+                    } elseif ('type' == $con) {
                         $query[$key] = ['$type' => intval($val[1])];
                     } else {
                         $query[$key] = $val;

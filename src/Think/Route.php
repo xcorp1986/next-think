@@ -122,8 +122,9 @@
                     if (strpos($val, '\\')) {
                         $type = substr($val, -1);
                         if ('d' == $type) {
-                            if (isset($m1[$key]) && !is_numeric($m1[$key]))
+                            if (isset($m1[$key]) && !is_numeric($m1[$key])) {
                                 return false;
+                            }
                         }
                         $name = substr($val, 1, -2);
                     } elseif ($pos = strpos($val, '^')) {

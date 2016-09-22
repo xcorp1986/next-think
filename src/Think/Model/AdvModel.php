@@ -3,6 +3,7 @@
 
     namespace Think\Model;
 
+    use Think\Exception;
     use Think\Model;
 
     /**
@@ -173,8 +174,8 @@
         /**
          * 检查乐观锁
          * @access protected
-         * @param inteter $id   当前主键
-         * @param array   $data 当前数据
+         * @param int   $id   当前主键
+         * @param array $data 当前数据
          * @return mixed
          */
         protected function checkLockVersion($id, &$data)
@@ -273,18 +274,21 @@
          */
         public function returnResult($data, $type = '')
         {
-            if ('' === $type)
+            if ('' === $type) {
                 $type = $this->returnType;
+            }
             switch ($type) {
                 case 'array' :
                     return $data;
                 case 'object':
                     return (object)$data;
-                default:// 允许用户自定义返回类型
-                    if (class_exists($type))
+                // 允许用户自定义返回类型
+                default:
+                    if (class_exists($type)) {
                         return new $type($data);
-                    else
+                    } else {
                         E(L('_CLASS_NOT_EXIST_') . ':' . $type);
+                    }
             }
         }
 
@@ -319,8 +323,9 @@
         protected function getFilterListFields(&$resultSet)
         {
             if (!empty($this->_filter)) {
-                foreach ($resultSet as $key => $result)
+                foreach ($resultSet as $key => $result) {
                     $resultSet[$key] = $this->getFilterFields($result);
+                }
             }
 
             return $resultSet;
@@ -359,12 +364,13 @@
          * @access protected
          * @param array  $resultSet 数据
          * @param string $type      返回类型 默认为数组
-         * @return void
+         * @return array|mixed
          */
         protected function returnResultSet(&$resultSet, $type = '')
         {
-            foreach ($resultSet as $key => $data)
+            foreach ($resultSet as $key => $data) {
                 $resultSet[$key] = $this->returnResult($data, $type);
+            }
 
             return $resultSet;
         }
@@ -375,10 +381,11 @@
             if (!empty($this->blobFields)) {
                 foreach ($this->blobFields as $field) {
                     if (isset($data[$field])) {
-                        if (isset($data[$this->getPk()]))
+                        if (isset($data[$this->getPk()])) {
                             $this->blobValues[$this->name . '/' . $data[$this->getPk()] . '_' . $field] = $data[$field];
-                        else
+                        } else {
                             $this->blobValues[$this->name . '/@?id@_' . $field] = $data[$field];
+                        }
                         unset($data[$field]);
                     }
                 }
@@ -392,7 +399,7 @@
          * @access protected
          * @param mixed  $resultSet 查询的数据
          * @param string $field     查询的字段
-         * @return void
+         * @return array|mixed
          */
         protected function getListBlobFields(&$resultSet, $field = '')
         {
@@ -411,7 +418,7 @@
          * @access protected
          * @param mixed  $data  查询的数据
          * @param string $field 查询的字段
-         * @return void
+         * @return array|mixed
          */
         protected function getBlobFields(&$data, $field = '')
         {
@@ -443,8 +450,9 @@
         {
             if (!empty($this->blobFields)) {
                 foreach ($this->blobValues as $key => $val) {
-                    if (strpos($key, '@?id@'))
+                    if (strpos($key, '@?id@')) {
                         $key = str_replace('@?id@', $data[$this->getPk()], $key);
+                    }
                     F($key, $val);
                 }
             }
@@ -512,8 +520,9 @@
                 foreach ($this->serializeField as $key => $val) {
                     if (isset($result[$key])) {
                         $serialize = unserialize($result[$key]);
-                        foreach ($serialize as $name => $value)
+                        foreach ($serialize as $name => $value) {
                             $result[$name] = $value;
+                        }
                         unset($serialize, $result[$key]);
                     }
                 }
@@ -531,8 +540,9 @@
                     foreach ($resultSet as $k => $result) {
                         if (isset($result[$key])) {
                             $serialize = unserialize($result[$key]);
-                            foreach ($serialize as $name => $value)
+                            foreach ($serialize as $name => $value) {
                                 $result[$name] = $value;
+                            }
                             unset($serialize, $result[$key]);
                             $resultSet[$k] = $result;
                         }
@@ -552,9 +562,10 @@
         protected function checkReadonlyField(&$data)
         {
             if (!empty($this->readonlyField)) {
-                foreach ($this->readonlyField as $key => $field) {
-                    if (isset($data[$field]))
+                foreach ($this->readonlyField as $field) {
+                    if (isset($data[$field])) {
                         unset($data[$field]);
+                    }
                 }
             }
 
@@ -570,7 +581,9 @@
          */
         public function patchQuery($sql = [])
         {
-            if (!is_array($sql)) return false;
+            if (!is_array($sql)) {
+                return false;
+            }
             // 自动启动事务支持
             $this->startTrans();
             try {
@@ -585,7 +598,7 @@
                 }
                 // 提交事务
                 $this->commit();
-            } catch (ThinkException $e) {
+            } catch (Exception $e) {
                 $this->rollback();
             }
 
@@ -640,11 +653,12 @@
                 // 当设置的分表字段不在查询条件或者数据中
                 // 进行联合查询，必须设定 partition['num']
                 $tableName = [];
-                for ($i = 0; $i < $this->partition['num']; $i++)
+                for ($i = 0; $i < $this->partition['num']; $i++) {
                     $tableName[] = 'SELECT * FROM ' . $this->getTableName() . '_' . ($i + 1);
-                $tableName = '( ' . implode(" UNION ", $tableName) . ') AS ' . $this->name;
+                }
+                return '( ' . implode(" UNION ", $tableName) . ') AS ' . $this->name;
 
-                return $tableName;
+//                return $tableName;
             }
         }
     }

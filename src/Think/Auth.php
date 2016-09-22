@@ -64,12 +64,18 @@
 
         //默认配置
         protected $_config = [
-            'AUTH_ON'           => true,                      // 认证开关
-            'AUTH_TYPE'         => 1,                         // 认证方式，1为实时认证；2为登录认证。
-            'AUTH_GROUP'        => 'auth_group',        // 用户组数据表名
-            'AUTH_GROUP_ACCESS' => 'auth_group_access', // 用户-用户组关系表
-            'AUTH_RULE'         => 'auth_rule',         // 权限规则表
-            'AUTH_USER'         => 'member'             // 用户信息表
+            // 认证开关
+            'AUTH_ON'           => true,
+            // 认证方式，1为实时认证；2为登录认证。
+            'AUTH_TYPE'         => 1,
+            // 用户组数据表名
+            'AUTH_GROUP'        => 'auth_group',
+            // 用户-用户组关系表
+            'AUTH_GROUP_ACCESS' => 'auth_group_access',
+            // 权限规则表
+            'AUTH_RULE'         => 'auth_rule',
+            // 用户信息表
+            'AUTH_USER'         => 'member',
         ];
 
         public function __construct()
@@ -95,9 +101,11 @@
          */
         public function check($name, $uid, $type = 1, $mode = 'url', $relation = 'or')
         {
-            if (!$this->_config['AUTH_ON'])
+            if (!$this->_config['AUTH_ON']) {
                 return true;
-            $authList = $this->getAuthList($uid, $type); //获取用户需要验证的所有有效规则列表
+            }
+            //获取用户需要验证的所有有效规则列表
+            $authList = $this->getAuthList($uid, $type);
             if (is_string($name)) {
                 $name = strtolower($name);
                 if (strpos($name, ',') !== false) {
@@ -123,11 +131,11 @@
                     $list[] = $auth;
                 }
             }
-            if ($relation == 'or' and !empty($list)) {
+            if ($relation == 'or' && !empty($list)) {
                 return true;
             }
             $diff = array_diff($name, $list);
-            if ($relation == 'and' and empty($diff)) {
+            if ($relation == 'and' && empty($diff)) {
                 return true;
             }
 
@@ -144,8 +152,9 @@
         public function getGroups($uid)
         {
             static $groups = [];
-            if (isset($groups[$uid]))
+            if (isset($groups[$uid])) {
                 return $groups[$uid];
+            }
             $user_groups = M()
                 ->table($this->_config['AUTH_GROUP_ACCESS'] . ' a')
                 ->where("a.uid='$uid' and g.status='1'")
@@ -163,7 +172,8 @@
          */
         protected function getAuthList($uid, $type)
         {
-            static $_authList = []; //保存用户验证通过的权限列表
+            //保存用户验证通过的权限列表
+            static $_authList = [];
             $t = implode(',', (array)$type);
             if (isset($_authList[$uid . $t])) {
                 return $_authList[$uid . $t];
@@ -174,7 +184,8 @@
 
             //读取用户所属用户组
             $groups = $this->getGroups($uid);
-            $ids = [];//保存用户所属用户组设置的所有权限规则id
+            //保存用户所属用户组设置的所有权限规则id
+            $ids = [];
             foreach ($groups as $g) {
                 $ids = array_merge($ids, explode(',', trim($g['rules'], ',')));
             }
@@ -196,8 +207,10 @@
             //循环规则，判断结果。
             $authList = [];
             foreach ($rules as $rule) {
-                if (!empty($rule['condition'])) { //根据condition进行验证
-                    $user = $this->getUserInfo($uid);//获取用户信息,一维数组
+                //根据condition进行验证
+                if (!empty($rule['condition'])) {
+                    //获取用户信息,一维数组
+                    $user = $this->getUserInfo($uid);
 
                     $command = preg_replace('/\{(\w*?)\}/', '$user[\'\\1\']', $rule['condition']);
                     @(eval('$condition=(' . $command . ');'));

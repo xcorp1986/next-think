@@ -218,10 +218,12 @@
 
             for ($px = $px1; $px <= $px2; $px = $px + 1) {
                 if ($w != 0) {
-                    $py = $A * sin($w * $px + $f) + $b + $this->imageH / 2;  // y = Asin(ωx+φ) + b
+                    // y = Asin(ωx+φ) + b
+                    $py = $A * sin($w * $px + $f) + $b + $this->imageH / 2;
                     $i = (int)($this->fontSize / 5);
                     while ($i > 0) {
-                        imagesetpixel($this->_image, $px + $i, $py + $i, $this->_color);  // 这里(while)循环画像素点比imagettftext和imagestring用字体大小一次画出（不用这while循环）性能要好很多
+                        // 这里(while)循环画像素点比imagettftext和imagestring用字体大小一次画出（不用这while循环）性能要好很多
+                        imagesetpixel($this->_image, $px + $i, $py + $i, $this->_color);
                         $i--;
                     }
                 }
@@ -238,7 +240,8 @@
 
             for ($px = $px1; $px <= $px2; $px = $px + 1) {
                 if ($w != 0) {
-                    $py = $A * sin($w * $px + $f) + $b + $this->imageH / 2;  // y = Asin(ωx+φ) + b
+                    // y = Asin(ωx+φ) + b
+                    $py = $A * sin($w * $px + $f) + $b + $this->imageH / 2;
                     $i = (int)($this->fontSize / 5);
                     while ($i > 0) {
                         imagesetpixel($this->_image, $px + $i, $py + $i, $this->_color);

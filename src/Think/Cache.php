@@ -6,6 +6,9 @@
      * 缓存管理类
      * Class Cache
      * @package Think
+     * @method get($name)
+     * @method set($name, $value)
+     * @method rm($name)
      */
     class Cache
     {
@@ -33,12 +36,15 @@
          */
         public function connect($type = '', $options = [])
         {
-            if (empty($type)) $type = C('DATA_CACHE_TYPE');
+            if (empty($type)) {
+                $type = C('DATA_CACHE_TYPE');
+            }
             $class = strpos($type, '\\') ? $type : 'Think\\Cache\\Driver\\' . ucwords(strtolower($type));
-            if (class_exists($class))
+            if (class_exists($class)) {
                 $cache = new $class($options);
-            else
+            } else {
                 E(L('_CACHE_TYPE_INVALID_') . ':' . $type);
+            }
 
             return $cache;
         }
@@ -108,7 +114,9 @@
                 $value = [];
             }
             // 进列
-            if (false === array_search($key, $value)) array_push($value, $key);
+            if (false === array_search($key, $value)) {
+                array_push($value, $key);
+            }
             if (count($value) > $this->options['length']) {
                 // 出列
                 $key = array_shift($value);

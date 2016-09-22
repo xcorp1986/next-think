@@ -67,8 +67,9 @@
                         $hander,
                         isset($name[$w]) ? $name[$w] : $name[0]
                     );
-                    if (!$hander || !$dbSel)
+                    if (!$hander || !$dbSel) {
                         return false;
+                    }
                     $this->hander[0] = $hander;
                     //从数据库链接
                     $hander = mysqli_connect(
@@ -80,8 +81,9 @@
                         $hander,
                         isset($name[$r]) ? $name[$r] : $name[0]
                     );
-                    if (!$hander || !$dbSel)
+                    if (!$hander || !$dbSel) {
                         return false;
+                    }
                     $this->hander[1] = $hander;
 
                     return true;
@@ -98,8 +100,9 @@
                 $hander,
                 isset($name[$r]) ? $name[$r] : $name[0]
             );
-            if (!$hander || !$dbSel)
+            if (!$hander || !$dbSel) {
                 return false;
+            }
             $this->hander = $hander;
 
             return true;
@@ -150,8 +153,9 @@
             $hander = is_array($this->hander) ? $this->hander[0] : $this->hander;
             $expire = time() + $this->lifeTime;
             mysqli_query($hander, "REPLACE INTO  " . $this->sessionTable . " (  session_id, session_expire, session_data)  VALUES( '$sessID', '$expire',  '$sessData')");
-            if (mysqli_affected_rows($hander))
+            if (mysqli_affected_rows($hander)) {
                 return true;
+            }
 
             return false;
         }
@@ -165,8 +169,9 @@
         {
             $hander = is_array($this->hander) ? $this->hander[0] : $this->hander;
             mysqli_query($hander, "DELETE FROM " . $this->sessionTable . " WHERE session_id = '$sessID'");
-            if (mysqli_affected_rows($hander))
+            if (mysqli_affected_rows($hander)) {
                 return true;
+            }
 
             return false;
         }

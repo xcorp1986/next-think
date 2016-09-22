@@ -164,21 +164,18 @@
                 Hook::listen('module_check');
 
                 // 加载模块配置文件
-                if (is_file(MODULE_PATH . 'Conf/config' . EXT))
+                if (is_file(MODULE_PATH . 'Conf/config' . EXT)) {
                     C(load_config(MODULE_PATH . 'Conf/config' . EXT));
-                // 加载应用模式对应的配置文件
-//                if ('common' != APP_MODE && is_file(MODULE_PATH . 'Conf/config_' . APP_MODE . CONF_EXT))
-//                    C(load_config(MODULE_PATH . 'Conf/config_' . APP_MODE . CONF_EXT));
-                // 当前应用状态对应的配置文件
-//                if (APP_STATUS && is_file(MODULE_PATH . 'Conf/' . APP_STATUS . CONF_EXT))
-//                    C(load_config(MODULE_PATH . 'Conf/' . APP_STATUS . CONF_EXT));
+                }
 
                 // 加载模块tags文件定义
-                if (is_file(MODULE_PATH . 'Conf/tags.php'))
+                if (is_file(MODULE_PATH . 'Conf/tags.php')) {
                     Hook::import(include MODULE_PATH . 'Conf/tags.php');
+                }
                 // 加载模块函数文件
-                if (is_file(MODULE_PATH . 'Common/function.php'))
+                if (is_file(MODULE_PATH . 'Common/function.php')) {
                     include MODULE_PATH . 'Common/function.php';
+                }
 
                 $urlCase = C('URL_CASE_INSENSITIVE');
                 // 加载模块的扩展配置文件

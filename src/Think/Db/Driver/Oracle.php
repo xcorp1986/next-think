@@ -40,7 +40,9 @@
         public function execute($str, $fetchSql = false)
         {
             $this->initConnect(true);
-            if (!$this->_linkID) return false;
+            if (!$this->_linkID) {
+                return false;
+            }
             $this->queryStr = $str;
             if (!empty($this->bind)) {
                 $that = $this;
@@ -57,7 +59,9 @@
                 $flag = (boolean)$this->query("SELECT * FROM user_sequences WHERE sequence_name='" . strtoupper($this->table) . "'");
             }
             //释放前次的查询结果
-            if (!empty($this->PDOStatement)) $this->free();
+            if (!empty($this->PDOStatement)) {
+                $this->free();
+            }
             $this->executeTimes++;
             // 记录数据库查询次数
             N('db_write', 1);
@@ -106,7 +110,7 @@
                 . "') b where table_name='" . strtoupper($tableName) . "' and a.column_name=b.column_name(+)");
             $info = [];
             if ($result) {
-                foreach ($result as $key => $val) {
+                foreach ($result as $val) {
                     $info[strtolower($val['column_name'])] = [
                         'name'    => strtolower($val['column_name']),
                         'type'    => strtolower($val['data_type']),
@@ -157,10 +161,11 @@
             $limitStr = '';
             if (!empty($limit)) {
                 $limit = explode(',', $limit);
-                if (count($limit) > 1)
+                if (count($limit) > 1) {
                     $limitStr = "(numrow>" . $limit[0] . ") AND (numrow<=" . ($limit[0] + $limit[1]) . ")";
-                else
+                } else {
                     $limitStr = "(numrow>0 AND numrow<=" . $limit[0] . ")";
+                }
             }
 
             return $limitStr ? ' WHERE ' . $limitStr : '';
@@ -173,7 +178,9 @@
          */
         protected function parseLock($lock = false)
         {
-            if (!$lock) return '';
+            if (!$lock) {
+                return '';
+            }
 
             return ' FOR UPDATE NOWAIT ';
         }

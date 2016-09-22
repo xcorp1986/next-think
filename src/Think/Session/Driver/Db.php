@@ -67,8 +67,9 @@
                     $dbSel = mysql_select_db(
                         isset($name[$w]) ? $name[$w] : $name[0]
                         , $hander);
-                    if (!$hander || !$dbSel)
+                    if (!$hander || !$dbSel) {
                         return false;
+                    }
                     $this->hander[0] = $hander;
                     //从数据库链接
                     $hander = mysql_connect(
@@ -79,8 +80,9 @@
                     $dbSel = mysql_select_db(
                         isset($name[$r]) ? $name[$r] : $name[0]
                         , $hander);
-                    if (!$hander || !$dbSel)
+                    if (!$hander || !$dbSel) {
                         return false;
+                    }
                     $this->hander[1] = $hander;
 
                     return true;
@@ -96,8 +98,9 @@
             $dbSel = mysql_select_db(
                 isset($name[$r]) ? $name[$r] : $name[0]
                 , $hander);
-            if (!$hander || !$dbSel)
+            if (!$hander || !$dbSel) {
                 return false;
+            }
             $this->hander = $hander;
 
             return true;

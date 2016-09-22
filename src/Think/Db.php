@@ -27,9 +27,9 @@
                 // 解析连接参数 支持数组和字符串
                 $options = self::parseConfig($config);
                 // 兼容mysqli
-                if ('mysqli' == $options['type']) $options['type'] = 'mysql';
-                // 如果采用lite方式 仅支持原生SQL 包括query和execute方法
-//                $class = !empty($options['lite']) ? 'Think\Db\Lite' : 'Think\\Db\\Driver\\' . ucwords(strtolower($options['type']));
+                if ('mysqli' == $options['type']) {
+                    $options['type'] = 'mysql';
+                }
                 $class = 'Think\\Db\\Driver\\' . ucwords(strtolower($options['type']));
                 if (class_exists($class)) {
                     self::$instance[$md5] = new $class($options);

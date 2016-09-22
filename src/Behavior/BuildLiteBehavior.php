@@ -10,14 +10,19 @@
      * 建议绑定位置app_init
      * Class BuildLiteBehavior
      * @package Behavior
+     * @deprecated
      */
     class BuildLiteBehavior extends Behavior
     {
         public function run(&$params)
         {
-            if (!defined('BUILD_LITE_FILE')) return;
+            if (!defined('BUILD_LITE_FILE')) {
+                return;
+            }
             $litefile = C('RUNTIME_LITE_FILE', null, RUNTIME_PATH . 'lite.php');
-            if (is_file($litefile)) return;
+            if (is_file($litefile)) {
+                return;
+            }
 
             $defs = get_defined_constants(true);
             $content = 'namespace {$GLOBALS[\'_beginTime\'] = microtime(TRUE);';

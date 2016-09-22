@@ -603,7 +603,7 @@
 //            if (!C('APP_USE_NAMESPACE')) {
 //                import('Common/' . $layer . '/' . $class);
 //            } else {
-                $class = '\\Common\\' . $layer . '\\' . $name . $layer;
+            $class = '\\Common\\' . $layer . '\\' . $name . $layer;
 //            }
             $model = class_exists($class) ? new $class($name) : new \Think\Model($name);
         } else {
@@ -950,12 +950,14 @@
         }
 
         // 解析参数
-        if (is_string($vars)) { // aaa=1&bbb=2 转换成数组
+        // aaa=1&bbb=2 转换成数组
+        if (is_string($vars)) {
             parse_str($vars, $vars);
         } elseif (!is_array($vars)) {
             $vars = [];
         }
-        if (isset($info['query'])) { // 解析地址里面参数 合并到vars
+        // 解析地址里面参数 合并到vars
+        if (isset($info['query'])) {
             parse_str($info['query'], $params);
             $vars = array_merge($params, $vars);
         }
@@ -1046,7 +1048,9 @@
             }
             if (!empty($vars)) { // 添加参数
                 foreach ($vars as $var => $val) {
-                    if ('' !== trim($val)) $url .= $depr . $var . $depr . urlencode($val);
+                    if ('' !== trim($val)) {
+                        $url .= $depr . $var . $depr . urlencode($val);
+                    }
                 }
             }
             if ($suffix) {
@@ -1106,8 +1110,9 @@
     {
         //多行URL地址支持
         $url = str_replace(["\n", "\r"], '', $url);
-        if (empty($msg))
+        if (empty($msg)) {
             $msg = "系统将在{$time}秒之后自动跳转到{$url}！";
+        }
         if (!headers_sent()) {
             // redirect
             if (0 === $time) {
@@ -1119,8 +1124,9 @@
             exit();
         } else {
             $str = "<meta http-equiv='Refresh' content='{$time};URL={$url}'>";
-            if ($time != 0)
+            if ($time != 0) {
                 $str .= $msg;
+            }
             exit($str);
         }
     }

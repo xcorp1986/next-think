@@ -78,6 +78,8 @@
                             case '_COOKIE':
                                 $var = $_COOKIE[$match[2]];
                                 break;
+                            default:
+                                break;
                         }
 
                         return (count($match) == 4) ? $match[3]($var) : $var;

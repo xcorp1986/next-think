@@ -46,7 +46,7 @@
                     $parseStr = '<!-- 编辑器调用开始 --><script src="__ROOT__/Public/Js/FCKMini/fckeditor.js"></script><textarea id="' . $id . '" name="' . $name . '">' . $content . '</textarea><script> var oFCKeditor = new FCKeditor( "' . $id . '","' . $width . '","' . $height . '" ) ; oFCKeditor.BasePath = "__ROOT__/Public/Js/FCKMini/" ; oFCKeditor.ReplaceTextarea() ;function resetEditor(){setContents("' . $id . '",document.getElementById("' . $id . '").value)}; function saveEditor(){document.getElementById("' . $id . '").value = getContents("' . $id . '");} function InsertHTML(html){ var oEditor = FCKeditorAPI.GetInstance("' . $id . '") ;if (oEditor.EditMode == FCK_EDITMODE_WYSIWYG ){oEditor.InsertHtml(html) ;}else	alert( "FCK必须处于WYSIWYG模式!" ) ;}</script> <!-- 编辑器调用结束 -->';
                     break;
                 case 'EWEBEDITOR':
-                    $parseStr = "<!-- 编辑器调用开始 --><script type='text/javascript' src='__ROOT__/Public/Js/eWebEditor/js/edit.js'></script><input type='hidden'  id='{$id}' name='{$name}'  value='{$conent}'><iframe src='__ROOT__/Public/Js/eWebEditor/ewebeditor.htm?id={$name}' frameborder=0 scrolling=no width='{$width}' height='{$height}'></iframe><script type='text/javascript'>function saveEditor(){document.getElementById('{$id}').value = getHTML();} </script><!-- 编辑器调用结束 -->";
+                    $parseStr = "<!-- 编辑器调用开始 --><script src='__ROOT__/Public/Js/eWebEditor/js/edit.js'></script><input type='hidden'  id='{$id}' name='{$name}'  value='{$conent}'><iframe src='__ROOT__/Public/Js/eWebEditor/ewebeditor.htm?id={$name}' frameborder=0 scrolling=no width='{$width}' height='{$height}'></iframe><script type='text/javascript'>function saveEditor(){document.getElementById('{$id}').value = getHTML();} </script><!-- 编辑器调用结束 -->";
                     break;
                 case 'NETEASE':
                     $parseStr = '<!-- 编辑器调用开始 --><textarea id="' . $id . '" name="' . $name . '" style="display:none">' . $content . '</textarea><iframe ID="Editor" name="Editor" src="__ROOT__/Public/Js/HtmlEditor/index.html?ID=' . $name . '" frameBorder="0" marginHeight="0" marginWidth="0" scrolling="No" style="height:' . $height . ';width:' . $width . '"></iframe><!-- 编辑器调用结束 -->';
@@ -266,8 +266,12 @@
 
             //计算表格的列数
             $colNum = count($show);
-            if (!empty($action)) $colNum++;
-            if (!empty($key)) $colNum++;
+            if (!empty($action)) {
+                $colNum++;
+            }
+            if (!empty($key)) {
+                $colNum++;
+            }
 
             //显示开始
             $parseStr = "<!-- 系统列表组件开始 -->\n";
@@ -427,9 +431,15 @@
 
             //计算表格的列数
             $colNum = count($show);
-            if (!empty($checkbox)) $colNum++;
-            if (!empty($action)) $colNum++;
-            if (!empty($key)) $colNum++;
+            if (!empty($checkbox)) {
+                $colNum++;
+            }
+            if (!empty($action)) {
+                $colNum++;
+            }
+            if (!empty($key)) {
+                $colNum++;
+            }
 
             //显示开始
             $parseStr = "<!-- 系统列表组件开始 -->\n";

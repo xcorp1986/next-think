@@ -33,7 +33,8 @@
                 $tableName = '';
                 foreach ($this->viewFields as $key => $view) {
                     // 获取数据表名称
-                    if (isset($view['_table'])) { // 2011/10/17 添加实际表名定义支持 可以实现同一个表的视图
+                    // 添加实际表名定义支持 可以实现同一个表的视图
+                    if (isset($view['_table'])) {
                         $tableName .= $view['_table'];
                         $prefix = $this->tablePrefix;
                         $tableName = preg_replace_callback("/__([A-Z_-]+)__/sU", function ($match) use ($prefix) {
@@ -68,16 +69,20 @@
          */
         protected function _options_filter(&$options)
         {
-            if (isset($options['field']))
+            if (isset($options['field'])) {
                 $options['field'] = $this->checkFields($options['field']);
-            else
+            } else {
                 $options['field'] = $this->checkFields();
-            if (isset($options['group']))
+            }
+            if (isset($options['group'])) {
                 $options['group'] = $this->checkGroup($options['group']);
-            if (isset($options['where']))
+            }
+            if (isset($options['where'])) {
                 $options['where'] = $this->checkCondition($options['where']);
-            if (isset($options['order']))
+            }
+            if (isset($options['order'])) {
                 $options['order'] = $this->checkOrder($options['order']);
+            }
         }
 
         /**
@@ -219,8 +224,9 @@
                 }
                 $fields = implode(',', $fields);
             } else {
-                if (!is_array($fields))
+                if (!is_array($fields)) {
                     $fields = explode(',', $fields);
+                }
                 // 解析成视图字段
                 $array = [];
                 foreach ($fields as $key => $field) {
@@ -239,11 +245,12 @@
                             if (is_numeric($_field)) {
                                 $array[] = $k . '.' . $field . ' AS ' . $field;
                             } elseif ('_' != substr($_field, 0, 1)) {
-                                if (false !== strpos($_field, '*') || false !== strpos($_field, '(') || false !== strpos($_field, '.'))
-                                    //如果包含* 或者 使用了sql方法 则不再添加前面的表名
+                                //如果包含* 或者 使用了sql方法 则不再添加前面的表名
+                                if (false !== strpos($_field, '*') || false !== strpos($_field, '(') || false !== strpos($_field, '.')) {
                                     $array[] = $_field . ' AS ' . $field;
-                                else
+                                } else {
                                     $array[] = $k . '.' . $_field . ' AS ' . $field;
+                                }
                             }
                         }
                     }

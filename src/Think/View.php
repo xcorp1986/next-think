@@ -86,8 +86,12 @@
          */
         private function render($content, $charset = '', $contentType = '')
         {
-            if (empty($charset)) $charset = C('DEFAULT_CHARSET');
-            if (empty($contentType)) $contentType = C('TMPL_CONTENT_TYPE');
+            if (empty($charset)) {
+                $charset = C('DEFAULT_CHARSET');
+            }
+            if (empty($contentType)) {
+                $contentType = C('TMPL_CONTENT_TYPE');
+            }
             // 网页字符编码
             header('Content-Type:' . $contentType . '; charset=' . $charset);
             // 页面缓存控制
@@ -110,9 +114,11 @@
             if (empty($content)) {
                 $templateFile = $this->parseTemplate($templateFile);
                 // 模板文件不存在直接返回
-                if (!is_file($templateFile)) E(L('_TEMPLATE_NOT_EXIST_') . ':' . $templateFile);
+                if (!is_file($templateFile)) {
+                    E(L('_TEMPLATE_NOT_EXIST_') . ':' . $templateFile);
+                }
             } else {
-                defined('THEME_PATH') or define('THEME_PATH', $this->getThemePath());
+                defined('THEME_PATH') || define('THEME_PATH', $this->getThemePath());
             }
             // 页面缓存
             ob_start();
@@ -159,7 +165,7 @@
                 list($module, $template) = explode('@', $template);
             }
             // 获取当前主题的模版路径
-            defined('THEME_PATH') or define('THEME_PATH', $this->getThemePath($module));
+            defined('THEME_PATH') || define('THEME_PATH', $this->getThemePath($module));
 
             // 分析模板文件规则
             if ('' == $template) {

@@ -38,11 +38,12 @@
             $result = $this->query('select fields_name as "field",fields_type as "type",fields_not_null as "null",fields_key_name as "key",fields_default as "default",fields_default as "extra" from table_msg(' . $tableName . ');');
             $info = [];
             if ($result) {
-                foreach ($result as $key => $val) {
+                foreach ($result as $val) {
                     $info[$val['field']] = [
                         'name'    => $val['field'],
                         'type'    => $val['type'],
-                        'notnull' => (bool)($val['null'] === ''), // not null is empty, null is yes
+                        // not null is empty, null is yes
+                        'notnull' => (bool)($val['null'] === ''),
                         'default' => $val['default'],
                         'primary' => (strtolower($val['key']) == 'pri'),
                         'autoinc' => (strtolower($val['extra']) == 'auto_increment'),

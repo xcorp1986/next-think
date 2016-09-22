@@ -41,8 +41,9 @@
             if (!APP_DEBUG && Storage::has($runtimefile)) {
                 Storage::load($runtimefile);
             } else {
-                if (Storage::has($runtimefile))
+                if (Storage::has($runtimefile)) {
                     Storage::unlink($runtimefile);
+                }
                 $content = '';
                 /**
                  * 检查核心必须文件
@@ -60,7 +61,9 @@
                 foreach ($mode as $file) {
                     if (is_file($file)) {
                         include $file;
-                        if (!APP_DEBUG) $content .= compile($file);
+                        if (!APP_DEBUG) {
+                            $content .= compile($file);
+                        }
                     }
                 }
 
@@ -103,8 +106,9 @@
                     // 调试模式加载系统默认的配置文件
                     C(include __DIR__ . '/../Conf/debug.php');
                     // 读取应用调试配置文件
-                    if (is_file(CONF_PATH . 'debug' . EXT))
+                    if (is_file(CONF_PATH . 'debug' . EXT)) {
                         C(include CONF_PATH . 'debug' . EXT);
+                    }
                 }
             }
 
@@ -154,12 +158,14 @@
             if (!isset(self::$_instance[$identify])) {
                 if (class_exists($class)) {
                     $o = new $class();
-                    if (!empty($method) && method_exists($o, $method))
+                    if (!empty($method) && method_exists($o, $method)) {
                         self::$_instance[$identify] = call_user_func([&$o, $method]);
-                    else
+                    } else {
                         self::$_instance[$identify] = $o;
-                } else
+                    }
+                } else {
                     self::halt(L('_CLASS_NOT_EXIST_') . ':' . $class);
+                }
             }
 
             return self::$_instance[$identify];
@@ -209,7 +215,9 @@
                 case E_USER_ERROR:
                     ob_end_clean();
                     $errorStr = "$errstr " . $errfile . " 第 $errline 行.";
-                    if (C('LOG_RECORD')) Log::write("[$errno] " . $errorStr, Log::ERR);
+                    if (C('LOG_RECORD')) {
+                        Log::write("[$errno] " . $errorStr, Log::ERR);
+                    }
                     self::halt($errorStr);
                     break;
                 default:
@@ -234,6 +242,8 @@
                     case E_USER_ERROR:
                         ob_end_clean();
                         self::halt($e);
+                        break;
+                    default:
                         break;
                 }
             }

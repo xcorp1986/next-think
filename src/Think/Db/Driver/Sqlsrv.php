@@ -53,11 +53,12 @@
         WHERE   t.table_name = '$tableName'");
             $info = [];
             if ($result) {
-                foreach ($result as $key => $val) {
+                foreach ($result as $val) {
                     $info[$val['column_name']] = [
                         'name'    => $val['column_name'],
                         'type'    => $val['data_type'],
-                        'notnull' => (bool)($val['is_nullable'] === ''), // not null is empty, null is yes
+                        // not null is empty, null is yes
+                        'notnull' => (bool)($val['is_nullable'] === ''),
                         'default' => $val['column_default'],
                         'primary' => false,
                         'autoinc' => false,
@@ -122,12 +123,15 @@
          */
         public function parseLimit($limit)
         {
-            if (empty($limit)) return '';
+            if (empty($limit)) {
+                return '';
+            }
             $limit = explode(',', $limit);
-            if (count($limit) > 1)
+            if (count($limit) > 1) {
                 $limitStr = '(T1.ROW_NUMBER BETWEEN ' . $limit[0] . ' + 1 AND ' . $limit[0] . ' + ' . $limit[1] . ')';
-            else
+            } else {
                 $limitStr = '(T1.ROW_NUMBER BETWEEN 1 AND ' . $limit[0] . ")";
+            }
 
             return 'WHERE ' . $limitStr;
         }

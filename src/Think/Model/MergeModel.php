@@ -11,11 +11,16 @@
     class MergeModel extends Model
     {
 
-        protected $modelList = [];    //  包含的模型列表 第一个必须是主表模型
-        protected $masterModel = '';         //  主模型
-        protected $joinType = 'INNER';    //  聚合模型的查询JOIN类型
-        protected $fk = '';         //  外键名 默认为主表名_id
-        protected $mapFields = [];    //  需要处理的模型映射字段，避免混淆 array( id => 'user.id'  )
+        //  包含的模型列表 第一个必须是主表模型
+        protected $modelList = [];
+        //  主模型
+        protected $masterModel = '';
+        //  聚合模型的查询JOIN类型
+        protected $joinType = 'INNER';
+        //  外键名 默认为主表名_id
+        protected $fk = '';
+        //  需要处理的模型映射字段，避免混淆 array( id => 'user.id'  )
+        protected $mapFields = [];
 
         /**
          * 取得DB类的实例对象 字段检查
@@ -222,7 +227,9 @@
             }
             $result = $this->db->update($data, $options);
             if (false !== $result) {
-                if (isset($pkValue)) $data[$pk] = $pkValue;
+                if (isset($pkValue)) {
+                    $data[$pk] = $pkValue;
+                }
                 $this->_after_update($data, $options);
             }
 
@@ -240,10 +247,11 @@
             $pk = $this->pk;
             if (empty($options) && empty($this->options['where'])) {
                 // 如果删除条件为空 则删除当前数据对象所对应的记录
-                if (!empty($this->data) && isset($this->data[$pk]))
+                if (!empty($this->data) && isset($this->data[$pk])) {
                     return $this->delete($this->data[$pk]);
-                else
+                } else {
                     return false;
+                }
             }
 
             if (is_numeric($options) || is_string($options)) {
@@ -275,7 +283,9 @@
             $result = $this->db->delete($options);
             if (false !== $result) {
                 $data = [];
-                if (isset($pkValue)) $data[$pk] = $pkValue;
+                if (isset($pkValue)) {
+                    $data[$pk] = $pkValue;
+                }
                 $this->_after_delete($data, $options);
             }
 
@@ -300,12 +310,15 @@
             }
             $options['table'] = M($this->masterModel)->getTableName() . ' ' . $this->masterModel;
             $options['field'] = $this->checkFields(isset($options['field']) ? $options['field'] : '');
-            if (isset($options['group']))
+            if (isset($options['group'])) {
                 $options['group'] = $this->checkGroup($options['group']);
-            if (isset($options['where']))
+            }
+            if (isset($options['where'])) {
                 $options['where'] = $this->checkCondition($options['where']);
-            if (isset($options['order']))
+            }
+            if (isset($options['order'])) {
                 $options['order'] = $this->checkOrder($options['order']);
+            }
         }
 
         /**
@@ -395,8 +408,9 @@
                 // 获取全部聚合字段
                 $fields = $this->fields;
             }
-            if (!is_array($fields))
+            if (!is_array($fields)) {
                 $fields = explode(',', $fields);
+            }
 
             // 解析成聚合字段
             $array = [];
@@ -408,9 +422,8 @@
                     $array[] = $field;
                 }
             }
-            $fields = implode(',', $array);
 
-            return $fields;
+            return implode(',', $array);
         }
 
         /**

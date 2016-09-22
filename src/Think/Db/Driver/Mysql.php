@@ -54,7 +54,7 @@
             $result = $this->query($sql);
             $info = [];
             if ($result) {
-                foreach ($result as $key => $val) {
+                foreach ($result as $val) {
                     if (PDO::CASE_LOWER != $this->_linkID->getAttribute(PDO::ATTR_CASE)) {
                         $val = array_change_key_case($val, CASE_LOWER);
                     }
@@ -116,12 +116,14 @@
         {
             $values = [];
             $this->model = $options['model'];
-            if (!is_array($dataSet[0])) return false;
+            if (!is_array($dataSet[0])) {
+                return false;
+            }
             $this->parseBind(!empty($options['bind']) ? $options['bind'] : []);
             $fields = array_map([$this, 'parseKey'], array_keys($dataSet[0]));
             foreach ($dataSet as $data) {
                 $value = [];
-                foreach ($data as $key => $val) {
+                foreach ($data as $val) {
                     if (is_array($val) && 'exp' == $val[0]) {
                         $value[] = $val[1];
                     } elseif (is_null($val)) {
@@ -155,7 +157,9 @@
         protected function parseDuplicate($duplicate)
         {
             // 布尔值或空则返回空字符串
-            if (is_bool($duplicate) || empty($duplicate)) return '';
+            if (is_bool($duplicate) || empty($duplicate)) {
+                return '';
+            }
 
             if (is_string($duplicate)) {
                 // field1,field2 转数组
@@ -171,9 +175,12 @@
                     $updates[] = $this->parseKey($val) . "=VALUES(" . $this->parseKey($val) . ")";
                 } else {
                     // 兼容标量传值方式
-                    if (is_scalar($val))
+                    if (is_scalar($val)) {
                         $val = ['value', $val];
-                    if (!isset($val[1])) continue;
+                    }
+                    if (!isset($val[1])) {
+                        continue;
+                    }
                     switch ($val[0]) {
                         // 表达式
                         case 'exp':
@@ -189,7 +196,9 @@
                     }
                 }
             }
-            if (empty($updates)) return '';
+            if (empty($updates)) {
+                return '';
+            }
 
             return " ON DUPLICATE KEY UPDATE " . join(', ', $updates);
         }
@@ -206,13 +215,17 @@
         {
             $this->initConnect(false);
             $this->_linkID->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-            if (!$this->_linkID) return false;
+            if (!$this->_linkID) {
+                return false;
+            }
             $this->queryStr = $str;
             if ($fetchSql) {
                 return $this->queryStr;
             }
             //释放前次的查询结果
-            if (!empty($this->PDOStatement)) $this->free();
+            if (!empty($this->PDOStatement)) {
+                $this->free();
+            }
             $this->queryTimes++;
             // 记录数据库查询次数
             N('db_query', 1);

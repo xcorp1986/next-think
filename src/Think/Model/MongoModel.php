@@ -69,7 +69,8 @@
         {
             // 缓存不存在则查询数据表信息
             $fields = $this->db->getFields();
-            if (!$fields) { // 暂时没有数据无法获取字段信息 下次查询
+            // 暂时没有数据无法获取字段信息 下次查询
+            if (!$fields) {
                 return false;
             }
             $this->fields = array_keys($fields);
@@ -78,7 +79,9 @@
                 $type[$key] = $val['type'];
             }
             // 记录字段类型信息
-            if (C('DB_FIELDTYPE_CHECK')) $this->fields['_type'] = $type;
+            if (C('DB_FIELDTYPE_CHECK')) {
+                $this->fields['_type'] = $type;
+            }
 
             // 2008-3-7 增加缓存开关控制
             if (C('DB_FIELDS_CACHE')) {
@@ -193,7 +196,8 @@
         protected function _before_insert(&$data, $options)
         {
             // 写入数据到数据库
-            if ($this->_autoinc && $this->_idType == self::TYPE_INT) { // 主键自动增长
+            // 主键自动增长
+            if ($this->_autoinc && $this->_idType == self::TYPE_INT) {
                 $pk = $this->getPk();
                 if (!isset($data[$pk])) {
                     $data[$pk] = $this->db->getMongoNextId($pk);
@@ -302,10 +306,13 @@
         {
             $options['field'] = $field;
             $options = $this->_parseOptions($options);
-            if (strpos($field, ',')) { // 多字段
-                if (is_numeric($sepa)) {// 限定数量
+            // 多字段
+            if (strpos($field, ',')) {
+                // 限定数量
+                if (is_numeric($sepa)) {
                     $options['limit'] = $sepa;
-                    $sepa = null;// 重置为null 返回数组
+                    // 重置为null 返回数组
+                    $sepa = null;
                 }
                 $resultSet = $this->db->select($options);
                 if (!empty($resultSet)) {
@@ -328,9 +335,11 @@
                 }
             } else {
                 // 返回数据个数
-                if (true !== $sepa) {// 当sepa指定为true的时候 返回所有数据
+                // 当sepa指定为true的时候 返回所有数据
+                if (true !== $sepa) {
                     $options['limit'] = is_numeric($sepa) ? $sepa : 1;
-                }            // 查找符合的记录
+                }
+                // 查找符合的记录
                 $result = $this->db->select($options);
                 if (!empty($result)) {
                     if (1 == $options['limit']) {
@@ -411,8 +420,9 @@
             $option = $this->_parseOptions($option);
 
             //合并查询条件
-            if (isset($option['where']))
+            if (isset($option['where'])) {
                 $option['condition'] = array_merge((array)$option['condition'], $option['where']);
+            }
 
             return $this->db->group($key, $init, $reduce, $option);
         }

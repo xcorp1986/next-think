@@ -22,10 +22,11 @@
                     $content = str_replace('{__NORUNTIME__}', '', $content);
                 } else {
                     $runtime = $this->showTime();
-                    if (strpos($content, '{__RUNTIME__}'))
+                    if (strpos($content, '{__RUNTIME__}')) {
                         $content = str_replace('{__RUNTIME__}', $runtime, $content);
-                    else
+                    } else {
                         $content .= $runtime;
+                    }
                 }
             } else {
                 $content = str_replace(['{__NORUNTIME__}', '{__RUNTIME__}'], '', $content);

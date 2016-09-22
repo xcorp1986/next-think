@@ -38,9 +38,11 @@
          */
         static public function import($data, $recursive = true)
         {
-            if (!$recursive) { // 覆盖导入
+            // 覆盖导入
+            if (!$recursive) {
                 self::$tags = array_merge(self::$tags, $data);
-            } else { // 合并导入
+                // 合并导入
+            } else {
                 foreach ($data as $tag => $val) {
                     if (!isset(self::$tags[$tag]))
                         self::$tags[$tag] = [];

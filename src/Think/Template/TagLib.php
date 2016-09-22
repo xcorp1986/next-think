@@ -99,7 +99,7 @@
                     $tag = strtolower($tag);
                     if (!isset($this->tags[$tag])) {
                         // 检测是否存在别名定义
-                        foreach ($this->tags as $key => $val) {
+                        foreach ($this->tags as $val) {
                             if (isset($val['alias']) && in_array($tag, explode(',', $val['alias']))) {
                                 $item = $val;
                                 break;
@@ -190,10 +190,12 @@
                     // 识别为对象
                     case 'obj':
                         $name = '$' . $var;
-                        foreach ($vars as $key => $val)
+                        foreach ($vars as $key => $val) {
                             $name .= '->' . $val;
+                        }
                         break;
-                    default:  // 自动判断数组或对象 只支持二维
+                    // 自动判断数组或对象 只支持二维
+                    default:
                         $name = 'is_array($' . $var . ')?$' . $var . '["' . $vars[0] . '"]:$' . $var . '->' . $vars[0];
                 }
             }
@@ -273,6 +275,8 @@
                     case 'CONFIG':
                         $parseStr = 'C("' . $vars[2] . '")';
                         break;
+                    default:
+                        break;
                 }
             } elseif (count($vars) == 2) {
                 switch ($vars[1]) {
@@ -283,7 +287,9 @@
                         $parseStr = 'THINK_VERSION';
                         break;
                     default:
-                        if (defined($vars[1])) $parseStr = $vars[1];
+                        if (defined($vars[1])) {
+                            $parseStr = $vars[1];
+                        }
                 }
             }
 

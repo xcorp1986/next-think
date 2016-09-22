@@ -53,9 +53,10 @@
             } else {
                 $tokenValue = is_callable($tokenType) ? $tokenType(microtime(true)) : md5(microtime(true));
                 $_SESSION[$tokenName][$tokenKey] = $tokenValue;
-                if (IS_AJAX && C('TOKEN_RESET', null, true))
-                    //ajax需要获得这个header并替换页面中meta中的token值
+                //ajax需要获得这个header并替换页面中meta中的token值
+                if (IS_AJAX && C('TOKEN_RESET', null, true)) {
                     header($tokenName . ': ' . $tokenKey . '_' . $tokenValue);
+                }
             }
 
             return [$tokenName, $tokenKey, $tokenValue];

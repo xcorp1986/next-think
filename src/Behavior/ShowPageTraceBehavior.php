@@ -32,7 +32,7 @@
             // 系统默认显示信息
             $files = get_included_files();
             $info = [];
-            foreach ($files as $key => $file) {
+            foreach ($files as $file) {
                 $info[] = $file . ' ( ' . number_format(filesize($file) / 1024, 2) . ' KB )';
             }
             $trace = [];
@@ -79,32 +79,6 @@
                             $trace[$title] = isset($debug[$name]) ? $debug[$name] : '';
                         }
                 }
-            }
-            if ($save = C('PAGE_TRACE_SAVE')) {
-                // 保存页面Trace日志
-                if (is_array($save)) {
-                    // 选择选项卡保存
-                    $tabs = C('TRACE_PAGE_TABS', null, $this->tracePageTabs);
-                    $array = [];
-                    foreach ($save as $tab) {
-                        $array[] = $tabs[$tab];
-                    }
-                }
-                $content = date('[ c ]') . ' ' . get_client_ip() . ' ' . $_SERVER['REQUEST_URI'] . "\r\n";
-                foreach ($trace as $key => $val) {
-                    if (!isset($array) || in_array_case($key, $array)) {
-                        $content .= '[ ' . $key . " ]\r\n";
-                        if (is_array($val)) {
-                            foreach ($val as $k => $v) {
-                                $content .= (!is_numeric($k) ? $k . ':' : '') . print_r($v, true) . "\r\n";
-                            }
-                        } else {
-                            $content .= print_r($val, true) . "\r\n";
-                        }
-                        $content .= "\r\n";
-                    }
-                }
-                error_log(str_replace('<br/>', "\r\n", $content), 3, C('LOG_PATH') . date('y_m_d') . '_trace.log');
             }
             unset($files, $info, $base);
             // 调用Trace页面模板

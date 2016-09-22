@@ -58,7 +58,22 @@
         // 是否批处理验证
         protected $patchValidate = false;
         // 链操作方法列表
-        protected $methods = ['strict', 'order', 'alias', 'having', 'group', 'lock', 'distinct', 'auto', 'filter', 'validate', 'result', 'token', 'index', 'force'];
+        protected $methods = [
+            'strict',
+            'order',
+            'alias',
+            'having',
+            'group',
+            'lock',
+            'distinct',
+            'auto',
+            'filter',
+            'validate',
+            'result',
+            'token',
+            'index',
+            'force',
+        ];
 
         /**
          * 取得DB类的实例对象 字段检查
@@ -158,7 +173,9 @@
                         $this->pk = $key;
                         $this->fields['_pk'] = $key;
                     }
-                    if ($val['autoinc']) $this->autoinc = true;
+                    if ($val['autoinc']) {
+                        $this->autoinc = true;
+                    }
                 }
             }
             // 记录字段类型信息
@@ -348,7 +365,9 @@
             if (false !== $result && is_numeric($result)) {
                 $pk = $this->getPk();
                 // 增加复合主键支持
-                if (is_array($pk)) return $result;
+                if (is_array($pk)) {
+                    return $result;
+                }
                 $insertId = $this->getLastInsID();
                 if ($insertId) {
                     // 自增主键返回插入ID
@@ -495,7 +514,9 @@
             }
             $result = $this->db->update($data, $options);
             if (false !== $result && is_numeric($result)) {
-                if (isset($pkValue)) $data[$pk] = $pkValue;
+                if (isset($pkValue)) {
+                    $data[$pk] = $pkValue;
+                }
                 $this->_after_update($data, $options);
             }
 
@@ -531,10 +552,11 @@
             $pk = $this->getPk();
             if (empty($options) && empty($this->options['where'])) {
                 // 如果删除条件为空 则删除当前数据对象所对应的记录
-                if (!empty($this->data) && isset($this->data[$pk]))
+                if (!empty($this->data) && isset($this->data[$pk])) {
                     return $this->delete($this->data[$pk]);
-                else
+                } else {
                     return false;
+                }
             }
             if (is_numeric($options) || is_string($options)) {
                 // 根据主键删除记录
@@ -550,7 +572,9 @@
             if (is_array($options) && (count($options) > 0) && is_array($pk)) {
                 $count = 0;
                 foreach (array_keys($options) as $key) {
-                    if (is_int($key)) $count++;
+                    if (is_int($key)) {
+                        $count++;
+                    }
                 }
                 if ($count == count($pk)) {
                     $i = 0;
@@ -579,7 +603,9 @@
             $result = $this->db->delete($options);
             if (false !== $result && is_numeric($result)) {
                 $data = [];
-                if (isset($pkValue)) $data[$pk] = $pkValue;
+                if (isset($pkValue)) {
+                    $data[$pk] = $pkValue;
+                }
                 $this->_after_delete($data, $options);
             }
 
@@ -626,7 +652,9 @@
                 // 根据复合主键查询
                 $count = 0;
                 foreach (array_keys($options) as $key) {
-                    if (is_int($key)) $count++;
+                    if (is_int($key)) {
+                        $count++;
+                    }
                 }
                 if ($count == count($pk)) {
                     $i = 0;
@@ -714,8 +742,9 @@
          */
         protected function _parseOptions($options = [])
         {
-            if (is_array($options))
+            if (is_array($options)) {
                 $options = array_merge($this->options, $options);
+            }
 
             if (!isset($options['table'])) {
                 // 自动获取表名
@@ -829,7 +858,9 @@
                 // 根据复合主键查询
                 $count = 0;
                 foreach (array_keys($options) as $key) {
-                    if (is_int($key)) $count++;
+                    if (is_int($key)) {
+                        $count++;
+                    }
                 }
                 if ($count == count($pk)) {
                     $i = 0;
@@ -908,6 +939,8 @@
                         return json_encode($data);
                     case 'xml':
                         return xml_encode($data);
+                    default:
+                        break;
                 }
             }
 
@@ -926,7 +959,8 @@
             // 检查字段映射
             if (!empty($this->_map)) {
                 foreach ($this->_map as $key => $val) {
-                    if ($type == 1) { // 读取
+                    // 读取
+                    if ($type == 1) {
                         if (isset($data[$val])) {
                             $data[$key] = $data[$val];
                             unset($data[$val]);
@@ -972,12 +1006,14 @@
          */
         public function setInc($field, $step = 1, $lazyTime = 0)
         {
-            if ($lazyTime > 0) {// 延迟写入
+            // 延迟写入
+            if ($lazyTime > 0) {
                 $condition = $this->options['where'];
                 $guid = md5($this->name . '_' . $field . '_' . serialize($condition));
                 $step = $this->lazyWrite($guid, $step, $lazyTime);
                 if (empty($step)) {
-                    return true; // 等待下次写入
+                    // 等待下次写入
+                    return true;
                 } elseif ($step < 0) {
                     $step = '-' . $step;
                 }
@@ -996,12 +1032,14 @@
          */
         public function setDec($field, $step = 1, $lazyTime = 0)
         {
-            if ($lazyTime > 0) {// 延迟写入
+            // 延迟写入
+            if ($lazyTime > 0) {
                 $condition = $this->options['where'];
                 $guid = md5($this->name . '_' . $field . '_' . serialize($condition));
                 $step = $this->lazyWrite($guid, -$step, $lazyTime);
                 if (empty($step)) {
-                    return true; // 等待下次写入
+                    // 等待下次写入
+                    return true;
                 } elseif ($step > 0) {
                     $step = '-' . $step;
                 }
@@ -1021,7 +1059,8 @@
          */
         protected function lazyWrite($guid, $step, $lazyTime)
         {
-            if (false !== ($value = S($guid))) { // 存在缓存写入数据
+            // 存在缓存写入数据
+            if (false !== ($value = S($guid))) {
                 if (NOW_TIME > S($guid . '_time') + $lazyTime) {
                     // 延时更新时间到了，删除缓存数据 并实际写入数据库
                     S($guid, null);
@@ -1095,7 +1134,8 @@
                 }
             } else {   // 查找一条记录
                 // 返回数据个数
-                if (true !== $sepa) {// 当sepa指定为true的时候 返回所有数据
+                // 当sepa指定为true的时候 返回所有数据
+                if (true !== $sepa) {
                     $options['limit'] = is_numeric($sepa) ? $sepa : 1;
                 }
                 $result = $this->db->select($options);
@@ -1215,7 +1255,9 @@
         public function autoCheckToken($data)
         {
             // 支持使用token(false) 关闭令牌验证
-            if (isset($this->options['token']) && !$this->options['token']) return true;
+            if (isset($this->options['token']) && !$this->options['token']) {
+                return true;
+            }
             if (C('TOKEN_ON')) {
                 $name = C('TOKEN_NAME', null, '__hash__');
                 // 令牌数据无效
@@ -1233,7 +1275,9 @@
                     return true;
                 }
                 // 开启TOKEN重置
-                if (C('TOKEN_RESET')) unset($_SESSION[$name][$key]);
+                if (C('TOKEN_RESET')) {
+                    unset($_SESSION[$name][$key]);
+                }
 
                 return false;
             }
@@ -1262,8 +1306,9 @@
                 'english'  => '/^[A-Za-z]+$/',
             ];
             // 检查是否有内置的正则表达式
-            if (isset($validate[strtolower($rule)]))
+            if (isset($validate[strtolower($rule)])) {
                 $rule = $validate[strtolower($rule)];
+            }
 
             return preg_match($rule, $value) === 1;
         }
@@ -1293,9 +1338,13 @@
                     // 填充因子定义格式
                     // array('field','填充内容','填充条件','附加规则',[额外参数])
                     // 默认为新增的时候自动填充
-                    if (empty($auto[2])) $auto[2] = self::MODEL_INSERT;
+                    if (empty($auto[2])) {
+                        $auto[2] = self::MODEL_INSERT;
+                    }
                     if ($type == $auto[2] || $auto[2] == self::MODEL_BOTH) {
-                        if (empty($auto[3])) $auto[3] = 'string';
+                        if (empty($auto[3])) {
+                            $auto[3] = 'string';
+                        }
                         switch (trim($auto[3])) {
                             //  使用函数进行填充 字段的值作为参数
                             case 'function':
@@ -1359,39 +1408,46 @@
                     // 重置验证错误信息
                     $this->error = [];
                 }
-                foreach ($_validate as $key => $val) {
+                foreach ($_validate as $val) {
                     // 验证因子定义格式
                     // array(field,rule,message,condition,type,when,params)
                     // 判断是否需要执行验证
                     if (empty($val[5]) || ($val[5] == self::MODEL_BOTH && $type < 3) || $val[5] == $type) {
-                        if (0 == strpos($val[2], '{%') && strpos($val[2], '}'))
-                            // 支持提示信息的多语言 使用 {%语言定义} 方式
+                        // 支持提示信息的多语言 使用 {%语言定义} 方式
+                        if (0 == strpos($val[2], '{%') && strpos($val[2], '}')) {
                             $val[2] = L(substr($val[2], 2, -1));
+                        }
                         $val[3] = isset($val[3]) ? $val[3] : self::EXISTS_VALIDATE;
                         $val[4] = isset($val[4]) ? $val[4] : 'regex';
                         // 判断验证条件
                         switch ($val[3]) {
                             // 必须验证 不管表单是否有设置该字段
                             case self::MUST_VALIDATE:
-                                if (false === $this->_validationField($data, $val))
+                                if (false === $this->_validationField($data, $val)) {
                                     return false;
+                                }
                                 break;
                             // 值不为空的时候才验证
                             case self::VALUE_VALIDATE:
                                 if ('' != trim($data[$val[0]]))
-                                    if (false === $this->_validationField($data, $val))
+                                    if (false === $this->_validationField($data, $val)) {
                                         return false;
+                                    }
                                 break;
                             // 默认表单存在该字段就验证
                             default:
-                                if (isset($data[$val[0]]))
-                                    if (false === $this->_validationField($data, $val))
+                                if (isset($data[$val[0]])) {
+                                    if (false === $this->_validationField($data, $val)) {
                                         return false;
+                                    }
+                                }
                         }
                     }
                 }
                 // 批量验证的时候最后返回错误
-                if (!empty($this->error)) return false;
+                if (!empty($this->error)) {
+                    return false;
+                }
             }
 
             return true;
@@ -1407,9 +1463,10 @@
          */
         protected function _validationField($data, $val)
         {
-            if ($this->patchValidate && isset($this->error[$val[0]]))
-                //当前字段已经有规则验证没有通过
+            //当前字段已经有规则验证没有通过
+            if ($this->patchValidate && isset($this->error[$val[0]])) {
                 return;
+            }
             if (false === $this->_validationFieldItem($data, $val)) {
                 if ($this->patchValidate) {
                     $this->error[$val[0]] = $val[2];
@@ -1438,12 +1495,14 @@
                     // 调用方法进行验证
                 case 'callback':
                     $args = isset($val[6]) ? (array)$val[6] : [];
-                    if (is_string($val[0]) && strpos($val[0], ','))
+                    if (is_string($val[0]) && strpos($val[0], ',')) {
                         $val[0] = explode(',', $val[0]);
+                    }
                     if (is_array($val[0])) {
                         // 支持多个字段验证
-                        foreach ($val[0] as $field)
+                        foreach ($val[0] as $field) {
                             $_data[$field] = $data[$field];
+                        }
                         array_unshift($args, $_data);
                     } else {
                         array_unshift($args, $data[$val[0]]);
@@ -1458,13 +1517,15 @@
                     return $data[$val[0]] == $data[$val[1]];
                 // 验证某个值是否唯一
                 case 'unique':
-                    if (is_string($val[0]) && strpos($val[0], ','))
+                    if (is_string($val[0]) && strpos($val[0], ',')) {
                         $val[0] = explode(',', $val[0]);
+                    }
                     $map = [];
                     if (is_array($val[0])) {
                         // 支持多个字段验证
-                        foreach ($val[0] as $field)
+                        foreach ($val[0] as $field) {
                             $map[$field] = $data[$field];
+                        }
                     } else {
                         $map[$val[0]] = $data[$val[0]];
                     }
@@ -1473,7 +1534,9 @@
                         // 完善编辑的时候验证唯一
                         $map[$pk] = ['neq', $data[$pk]];
                     }
-                    if ($this->where($map)->find()) return false;
+                    if ($this->where($map)->find()) {
+                        return false;
+                    }
 
                     return true;
                 // 检查附加规则
@@ -1532,8 +1595,12 @@
                 //验证有效期
                 case 'expire':
                     list($start, $end) = explode(',', $rule);
-                    if (!is_numeric($start)) $start = strtotime($start);
-                    if (!is_numeric($end)) $end = strtotime($end);
+                    if (!is_numeric($start)) {
+                        $start = strtotime($start);
+                    }
+                    if (!is_numeric($end)) {
+                        $end = strtotime($end);
+                    }
 
                     return NOW_TIME >= $start && NOW_TIME <= $end;
                 // IP 操作许可验证
@@ -1661,7 +1728,9 @@
             $this->db = $this->_db[$linkNum];
             $this->_after_db();
             // 字段检测
-            if (!empty($this->name) && $this->autoCheckFields) $this->_checkTableInfo();
+            if (!empty($this->name) && $this->autoCheckFields) {
+                $this->_checkTableInfo();
+            }
 
             return $this;
         }
@@ -1913,7 +1982,7 @@
         {
             $prefix = $this->tablePrefix;
             if (is_array($join)) {
-                foreach ($join as $key => &$_join) {
+                foreach ($join as &$_join) {
                     $_join = preg_replace_callback("/__([A-Z0-9_-]+)__/sU", function ($match) use ($prefix) {
                         return $prefix . strtolower($match[1]);
                     }, $_join);
@@ -1940,7 +2009,9 @@
          */
         public function union($union, $all = false)
         {
-            if (empty($union)) return $this;
+            if (empty($union)) {
+                return $this;
+            }
             if ($all) {
                 $this->options['union']['_all'] = true;
             }
@@ -1985,8 +2056,9 @@
                 $expire = $key;
                 $key = true;
             }
-            if (false !== $key)
+            if (false !== $key) {
                 $this->options['cache'] = ['key' => $key, 'expire' => $expire, 'type' => $type];
+            }
 
             return $this;
         }
@@ -2036,7 +2108,9 @@
                 $scopes = explode(',', $scope);
                 $options = [];
                 foreach ($scopes as $name) {
-                    if (!isset($this->_scope[$name])) continue;
+                    if (!isset($this->_scope[$name])) {
+                        continue;
+                    }
                     $options = array_merge($options, $this->_scope[$name]);
                 }
                 if (!empty($args) && is_array($args)) {
@@ -2181,8 +2255,9 @@
          */
         public function setProperty($name, $value)
         {
-            if (property_exists($this, $name))
+            if (property_exists($this, $name)) {
                 $this->$name = $value;
+            }
 
             return $this;
         }

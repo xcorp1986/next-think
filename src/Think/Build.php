@@ -69,14 +69,18 @@ class [MODEL]Model extends Model {
                     DATA_PATH,
                 ];
                 foreach ($dirs as $dir) {
-                    if (!is_dir($dir)) mkdir($dir, 0755, true);
+                    if (!is_dir($dir)) {
+                        mkdir($dir, 0755, true);
+                    }
                 }
                 // 写入应用配置文件
-                if (!is_file(CONF_PATH . 'config' . EXT))
+                if (!is_file(CONF_PATH . 'config' . EXT)) {
                     file_put_contents(CONF_PATH . 'config' . EXT, "<?php\nreturn [\n\t//'配置项'=>'配置值'\n];");
+                }
                 // 写入模块配置文件
-                if (!is_file(APP_PATH . $module . '/Conf/config' . EXT))
+                if (!is_file(APP_PATH . $module . '/Conf/config' . EXT)) {
                     file_put_contents(APP_PATH . $module . '/Conf/config' . EXT, "<?php\nreturn [\n\t//'配置项'=>'配置值'\n];");
+                }
                 // 生成模块的测试控制器
                 if (defined('BUILD_CONTROLLER_LIST')) {
                     // 自动生成的控制器列表（注意大小写）
@@ -115,9 +119,19 @@ class [MODEL]Model extends Model {
                 \Think\Think::halt('目录 [ ' . RUNTIME_PATH . ' ] 不可写！');
             }
             mkdir(CACHE_PATH);  // 模板缓存目录
-            if (!is_dir(LOG_PATH)) mkdir(LOG_PATH);    // 日志目录
-            if (!is_dir(TEMP_PATH)) mkdir(TEMP_PATH);   // 数据缓存目录
-            if (!is_dir(DATA_PATH)) mkdir(DATA_PATH);   // 数据文件目录
+            // 日志目录
+            if (!is_dir(LOG_PATH)) {
+                mkdir(LOG_PATH);
+            }
+            // 数据缓存目录
+            if (!is_dir(TEMP_PATH)) {
+                mkdir(TEMP_PATH);
+            }
+            // 数据文件目录
+            if (!is_dir(DATA_PATH)) {
+                mkdir(DATA_PATH);
+            }
+
             return true;
         }
 
@@ -162,26 +176,5 @@ class [MODEL]Model extends Model {
                 file_put_contents($file, $content);
             }
         }
-
-        /**
-         * 生成目录安全文件
-         * @deprecated
-         * @param array $dirs
-         */
-        static public function buildDirSecure($dirs = [])
-        {
-            // 目录安全写入（默认开启）
-            defined('BUILD_DIR_SECURE') or define('BUILD_DIR_SECURE', true);
-            if (BUILD_DIR_SECURE) {
-                defined('DIR_SECURE_FILENAME') or define('DIR_SECURE_FILENAME', 'index.html');
-                defined('DIR_SECURE_CONTENT') or define('DIR_SECURE_CONTENT', ' ');
-                // 自动写入目录安全文件
-                $content = DIR_SECURE_CONTENT;
-                $files = explode(',', DIR_SECURE_FILENAME);
-                foreach ($files as $filename) {
-                    foreach ($dirs as $dir)
-                        file_put_contents($dir . $filename, $content);
-                }
-            }
-        }
+        
     }
