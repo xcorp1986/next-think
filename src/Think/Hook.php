@@ -10,49 +10,53 @@
     class Hook
     {
 
+        /**
+         * @var array $tags 行为集合
+         */
         static private $tags = [];
 
         /**
          * 动态添加插件到某个标签
-         * @param string $tag  标签名称
-         * @param mixed  $name 插件名称
+         * @param string       $tag  标签名称
+         * @param array|string $name Behavior名称
          * @return void
          */
         static public function add($tag, $name)
         {
-            if (!isset(self::$tags[$tag])) {
-                self::$tags[$tag] = [];
+            if (!isset(static::$tags[$tag])) {
+                static::$tags[$tag] = [];
             }
             if (is_array($name)) {
-                self::$tags[$tag] = array_merge(self::$tags[$tag], $name);
+                static::$tags[$tag] = array_merge(static::$tags[$tag], $name);
             } else {
-                self::$tags[$tag][] = $name;
+                static::$tags[$tag][] = $name;
             }
         }
 
         /**
          * 批量导入插件
-         * @param array   $data      插件信息
-         * @param boolean $recursive 是否递归合并
+         * @param array $data      插件信息
+         * @param bool  $recursive 是否递归合并
          * @return void
          */
-        static public function import($data, $recursive = true)
+        static public function import(array $data = [], $recursive = true)
         {
             // 覆盖导入
             if (!$recursive) {
-                self::$tags = array_merge(self::$tags, $data);
+                static::$tags = array_merge(static::$tags, $data);
                 // 合并导入
             } else {
                 foreach ($data as $tag => $val) {
-                    if (!isset(self::$tags[$tag]))
-                        self::$tags[$tag] = [];
+                    if (!isset(static::$tags[$tag])) {
+                        static::$tags[$tag] = [];
+                    }
                     if (!empty($val['_overlay'])) {
                         // 可以针对某个标签指定覆盖模式
                         unset($val['_overlay']);
-                        self::$tags[$tag] = $val;
+                        static::$tags[$tag] = $val;
                     } else {
                         // 合并模式
-                        self::$tags[$tag] = array_merge(self::$tags[$tag], $val);
+                        static::$tags[$tag] = array_merge(static::$tags[$tag], $val);
                     }
                 }
             }
@@ -67,9 +71,9 @@
         {
             if (empty($tag)) {
                 // 获取全部的插件信息
-                return self::$tags;
+                return static::$tags;
             } else {
-                return self::$tags[$tag];
+                return static::$tags[$tag];
             }
         }
 
@@ -81,14 +85,14 @@
          */
         static public function listen($tag, &$params = null)
         {
-            if (isset(self::$tags[$tag])) {
+            if (isset(static::$tags[$tag])) {
                 if (APP_DEBUG) {
                     G($tag . 'Start');
                     trace('[ ' . $tag . ' ] --START--', '', 'INFO');
                 }
-                foreach (self::$tags[$tag] as $name) {
+                foreach (static::$tags[$tag] as $name) {
                     APP_DEBUG && G($name . '_start');
-                    $result = self::exec($name, $tag, $params);
+                    $result = static::exec($name, $tag, $params);
                     if (APP_DEBUG) {
                         G($name . '_end');
                         trace('Run ' . $name . ' [ RunTime:' . G($name . '_start', $name . '_end', 6) . 's ]', '', 'INFO');
@@ -98,7 +102,8 @@
                         return;
                     }
                 }
-                if (APP_DEBUG) { // 记录行为的执行日志
+                // 记录行为的执行日志
+                if (APP_DEBUG) {
                     trace('[ ' . $tag . ' ] --END-- [ RunTime:' . G($tag . 'Start', $tag . 'End', 6) . 's ]', '', 'INFO');
                 }
             }
