@@ -1,7 +1,7 @@
 <?php
-
+    
     namespace Think;
-
+    
     /**
      * 内置的Dispatcher类
      * 完成URL解析、路由和调度
@@ -10,7 +10,7 @@
      */
     class Dispatcher
     {
-
+        
         /**
          * URL映射到控制器
          * @access public
@@ -32,7 +32,7 @@
                 // CLI模式下 index.php module/controller/action/params/...
                 $_SERVER['PATH_INFO'] = isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : '';
             }
-
+            
             // 开启子域名部署
             if (C('APP_SUB_DOMAIN_DEPLOY')) {
                 $rules = C('APP_SUB_DOMAIN_RULES');
@@ -72,7 +72,7 @@
                         }
                     }
                 }
-
+                
                 if (!empty($rule)) {
                     // 子域名部署规则 '子域名'=>array('模块名[/控制器名]','var1=a&var2=b');
                     if (is_array($rule)) {
@@ -117,10 +117,10 @@
                     }
                 }
             }
-
+            
             $depr = C('URL_PATHINFO_DEPR');
             define('MODULE_PATHINFO_DEPR', $depr);
-
+            
             if (empty($_SERVER['PATH_INFO'])) {
                 $_SERVER['PATH_INFO'] = '';
                 define('__INFO__', '');
@@ -144,13 +144,13 @@
                     }
                 }
             }
-
+            
             // URL常量
             define('__SELF__', strip_tags($_SERVER[C('URL_REQUEST_URI')]));
-
+            
             // 获取模块名称
             define('MODULE_NAME', defined('BIND_MODULE') ? BIND_MODULE : self::getModule($varModule));
-
+            
             // 检测模块是否存在
             if (MODULE_NAME && (defined('BIND_MODULE') || !in_array_case(MODULE_NAME, C('MODULE_DENY_LIST'))) && is_dir(APP_PATH . MODULE_NAME)) {
                 // 定义当前模块路径
@@ -159,31 +159,32 @@
                 C('CACHE_PATH', CACHE_PATH . MODULE_NAME . '/');
                 // 定义当前模块的日志目录
                 C('LOG_PATH', realpath(LOG_PATH) . '/' . MODULE_NAME . '/');
-
+                
                 // 模块检测
                 Hook::listen('module_check');
-
+                
                 // 加载模块配置文件
                 if (is_file(MODULE_PATH . 'Conf/config' . EXT)) {
                     C(load_config(MODULE_PATH . 'Conf/config' . EXT));
                 }
-
+                
                 // 加载模块tags文件定义
                 if (is_file(MODULE_PATH . 'Conf/tags.php')) {
-                    Hook::import(include MODULE_PATH . 'Conf/tags.php');
+                    $moduleBehaviors = include MODULE_PATH . 'Conf/tags.php';
+                    is_array($moduleBehaviors) && Hook::import($moduleBehaviors);
                 }
                 // 加载模块函数文件
                 if (is_file(MODULE_PATH . 'Common/function.php')) {
                     include MODULE_PATH . 'Common/function.php';
                 }
-
+                
                 $urlCase = C('URL_CASE_INSENSITIVE');
                 // 加载模块的扩展配置文件
                 load_ext_file(MODULE_PATH);
             } else {
                 E(L('_MODULE_NOT_EXIST_') . ':' . MODULE_NAME);
             }
-
+            
             if (!defined('__APP__')) {
                 $urlMode = C('URL_MODEL');
                 // 兼容模式判断
@@ -203,7 +204,7 @@
             // 模块URL地址
             $moduleName = defined('MODULE_ALIAS') ? MODULE_ALIAS : MODULE_NAME;
             define('__MODULE__', (defined('BIND_MODULE') || !C('MULTI_MODULE')) ? __APP__ : __APP__ . '/' . ($urlCase ? strtolower($moduleName) : $moduleName));
-
+            
             if ('' != $_SERVER['PATH_INFO'] && (!C('URL_ROUTER_ON') || !Route::check())) {
                 // 检测路由规则 如果没有则按默认规则调度URL
                 Hook::listen('path_info');
@@ -212,13 +213,13 @@
                     send_http_status(404);
                     exit;
                 }
-
+                
                 // 去除URL后缀
                 $_SERVER['PATH_INFO'] = preg_replace(C('URL_HTML_SUFFIX') ? '/\.(' . trim(C('URL_HTML_SUFFIX'), '.') . ')$/i' : '/\.' . __EXT__ . '$/i', '', $_SERVER['PATH_INFO']);
-
+                
                 $depr = C('URL_PATHINFO_DEPR');
                 $paths = explode($depr, trim($_SERVER['PATH_INFO'], $depr));
-
+                
                 // 获取控制器
                 if (!defined('BIND_CONTROLLER')) {
                     // 控制器层次
@@ -250,18 +251,18 @@
             // 获取控制器和操作名
             define('CONTROLLER_NAME', defined('BIND_CONTROLLER') ? BIND_CONTROLLER : self::getController($varController, $urlCase));
             define('ACTION_NAME', defined('BIND_ACTION') ? BIND_ACTION : self::getAction($varAction, $urlCase));
-
+            
             // 当前控制器的UR地址
             $controllerName = defined('CONTROLLER_ALIAS') ? CONTROLLER_ALIAS : CONTROLLER_NAME;
             define('__CONTROLLER__', __MODULE__ . $depr . (defined('BIND_CONTROLLER') ? '' : ($urlCase ? parse_name($controllerName) : $controllerName)));
-
+            
             // 当前操作的URL地址
             define('__ACTION__', __CONTROLLER__ . $depr . (defined('ACTION_ALIAS') ? ACTION_ALIAS : ACTION_NAME));
-
+            
             //保证$_REQUEST正常取值
             $_REQUEST = array_merge($_POST, $_GET, $_COOKIE);
         }
-
+        
         /**
          * 获得控制器的命名空间路径 便于插件机制访问
          */
@@ -269,10 +270,10 @@
         {
             $space = !empty($_GET[$var]) ? strip_tags($_GET[$var]) : '';
             unset($_GET[$var]);
-
+            
             return $space;
         }
-
+        
         /**
          * 获得实际的控制器名称
          */
@@ -284,7 +285,7 @@
                 if (isset($maps[strtolower($controller)])) {
                     // 记录当前别名
                     define('CONTROLLER_ALIAS', strtolower($controller));
-
+                    
                     // 获取实际的控制器名
                     return ucfirst($maps[CONTROLLER_ALIAS]);
                 } elseif (array_search(strtolower($controller), $maps)) {
@@ -297,10 +298,10 @@
                 // 智能识别方式 user_type 识别到 UserTypeController 控制器
                 $controller = parse_name($controller, 1);
             }
-
+            
             return strip_tags(ucfirst($controller));
         }
-
+        
         /**
          * 获得实际的操作名称
          */
@@ -320,22 +321,22 @@
                         if (is_array($maps[ACTION_ALIAS])) {
                             parse_str($maps[ACTION_ALIAS][1], $vars);
                             $_GET = array_merge($_GET, $vars);
-
+                            
                             return $maps[ACTION_ALIAS][0];
                         } else {
                             return $maps[ACTION_ALIAS];
                         }
-
+                        
                     } elseif (array_search(strtolower($action), $maps)) {
                         // 禁止访问原始操作
                         return '';
                     }
                 }
             }
-
+            
             return strip_tags($urlCase ? strtolower($action) : $action);
         }
-
+        
         /**
          * 获得实际的模块名称
          */
@@ -347,7 +348,7 @@
                 if (isset($maps[strtolower($module)])) {
                     // 记录当前别名
                     define('MODULE_ALIAS', strtolower($module));
-
+                    
                     // 获取实际的模块名
                     return ucfirst($maps[MODULE_ALIAS]);
                 } elseif (array_search(strtolower($module), $maps)) {
@@ -355,8 +356,8 @@
                     return '';
                 }
             }
-
+            
             return strip_tags(ucfirst($module));
         }
-
+        
     }

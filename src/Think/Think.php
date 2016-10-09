@@ -1,23 +1,23 @@
 <?php
-
+    
     namespace Think;
-
+    
     /**
      * 引导类
      */
     class Think
     {
-
+        
         /**
          * @var array $_map 类映射
          */
         private static $_map = [];
-
+        
         /**
          * @var array $_instance 实例化对象
          */
         private static $_instance = [];
-
+        
         /**
          * 应用程序初始化
          * @access public
@@ -31,12 +31,12 @@
             register_shutdown_function([__CLASS__, 'fatalError']);
             set_error_handler([__CLASS__, 'appError']);
             set_exception_handler([__CLASS__, 'appException']);
-
+            
             /*
              * 初始化文件存储方式
              */
             Storage::connect();
-
+            
             $runtimefile = RUNTIME_PATH . '__runtime.php';
             if (!APP_DEBUG && Storage::has($runtimefile)) {
                 Storage::load($runtimefile);
@@ -66,7 +66,7 @@
                         }
                     }
                 }
-
+                
                 /*
                  * 加载应用模式配置文件
                  */
@@ -74,7 +74,7 @@
                 foreach ($config as $key => $file) {
                     is_numeric($key) ? C(load_config($file)) : C($key, load_config($file));
                 }
-
+                
                 /*
                  * 加载模式行为定义
                  */
@@ -82,20 +82,21 @@
                 if (isset($tags)) {
                     Hook::import(is_array($tags) ? $tags : include $tags);
                 }
-
+                
                 /*
                  * 加载应用行为
                  */
                 if (is_file(CONF_PATH . 'tags.php')) {
-                    Hook::import(include CONF_PATH . 'tags.php');
+                    $appBehaviors = include CONF_PATH . 'tags.php';
+                    is_array($appBehaviors) && Hook::import($appBehaviors);
                 }
-
+                
                 /*
                  * 加载框架底层语言包
                  */
                 $lang = include __DIR__ . '/../Lang/' . C('DEFAULT_LANG') . EXT;
                 L($lang);
-
+                
                 if (!APP_DEBUG) {
                     $content .= "\nnamespace { ";
                     $content .= "\nL(" . var_export(L(), true) . ");
@@ -111,19 +112,19 @@
                     }
                 }
             }
-
+            
             /*
              * 读取当前应用状态对应的配置文件
              */
             if (APP_STATUS && is_file(CONF_PATH . APP_STATUS . EXT)) {
                 C(include CONF_PATH . APP_STATUS . EXT);
             }
-
+            
             /*
              * 设置系统时区
              */
             date_default_timezone_set(C('DEFAULT_TIMEZONE'));
-
+            
             /*
              * 检查应用目录结构 如果不存在则自动创建
              */
@@ -134,18 +135,18 @@
                     Build::checkDir($module);
                 }
             }
-
+            
             /*
              * 记录加载文件时间
              */
             G('loadTime');
-
+            
             /*
              * 运行应用
              */
             App::run();
         }
-
+        
         /**
          * 取得对象实例 支持调用类的静态方法
          * @param string $class  对象类名
@@ -167,10 +168,10 @@
                     self::halt(L('_CLASS_NOT_EXIST_') . ':' . $class);
                 }
             }
-
+            
             return self::$_instance[$identify];
         }
-
+        
         /**
          * 自定义异常处理
          * @access public
@@ -197,7 +198,7 @@
             }
             self::halt($error);
         }
-
+        
         /**
          * 自定义错误处理
          * @access public
@@ -228,7 +229,7 @@
                     break;
             }
         }
-
+        
         /**
          * 致命错误捕获
          */
@@ -250,7 +251,7 @@
                 }
             }
         }
-
+        
         /**
          * 错误输出
          * @param mixed $error 错误
@@ -290,7 +291,7 @@
             include $exceptionFile;
             exit;
         }
-
+        
         /**
          * 添加和获取页面Trace记录
          * @param string  $value  变量
@@ -308,7 +309,7 @@
             } else {
                 $info = ($label ? $label . ':' : '') . print_r($value, true);
                 $level = strtoupper($level);
-
+                
                 if ((defined('IS_AJAX') && IS_AJAX) || !C('SHOW_PAGE_TRACE') || $record) {
                     Log::record($info, $level, $record);
                 } else {
