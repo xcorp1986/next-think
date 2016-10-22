@@ -1,6 +1,7 @@
 {
   "name": "cheukpang/next-think",
   "description": "ThinkPHP refactor base on v3.2.3",
+  "type": "library",
   "keywords": [
     "ThinkPHP",
     "refactor",
