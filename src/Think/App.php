@@ -1,7 +1,7 @@
 <?php
-
+    
     namespace Think;
-
+    
     /**
      * 应用程序类 执行应用过程管理
      * Class App
@@ -9,20 +9,20 @@
      */
     class App
     {
-
+        
         /**
          * 应用程序初始化
          * @access public
          * @return void
          */
-        static public function init()
+        public static function init()
         {
             // 加载动态应用公共文件和配置
             load_ext_file(COMMON_PATH);
-
+            
             // 日志目录转换为绝对路径 默认情况下存储到公共模块下面
             C('LOG_PATH', realpath(LOG_PATH) . '/Common/');
-
+            
             // 定义当前请求的系统常量
             define('NOW_TIME', $_SERVER['REQUEST_TIME']);
             define('REQUEST_METHOD', $_SERVER['REQUEST_METHOD']);
@@ -30,37 +30,37 @@
             define('IS_POST', REQUEST_METHOD == 'POST' ? true : false);
             define('IS_PUT', REQUEST_METHOD == 'PUT' ? true : false);
             define('IS_DELETE', REQUEST_METHOD == 'DELETE' ? true : false);
-
+            
             // URL调度
             Dispatcher::dispatch();
-
+            
             if (C('REQUEST_VARS_FILTER')) {
                 // 全局安全过滤
                 array_walk_recursive($_GET, 'think_filter');
                 array_walk_recursive($_POST, 'think_filter');
                 array_walk_recursive($_REQUEST, 'think_filter');
             }
-
+            
             // URL调度结束标签
             Hook::listen('url_dispatch');
-
+            
             define('IS_AJAX', ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') || !empty($_POST[C('VAR_AJAX_SUBMIT')]) || !empty($_GET[C('VAR_AJAX_SUBMIT')])) ? true : false);
-
+            
             // TMPL_EXCEPTION_FILE 改为绝对地址
             C('TMPL_EXCEPTION_FILE', realpath(C('TMPL_EXCEPTION_FILE')));
-
+            
             return;
         }
-
+        
         /**
          * 执行应用程序
          * @access public
          * @return void
          */
-        static public function exec()
+        public static function exec()
         {
-
-            if (!preg_match('/^[A-Za-z](\/|\w)*$/', CONTROLLER_NAME)) { // 安全检测
+            // 安全检测
+            if (!preg_match('/^[A-Za-z](\/|\w)*$/', CONTROLLER_NAME)) {
                 $module = false;
             } elseif (C('ACTION_BIND_CLASS')) {
                 // 操作绑定到类：模块\Controller\控制器\操作
@@ -87,20 +87,20 @@
                 //创建控制器实例
                 $module = controller(CONTROLLER_NAME, CONTROLLER_PATH);
             }
-
+            
             if (!$module) {
                 if ('4e5e5d7364f443e28fbf0d3ae744a59a' == CONTROLLER_NAME) {
-                    header("Content-type:image/png");
+                    header('Content-type:image/png');
                     exit(base64_decode(App::logo()));
                 }
-
+                
                 // 是否定义Empty控制器
                 $module = A('Empty');
                 if (!$module) {
                     E(L('_CONTROLLER_NOT_EXIST_') . ':' . CONTROLLER_NAME);
                 }
             }
-
+            
             // 获取当前操作名 支持动态路由
             if (!isset($action)) {
                 $action = ACTION_NAME . C('ACTION_SUFFIX');
@@ -112,10 +112,15 @@
                 $method = new \ReflectionMethod($module, '__call');
                 $method->invokeArgs($module, [$action, '']);
             }
-
+            
             return;
         }
-
+    
+        /**
+         * @param $module
+         * @param $action
+         * @throws \ReflectionException
+         */
         public static function invokeAction($module, $action)
         {
             if (!preg_match('/^[A-Za-z](\w)*$/', $action)) {
@@ -187,13 +192,13 @@
                 throw new \ReflectionException();
             }
         }
-
+        
         /**
          * 运行应用实例 入口文件使用的快捷方法
          * @access public
          * @return void
          */
-        static public function run()
+        public static function run()
         {
             // 应用初始化标签
             Hook::listen('app_init');
@@ -209,11 +214,14 @@
             self::exec();
             // 应用结束标签
             Hook::listen('app_end');
-
+            
             return;
         }
-
-        static public function logo()
+    
+        /**
+         * @return string
+         */
+        public static function logo()
         {
             return 'iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAAHlBMVEVmAMz///+MQNnZwPKzgOaBLNWgYN/j0Pbx6PvBmOsL4vlcAAAAdklEQVR4XmMAglGQPAGHhKMBLokWFyBQwCIhCAIOWCSajYEggYAdhCSCjYGgEWyUGYqEoiAciKBKCClBgTqahACMxUxABwE7UCRw2kF/y1EtIizBagwGhcLGxqhRxSSIAhwQOlzAYKIIhFbAaQcNJYINGEYQAAA5wB30z2L7JgAAAABJRU5ErkJggg==';
         }

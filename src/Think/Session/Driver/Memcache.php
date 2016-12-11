@@ -1,7 +1,9 @@
 <?php
     namespace Think\Session\Driver;
 
-    class Memcache
+    use SessionHandlerInterface;
+
+    class Memcache implements SessionHandlerInterface
     {
         protected $lifeTime = 3600;
         protected $sessionName = '';

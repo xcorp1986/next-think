@@ -1,10 +1,10 @@
 <?php
-
-
+    
+    
     namespace Org\Util;
-
+    
     use Think\Db;
-
+    
     /**
      * 基于角色的数据库方式验证类
      *
@@ -74,50 +74,59 @@
          * @param string $model
          * @return mixed
          */
-        static public function authenticate($map, $model = '')
+        public static function authenticate($map, $model = '')
         {
-            if (empty($model)) $model = C('USER_AUTH_MODEL');
-
+            if (empty($model)) {
+                $model = C('USER_AUTH_MODEL');
+            }
+            
             //使用给定的Map进行认证
             return M($model)->where($map)->find();
         }
-
+        
         /**
          * 用于检测用户权限的方法,并保存到Session中
          * @param null $authId
          */
-        static function saveAccessList($authId = null)
+        public static function saveAccessList($authId = null)
         {
-            if (null === $authId) $authId = $_SESSION[C('USER_AUTH_KEY')];
+            if (null === $authId) {
+                $authId = $_SESSION[C('USER_AUTH_KEY')];
+            }
             // 如果使用普通权限模式，保存当前用户的访问权限列表
             // 对管理员开发所有权限
-            if (C('USER_AUTH_TYPE') != 2 && !$_SESSION[C('ADMIN_AUTH_KEY')])
+            if (C('USER_AUTH_TYPE') != 2 && !$_SESSION[C('ADMIN_AUTH_KEY')]) {
                 $_SESSION['_ACCESS_LIST'] = self::getAccessList($authId);
-
+            }
+            
             return;
         }
-
+        
         /**
          * 取得模块的所属记录访问权限列表 返回有权限的记录ID数组
          * @param null   $authId
          * @param string $module
          * @return array
          */
-        static function getRecordAccessList($authId = null, $module = '')
+        public static function getRecordAccessList($authId = null, $module = '')
         {
-            if (null === $authId) $authId = $_SESSION[C('USER_AUTH_KEY')];
-            if (empty($module)) $module = CONTROLLER_NAME;
+            if (null === $authId) {
+                $authId = $_SESSION[C('USER_AUTH_KEY')];
+            }
+            if (empty($module)) {
+                $module = CONTROLLER_NAME;
+            }
             //获取权限访问列表
             $accessList = self::getModuleAccessList($authId, $module);
-
+            
             return $accessList;
         }
-
+        
         /**
          * 检查当前操作是否需要认证
          * @return bool
          */
-        static function checkAccess()
+        public static function checkAccess()
         {
             //如果项目要求认证，并且当前模块需要认证，则进行权限认证
             if (C('USER_AUTH_ON')) {
@@ -149,15 +158,15 @@
                     return false;
                 }
             }
-
+            
             return false;
         }
-
+        
         /**
          * 登录检查
          * @return bool
          */
-        static public function checkLogin()
+        public static function checkLogin()
         {
             //检查当前操作是否需要认证
             if (self::checkAccess()) {
@@ -174,16 +183,16 @@
                     }
                 }
             }
-
+            
             return true;
         }
-
+        
         /**
          * 权限认证的过滤器方法
          * @param mixed|string $appName
          * @return bool
          */
-        static public function AccessDecision($appName = MODULE_NAME)
+        public static function AccessDecision($appName = MODULE_NAME)
         {
             //检查是否需要认证
             if (self::checkAccess()) {
@@ -205,7 +214,7 @@
                     //判断是否为组件化模式，如果是，验证其全模块名
                     if (!isset($accessList[strtoupper($appName)][strtoupper(CONTROLLER_NAME)][strtoupper(ACTION_NAME)])) {
                         $_SESSION[$accessGuid] = false;
-
+                        
                         return false;
                     } else {
                         $_SESSION[$accessGuid] = true;
@@ -215,16 +224,16 @@
                     return true;
                 }
             }
-
+            
             return true;
         }
-
+        
         /**
          * 取得当前认证号的所有权限列表
          * @param int $authId 用户ID
          * @access public
          */
-        static public function getAccessList($authId)
+        public static function getAccessList($authId)
         {
             // Db方式权限数据
             $db = Db::getInstance(C('RBAC_DB_DSN'));
@@ -289,17 +298,17 @@
                     $access[strtoupper($appName)][strtoupper($moduleName)] = array_change_key_case($action, CASE_UPPER);
                 }
             }
-
+            
             return $access;
         }
-
+        
         /**
          * 读取模块所属的记录访问权限
          * @param $authId
          * @param $module
          * @return array
          */
-        static public function getModuleAccessList($authId, $module)
+        public static function getModuleAccessList($authId, $module)
         {
             // Db方式
             $db = Db::getInstance(C('RBAC_DB_DSN'));
@@ -314,7 +323,7 @@
             foreach ($rs as $node) {
                 $access[] = $node['node_id'];
             }
-
+            
             return $access;
         }
     }

@@ -1,10 +1,10 @@
 <?php
-
-
+    
+    
     namespace Think\Upload\Driver;
-
+    
     use Think\Upload\Driver\Qiniu\QiniuStorage;
-
+    
     class Qiniu
     {
         /**
@@ -12,13 +12,13 @@
          * @var string
          */
         private $rootPath;
-
+        
         /**
          * 上传错误信息
          * @var string
          */
         private $error = '';
-
+        
         private $config = [
             'secretKey' => '', //七牛服务器
             'accessKey' => '', //七牛用户
@@ -26,7 +26,7 @@
             'bucket'    => '', //空间名称
             'timeout'   => 300, //超时时间
         ];
-
+        
         /**
          * 构造函数，用于设置上传根路径
          * @param array $config FTP配置
@@ -37,7 +37,7 @@
             /* 设置根目录 */
             $this->qiniu = new QiniuStorage($config);
         }
-
+        
         /**
          * 检测上传根目录(七牛上传时支持自动创建目录，直接返回)
          * @param string $rootpath 根目录
@@ -46,10 +46,10 @@
         public function checkRootPath($rootpath)
         {
             $this->rootPath = trim($rootpath, './') . '/';
-
+            
             return true;
         }
-
+        
         /**
          * 检测上传目录(七牛上传时支持自动创建目录，直接返回)
          * @param  string $savepath 上传目录
@@ -59,7 +59,7 @@
         {
             return true;
         }
-
+        
         /**
          * 创建文件夹 (七牛上传时支持自动创建目录，直接返回)
          * @param  string $savepath 目录名称
@@ -69,11 +69,11 @@
         {
             return true;
         }
-
+        
         /**
          * 保存指定文件
-         * @param  array   $file    保存的文件信息
-         * @param  boolean $replace 同名文件是否覆盖
+         * @param  array $file    保存的文件信息
+         * @param  bool  $replace 同名文件是否覆盖
          * @return bool          保存状态，true-成功，false-失败
          */
         public function save(&$file, $replace = true)
@@ -89,10 +89,10 @@
             $result = $this->qiniu->upload($config, $upfile);
             $url = $this->qiniu->downlink($key);
             $file['url'] = $url;
-
+            
             return false === $result ? false : true;
         }
-
+        
         /**
          * 获取最后一次上传错误信息
          * @return string 错误信息

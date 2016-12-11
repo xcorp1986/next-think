@@ -1,6 +1,6 @@
 <?php
-
-
+    
+    
     namespace Org\Net;
     /**
      * Http 工具类
@@ -8,25 +8,25 @@
      */
     class Http
     {
-
+        
         /**
          * 采集远程文件
          * @access public
          * @param string $remote 远程文件名
          * @param string $local  本地保存文件名
-         * @return mixed
+         * @return void
          */
-        static public function curlDownload($remote, $local)
+        public static function curlDownload($remote, $local)
         {
             $cp = curl_init($remote);
-            $fp = fopen($local, "w");
+            $fp = fopen($local, 'w');
             curl_setopt($cp, CURLOPT_FILE, $fp);
             curl_setopt($cp, CURLOPT_HEADER, 0);
             curl_exec($cp);
             curl_close($cp);
             fclose($fp);
         }
-
+        
         /**
          * 使用 fsockopen 通过 HTTP 协议直接访问(采集)远程文件
          * 如果主机或服务器没有开启 CURL 扩展可考虑使用
@@ -43,11 +43,13 @@
          *                     bool   block 是否阻塞访问,默认为true
          * @return mixed
          */
-        static public function fsockopenDownload($url, $conf = [])
+        public static function fsockopenDownload($url, array $conf = [])
         {
             $return = '';
-            if (!is_array($conf)) return $return;
-
+            if (!is_array($conf)) {
+                return $return;
+            }
+            
             $matches = parse_url($url);
             !isset($matches['host']) && $matches['host'] = '';
             !isset($matches['path']) && $matches['path'] = '';
@@ -56,7 +58,7 @@
             $host = $matches['host'];
             $path = $matches['path'] ? $matches['path'] . ($matches['query'] ? '?' . $matches['query'] : '') : '/';
             $port = !empty($matches['port']) ? $matches['port'] : 80;
-
+            
             $conf_arr = [
                 'limit'   => 0,
                 'post'    => '',
@@ -65,9 +67,11 @@
                 'timeout' => 15,
                 'block'   => true,
             ];
-
-            foreach (array_merge($conf_arr, $conf) as $k => $v) ${$k} = $v;
-
+            
+            foreach (array_merge($conf_arr, $conf) as $k => $v) {
+                ${$k} = $v;
+            }
+            
             if ($post) {
                 if (is_array($post)) {
                     $post = http_build_query($post);
@@ -108,7 +112,7 @@
                             break;
                         }
                     }
-
+                    
                     $stop = false;
                     while (!feof($fp) && !$stop) {
                         $data = fread($fp, ($limit == 0 || $limit > 8192 ? 8192 : $limit));
@@ -120,11 +124,11 @@
                     }
                 }
                 @fclose($fp);
-
+                
                 return $return;
             }
         }
-
+        
         /**
          * 下载文件
          * 可以指定下载显示的文件名，并自动发送相应的Header信息
@@ -137,7 +141,7 @@
          * @param int    $expire   下载内容浏览器缓存时间
          * @return void
          */
-        static public function download($filename, $showname = '', $content = '', $expire = 180)
+        public static function download($filename, $showname = '', $content = '', $expire = 180)
         {
             if (is_file($filename)) {
                 $length = filesize($filename);
@@ -157,63 +161,65 @@
                 $finfo = new \finfo(FILEINFO_MIME);
                 $type = $finfo->file($filename);
             } else {
-                $type = "application/octet-stream";
+                $type = 'application/octet-stream';
             }
             //发送Http Header信息 开始下载
-            header("Pragma: public");
-            header("Cache-control: max-age=" . $expire);
+            header('Pragma: public');
+            header('Cache-control: max-age=' . $expire);
             //header('Cache-Control: no-store, no-cache, must-revalidate');
-            header("Expires: " . gmdate("D, d M Y H:i:s", time() + $expire) . "GMT");
-            header("Last-Modified: " . gmdate("D, d M Y H:i:s", time()) . "GMT");
-            header("Content-Disposition: attachment; filename=" . $showname);
-            header("Content-Length: " . $length);
-            header("Content-type: " . $type);
-            header('Content-Encoding: none');
-            header("Content-Transfer-Encoding: binary");
+            header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expire) . 'GMT');
+            header('Last-Modified: ' . gmdate('D, d M Y H:i:s', time()) . 'GMT');
+            header('Content-Disposition: attachment; filename=' . $showname);
+            header('Content-Length: ' . $length);
+            header('Content-type: ' . $type);
+            header("Content-Encoding: none");
+            header('Content-Transfer-Encoding: binary');
             if ($content == '') {
                 readfile($filename);
             } else {
-                echo($content);
+                echo $content;
             }
             exit();
         }
-
+        
         /**
          * 显示HTTP Header 信息
+         * @param string $header
+         * @param bool   $echo
          * @return string
          */
-        static function getHeaderInfo($header = '', $echo = true)
+        public static function getHeaderInfo($header = '', $echo = true)
         {
             ob_start();
             $headers = getallheaders();
             if (!empty($header)) {
                 $info = $headers[$header];
-                echo($header . ':' . $info . "\n");;
+                echo $header . ':' . $info . "\n";
             } else {
                 foreach ($headers as $key => $val) {
-                    echo("$key:$val\n");
+                    echo "$key:$val\n";
                 }
             }
             $output = ob_get_clean();
             if ($echo) {
-                echo(nl2br($output));
+                echo nl2br($output);
             } else {
                 return $output;
             }
-
+            
         }
-
+        
         /**
          * HTTP Protocol defined status codes
-         * @param int $num
+         * @param $code
          */
-        static function sendHttpStatus($code)
+        public static function sendHttpStatus($code)
         {
             static $_status = [
                 // Informational 1xx
                 100 => 'Continue',
                 101 => 'Switching Protocols',
-
+                
                 // Success 2xx
                 200 => 'OK',
                 201 => 'Created',
@@ -222,7 +228,7 @@
                 204 => 'No Content',
                 205 => 'Reset Content',
                 206 => 'Partial Content',
-
+                
                 // Redirection 3xx
                 300 => 'Multiple Choices',
                 301 => 'Moved Permanently',
@@ -232,7 +238,7 @@
                 305 => 'Use Proxy',
                 // 306 is deprecated but reserved
                 307 => 'Temporary Redirect',
-
+                
                 // Client Error 4xx
                 400 => 'Bad Request',
                 401 => 'Unauthorized',
@@ -252,7 +258,7 @@
                 415 => 'Unsupported Media Type',
                 416 => 'Requested Range Not Satisfiable',
                 417 => 'Expectation Failed',
-
+                
                 // Server Error 5xx
                 500 => 'Internal Server Error',
                 501 => 'Not Implemented',
@@ -266,4 +272,4 @@
                 header('HTTP/1.1 ' . $code . ' ' . $_status[$code]);
             }
         }
-    }//类定义结束
+    }

@@ -16,7 +16,7 @@
          * @param array $options 缓存参数
          * @access public
          */
-        function __construct($options = [])
+        function __construct(array $options = [])
         {
             if (!extension_loaded('memcache')) {
                 E(L('_NOT_SUPPORT_') . ':memcache');
@@ -79,11 +79,12 @@
 
             return false;
         }
-
+    
         /**
          * 删除缓存
          * @access public
          * @param string $name 缓存变量名
+         * @param bool   $ttl
          * @return bool
          */
         public function rm($name, $ttl = false)

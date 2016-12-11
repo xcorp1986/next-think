@@ -16,7 +16,7 @@
          * @param array $options 缓存参数
          * @access public
          */
-        public function __construct($options = [])
+        public function __construct(array $options = [])
         {
             if (!empty($options)) {
                 $this->options = $options;

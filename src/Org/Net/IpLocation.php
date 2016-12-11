@@ -1,6 +1,6 @@
 <?php
-
-
+    
+    
     namespace Org\Net;
     /**
      *  IP 地理位置查询类 修改自 CoolCode.CN
@@ -14,35 +14,34 @@
          * @var resource
          */
         private $fp;
-
+        
         /**
          * 第一条IP记录的偏移地址
          *
          * @var int
          */
         private $firstip;
-
+        
         /**
          * 最后一条IP记录的偏移地址
          *
          * @var int
          */
         private $lastip;
-
+        
         /**
          * IP记录的总条数（不包含版本信息记录）
          *
          * @var int
          */
         private $totalip;
-
+        
         /**
          * 构造函数，打开 QQWry.Dat 文件并初始化类中的信息
          *
          * @param string $filename
-         * @return IpLocation
          */
-        public function __construct($filename = "UTFWry.dat")
+        public function __construct($filename = 'UTFWry.dat')
         {
             $this->fp = 0;
             if (($this->fp = fopen(dirname(__FILE__) . '/' . $filename, 'rb')) !== false) {
@@ -51,7 +50,7 @@
                 $this->totalip = ($this->lastip - $this->firstip) / 7;
             }
         }
-
+        
         /**
          * 返回读取的长整型数
          *
@@ -62,10 +61,10 @@
         {
             //将读取的little-endian编码的4个字节转化为长整型数
             $result = unpack('Vlong', fread($this->fp, 4));
-
+            
             return $result['long'];
         }
-
+        
         /**
          * 返回读取的3个字节的长整型数
          *
@@ -76,10 +75,10 @@
         {
             //将读取的little-endian编码的3个字节转化为长整型数
             $result = unpack('Vlong', fread($this->fp, 3) . chr(0));
-
+            
             return $result['long'];
         }
-
+        
         /**
          * 返回压缩后可进行比较的IP地址
          *
@@ -93,7 +92,7 @@
             // 这时intval将Flase转化为整数-1，之后压缩成big-endian编码的字符串
             return pack('N', intval(ip2long($ip)));
         }
-
+        
         /**
          * 返回读取的字符串
          *
@@ -101,17 +100,19 @@
          * @param string $data
          * @return string
          */
-        private function getstring($data = "")
+        private function getstring($data = '')
         {
             $char = fread($this->fp, 1);
-            while (ord($char) > 0) {        // 字符串按照C格式保存，以\0结束
-                $data .= $char;             // 将读取的字符连接到给定字符串之后
+            // 字符串按照C格式保存，以\0结束
+            while (ord($char) > 0) {
+                // 将读取的字符连接到给定字符串之后
+                $data .= $char;
                 $char = fread($this->fp, 1);
             }
-
+            
             return $data;
         }
-
+        
         /**
          * 返回地区信息
          *
@@ -120,24 +121,28 @@
          */
         private function getarea()
         {
-            $byte = fread($this->fp, 1);    // 标志字节
+            // 标志字节
+            $byte = fread($this->fp, 1);
             switch (ord($byte)) {
-                case 0:                     // 没有区域信息
-                    $area = "";
+                // 没有区域信息
+                case 0:
+                    $area = '';
                     break;
                 case 1:
-                case 2:                     // 标志字节为1或2，表示区域信息被重定向
+                    // 标志字节为1或2，表示区域信息被重定向
+                case 2:
                     fseek($this->fp, $this->getlong3());
                     $area = $this->getstring();
                     break;
-                default:                    // 否则，表示区域信息没有被重定向
+                // 否则，表示区域信息没有被重定向
+                default:
                     $area = $this->getstring($byte);
                     break;
             }
-
+            
             return $area;
         }
-
+        
         /**
          * 根据所给 IP 地址或域名返回所在地区信息
          *
@@ -147,10 +152,17 @@
          */
         public function getlocation($ip = '')
         {
-            if (!$this->fp) return null;            // 如果数据文件没有被正确打开，则直接返回空
-            if (empty($ip)) $ip = get_client_ip();
-            $location['ip'] = gethostbyname($ip);   // 将输入的域名转化为IP地址
-            $ip = $this->packip($location['ip']);   // 将输入的IP地址转化为可比较的IP地址
+            // 如果数据文件没有被正确打开，则直接返回空
+            if (!$this->fp) {
+                return null;
+            }
+            if (empty($ip)) {
+                $ip = get_client_ip();
+            }
+            // 将输入的域名转化为IP地址
+            $location['ip'] = gethostbyname($ip);
+            // 将输入的IP地址转化为可比较的IP地址
+            $ip = $this->packip($location['ip']);
             // 不合法的IP地址会被转化为255.255.255.255
             // 对分搜索
             $l = 0;                         // 搜索的下边界
@@ -175,7 +187,7 @@
                     }
                 }
             }
-
+            
             //获取查找到的IP地理位置信息
             fseek($this->fp, $findip);
             $location['beginip'] = long2ip($this->getlong());   // 用户IP所在范围的开始地址
@@ -212,19 +224,19 @@
                     $location['area'] = $this->getarea();
                     break;
             }
-            if (trim($location['country']) == 'CZ88.NET') {  // CZ88.NET表示没有有效信息
+            // CZ88.NET表示没有有效信息
+            if (trim($location['country']) == 'CZ88.NET') {
                 $location['country'] = '未知';
             }
             if (trim($location['area']) == 'CZ88.NET') {
                 $location['area'] = '';
             }
-
+            
             return $location;
         }
-
+        
         /**
          * 析构函数，用于在页面执行结束后自动关闭打开的文件。
-         *
          */
         public function __destruct()
         {
@@ -233,5 +245,5 @@
             }
             $this->fp = 0;
         }
-
+        
     }

@@ -1,7 +1,7 @@
 <?php
-
+    
     namespace Think;
-
+    
     /**
      * 数据库中间层实现类
      * Class Db
@@ -9,10 +9,18 @@
      */
     class Db
     {
-
-        static private $instance = [];     //  数据库连接实例
-        static private $_instance = null;   //  当前数据库连接实例
-
+        /**
+         * 数据库连接实例
+         * @var array $instance
+         */
+        private static $instance = [];
+        
+        /**
+         * 当前数据库连接实例
+         * @var null $_instance
+         */
+        private static $_instance = null;
+        
         /**
          * 取得数据库类实例
          * @static
@@ -20,7 +28,7 @@
          * @param mixed $config 连接配置
          * @return \Think\Db\Driver 返回数据库驱动类
          */
-        static public function getInstance($config = [])
+        public static function getInstance($config = [])
         {
             $md5 = md5(serialize($config));
             if (!isset(self::$instance[$md5])) {
@@ -39,10 +47,10 @@
                 }
             }
             self::$_instance = self::$instance[$md5];
-
+            
             return self::$_instance;
         }
-
+        
         /**
          * 数据库连接参数解析
          * @static
@@ -50,7 +58,7 @@
          * @param mixed $config
          * @return array
          */
-        static private function parseConfig($config)
+        private static function parseConfig($config)
         {
             if (!empty($config)) {
                 if (is_string($config)) {
@@ -93,10 +101,10 @@
                     'lite'        => C('DB_LITE'),
                 ];
             }
-
+            
             return $config;
         }
-
+        
         /**
          * DSN解析
          * 格式： mysql://username:passwd@localhost:3306/DbName?param1=val1&param2=val2#utf8
@@ -105,7 +113,7 @@
          * @param string $dsnStr
          * @return array|bool
          */
-        static private function parseDsn($dsnStr)
+        private static function parseDsn($dsnStr)
         {
             if (empty($dsnStr)) {
                 return false;
@@ -123,23 +131,23 @@
                 'database' => isset($info['path']) ? substr($info['path'], 1) : '',
                 'charset'  => isset($info['fragment']) ? $info['fragment'] : 'utf8',
             ];
-
+            
             if (isset($info['query'])) {
                 parse_str($info['query'], $dsn['params']);
             } else {
                 $dsn['params'] = [];
             }
-
+            
             return $dsn;
         }
-
+        
         /**
          * 静态调用驱动类的方法
          * @param $method
          * @param $params
          * @return mixed
          */
-        static public function __callStatic($method, $params)
+        public static function __callStatic($method, $params)
         {
             return call_user_func_array([self::$_instance, $method], $params);
         }

@@ -1,10 +1,10 @@
 <?php
-
-
+    
+    
     namespace Think\Template\TagLib;
-
+    
     use Think\Template\TagLib;
-
+    
     /**
      * Html标签库驱动
      */
@@ -21,15 +21,16 @@
             'checkbox' => ['attr' => 'name,checkboxes,checked,separator', 'close' => 0],
             'radio'    => ['attr' => 'name,radios,checked,separator', 'close' => 0],
         ];
-
+        
         /**
          * editor标签解析 插入可视化编辑器
          * 格式： <html:editor id="editor" name="remark" type="FCKeditor" style="" >{$vo.remark}</html:editor>
          * @access public
-         * @param array $tag 标签属性
-         * @return string|void
+         * @param array    $tag 标签属性
+         * @param   string $content
+         * @return string
          */
-        public function _editor($tag, $content)
+        public function _editor(array $tag = [], $content = '')
         {
             $id = !empty($tag['id']) ? $tag['id'] : '_editor';
             $name = $tag['name'];
@@ -46,7 +47,7 @@
                     $parseStr = '<!-- 编辑器调用开始 --><script src="__ROOT__/Public/Js/FCKMini/fckeditor.js"></script><textarea id="' . $id . '" name="' . $name . '">' . $content . '</textarea><script> var oFCKeditor = new FCKeditor( "' . $id . '","' . $width . '","' . $height . '" ) ; oFCKeditor.BasePath = "__ROOT__/Public/Js/FCKMini/" ; oFCKeditor.ReplaceTextarea() ;function resetEditor(){setContents("' . $id . '",document.getElementById("' . $id . '").value)}; function saveEditor(){document.getElementById("' . $id . '").value = getContents("' . $id . '");} function InsertHTML(html){ var oEditor = FCKeditorAPI.GetInstance("' . $id . '") ;if (oEditor.EditMode == FCK_EDITMODE_WYSIWYG ){oEditor.InsertHtml(html) ;}else	alert( "FCK必须处于WYSIWYG模式!" ) ;}</script> <!-- 编辑器调用结束 -->';
                     break;
                 case 'EWEBEDITOR':
-                    $parseStr = "<!-- 编辑器调用开始 --><script src='__ROOT__/Public/Js/eWebEditor/js/edit.js'></script><input type='hidden'  id='{$id}' name='{$name}'  value='{$conent}'><iframe src='__ROOT__/Public/Js/eWebEditor/ewebeditor.htm?id={$name}' frameborder=0 scrolling=no width='{$width}' height='{$height}'></iframe><script type='text/javascript'>function saveEditor(){document.getElementById('{$id}').value = getHTML();} </script><!-- 编辑器调用结束 -->";
+                    $parseStr = "<!-- 编辑器调用开始 --><script src='__ROOT__/Public/Js/eWebEditor/js/edit.js'></script><input type='hidden'  id='{$id}' name='{$name}'  value='{$content}'><iframe src='__ROOT__/Public/Js/eWebEditor/ewebeditor.htm?id={$name}' frameborder=0 scrolling=no width='{$width}' height='{$height}'></iframe><script type='text/javascript'>function saveEditor(){document.getElementById('{$id}').value = getHTML();} </script><!-- 编辑器调用结束 -->";
                     break;
                 case 'NETEASE':
                     $parseStr = '<!-- 编辑器调用开始 --><textarea id="' . $id . '" name="' . $name . '" style="display:none">' . $content . '</textarea><iframe ID="Editor" name="Editor" src="__ROOT__/Public/Js/HtmlEditor/index.html?ID=' . $name . '" frameBorder="0" marginHeight="0" marginWidth="0" scrolling="No" style="height:' . $height . ';width:' . $width . '"></iframe><!-- 编辑器调用结束 -->';
@@ -60,18 +61,18 @@
                 default :
                     $parseStr = '<textarea id="' . $id . '" style="' . $style . '" name="' . $name . '" >' . $content . '</textarea>';
             }
-
+            
             return $parseStr;
         }
-
+        
         /**
          * imageBtn标签解析
          * 格式： <html:imageBtn type="" value="" />
          * @access public
          * @param array $tag 标签属性
-         * @return string|void
+         * @return string
          */
-        public function _imageBtn($tag)
+        public function _imageBtn(array $tag = [])
         {
             //input name
             $name = $tag['name'];
@@ -85,24 +86,24 @@
             $click = isset($tag['click']) ? $tag['click'] : '';
             //input type
             $type = empty($tag['type']) ? 'button' : $tag['type'];
-
+            
             if (!empty($name)) {
                 $parseStr = '<div class="' . $style . '" ><input type="' . $type . '" id="' . $id . '" name="' . $name . '" value="' . $value . '" onclick="' . $click . '" class="' . $name . ' imgButton"></div>';
             } else {
                 $parseStr = '<div class="' . $style . '" ><input type="' . $type . '" id="' . $id . '"  name="' . $name . '" value="' . $value . '" onclick="' . $click . '" class="button"></div>';
             }
-
+            
             return $parseStr;
         }
-
+        
         /**
          * imageLink标签解析
          * 格式： <html:imageLink type="" value="" />
          * @access public
          * @param array $tag 标签属性
-         * @return string|void
+         * @return string
          */
-        public function _imgLink($tag)
+        public function _imgLink(array $tag = [])
         {
             //input name
             $name = $tag['name'];
@@ -119,19 +120,18 @@
             if (empty($type)) {
                 $type = 'button';
             }
-            $parseStr = '<span class="' . $style . '" ><input title="' . $alt . '" type="' . $type . '" id="' . $id . '"  name="' . $name . '" onmouseover="this.style.filter=\'alpha(opacity=100)\'" onmouseout="this.style.filter=\'alpha(opacity=80)\'" onclick="' . $click . '" align="absmiddle" class="' . $name . ' imgLink"></span>';
-
-            return $parseStr;
+            
+            return '<span class="' . $style . '" ><input title="' . $alt . '" type="' . $type . '" id="' . $id . '"  name="' . $name . '" onmouseover="this.style.filter=\'alpha(opacity=100)\'" onmouseout="this.style.filter=\'alpha(opacity=80)\'" onclick="' . $click . '" align="absmiddle" class="' . $name . ' imgLink"></span>';
         }
-
+        
         /**
          * select标签解析
          * 格式： <html:select options="name" selected="value" />
          * @access public
          * @param array $tag 标签属性
-         * @return string|void
+         * @return string
          */
-        public function _select($tag)
+        public function _select(array $tag = [])
         {
             $name = $tag['name'];
             $options = $tag['options'];
@@ -145,7 +145,7 @@
             $style = $tag['style'];
             $ondblclick = $tag['dblclick'];
             $onchange = $tag['change'];
-
+            
             if (!empty($multiple)) {
                 $parseStr = '<select id="' . $id . '" name="' . $name . '" ondblclick="' . $ondblclick . '" onchange="' . $onchange . '" multiple="multiple" class="' . $style . '" size="' . $size . '" >';
             } else {
@@ -178,18 +178,18 @@
                 $parseStr .= '<?php } ?>';
             }
             $parseStr .= '</select>';
-
+            
             return $parseStr;
         }
-
+        
         /**
          * checkbox标签解析
          * 格式： <html:checkbox checkboxes="" checked="" />
          * @access public
          * @param array $tag 标签属性
-         * @return string|void
+         * @return string
          */
-        public function _checkbox($tag)
+        public function _checkbox(array $tag = [])
         {
             $name = $tag['name'];
             $checkboxes = $tag['checkboxes'];
@@ -205,18 +205,18 @@
                     $parseStr .= '<input type="checkbox" name="' . $name . '[]" value="' . $key . '">' . $val . $separator;
                 }
             }
-
+            
             return $parseStr;
         }
-
+        
         /**
          * radio标签解析
          * 格式： <html:radio radios="name" checked="value" />
          * @access public
          * @param array $tag 标签属性
-         * @return string|void
+         * @return string
          */
-        public function _radio($tag)
+        public function _radio(array $tag = [])
         {
             $name = $tag['name'];
             $radios = $tag['radios'];
@@ -231,12 +231,12 @@
                 } else {
                     $parseStr .= '<input type="radio" name="' . $name . '[]" value="' . $key . '">' . $val . $separator;
                 }
-
+                
             }
-
+            
             return $parseStr;
         }
-
+        
         /**
          * list标签解析
          * 格式： <html:grid datasource="" show="vo" />
@@ -244,26 +244,34 @@
          * @param array $tag 标签属性
          * @return string
          */
-        public function _grid($tag)
+        public function _grid(array $tag = [])
         {
-            $id = $tag['id'];                       //表格ID
-            $datasource = $tag['datasource'];               //列表显示的数据源VoList名称
-            $pk = empty($tag['pk']) ? 'id' : $tag['pk'];//主键名，默认为id
-            $style = $tag['style'];                    //样式名
-            $name = !empty($tag['name']) ? $tag['name'] : 'vo';                 //Vo对象名
-            $action = !empty($tag['action']) ? $tag['action'] : false;                   //是否显示功能操作
+            //表格ID
+            $id = $tag['id'];
+            //列表显示的数据源VoList名称
+            $datasource = $tag['datasource'];
+            //主键名，默认为id
+            $pk = empty($tag['pk']) ? 'id' : $tag['pk'];
+            //样式名
+            $style = $tag['style'];
+            //Vo对象名
+            $name = !empty($tag['name']) ? $tag['name'] : 'vo';
+            //是否显示功能操作
+            $action = !empty($tag['action']) ? $tag['action'] : false;
             $key = !empty($tag['key']) ? true : false;
             if (isset($tag['actionlist'])) {
-                $actionlist = explode(',', trim($tag['actionlist']));    //指定功能列表
+                //指定功能列表
+                $actionlist = explode(',', trim($tag['actionlist']));
             }
-
+            
             if (substr($tag['show'], 0, 1) == '$') {
                 $show = $this->tpl->get(substr($tag['show'], 1));
             } else {
                 $show = $tag['show'];
             }
-            $show = explode(',', $show);                //列表显示字段列表
-
+            //列表显示字段列表
+            $show = explode(',', $show);
+            
             //计算表格的列数
             $colNum = count($show);
             if (!empty($action)) {
@@ -272,7 +280,7 @@
             if (!empty($key)) {
                 $colNum++;
             }
-
+            
             //显示开始
             $parseStr = "<!-- 系统列表组件开始 -->\n";
             $parseStr .= '<table id="' . $id . '" class="' . $style . '" cellpadding=0 cellspacing=0 >';
@@ -283,7 +291,7 @@
             foreach ($show as $val) {
                 $fields[] = explode(':', $val);
             }
-
+            
             if (!empty($key)) {
                 $parseStr .= '<th width="12">No</th>';
             }
@@ -304,7 +312,7 @@
             }
             $parseStr .= '</tr>';
             $parseStr .= '<volist name="' . $datasource . '" id="' . $name . '" ><tr class="row" >';    //支持鼠标移动单元行颜色变化 具体方法在js中定义
-
+            
             if (!empty($key)) {
                 $parseStr .= '<td>{$i}</td>';
             }
@@ -353,7 +361,7 @@
                     $parseStr .= '</a>';
                 }
                 $parseStr .= '</td>';
-
+                
             }
             //显示功能操作
             if (!empty($action)) {
@@ -382,10 +390,10 @@
             }
             $parseStr .= '</tr></volist><tr><td height="5" colspan="' . $colNum . '" class="bottomTd"></td></tr></table>';
             $parseStr .= "\n<!-- 系统列表组件结束 -->\n";
-
+            
             return $parseStr;
         }
-
+        
         /**
          * list标签解析
          * 格式： <html:list datasource="" show="" />
@@ -393,7 +401,7 @@
          * @param array $tag 标签属性
          * @return string
          */
-        public function _list($tag)
+        public function _list(array $tag = [])
         {
             //表格ID
             $id = $tag['id'];
@@ -420,7 +428,7 @@
                 //指定功能列表
                 $actionlist = explode(',', trim($actionlist));
             }
-
+            
             if (substr($tag['show'], 0, 1) == '$') {
                 $show = $this->tpl->get(substr($tag['show'], 1));
             } else {
@@ -428,7 +436,7 @@
             }
             //列表显示字段列表
             $show = explode(',', $show);
-
+            
             //计算表格的列数
             $colNum = count($show);
             if (!empty($checkbox)) {
@@ -440,7 +448,7 @@
             if (!empty($key)) {
                 $colNum++;
             }
-
+            
             //显示开始
             $parseStr = "<!-- 系统列表组件开始 -->\n";
             $parseStr .= '<table id="' . $id . '" class="' . $style . '" cellpadding=0 cellspacing=0 >';
@@ -451,7 +459,8 @@
             foreach ($show as $val) {
                 $fields[] = explode(':', $val);
             }
-            if (!empty($checkbox) && 'true' == strtolower($checkbox)) {//如果指定需要显示checkbox列
+            //如果指定需要显示checkbox列
+            if (!empty($checkbox) && 'true' == strtolower($checkbox)) {
                 $parseStr .= '<th width="8"><input type="checkbox" id="check" onclick="CheckAll(\'' . $id . '\')"></th>';
             }
             if (!empty($key)) {
@@ -472,13 +481,13 @@
                 } else {
                     $parseStr .= $showname[0] . '</th>';
                 }
-
+                
             }
             //如果指定显示操作功能列
             if (!empty($action)) {
                 $parseStr .= '<th >操作</th>';
             }
-
+            
             $parseStr .= '</tr>';
             //支持鼠标移动单元行颜色变化 具体方法在js中定义
             $parseStr .= '<volist name="' . $datasource . '" id="' . $name . '" ><tr class="row" ';
@@ -538,7 +547,7 @@
                     $parseStr .= '</a>';
                 }
                 $parseStr .= '</td>';
-
+                
             }
             //显示功能操作
             if (!empty($action)) {
@@ -567,7 +576,7 @@
             }
             $parseStr .= '</tr></volist><tr><td height="5" colspan="' . $colNum . '" class="bottomTd"></td></tr></table>';
             $parseStr .= "\n<!-- 系统列表组件结束 -->\n";
-
+            
             return $parseStr;
         }
     }

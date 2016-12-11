@@ -1,17 +1,17 @@
 <?php
-
-
+    
+    
     namespace Think\Db\Driver;
-
+    
     use Think\Db\Driver;
-
+    
     /**
      * Firebird数据库驱动
      */
     class Firebird extends Driver
     {
         protected $selectSql = 'SELECT %LIMIT% %DISTINCT% %FIELD% FROM %TABLE%%JOIN%%WHERE%%GROUP%%HAVING%%ORDER%';
-
+        
         /**
          * 解析pdo连接的dsn信息
          * @access public
@@ -20,16 +20,14 @@
          */
         protected function parseDsn($config)
         {
-            $dsn = 'firebird:dbname=' . $config['hostname'] . '/' . ($config['hostport'] ?: 3050) . ':' . $config['database'];
-
-            return $dsn;
+            return 'firebird:dbname=' . $config['hostname'] . '/' . ($config['hostport'] ?: 3050) . ':' . $config['database'];
         }
-
+        
         /**
          * 执行语句
          * @access public
          * @param string  $str      sql指令
-         * @param boolean $fetchSql 不执行只是获取SQL
+         * @param bool $fetchSql 不执行只是获取SQL
          * @return mixed
          */
         public function execute($str, $fetchSql = false)
@@ -72,15 +70,15 @@
             $this->debug(false);
             if (false === $result) {
                 $this->error();
-
+                
                 return false;
             } else {
                 $this->numRows = $this->PDOStatement->rowCount();
-
+                
                 return $this->numRows;
             }
         }
-
+        
         /**
          * 取得数据表的字段信息
          * @access public
@@ -93,7 +91,7 @@
             $result = $this->query($sql);
             $info = [];
             if ($result) {
-                foreach ($result as $key => $val) {
+                foreach ($result as $val) {
                     $info[trim($val['field'])] = [
                         'name'    => trim($val['field']),
                         'type'    => $val['type'],
@@ -110,10 +108,10 @@
             foreach ($rs_temp as $row) {
                 $info[trim($row['field_name'])]['primary'] = true;
             }
-
+            
             return $info;
         }
-
+        
         /**
          * 取得数据库的表信息
          * @access public
@@ -126,10 +124,10 @@
             foreach ($result as $key => $val) {
                 $info[$key] = trim(current($val));
             }
-
+            
             return $info;
         }
-
+        
         /**
          * SQL指令安全过滤
          * @access public
@@ -140,11 +138,11 @@
         {
             return str_replace("'", "''", $str);
         }
-
+        
         /**
          * limit
          * @access public
-         * @param $limit limit表达式
+         * @param string $limit limit表达式
          * @return string
          */
         public function parseLimit($limit)
@@ -158,7 +156,7 @@
                     $limitStr = ' FIRST ' . $limit[0] . ' ';
                 }
             }
-
+            
             return $limitStr;
         }
     }

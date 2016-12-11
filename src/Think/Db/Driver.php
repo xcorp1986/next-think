@@ -1,11 +1,11 @@
 <?php
-
-
+    
+    
     namespace Think\Db;
-
+    
     use PDO;
-
-
+    
+    
     /**
      * Class Driver
      * @package Think\Db
@@ -87,13 +87,13 @@
         ];
         // 参数绑定
         protected $bind = [];
-
+        
         /**
          * 读取数据库配置信息
          * @access public
          * @param array $config 数据库配置数组
          */
-        public function __construct($config = '')
+        public function __construct(array $config = [])
         {
             if (!empty($config)) {
                 $this->config = array_merge($this->config, $config);
@@ -102,7 +102,7 @@
                 }
             }
         }
-
+        
         /**
          * 连接数据库方法
          * @access public
@@ -127,17 +127,17 @@
                 } catch (\PDOException $e) {
                     if ($autoConnection) {
                         trace($e->getMessage(), '', 'ERR');
-
+                        
                         return $this->connect($autoConnection, $linkNum);
                     } elseif ($config['debug']) {
                         E($e->getMessage());
                     }
                 }
             }
-
+            
             return $this->linkID[$linkNum];
         }
-
+        
         /**
          * 解析pdo连接的dsn信息
          * @access public
@@ -147,7 +147,7 @@
         protected function parseDsn($config)
         {
         }
-
+        
         /**
          * 释放查询结果
          * @access public
@@ -156,12 +156,12 @@
         {
             $this->PDOStatement = null;
         }
-
+        
         /**
          * 执行查询 返回数据集
          * @access public
-         * @param string  $str      sql指令
-         * @param boolean $fetchSql 不执行只是获取SQL
+         * @param string $str      sql指令
+         * @param bool   $fetchSql 不执行只是获取SQL
          * @throws \PDOException
          * @return mixed
          */
@@ -193,7 +193,7 @@
             $this->PDOStatement = $this->_linkID->prepare($str);
             if (false === $this->PDOStatement) {
                 $this->error();
-
+                
                 return false;
             }
             foreach ($this->bind as $key => $val) {
@@ -210,23 +210,23 @@
                 $this->debug(false);
                 if (false === $result) {
                     $this->error();
-
+                    
                     return false;
                 } else {
                     return $this->getResult();
                 }
             } catch (\PDOException $e) {
                 $this->error();
-
+                
                 return false;
             }
         }
-
+        
         /**
          * 执行语句
          * @access public
-         * @param string  $str      sql指令
-         * @param boolean $fetchSql 不执行只是获取SQL
+         * @param string $str      sql指令
+         * @param bool   $fetchSql 不执行只是获取SQL
          * @throws \PDOException
          * @return mixed
          */
@@ -258,7 +258,7 @@
             $this->PDOStatement = $this->_linkID->prepare($str);
             if (false === $this->PDOStatement) {
                 $this->error();
-
+                
                 return false;
             }
             foreach ($this->bind as $key => $val) {
@@ -275,23 +275,23 @@
                 $this->debug(false);
                 if (false === $result) {
                     $this->error();
-
+                    
                     return false;
                 } else {
                     $this->numRows = $this->PDOStatement->rowCount();
                     if (preg_match("/^\s*(INSERT\s+INTO|REPLACE\s+INTO)\s+/i", $str)) {
                         $this->lastInsID = $this->_linkID->lastInsertId();
                     }
-
+                    
                     return $this->numRows;
                 }
             } catch (\PDOException $e) {
                 $this->error();
-
+                
                 return false;
             }
         }
-
+        
         /**
          * 启动事务
          * @access public
@@ -308,10 +308,10 @@
                 $this->_linkID->beginTransaction();
             }
             $this->transTimes++;
-
+            
             return;
         }
-
+        
         /**
          * 用于非自动提交状态下面的查询提交
          * @access public
@@ -324,14 +324,14 @@
                 $this->transTimes = 0;
                 if (!$result) {
                     $this->error();
-
+                    
                     return false;
                 }
             }
-
+            
             return true;
         }
-
+        
         /**
          * 事务回滚
          * @access public
@@ -344,14 +344,14 @@
                 $this->transTimes = 0;
                 if (!$result) {
                     $this->error();
-
+                    
                     return false;
                 }
             }
-
+            
             return true;
         }
-
+        
         /**
          * 获得所有的查询数据
          * @access private
@@ -362,31 +362,31 @@
             //返回数据集
             $result = $this->PDOStatement->fetchAll(PDO::FETCH_ASSOC);
             $this->numRows = count($result);
-
+            
             return $result;
         }
-
+        
         /**
          * 获得查询次数
          * @access public
-         * @param boolean $execute 是否包含所有查询
-         * @return integer
+         * @param bool $execute 是否包含所有查询
+         * @return int
          */
         public function getQueryTimes($execute = false)
         {
             return $execute ? $this->queryTimes + $this->executeTimes : $this->queryTimes;
         }
-
+        
         /**
          * 获得执行次数
          * @access public
-         * @return integer
+         * @return int
          */
         public function getExecuteTimes()
         {
             return $this->executeTimes;
         }
-
+        
         /**
          * 关闭数据库
          * @access public
@@ -395,7 +395,7 @@
         {
             $this->_linkID = null;
         }
-
+        
         /**
          * 数据库错误信息
          * 并显示当前的SQL语句
@@ -421,7 +421,7 @@
                 return $this->error;
             }
         }
-
+        
         /**
          * 设置锁机制
          * @access protected
@@ -431,7 +431,7 @@
         {
             return $lock ? ' FOR UPDATE ' : '';
         }
-
+        
         /**
          * set分析
          * @access protected
@@ -455,10 +455,10 @@
                     }
                 }
             }
-
+            
             return ' SET ' . implode(',', $set);
         }
-
+        
         /**
          * 参数绑定
          * @access protected
@@ -470,7 +470,7 @@
         {
             $this->bind[':' . $name] = $value;
         }
-
+        
         /**
          * 字段名分析
          * @access protected
@@ -481,7 +481,7 @@
         {
             return $key;
         }
-
+        
         /**
          * value分析
          * @access protected
@@ -501,10 +501,10 @@
             } elseif (is_null($value)) {
                 $value = 'null';
             }
-
+            
             return $value;
         }
-
+        
         /**
          * field分析
          * @access protected
@@ -531,11 +531,11 @@
             } else {
                 $fieldsStr = '*';
             }
-
+            
             //TODO 如果是查询全部字段，并且是join的方式，那么就把要查的表加个别名，以免字段被覆盖
             return $fieldsStr;
         }
-
+        
         /**
          * table分析
          * @access protected
@@ -558,10 +558,10 @@
                 $tables = explode(',', $tables);
                 array_walk($tables, [&$this, 'parseKey']);
             }
-
+            
             return implode(',', $tables);
         }
-
+        
         /**
          * where分析
          * @access protected
@@ -624,10 +624,10 @@
                 }
                 $whereStr = substr($whereStr, 0, -strlen($operate));
             }
-
+            
             return empty($whereStr) ? '' : ' WHERE ' . $whereStr;
         }
-
+        
         /**
          * where子单元解析
          * @param $key
@@ -708,10 +708,10 @@
                     $whereStr .= $key . ' = ' . $this->parseValue($val);
                 }
             }
-
+            
             return $whereStr;
         }
-
+        
         /**
          * 特殊条件分析
          * @access protected
@@ -749,10 +749,10 @@
                 default:
                     break;
             }
-
+            
             return '( ' . $whereStr . ' )';
         }
-
+        
         /**
          * limit分析
          * @access protected
@@ -763,7 +763,7 @@
         {
             return !empty($limit) ? ' LIMIT ' . $limit . ' ' : '';
         }
-
+        
         /**
          * join分析
          * @access protected
@@ -776,10 +776,10 @@
             if (!empty($join)) {
                 $joinStr = ' ' . implode(' ', $join) . ' ';
             }
-
+            
             return $joinStr;
         }
-
+        
         /**
          * order分析
          * @access protected
@@ -799,10 +799,10 @@
                 }
                 $order = implode(',', $array);
             }
-
+            
             return !empty($order) ? ' ORDER BY ' . $order : '';
         }
-
+        
         /**
          * group分析
          * @access protected
@@ -813,7 +813,7 @@
         {
             return !empty($group) ? ' GROUP BY ' . $group : '';
         }
-
+        
         /**
          * having分析
          * @access protected
@@ -824,7 +824,7 @@
         {
             return !empty($having) ? ' HAVING ' . $having : '';
         }
-
+        
         /**
          * comment分析
          * @access protected
@@ -835,7 +835,7 @@
         {
             return !empty($comment) ? ' /* ' . $comment . ' */' : '';
         }
-
+        
         /**
          * distinct分析
          * @access protected
@@ -846,7 +846,7 @@
         {
             return !empty($distinct) ? ' DISTINCT ' : '';
         }
-
+        
         /**
          * union分析
          * @access protected
@@ -865,10 +865,10 @@
             foreach ($union as $u) {
                 $sql[] = $str . (is_array($u) ? $this->buildSelectSql($u) : $u);
             }
-
+            
             return implode(' ', $sql);
         }
-
+        
         /**
          * 参数绑定分析
          * @access protected
@@ -879,7 +879,7 @@
         {
             $this->bind = array_merge($this->bind, $bind);
         }
-
+        
         /**
          * index分析，可在操作链中指定需要强制使用的索引
          * @access protected
@@ -894,10 +894,10 @@
             if (is_array($index)) {
                 $index = join(",", $index);
             }
-
+            
             return sprintf(" FORCE INDEX ( %s ) ", $index);
         }
-
+        
         /**
          * ON DUPLICATE KEY UPDATE 分析
          * @access protected
@@ -908,14 +908,14 @@
         {
             return '';
         }
-
+        
         /**
          * 插入记录
          * @access public
-         * @param mixed   $data    数据
-         * @param array   $options 参数表达式
-         * @param boolean $replace 是否replace
-         * @return false | integer
+         * @param mixed $data    数据
+         * @param array $options 参数表达式
+         * @param bool  $replace 是否replace
+         * @return false | int
          */
         public function insert($data, $options = [], $replace = false)
         {
@@ -945,18 +945,18 @@
             $replace = (is_numeric($replace) && $replace > 0) ? true : $replace;
             $sql = (true === $replace ? 'REPLACE' : 'INSERT') . ' INTO ' . $this->parseTable($options['table']) . ' (' . implode(',', $fields) . ') VALUES (' . implode(',', $values) . ')' . $this->parseDuplicate($replace);
             $sql .= $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
-
+            
             return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
         }
-
-
+        
+        
         /**
          * 批量插入记录
          * @access public
-         * @param mixed   $dataSet 数据集
-         * @param array   $options 参数表达式
-         * @param boolean $replace 是否replace
-         * @return false | integer
+         * @param mixed $dataSet 数据集
+         * @param array $options 参数表达式
+         * @param bool  $replace 是否replace
+         * @return false | int
          */
         public function insertAll($dataSet, $options = [], $replace = false)
         {
@@ -988,17 +988,17 @@
             }
             $sql = 'INSERT INTO ' . $this->parseTable($options['table']) . ' (' . implode(',', $fields) . ') ' . implode(' UNION ALL ', $values);
             $sql .= $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
-
+            
             return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
         }
-
+        
         /**
          * 通过Select方式插入记录
          * @access public
          * @param string $fields 要插入的数据表字段名
          * @param string $table  要插入的数据表名
          * @param array  $option 查询数据参数
-         * @return false | integer
+         * @return false | int
          */
         public function selectInsert($fields, $table, $options = [])
         {
@@ -1010,16 +1010,16 @@
             array_walk($fields, [$this, 'parseKey']);
             $sql = 'INSERT INTO ' . $this->parseTable($table) . ' (' . implode(',', $fields) . ') ';
             $sql .= $this->buildSelectSql($options);
-
+            
             return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
         }
-
+        
         /**
          * 更新记录
          * @access public
          * @param mixed $data    数据
          * @param array $options 表达式
-         * @return false | integer
+         * @return false | int
          */
         public function update($data, $options)
         {
@@ -1038,15 +1038,15 @@
                     . $this->parseLimit(!empty($options['limit']) ? $options['limit'] : '');
             }
             $sql .= $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
-
+            
             return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
         }
-
+        
         /**
          * 删除记录
          * @access public
          * @param array $options 表达式
-         * @return false | integer
+         * @return false | int
          */
         public function delete($options = [])
         {
@@ -1068,10 +1068,10 @@
                     . $this->parseLimit(!empty($options['limit']) ? $options['limit'] : '');
             }
             $sql .= $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
-
+            
             return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
         }
-
+        
         /**
          * 查找记录
          * @access public
@@ -1083,11 +1083,10 @@
             $this->model = $options['model'];
             $this->parseBind(!empty($options['bind']) ? $options['bind'] : []);
             $sql = $this->buildSelectSql($options);
-            $result = $this->query($sql, !empty($options['fetch_sql']) ? true : false);
-
-            return $result;
+            
+            return $this->query($sql, !empty($options['fetch_sql']) ? true : false);
         }
-
+        
         /**
          * 生成查询SQL
          * @access public
@@ -1104,21 +1103,35 @@
                 $offset = $listRows * ($page - 1);
                 $options['limit'] = $offset . ',' . $listRows;
             }
-            $sql = $this->parseSql($this->selectSql, $options);
-
-            return $sql;
+            
+            return $this->parseSql($this->selectSql, $options);
         }
-
+        
         /**
          * 替换SQL语句中表达式
          * @access public
-         * @param array $options 表达式
+         * @param  string $sql
+         * @param array   $options 表达式
          * @return string
          */
-        public function parseSql($sql, $options = [])
+        public function parseSql($sql = '', $options = [])
         {
-            $sql = str_replace(
-                ['%TABLE%', '%DISTINCT%', '%FIELD%', '%JOIN%', '%WHERE%', '%GROUP%', '%HAVING%', '%ORDER%', '%LIMIT%', '%UNION%', '%LOCK%', '%COMMENT%', '%FORCE%'],
+            return str_replace(
+                [
+                    '%TABLE%',
+                    '%DISTINCT%',
+                    '%FIELD%',
+                    '%JOIN%',
+                    '%WHERE%',
+                    '%GROUP%',
+                    '%HAVING%',
+                    '%ORDER%',
+                    '%LIMIT%',
+                    '%UNION%',
+                    '%LOCK%',
+                    '%COMMENT%',
+                    '%FORCE%',
+                ],
                 [
                     $this->parseTable($options['table']),
                     $this->parseDistinct(isset($options['distinct']) ? $options['distinct'] : false),
@@ -1134,10 +1147,8 @@
                     $this->parseComment(!empty($options['comment']) ? $options['comment'] : ''),
                     $this->parseForce(!empty($options['force']) ? $options['force'] : ''),
                 ], $sql);
-
-            return $sql;
         }
-
+        
         /**
          * 获取最近一次查询的sql语句
          * @param string $model 模型名
@@ -1148,7 +1159,7 @@
         {
             return $model ? $this->modelSql[$model] : $this->queryStr;
         }
-
+        
         /**
          * 获取最近插入的ID
          * @access public
@@ -1158,7 +1169,7 @@
         {
             return $this->lastInsID;
         }
-
+        
         /**
          * 获取最近的错误信息
          * @access public
@@ -1168,7 +1179,7 @@
         {
             return $this->error;
         }
-
+        
         /**
          * SQL指令安全过滤
          * @access public
@@ -1179,7 +1190,7 @@
         {
             return addslashes($str);
         }
-
+        
         /**
          * 设置当前操作模型
          * @access public
@@ -1190,15 +1201,16 @@
         {
             $this->model = $model;
         }
-
+        
         /**
          * 数据库调试 记录当前SQL
          * @access protected
-         * @param boolean $start 调试开始标记 true 开始 false 结束
+         * @param bool $start 调试开始标记 true 开始 false 结束
          */
         protected function debug($start)
         {
-            if ($this->config['debug']) {// 开启数据库调试模式
+            // 开启数据库调试模式
+            if ($this->config['debug']) {
                 if ($start) {
                     G('queryStartTime');
                 } else {
@@ -1210,11 +1222,11 @@
                 }
             }
         }
-
+        
         /**
          * 初始化数据库连接
          * @access protected
-         * @param boolean $master 主服务器
+         * @param bool $master 主服务器
          * @return void
          */
         protected function initConnect($master = true)
@@ -1228,11 +1240,11 @@
                     $this->_linkID = $this->connect();
                 }
         }
-
+        
         /**
          * 连接分布式服务器
          * @access protected
-         * @param boolean $master 主服务器
+         * @param bool $master 主服务器
          * @return mixed
          */
         protected function multiConnect($master = false)
@@ -1245,7 +1257,7 @@
             $_config['database'] = explode(',', $this->config['database']);
             $_config['dsn'] = explode(',', $this->config['dsn']);
             $_config['charset'] = explode(',', $this->config['charset']);
-
+            
             $m = floor(mt_rand(0, $this->config['master_num'] - 1));
             // 数据库读写是否分离
             if ($this->config['rw_separate']) {
@@ -1268,7 +1280,7 @@
                 // 每次随机连接的数据库
                 $r = floor(mt_rand(0, count($_config['hostname']) - 1));
             }
-
+            
             if ($m != $r) {
                 $db_master = [
                     'username' => isset($_config['username'][$m]) ? $_config['username'][$m] : $_config['username'][0],
@@ -1289,10 +1301,10 @@
                 'dsn'      => isset($_config['dsn'][$r]) ? $_config['dsn'][$r] : $_config['dsn'][0],
                 'charset'  => isset($_config['charset'][$r]) ? $_config['charset'][$r] : $_config['charset'][0],
             ];
-
+            
             return $this->connect($db_config, $r, $r == $m ? false : $db_master);
         }
-
+        
         /**
          * 析构方法
          * @access public

@@ -1,16 +1,16 @@
 <?php
-
-
+    
+    
     namespace Think\Model;
-
+    
     use Think\Model;
-
+    
     /**
-     * 聚合模型扩展
+     * 聚合模型
      */
     class MergeModel extends Model
     {
-
+        
         //  包含的模型列表 第一个必须是主表模型
         protected $modelList = [];
         //  主模型
@@ -21,7 +21,7 @@
         protected $fk = '';
         //  需要处理的模型映射字段，避免混淆 array( id => 'user.id'  )
         protected $mapFields = [];
-
+        
         /**
          * 取得DB类的实例对象 字段检查
          * @access public
@@ -44,21 +44,21 @@
                 }
                 $this->fields = $fields;
             }
-
+            
             // 设置第一个模型为主表模型
             if (empty($this->masterModel) && !empty($this->modelList)) {
                 $this->masterModel = $this->modelList[0];
             }
             // 主表的主键名
             $this->pk = M($this->masterModel)->getPk();
-
+            
             // 设置默认外键名 仅支持单一外键
             if (empty($this->fk)) {
                 $this->fk = strtolower($this->masterModel) . '_id';
             }
-
+            
         }
-
+        
         /**
          * 得到完整的数据表名
          * @access public
@@ -74,10 +74,10 @@
                 }
                 $this->trueTableName = implode(',', $tableName);
             }
-
+            
             return $this->trueTableName;
         }
-
+        
         /**
          * 自动检测数据表信息
          * @access protected
@@ -86,13 +86,13 @@
         protected function _checkTableInfo()
         {
         }
-
+        
         /**
          * 新增聚合数据
          * @access public
-         * @param mixed   $data    数据
-         * @param array   $options 表达式
-         * @param boolean $replace 是否replace
+         * @param mixed $data    数据
+         * @param array $options 表达式
+         * @param bool  $replace 是否replace
          * @return mixed
          */
         public function add($data = '', $options = [], $replace = false)
@@ -105,7 +105,7 @@
                     $this->data = [];
                 } else {
                     $this->error = L('_DATA_TYPE_INVALID_');
-
+                    
                     return false;
                 }
             }
@@ -123,7 +123,7 @@
                     $res = M($model)->strict(false)->add($data);
                     if (!$res) {
                         $this->rollback();
-
+                        
                         return false;
                     }
                 }
@@ -131,13 +131,13 @@
                 $this->commit();
             } else {
                 $this->rollback();
-
+                
                 return false;
             }
-
+            
             return $result;
         }
-
+        
         /**
          * 对保存到数据库的数据进行处理
          * @access protected
@@ -146,7 +146,7 @@
          */
         protected function _facade($data)
         {
-
+            
             // 检查数据字段合法性
             if (!empty($this->fields)) {
                 if (!empty($this->options['field'])) {
@@ -168,17 +168,17 @@
                     }
                 }
             }
-
+            
             // 安全过滤
             if (!empty($this->options['filter'])) {
                 $data = array_map($this->options['filter'], $data);
                 unset($this->options['filter']);
             }
             $this->_before_write($data);
-
+            
             return $data;
         }
-
+        
         /**
          * 保存聚合模型数据
          * @access public
@@ -197,14 +197,14 @@
                     $this->data = [];
                 } else {
                     $this->error = L('_DATA_TYPE_INVALID_');
-
+                    
                     return false;
                 }
             }
             if (empty($data)) {
                 // 没有数据则不执行
                 $this->error = L('_DATA_TYPE_INVALID_');
-
+                
                 return false;
             }
             // 如果存在主键数据 则自动作为更新条件
@@ -218,7 +218,7 @@
             $options = $this->_parseOptions($options);
             // 更新操作不使用JOIN
             $options['table'] = $this->getTableName();
-
+            
             if (is_array($options['where']) && isset($options['where'][$pk])) {
                 $pkValue = $options['where'][$pk];
             }
@@ -232,17 +232,17 @@
                 }
                 $this->_after_update($data, $options);
             }
-
+            
             return $result;
         }
-
+        
         /**
          * 删除聚合模型数据
          * @access public
          * @param mixed $options 表达式
          * @return mixed
          */
-        public function delete($options = [])
+        public function delete($options)
         {
             $pk = $this->pk;
             if (empty($options) && empty($this->options['where'])) {
@@ -253,7 +253,7 @@
                     return false;
                 }
             }
-
+            
             if (is_numeric($options) || is_string($options)) {
                 // 根据主键删除记录
                 if (strpos($options, ',')) {
@@ -274,7 +274,7 @@
             if (is_array($options['where']) && isset($options['where'][$pk])) {
                 $pkValue = $options['where'][$pk];
             }
-
+            
             $options['table'] = implode(',', $this->modelList);
             $options['using'] = $this->getTableName();
             if (false === $this->_before_delete($options)) {
@@ -288,11 +288,11 @@
                 }
                 $this->_after_delete($data, $options);
             }
-
+            
             // 返回删除记录个数
             return $result;
         }
-
+        
         /**
          * 表达式过滤方法
          * @access protected
@@ -320,14 +320,15 @@
                 $options['order'] = $this->checkOrder($options['order']);
             }
         }
-
+        
         /**
          * 检查条件中的聚合字段
-         * @access protected
-         * @param mixed $data 条件表达式
+         * @access   protected
+         * @param array $where
          * @return array
+         * @internal param mixed $data 条件表达式
          */
-        protected function checkCondition($where)
+        protected function checkCondition(array $where = [])
         {
             if (is_array($where)) {
                 $view = [];
@@ -340,10 +341,10 @@
                 }
                 $where = array_merge($where, $view);
             }
-
+            
             return $where;
         }
-
+        
         /**
          * 检查Order表达式中的聚合字段
          * @access protected
@@ -367,10 +368,10 @@
                 }
                 $order = implode(',', $_order);
             }
-
+            
             return $order;
         }
-
+        
         /**
          * 检查Group表达式中的聚合字段
          * @access protected
@@ -392,10 +393,10 @@
                 }
                 $group = implode(',', $_group);
             }
-
+            
             return $group;
         }
-
+        
         /**
          * 检查fields表达式中的聚合字段
          * @access protected
@@ -411,7 +412,7 @@
             if (!is_array($fields)) {
                 $fields = explode(',', $fields);
             }
-
+            
             // 解析成聚合字段
             $array = [];
             foreach ($fields as $field) {
@@ -422,10 +423,10 @@
                     $array[] = $field;
                 }
             }
-
+            
             return implode(',', $array);
         }
-
+        
         /**
          * 获取数据表字段信息
          * @access public
@@ -435,5 +436,5 @@
         {
             return $this->fields;
         }
-
+        
     }

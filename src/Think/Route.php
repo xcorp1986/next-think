@@ -1,7 +1,7 @@
 <?php
-
+    
     namespace Think;
-
+    
     /**
      * 路由解析类
      * Class Route
@@ -9,8 +9,11 @@
      */
     class Route
     {
-
-        // 路由检测
+        
+        /**
+         * 路由检测
+         * @return bool|void
+         */
         public static function check()
         {
             $depr = C('URL_PATHINFO_DEPR');
@@ -24,7 +27,7 @@
             if (isset($maps[$regx])) {
                 $var = self::parseUrl($maps[$regx]);
                 $_GET = array_merge($var, $_GET);
-
+                
                 return true;
             }
             // 动态路由处理
@@ -58,7 +61,7 @@
                         if ($route instanceof \Closure) {
                             // 执行闭包
                             $result = self::invokeRegx($route, $matches);
-
+                            
                             // 如果返回布尔值 则继续执行
                             return is_bool($result) ? $result : exit;
                         } else {
@@ -82,7 +85,7 @@
                                 if ($route instanceof \Closure) {
                                     // 执行闭包
                                     $result = self::invokeRule($route, $match);
-
+                                    
                                     // 如果返回布尔值 则继续执行
                                     return is_bool($result) ? $result : exit;
                                 } else {
@@ -93,10 +96,10 @@
                     }
                 }
             }
-
+            
             return false;
         }
-
+        
         /**
          * 检测URL和规则路由是否匹配
          * @param $regx
@@ -112,7 +115,7 @@
                 if (0 === strpos($val, '[:')) {
                     $val = substr($val, 1, -1);
                 }
-
+                
                 if (':' == substr($val, 0, 1)) {
                     // 动态变量
                     if ($pos = strpos($val, '|')) {
@@ -141,11 +144,11 @@
                     return false;
                 }
             }
-
+            
             // 成功匹配后返回URL中的动态变量数组
             return $var;
         }
-
+        
         /**
          * 解析规范的路由地址
          * 地址格式 [控制器/操作?]参数1=值1&参数2=值2...
@@ -176,10 +179,10 @@
                     $var[C('VAR_MODULE')] = array_pop($path);
                 }
             }
-
+            
             return $var;
         }
-
+        
         /**
          * 解析规则路由
          * '路由规则'=>'[控制器/操作]?额外参数1=值1&额外参数2=值2...'
@@ -229,7 +232,7 @@
                     array_shift($paths);
                 }
             }
-
+            
             if (0 === strpos($url, '/') || 0 === strpos($url, 'http')) {
                 // 路由重定向跳转
                 if (strpos($url, ':')) {
@@ -269,10 +272,10 @@
                 }
                 $_GET = array_merge($var, $_GET);
             }
-
+            
             return true;
         }
-
+        
         /**
          *
          * 解析正则路由
@@ -327,17 +330,17 @@
                 }
                 $_GET = array_merge($var, $_GET);
             }
-
+            
             return true;
         }
-
+        
         /**
          * 执行正则匹配下的闭包方法 支持参数调用
          * @param   \Closure $closure
          * @param array      $var
          * @return mixed
          */
-        static private function invokeRegx(\Closure $closure, $var = [])
+        private static function invokeRegx(\Closure $closure, $var = [])
         {
             $reflect = new \ReflectionFunction($closure);
             $params = $reflect->getParameters();
@@ -350,17 +353,17 @@
                     $args[] = $param->getDefaultValue();
                 }
             }
-
+            
             return $reflect->invokeArgs($args);
         }
-
+        
         /**
          * 执行规则匹配下的闭包方法 支持参数调用
          * @param  \Closure $closure
          * @param array     $var
          * @return mixed
          */
-        static private function invokeRule(\Closure $closure, $var = [])
+        private static function invokeRule(\Closure $closure, $var = [])
         {
             $reflect = new \ReflectionFunction($closure);
             $params = $reflect->getParameters();
@@ -373,8 +376,8 @@
                     $args[] = $param->getDefaultValue();
                 }
             }
-
+            
             return $reflect->invokeArgs($args);
         }
-
+        
     }

@@ -16,7 +16,7 @@
          * @param array $options 缓存参数
          * @access public
          */
-        public function __construct($options = [])
+        public function __construct(array $options = [])
         {
             if (!extension_loaded('redis')) {
                 E(L('_NOT_SUPPORT_') . ':redis');
@@ -89,11 +89,11 @@
          * 删除缓存
          * @access public
          * @param string $name 缓存变量名
-         * @return bool
+         * @return void
          */
         public function rm($name)
         {
-            return $this->handler->delete($this->options['prefix'] . $name);
+            $this->handler->delete($this->options['prefix'] . $name);
         }
 
         /**

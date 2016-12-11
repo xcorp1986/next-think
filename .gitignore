@@ -5,3 +5,4 @@
 /.phpstorm.meta.php
 /vendor/
 /composer.lock
+/phpunit.xml

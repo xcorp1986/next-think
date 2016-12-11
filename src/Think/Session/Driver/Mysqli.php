@@ -2,6 +2,7 @@
 
 
     namespace Think\Session\Driver;
+    use SessionHandlerInterface;
 
     /**
      * Class Mysqli
@@ -14,7 +15,7 @@
      * UNIQUE KEY `session_id` (`session_id`)
      * );
      */
-    class Mysqli
+    class Mysqli implements SessionHandlerInterface
     {
 
         /**

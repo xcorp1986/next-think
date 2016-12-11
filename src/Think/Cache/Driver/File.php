@@ -1,21 +1,22 @@
 <?php
-
-
+    
+    
     namespace Think\Cache\Driver;
-
+    
     use Think\Cache;
-
-
+    
+    
     /**
      * 文件类型缓存类
      */
     class File extends Cache
     {
-
+    
         /**
          * @access public
+         * @param array $options
          */
-        public function __construct($options = [])
+        public function __construct(array $options = [])
         {
             if (!empty($options)) {
                 $this->options = $options;
@@ -24,14 +25,16 @@
             $this->options['prefix'] = isset($options['prefix']) ? $options['prefix'] : C('DATA_CACHE_PREFIX');
             $this->options['expire'] = isset($options['expire']) ? $options['expire'] : C('DATA_CACHE_TIME');
             $this->options['length'] = isset($options['length']) ? $options['length'] : 0;
-            if (substr($this->options['temp'], -1) != '/') $this->options['temp'] .= '/';
+            if (substr($this->options['temp'], -1) != '/') {
+                $this->options['temp'] .= '/';
+            }
             $this->init();
         }
-
+        
         /**
          * 初始化检查
          * @access private
-         * @return bool
+         * @return void
          */
         private function init()
         {
@@ -40,7 +43,7 @@
                 mkdir($this->options['temp']);
             }
         }
-
+        
         /**
          * 取得变量的存储文件名
          * @access private
@@ -63,10 +66,10 @@
             } else {
                 $filename = $this->options['prefix'] . $name . '.php';
             }
-
+            
             return $this->options['temp'] . $filename;
         }
-
+        
         /**
          * 读取缓存
          * @access public
@@ -86,13 +89,15 @@
                 if ($expire != 0 && time() > filemtime($filename) + $expire) {
                     //缓存过期删除缓存文件
                     unlink($filename);
-
+                    
                     return false;
                 }
-                if (C('DATA_CACHE_CHECK')) {//开启数据校验
+                //开启数据校验
+                if (C('DATA_CACHE_CHECK')) {
                     $check = substr($content, 20, 32);
                     $content = substr($content, 52, -3);
-                    if ($check != md5($content)) {//校验错误
+                    //校验错误
+                    if ($check != md5($content)) {
                         return false;
                     }
                 } else {
@@ -102,14 +107,13 @@
                     //启用数据压缩
                     $content = gzuncompress($content);
                 }
-                $content = unserialize($content);
-
-                return $content;
+                
+                return unserialize($content);
             } else {
                 return false;
             }
         }
-
+        
         /**
          * 写入缓存
          * @access public
@@ -130,7 +134,8 @@
                 //数据压缩
                 $data = gzcompress($data, 3);
             }
-            if (C('DATA_CACHE_CHECK')) {//开启数据校验
+            //开启数据校验
+            if (C('DATA_CACHE_CHECK')) {
                 $check = md5($data);
             } else {
                 $check = '';
@@ -143,13 +148,13 @@
                     $this->queue($name);
                 }
                 clearstatcache();
-
+                
                 return true;
             } else {
                 return false;
             }
         }
-
+        
         /**
          * 删除缓存
          * @access public
@@ -160,11 +165,10 @@
         {
             return unlink($this->filename($name));
         }
-
+        
         /**
          * 清除缓存
          * @access public
-         * @param string $name 缓存变量名
          * @return bool
          */
         public function clear()
@@ -179,10 +183,10 @@
                         unlink($path . $file);
                     }
                 }
-
+                
                 return true;
             }
-
+            
             return false;
         }
     }

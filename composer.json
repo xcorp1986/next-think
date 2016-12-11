@@ -31,5 +31,15 @@
     "files": [
       "src/Bootstrap.php"
     ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Think\\": "src/Think",
+      "Behavior\\": "src/Behavior",
+      "Org\\": "src/Org"
+    },
+    "files": [
+      "src/Bootstrap.php"
+    ]
   }
 }

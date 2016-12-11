@@ -1,24 +1,26 @@
 <?php
-
-
+    
+    
     namespace Think\Model;
-
+    
     use Think\Model;
-
+    
     /**
-     * 关联模型扩展
+     * 关联模型
      */
     class RelationModel extends Model
     {
-
+        
         const   HAS_ONE = 1;
         const   BELONGS_TO = 2;
         const   HAS_MANY = 3;
         const   MANY_TO_MANY = 4;
-
-        // 关联定义
+        
+        /**
+         * @var array $_link 关联定义
+         */
         protected $_link = [];
-
+        
         /**
          * 动态方法实现
          * @access public
@@ -32,17 +34,18 @@
                 $type = strtoupper(substr($method, 8));
                 if (in_array($type, ['ADD', 'SAVE', 'DEL'], true)) {
                     array_unshift($args, $type);
-
+                    
                     return call_user_func_array([&$this, 'opRelation'], $args);
                 }
             } else {
                 return parent::__call($method, $args);
             }
         }
-
+        
         /**
          * 得到关联的数据表名
          * @access public
+         * @param $relation
          * @return string
          */
         public function getRelationTableName($relation)
@@ -50,11 +53,15 @@
             $relationTable = !empty($this->tablePrefix) ? $this->tablePrefix : '';
             $relationTable .= $this->tableName ? $this->tableName : $this->name;
             $relationTable .= '_' . $relation->getModelName();
-
+            
             return strtolower($relationTable);
         }
-
-        // 查询成功后的回调方法
+        
+        /**
+         * 查询成功后的回调方法
+         * @param $result
+         * @param $options
+         */
         protected function _after_find(&$result, $options)
         {
             // 获取关联数据 并附加到结果中
@@ -62,16 +69,25 @@
                 $this->getRelation($result, $options['link']);
             }
         }
-
-        // 查询数据集成功后的回调方法
+        
+        /**
+         * 查询数据集成功后的回调方法
+         * @param $result
+         * @param $options
+         */
         protected function _after_select(&$result, $options)
         {
             // 获取关联数据 并附加到结果中
-            if (!empty($options['link']))
+            if (!empty($options['link'])) {
                 $this->getRelations($result, $options['link']);
+            }
         }
-
-        // 写入成功后的回调方法
+        
+        /**
+         * 写入成功后的回调方法
+         * @param $data
+         * @param $options
+         */
         protected function _after_insert($data, $options)
         {
             // 关联写入
@@ -79,8 +95,12 @@
                 $this->opRelation('ADD', $data, $options['link']);
             }
         }
-
-        // 更新成功后的回调方法
+        
+        /**
+         * 更新成功后的回调方法
+         * @param $data
+         * @param $options
+         */
         protected function _after_update($data, $options)
         {
             // 关联更新
@@ -88,8 +108,12 @@
                 $this->opRelation('SAVE', $data, $options['link']);
             }
         }
-
-        // 删除成功后的回调方法
+        
+        /**
+         * 删除成功后的回调方法
+         * @param $data
+         * @param $options
+         */
         protected function _after_delete($data, $options)
         {
             // 关联删除
@@ -97,7 +121,7 @@
                 $this->opRelation('DEL', $data, $options['link']);
             }
         }
-
+        
         /**
          * 对保存到数据库的数据进行处理
          * @access protected
@@ -107,10 +131,10 @@
         protected function _facade($data)
         {
             $this->_before_write($data);
-
+            
             return $data;
         }
-
+        
         /**
          * 获取返回数据集的关联记录
          * @access protected
@@ -125,16 +149,16 @@
                 $val = $this->getRelation($val, $name);
                 $resultSet[$key] = $val;
             }
-
+            
             return $resultSet;
         }
-
+        
         /**
          * 获取返回数据的关联记录
          * @access protected
          * @param mixed        $result 返回数据
          * @param string|array $name   关联名称
-         * @param boolean      $return 是否返回关联数据本身
+         * @param bool         $return 是否返回关联数据本身
          * @return array
          */
         protected function getRelation(&$result, $name = '', $return = false)
@@ -193,7 +217,11 @@
                                 $mappingOrder = !empty($val['mapping_order']) ? $val['mapping_order'] : '';
                                 $mappingLimit = !empty($val['mapping_limit']) ? $val['mapping_limit'] : '';
                                 // 延时获取关联记录
-                                $relationData = $model->where($mappingCondition)->field($mappingFields)->order($mappingOrder)->limit($mappingLimit)->select();
+                                $relationData = $model->where($mappingCondition)
+                                    ->field($mappingFields)
+                                    ->order($mappingOrder)
+                                    ->limit($mappingLimit)
+                                    ->select();
                                 if (!empty($val['relation_deep'])) {
                                     foreach ($relationData as $key => $data) {
                                         $model->getRelation($data, $val['relation_deep']);
@@ -209,7 +237,7 @@
                                 $mappingLimit = $val['mapping_limit'];
                                 $mappingRelationFk = $val['relation_foreign_key'] ? $val['relation_foreign_key'] : $model->getModelName() . '_id';
                                 if (isset($val['relation_table'])) {
-                                    $mappingRelationTable = preg_replace_callback("/__([A-Z_-]+)__/sU", function ($match) use ($prefix) {
+                                    $mappingRelationTable = preg_replace_callback('/__([A-Z_-]+)__/sU', function ($match) use ($prefix) {
                                         return $prefix . strtolower($match[1]);
                                     }, $val['relation_table']);
                                 } else {
@@ -257,10 +285,10 @@
                     }
                 }
             }
-
+            
             return $result;
         }
-
+        
         /**
          * 操作关联数据
          * @access protected
@@ -438,10 +466,10 @@
                     }
                 }
             }
-
+            
             return $result;
         }
-
+        
         /**
          * 进行关联查询
          * @access public
@@ -451,22 +479,22 @@
         public function relation($name)
         {
             $this->options['link'] = $name;
-
+            
             return $this;
         }
-
+        
         /**
          * 关联数据获取 仅用于查询后
          * @access public
          * @param string $name 关联名称
-         * @return array
+         * @return array|bool
          */
         public function relationGet($name)
         {
             if (empty($this->data)) {
                 return false;
             }
-
+            
             return $this->getRelation($this->data, $name, true);
         }
     }

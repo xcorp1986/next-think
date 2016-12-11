@@ -1,7 +1,7 @@
 <?php
-
+    
     namespace Think;
-
+    
     /**
      * 控制器基类
      * Class Controller
@@ -9,21 +9,21 @@
      */
     abstract class Controller
     {
-
+        
         /**
          * 视图实例对象
          * @var \Think\View $view
          * @access protected
          */
         protected $view = null;
-
+        
         /**
          * 控制器参数
          * @var $config
          * @access protected
          */
         protected $config = [];
-
+        
         /**
          * 取得模板对象实例
          * @access public
@@ -38,14 +38,14 @@
                 $this->_init();
             }
         }
-
+        
         /**
          * 控制器初始化附加方法
          */
         protected function _init()
         {
         }
-
+        
         /**
          * 模板显示 调用内置的模板引擎显示方法，
          * @access protected
@@ -61,7 +61,7 @@
         {
             $this->view->display($templateFile, $charset, $contentType, $content, $prefix);
         }
-
+        
         /**
          * 输出内容文本可以包括Html 并支持内容解析
          * @access protected
@@ -69,13 +69,13 @@
          * @param string $charset     模板输出字符集
          * @param string $contentType 输出类型
          * @param string $prefix      模板缓存前缀
-         * @return mixed
+         * @return void
          */
         protected function show($content, $charset = '', $contentType = '', $prefix = '')
         {
             $this->view->display('', $charset, $contentType, $content, $prefix);
         }
-
+        
         /**
          *  获取输出页面内容
          * 调用内置的模板引擎fetch方法，
@@ -90,7 +90,7 @@
         {
             return $this->view->fetch($templateFile, $content, $prefix);
         }
-
+        
         /**
          *  创建静态页面
          * @access   protected
@@ -106,10 +106,10 @@
             $htmlpath = !empty($htmlpath) ? $htmlpath : HTML_PATH;
             $htmlfile = $htmlpath . $htmlfile . C('HTML_FILE_SUFFIX');
             Storage::put($htmlfile, $content);
-
+            
             return $content;
         }
-
+        
         /**
          * 模板主题设置
          * @access protected
@@ -119,10 +119,10 @@
         protected function theme($theme)
         {
             $this->view->theme($theme);
-
+            
             return $this;
         }
-
+        
         /**
          * 模板变量赋值
          * @access protected
@@ -133,15 +133,19 @@
         protected function assign($name, $value = '')
         {
             $this->view->assign($name, $value);
-
+            
             return $this;
         }
-
+        
+        /**
+         * @param $name
+         * @param $value
+         */
         public function __set($name, $value)
         {
             $this->assign($name, $value);
         }
-
+        
         /**
          * 取得模板显示变量的值
          * @access protected
@@ -152,12 +156,16 @@
         {
             return $this->view->get($name);
         }
-
+        
+        /**
+         * @param $name
+         * @return mixed
+         */
         public function __get($name)
         {
             return $this->get($name);
         }
-
+        
         /**
          * 检测模板变量的值
          * @access public
@@ -168,13 +176,13 @@
         {
             return $this->get($name);
         }
-
+        
         /**
          * 魔术方法 有不存在的操作的时候执行
          * @access public
          * @param string $method 方法名
          * @param array  $args   参数
-         * @return mixed
+         * @return void
          */
         public function __call($method, $args)
         {
@@ -190,11 +198,11 @@
                 }
             } else {
                 E(__CLASS__ . ':' . $method . L('_METHOD_NOT_EXIST_'));
-
+                
                 return;
             }
         }
-
+        
         /**
          * 操作错误跳转的快捷方法
          * @access protected
@@ -207,7 +215,7 @@
         {
             $this->dispatchJump($message, 0, $jumpUrl, $ajax);
         }
-
+        
         /**
          * 操作成功跳转的快捷方法
          * @access protected
@@ -220,7 +228,7 @@
         {
             $this->dispatchJump($message, 1, $jumpUrl, $ajax);
         }
-
+        
         /**
          * Ajax方式返回数据到客户端
          * @access protected
@@ -257,7 +265,7 @@
                     Hook::listen('ajax_return', $data);
             }
         }
-
+        
         /**
          * Action跳转(URL重定向） 支持指定模块和延时跳转
          * @access protected
@@ -272,17 +280,17 @@
             $url = U($url, $params);
             redirect($url, $delay, $msg);
         }
-
+        
         /**
          * 默认跳转操作 支持错误导向和正确跳转
          * 调用模板显示 默认为public目录下面的success页面
          * 提示页面为可配置 支持模板标签
-         * @param string  $message 提示信息
-         * @param Boolean $status  状态
-         * @param string  $jumpUrl 页面跳转地址
-         * @param mixed   $ajax    是否为Ajax方式 当数字时指定跳转时间
-         * @access private
+         * @param string   $message 提示信息
+         * @param bool|int $status  状态
+         * @param string   $jumpUrl 页面跳转地址
+         * @param mixed    $ajax    是否为Ajax方式 当数字时指定跳转时间
          * @return void
+         * @access private
          */
         private function dispatchJump($message, $status = 1, $jumpUrl = '', $ajax = false)
         {
@@ -306,11 +314,14 @@
             if ($this->get('closeWin')) {
                 $this->assign('jumpUrl', 'javascript:window.close();');
             }
-            $this->assign('status', $status);   // 状态
+            // 状态
+            $this->assign('status', $status);
             //保证输出不受静态缓存影响
             C('HTML_CACHE_ON', false);
-            if ($status) { //发送成功信息
-                $this->assign('message', $message);// 提示信息
+            //发送成功信息
+            if ($status) {
+                // 提示信息
+                $this->assign('message', $message);
                 // 成功操作后默认停留1秒
                 if (!isset($this->waitSecond)) {
                     $this->assign('waitSecond', '1');
@@ -329,14 +340,14 @@
                 }
                 // 默认发生错误的话自动返回上页
                 if (!isset($this->jumpUrl)) {
-                    $this->assign('jumpUrl', "javascript:history.back(-1);");
+                    $this->assign('jumpUrl', 'javascript:history.back(-1);');
                 }
                 $this->display(C('TMPL_ACTION_ERROR'));
                 // 中止执行  避免出错后继续执行
                 exit;
             }
         }
-
+        
         /**
          * 析构方法
          * @access public

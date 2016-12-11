@@ -1,7 +1,7 @@
 <?php
-
+    
     namespace Think;
-
+    
     /**
      * 缓存管理类
      * Class Cache
@@ -12,21 +12,21 @@
      */
     class Cache
     {
-
+        
         /**
          * 操作句柄
          * @var string
          * @access protected
          */
         protected $handler;
-
+        
         /**
          * 缓存连接参数
-         * @var integer
+         * @var int
          * @access protected
          */
         protected $options = [];
-
+        
         /**
          * 连接缓存
          * @access public
@@ -34,7 +34,7 @@
          * @param array  $options 配置数组
          * @return object
          */
-        public function connect($type = '', $options = [])
+        public function connect($type = '', array $options = [])
         {
             if (empty($type)) {
                 $type = C('DATA_CACHE_TYPE');
@@ -45,10 +45,10 @@
             } else {
                 E(L('_CACHE_TYPE_INVALID_') . ':' . $type);
             }
-
+            
             return $cache;
         }
-
+        
         /**
          * 取得缓存类实例
          * @static
@@ -63,42 +63,61 @@
                 $obj = new Cache();
                 $_instance[$guid] = $obj->connect($type, $options);
             }
-
+            
             return $_instance[$guid];
         }
-
+    
+        /**
+         * @param $name
+         * @return mixed
+         */
         public function __get($name)
         {
             return $this->get($name);
         }
-
+    
+        /**
+         * @param $name
+         * @param $value
+         * @return mixed
+         */
         public function __set($name, $value)
         {
             return $this->set($name, $value);
         }
-
+    
+        /**
+         * @param $name
+         */
         public function __unset($name)
         {
             $this->rm($name);
         }
-
+    
+        /**
+         * @param $name
+         * @param $value
+         */
         public function setOptions($name, $value)
         {
             $this->options[$name] = $value;
         }
-
+    
+        /**
+         * @param $name
+         * @return mixed
+         */
         public function getOptions($name)
         {
             return $this->options[$name];
         }
-
+        
         /**
          * 队列缓存
          * @access protected
          * @param string $key 队列名
          * @return mixed
          */
-        //
         protected function queue($key)
         {
             static $_handler = [
@@ -127,10 +146,15 @@
                     N($queue_name . '_out_times', 1);
                 }
             }
-
+            
             return $fun[1]($queue_name, $value);
         }
-
+        
+        /**
+         * @param $method
+         * @param $args
+         * @return mixed|void
+         */
         public function __call($method, $args)
         {
             //调用缓存类型自己的方法
@@ -138,7 +162,7 @@
                 return call_user_func_array([$this->handler, $method], $args);
             } else {
                 E(__CLASS__ . ':' . $method . L('_METHOD_NOT_EXIST_'));
-
+                
                 return;
             }
         }

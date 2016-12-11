@@ -16,7 +16,7 @@
          * @param array $options 缓存参数
          * @access public
          */
-        public function __construct($options = [])
+        public function __construct(array $options = [])
         {
             if (!extension_loaded('sqlite')) {
                 E(L('_NOT_SUPPORT_') . ':sqlite');
@@ -113,7 +113,7 @@
         /**
          * 清除缓存
          * @access public
-         * @return bool
+         * @return void
          */
         public function clear()
         {

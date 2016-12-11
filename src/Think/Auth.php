@@ -1,7 +1,7 @@
 <?php
-
+    
     namespace Think;
-
+    
     /**
      * 权限认证类
      * Class Auth
@@ -58,11 +58,14 @@
      * KEY `group_id` (`group_id`)
      * ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
      */
-
+    
     class Auth
     {
-
-        //默认配置
+        
+        /**
+         * 默认配置
+         * @var array $_config
+         */
         protected $_config = [
             // 认证开关
             'AUTH_ON'           => true,
@@ -77,7 +80,7 @@
             // 用户信息表
             'AUTH_USER'         => 'member',
         ];
-
+        
         public function __construct()
         {
             $prefix = C('DB_PREFIX');
@@ -90,14 +93,15 @@
                 $this->_config = array_merge($this->_config, C('AUTH_CONFIG'));
             }
         }
-
+    
         /**
          * 检查权限
          * @param string|array $name     需要验证的规则列表,支持逗号分隔的权限规则或索引数组
          * @param       int    $uid      认证用户的id
+         * @param int          $type
          * @param string       $mode     执行check的模式
          * @param  string      $relation 如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
-         * @return bool           通过验证返回true;失败返回false
+         * @return bool 通过验证返回true;失败返回false
          */
         public function check($name, $uid, $type = 1, $mode = 'url', $relation = 'or')
         {
@@ -114,17 +118,20 @@
                     $name = [$name];
                 }
             }
-            $list = []; //保存验证通过的规则名
+            //保存验证通过的规则名
+            $list = [];
             if ($mode == 'url') {
-                $REQUEST = unserialize(strtolower(serialize($_REQUEST)));
+                $request = unserialize(strtolower(serialize($_REQUEST)));
             }
             foreach ($authList as $auth) {
                 $query = preg_replace('/^.+\?/U', '', $auth);
                 if ($mode == 'url' && $query != $auth) {
-                    parse_str($query, $param); //解析规则中的param
-                    $intersect = array_intersect_assoc($REQUEST, $param);
+                    //解析规则中的param
+                    parse_str($query, $param);
+                    $intersect = array_intersect_assoc($request, $param);
                     $auth = preg_replace('/\?.*$/U', '', $auth);
-                    if (in_array($auth, $name) && $intersect == $param) {  //如果节点相符且url参数满足
+                    //如果节点相符且url参数满足
+                    if (in_array($auth, $name) && $intersect == $param) {
                         $list[] = $auth;
                     }
                 } elseif (in_array($auth, $name)) {
@@ -138,10 +145,10 @@
             if ($relation == 'and' && empty($diff)) {
                 return true;
             }
-
+            
             return false;
         }
-
+        
         /**
          * 根据用户id获取用户组,返回值为数组
          * @param   int $uid 用户id
@@ -161,14 +168,15 @@
                 ->join($this->_config['AUTH_GROUP'] . " g on a.group_id=g.id")
                 ->field('uid,group_id,title,rules')->select();
             $groups[$uid] = $user_groups ?: [];
-
+            
             return $groups[$uid];
         }
-
+    
         /**
          * 获得权限列表
          * @param int $uid 用户id
          * @param int $type
+         * @return array
          */
         protected function getAuthList($uid, $type)
         {
@@ -181,7 +189,7 @@
             if ($this->_config['AUTH_TYPE'] == 2 && isset($_SESSION['_AUTH_LIST_' . $uid . $t])) {
                 return $_SESSION['_AUTH_LIST_' . $uid . $t];
             }
-
+            
             //读取用户所属用户组
             $groups = $this->getGroups($uid);
             //保存用户所属用户组设置的所有权限规则id
@@ -192,10 +200,10 @@
             $ids = array_unique($ids);
             if (empty($ids)) {
                 $_authList[$uid . $t] = [];
-
+                
                 return [];
             }
-
+            
             $map = [
                 'id'     => ['in', $ids],
                 'type'   => $type,
@@ -203,7 +211,7 @@
             ];
             //读取用户组所有权限规则
             $rules = M()->table($this->_config['AUTH_RULE'])->where($map)->field('condition,name')->select();
-
+            
             //循环规则，判断结果。
             $authList = [];
             foreach ($rules as $rule) {
@@ -211,7 +219,7 @@
                 if (!empty($rule['condition'])) {
                     //获取用户信息,一维数组
                     $user = $this->getUserInfo($uid);
-
+                    
                     $command = preg_replace('/\{(\w*?)\}/', '$user[\'\\1\']', $rule['condition']);
                     @(eval('$condition=(' . $command . ');'));
                     if ($condition) {
@@ -227,12 +235,14 @@
                 //规则列表结果保存到session
                 $_SESSION['_AUTH_LIST_' . $uid . $t] = $authList;
             }
-
+            
             return array_unique($authList);
         }
-
+    
         /**
          * 获得用户资料,根据自己的情况读取数据库
+         * @param $uid
+         * @return mixed
          */
         protected function getUserInfo($uid)
         {
@@ -240,8 +250,8 @@
             if (!isset($userinfo[$uid])) {
                 $userinfo[$uid] = M()->where(['uid' => $uid])->table($this->_config['AUTH_USER'])->find();
             }
-
+            
             return $userinfo[$uid];
         }
-
+        
     }

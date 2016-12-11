@@ -1,6 +1,6 @@
 <?php
-
-
+    
+    
     namespace Think\Upload\Driver;
     class Sae
     {
@@ -9,15 +9,15 @@
          * @var string
          */
         private $domain = '';
-
+        
         private $rootPath = '';
-
+        
         /**
          * 本地上传错误信息
          * @var string
          */
         private $error = '';
-
+        
         /**
          * 构造函数，设置storage的domain， 如果有传配置，则domain为配置项，如果没有传domain为第一个路径的目录名称。
          * @param mixed $config 上传配置
@@ -28,7 +28,7 @@
                 $this->domain = strtolower($config['domain']);
             }
         }
-
+        
         /**
          * 检测上传根目录
          * @param string $rootpath 根目录
@@ -42,18 +42,18 @@
                 $this->domain = strtolower(array_shift($rootpath));
                 $rootpath = implode('/', $rootpath);
             }
-
+            
             $this->rootPath = $rootpath;
             $st = new \SaeStorage();
             if (false === $st->getDomainCapacity($this->domain)) {
                 $this->error = '您好像没有建立Storage的domain[' . $this->domain . ']';
-
+                
                 return false;
             }
-
+            
             return true;
         }
-
+        
         /**
          * 检测上传目录
          * @param  string $savepath 上传目录
@@ -63,11 +63,11 @@
         {
             return true;
         }
-
+        
         /**
          * 保存指定文件
-         * @param  array   $file    保存的文件信息
-         * @param  boolean $replace 同名文件是否覆盖
+         * @param  array $file    保存的文件信息
+         * @param  bool  $replace 同名文件是否覆盖
          * @return bool          保存状态，true-成功，false-失败
          */
         public function save(&$file, $replace = true)
@@ -77,27 +77,27 @@
             /* 不覆盖同名文件 */
             if (!$replace && $st->fileExists($this->domain, $filename)) {
                 $this->error = '存在同名文件' . $file['savename'];
-
+                
                 return false;
             }
-
+            
             /* 移动文件 */
             if (!$st->upload($this->domain, $filename, $file['tmp_name'])) {
                 $this->error = '文件上传保存错误！[' . $st->errno() . ']:' . $st->errmsg();
-
+                
                 return false;
             } else {
                 $file['url'] = $st->getUrl($this->domain, $filename);
             }
-
+            
             return true;
         }
-
+        
         public function mkdir()
         {
             return true;
         }
-
+        
         /**
          * 获取最后一次上传错误信息
          * @return string 错误信息
@@ -106,5 +106,5 @@
         {
             return $this->error;
         }
-
+        
     }

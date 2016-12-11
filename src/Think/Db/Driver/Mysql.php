@@ -35,10 +35,12 @@
 
             return $dsn;
         }
-
+    
         /**
          * 取得数据表的字段信息
          * @access public
+         * @param $tableName
+         * @return array
          */
         public function getFields($tableName)
         {
@@ -71,10 +73,12 @@
 
             return $info;
         }
-
+    
         /**
          * 取得数据库的表信息
          * @access public
+         * @param string $dbName
+         * @return array
          */
         public function getTables($dbName = '')
         {
@@ -109,8 +113,8 @@
          * @access public
          * @param mixed   $dataSet 数据集
          * @param array   $options 参数表达式
-         * @param boolean $replace 是否replace
-         * @return false | integer
+         * @param bool $replace 是否replace
+         * @return false | int
          */
         public function insertAll($dataSet, $options = [], $replace = false)
         {
@@ -172,7 +176,7 @@
             foreach ((array)$duplicate as $key => $val) {
                 if (is_numeric($key)) {
                     // array('field1', 'field2', 'field3') 解析为 ON DUPLICATE KEY UPDATE field1=VALUES(field1), field2=VALUES(field2), field3=VALUES(field3)
-                    $updates[] = $this->parseKey($val) . "=VALUES(" . $this->parseKey($val) . ")";
+                    $updates[] = $this->parseKey($val) . '=VALUES(' . $this->parseKey($val) . ')';
                 } else {
                     // 兼容标量传值方式
                     if (is_scalar($val)) {
@@ -200,7 +204,7 @@
                 return '';
             }
 
-            return " ON DUPLICATE KEY UPDATE " . join(', ', $updates);
+            return ' ON DUPLICATE KEY UPDATE ' . join(', ', $updates);
         }
 
 
@@ -208,8 +212,9 @@
          * 执行存储过程查询 返回多个数据集
          * @access public
          * @param string  $str      sql指令
-         * @param boolean $fetchSql 不执行只是获取SQL
+         * @param bool $fetchSql 不执行只是获取SQL
          * @return mixed
+         * @throws \PDOException
          */
         public function procedure($str, $fetchSql = false)
         {

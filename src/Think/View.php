@@ -1,7 +1,7 @@
 <?php
-
+    
     namespace Think;
-
+    
     /**
      * 视图类
      * Class View
@@ -15,14 +15,14 @@
          * @access protected
          */
         protected $tVar = [];
-
+        
         /**
          * 模板主题
          * @var $theme
          * @access protected
          */
         protected $theme = '';
-
+        
         /**
          * 模板变量赋值
          * @access public
@@ -37,7 +37,7 @@
                 $this->tVar[$name] = $value;
             }
         }
-
+        
         /**
          * 取得模板变量的值
          * @access public
@@ -49,10 +49,10 @@
             if ('' === $name) {
                 return $this->tVar;
             }
-
+            
             return isset($this->tVar[$name]) ? $this->tVar[$name] : false;
         }
-
+        
         /**
          * 加载模板和页面输出 可以返回输出内容
          * @access public
@@ -61,7 +61,7 @@
          * @param string $contentType  输出类型
          * @param string $content      模板输出内容
          * @param string $prefix       模板缓存前缀
-         * @return mixed
+         * @return void
          */
         public function display($templateFile = '', $charset = '', $contentType = '', $content = '', $prefix = '')
         {
@@ -75,14 +75,14 @@
             // 视图结束标签
             Hook::listen('view_end');
         }
-
+        
         /**
          * 输出内容文本可以包括Html
          * @access private
          * @param string $content     输出内容
          * @param string $charset     模板输出字符集
          * @param string $contentType 输出类型
-         * @return mixed
+         * @return void
          */
         private function render($content, $charset = '', $contentType = '')
         {
@@ -100,7 +100,7 @@
             // 输出模板文件
             echo $content;
         }
-
+        
         /**
          * 解析和获取模板内容 用于输出
          * @access public
@@ -139,11 +139,11 @@
             $content = ob_get_clean();
             // 内容过滤标签
             Hook::listen('view_filter', $content);
-
+            
             // 输出模板文件
             return $content;
         }
-
+        
         /**
          * 自动定位模板文件
          * @access protected
@@ -157,7 +157,7 @@
             }
             $depr = C('TMPL_FILE_DEPR');
             $template = str_replace(':', $depr, $template);
-
+            
             // 获取当前模块
             $module = MODULE_NAME;
             // 跨模块调用模版文件
@@ -166,7 +166,7 @@
             }
             // 获取当前主题的模版路径
             defined('THEME_PATH') || define('THEME_PATH', $this->getThemePath($module));
-
+            
             // 分析模板文件规则
             if ('' == $template) {
                 // 如果模板文件名为空 按照默认规则定位
@@ -179,20 +179,20 @@
                 // 找不到当前主题模板的时候定位默认主题中的模板
                 $file = dirname(THEME_PATH) . '/' . C('DEFAULT_THEME') . '/' . $template . C('TMPL_TEMPLATE_SUFFIX');
             }
-
+            
             return $file;
         }
-
+        
         /**
          * 获取当前的模板路径
          * @access protected
-         * @param  string $module 模块名
+         * @param mixed|string $module 模块名
          * @return string
          */
         protected function getThemePath($module = MODULE_NAME)
         {
             // 获取当前主题名称
-            $theme = $this->getTemplateTheme();
+            $_theme = $this->getTemplateTheme();
             // 获取当前主题的模版路径
             // 模块设置独立的视图目录
             $tmplPath = C('VIEW_PATH');
@@ -200,23 +200,23 @@
                 // 定义TMPL_PATH 则改变全局的视图目录到模块之外
                 $tmplPath = defined('TMPL_PATH') ? TMPL_PATH . $module . '/' : APP_PATH . $module . '/' . C('DEFAULT_V_LAYER') . '/';
             }
-
-            return $tmplPath . $theme;
+            
+            return $tmplPath . $_theme;
         }
-
+        
         /**
          * 设置当前输出的模板主题
          * @access public
          * @param  mixed $theme 主题名称
-         * @return View
+         * @return $this
          */
         public function theme($theme)
         {
             $this->theme = $theme;
-
+            
             return $this;
         }
-
+        
         /**
          * 获取当前的模板主题
          * @access private
@@ -224,29 +224,30 @@
          */
         private function getTemplateTheme()
         {
-            if ($this->theme) { // 指定模板主题
-                $theme = $this->theme;
+            // 指定模板主题
+            if ($this->theme) {
+                $_theme = $this->theme;
             } else {
                 /* 获取模板主题名称 */
-                $theme = C('DEFAULT_THEME');
+                $_theme = C('DEFAULT_THEME');
                 // 自动侦测模板主题
                 if (C('TMPL_DETECT_THEME')) {
                     $t = C('VAR_TEMPLATE');
                     if (isset($_GET[$t])) {
-                        $theme = $_GET[$t];
+                        $_theme = $_GET[$t];
                     } elseif (cookie('think_template')) {
-                        $theme = cookie('think_template');
+                        $_theme = cookie('think_template');
                     }
-                    if (!in_array($theme, explode(',', C('THEME_LIST')))) {
-                        $theme = C('DEFAULT_THEME');
+                    if (!in_array($_theme, explode(',', C('THEME_LIST')))) {
+                        $_theme = C('DEFAULT_THEME');
                     }
-                    cookie('think_template', $theme, 864000);
+                    cookie('think_template', $_theme, 864000);
                 }
             }
             // 当前模板主题名称
-            defined('THEME_NAME') || define('THEME_NAME', $theme);
-
-            return $theme ? $theme . '/' : '';
+            defined('THEME_NAME') || define('THEME_NAME', $_theme);
+            
+            return $_theme ? $_theme . '/' : '';
         }
-
+        
     }

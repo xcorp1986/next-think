@@ -2,6 +2,7 @@
 
 
     namespace Think\Session\Driver;
+    use SessionHandlerInterface;
 
     /**
      * Class Db
@@ -15,7 +16,7 @@
      * UNIQUE KEY `session_id` (`session_id`)
      * );
      */
-    class Db
+    class Db implements SessionHandlerInterface
     {
 
         /**

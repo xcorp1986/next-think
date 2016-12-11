@@ -16,7 +16,7 @@
          * @access public
          * @return void
          */
-        static public function dispatch()
+        public static function dispatch()
         {
             $varPath = C('VAR_PATHINFO');
             $varAddon = C('VAR_ADDON');
@@ -262,22 +262,27 @@
             //保证$_REQUEST正常取值
             $_REQUEST = array_merge($_POST, $_GET, $_COOKIE);
         }
-        
+    
         /**
          * 获得控制器的命名空间路径 便于插件机制访问
+         * @param $var
+         * @return string
          */
-        static private function getSpace($var)
+        private static function getSpace($var)
         {
             $space = !empty($_GET[$var]) ? strip_tags($_GET[$var]) : '';
             unset($_GET[$var]);
             
             return $space;
         }
-        
+    
         /**
          * 获得实际的控制器名称
+         * @param $var
+         * @param $urlCase
+         * @return string
          */
-        static private function getController($var, $urlCase)
+        private static function getController($var, $urlCase)
         {
             $controller = (!empty($_GET[$var]) ? $_GET[$var] : C('DEFAULT_CONTROLLER'));
             unset($_GET[$var]);
@@ -301,11 +306,14 @@
             
             return strip_tags(ucfirst($controller));
         }
-        
+    
         /**
          * 获得实际的操作名称
+         * @param $var
+         * @param $urlCase
+         * @return mixed|string
          */
-        static private function getAction($var, $urlCase)
+        private static function getAction($var, $urlCase)
         {
             $action = !empty($_POST[$var]) ?
                 $_POST[$var] :
@@ -336,11 +344,13 @@
             
             return strip_tags($urlCase ? strtolower($action) : $action);
         }
-        
+    
         /**
          * 获得实际的模块名称
+         * @param $var
+         * @return string
          */
-        static private function getModule($var)
+        private static function getModule($var)
         {
             $module = (!empty($_GET[$var]) ? $_GET[$var] : C('DEFAULT_MODULE'));
             unset($_GET[$var]);

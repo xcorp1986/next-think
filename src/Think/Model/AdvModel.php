@@ -1,11 +1,10 @@
 <?php
-
-
+    
     namespace Think\Model;
-
+    
     use Think\Exception;
     use Think\Model;
-
+    
     /**
      * 高级模型扩展
      */
@@ -19,7 +18,7 @@
         protected $readonlyField = [];
         protected $_filter = [];
         protected $partition = [];
-
+        
         public function __construct($name = '', $tablePrefix = '', $connection = '')
         {
             if ('' !== $name || is_subclass_of($this, 'AdvModel')) {
@@ -30,7 +29,7 @@
             }
             parent::__construct($name, $tablePrefix, $connection);
         }
-
+        
         /**
          * 利用__call方法重载 实现一些特殊的Model方法 （魔术方法）
          * @access public
@@ -44,13 +43,13 @@
                 // 获取前N条记录
                 $count = substr($method, 3);
                 array_unshift($args, $count);
-
+                
                 return call_user_func_array([&$this, 'topN'], $args);
             } else {
                 return parent::__call($method, $args);
             }
         }
-
+        
         /**
          * 对保存到数据库的数据进行处理
          * @access protected
@@ -61,11 +60,15 @@
         {
             // 检查序列化字段
             $data = $this->serializeField($data);
-
+            
             return parent::_facade($data);
         }
-
-        // 查询成功后的回调方法
+        
+        /**
+         * 查询成功后的回调方法
+         * @param        $result
+         * @param string $options
+         */
         protected function _after_find(&$result, $options = '')
         {
             // 检查序列化字段
@@ -77,8 +80,12 @@
             // 缓存乐观锁
             $this->cacheLockVersion($result);
         }
-
-        // 查询数据集成功后的回调方法
+        
+        /**
+         * 查询数据集成功后的回调方法
+         * @param        $resultSet
+         * @param string $options
+         */
         protected function _after_select(&$resultSet, $options = '')
         {
             // 检查序列化字段
@@ -88,8 +95,12 @@
             // 检查列表字段过滤
             $resultSet = $this->getFilterListFields($resultSet);
         }
-
-        // 写入前的回调方法
+        
+        /**
+         * 写入前的回调方法
+         * @param        $data
+         * @param string $options
+         */
         protected function _before_insert(&$data, $options = '')
         {
             // 记录乐观锁
@@ -99,14 +110,24 @@
             // 检查字段过滤
             $data = $this->setFilterFields($data);
         }
-
+        
+        /**
+         * 写入后的回调方法
+         * @param $data
+         * @param $options
+         */
         protected function _after_insert($data, $options)
         {
             // 保存文本字段
             $this->saveBlobFields($data);
         }
-
-        // 更新前的回调方法
+        
+        /**
+         * 更新前的回调方法
+         * @param        $data
+         * @param string $options
+         * @return bool
+         */
         protected function _before_update(&$data, $options = '')
         {
             // 检查乐观锁
@@ -124,19 +145,29 @@
             // 检查字段过滤
             $data = $this->setFilterFields($data);
         }
-
+        
+        /**
+         * 更新后的回调方法
+         * @param $data
+         * @param $options
+         */
         protected function _after_update($data, $options)
         {
             // 保存文本字段
             $this->saveBlobFields($data);
         }
-
+        
+        /**
+         * 删除后的回调方法
+         * @param $data
+         * @param $options
+         */
         protected function _after_delete($data, $options)
         {
             // 删除Blob数据
             $this->delBlobFields($data);
         }
-
+        
         /**
          * 记录乐观锁
          * @access protected
@@ -151,10 +182,10 @@
                     $data[$this->optimLock] = 0;
                 }
             }
-
+            
             return $data;
         }
-
+        
         /**
          * 缓存乐观锁
          * @access protected
@@ -170,7 +201,7 @@
                 }
             }
         }
-
+        
         /**
          * 检查乐观锁
          * @access protected
@@ -191,7 +222,7 @@
                     if ($curr_version > 0 && $lock_version != $curr_version) {
                         // 记录已经更新
                         $this->error = L('_RECORD_HAS_UPDATE_');
-
+                        
                         return false;
                     } else {
                         // 更新乐观锁
@@ -203,10 +234,10 @@
                     }
                 }
             }
-
+            
             return true;
         }
-
+        
         /**
          * 查找前N个记录
          * @access public
@@ -217,10 +248,10 @@
         public function topN($count, $options = [])
         {
             $options['limit'] = $count;
-
+            
             return $this->select($options);
         }
-
+        
         /**
          * 查询符合条件的第N条记录
          * 0 表示第一条记录 -1 表示最后一条记录
@@ -231,18 +262,20 @@
          */
         public function getN($position = 0, $options = [])
         {
-            if ($position >= 0) { // 正向查找
+            // 正向查找
+            if ($position >= 0) {
                 $options['limit'] = $position . ',1';
                 $list = $this->select($options);
-
+                
                 return $list ? $list[0] : false;
-            } else { // 逆序查找
+                // 逆序查找
+            } else {
                 $list = $this->select($options);
-
+                
                 return $list ? $list[count($list) - abs($position)] : false;
             }
         }
-
+        
         /**
          * 获取满足条件的第一条记录
          * @access public
@@ -253,7 +286,7 @@
         {
             return $this->getN(0, $options);
         }
-
+        
         /**
          * 获取满足条件的最后一条记录
          * @access public
@@ -264,7 +297,7 @@
         {
             return $this->getN(-1, $options);
         }
-
+        
         /**
          * 返回数据
          * @access public
@@ -291,7 +324,7 @@
                     }
             }
         }
-
+        
         /**
          * 获取数据的时候过滤数据字段
          * @access protected
@@ -316,10 +349,14 @@
                     }
                 }
             }
-
+            
             return $result;
         }
-
+    
+        /**
+         * @param $resultSet
+         * @return mixed
+         */
         protected function getFilterListFields(&$resultSet)
         {
             if (!empty($this->_filter)) {
@@ -327,10 +364,10 @@
                     $resultSet[$key] = $this->getFilterFields($result);
                 }
             }
-
+            
             return $resultSet;
         }
-
+        
         /**
          * 写入数据的时候过滤数据字段
          * @access protected
@@ -355,10 +392,10 @@
                     }
                 }
             }
-
+            
             return $data;
         }
-
+        
         /**
          * 返回数据列表
          * @access protected
@@ -371,10 +408,14 @@
             foreach ($resultSet as $key => $data) {
                 $resultSet[$key] = $this->returnResult($data, $type);
             }
-
+            
             return $resultSet;
         }
-
+    
+        /**
+         * @param $data
+         * @return mixed
+         */
         protected function checkBlobFields(&$data)
         {
             // 检查Blob文件保存字段
@@ -390,10 +431,10 @@
                     }
                 }
             }
-
+            
             return $data;
         }
-
+        
         /**
          * 获取数据集的文本字段
          * @access protected
@@ -409,10 +450,10 @@
                     $resultSet[$key] = $result;
                 }
             }
-
+            
             return $resultSet;
         }
-
+        
         /**
          * 获取数据的文本字段
          * @access protected
@@ -430,16 +471,16 @@
                         $identify = $this->name . '/' . $id . '_' . $field;
                         $data[$field] = F($identify);
                     }
-
+                    
                     return $data;
                 } else {
                     $identify = $this->name . '/' . $id . '_' . $field;
-
+                    
                     return F($identify);
                 }
             }
         }
-
+        
         /**
          * 保存File方式的字段
          * @access protected
@@ -457,7 +498,7 @@
                 }
             }
         }
-
+        
         /**
          * 删除File方式的字段
          * @access protected
@@ -481,7 +522,7 @@
                 }
             }
         }
-
+        
         /**
          * 检查序列化数据字段
          * @access protected
@@ -508,11 +549,15 @@
                     }
                 }
             }
-
+            
             return $data;
         }
-
-        // 检查返回数据的序列化字段
+    
+        /**
+         * 检查返回数据的序列化字段
+         * @param $result
+         * @return mixed
+         */
         protected function checkSerializeField(&$result)
         {
             // 检查序列化字段
@@ -527,11 +572,15 @@
                     }
                 }
             }
-
+            
             return $result;
         }
-
-        // 检查数据集的序列化字段
+    
+        /**
+         * 检查数据集的序列化字段
+         * @param $resultSet
+         * @return mixed
+         */
         protected function checkListSerializeField(&$resultSet)
         {
             // 检查序列化字段
@@ -549,10 +598,10 @@
                     }
                 }
             }
-
+            
             return $resultSet;
         }
-
+        
         /**
          * 检查只读字段
          * @access protected
@@ -568,16 +617,17 @@
                     }
                 }
             }
-
+            
             return $data;
         }
-
+        
         /**
          * 批处理执行SQL语句
          * 批处理的指令都认为是execute操作
          * @access public
          * @param array $sql SQL批处理指令
          * @return bool
+         * @throws Exception
          */
         public function patchQuery($sql = [])
         {
@@ -592,7 +642,7 @@
                     if (false === $result) {
                         // 发生错误自动回滚事务
                         $this->rollback();
-
+                        
                         return false;
                     }
                 }
@@ -601,10 +651,10 @@
             } catch (Exception $e) {
                 $this->rollback();
             }
-
+            
             return true;
         }
-
+        
         /**
          * 得到分表的的数据表名
          * @access public
@@ -647,7 +697,7 @@
                             $seq = (ord($field{0}) % $this->partition['num']) + 1;
                         }
                 }
-
+                
                 return $this->getTableName() . '_' . $seq;
             } else {
                 // 当设置的分表字段不在查询条件或者数据中
@@ -656,6 +706,7 @@
                 for ($i = 0; $i < $this->partition['num']; $i++) {
                     $tableName[] = 'SELECT * FROM ' . $this->getTableName() . '_' . ($i + 1);
                 }
+                
                 return '( ' . implode(" UNION ", $tableName) . ') AS ' . $this->name;
 
 //                return $tableName;

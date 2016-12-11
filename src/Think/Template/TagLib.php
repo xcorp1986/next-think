@@ -1,16 +1,16 @@
 <?php
-
-
+    
+    
     namespace Think\Template;
-
+    
     use Think\Think;
-
+    
     /**
      * 标签库TagLib解析基类
      */
     class TagLib
     {
-
+        
         /**
          * 标签库定义XML文件
          * @var string
@@ -27,21 +27,21 @@
          * @access protected
          */
         protected $tagLib = '';
-
+        
         /**
          * 标签库标签列表
          * @var array $tagList
          * @access protected
          */
         protected $tagList = [];
-
+        
         /**
          * 标签库分析数组
          * @var array $parse
          * @access protected
          */
         protected $parse = [];
-
+        
         /**
          * 标签库是否有效
          * @var bool $valid
@@ -49,14 +49,14 @@
          * @access protected
          */
         protected $valid = false;
-
+        
         /**
          * 当前模板对象
          * @var \Think\Template
          * @access protected
          */
         protected $tpl;
-
+        
         protected $comparison = [
             ' nheq ' => ' !== ',
             ' heq '  => ' === ',
@@ -67,7 +67,7 @@
             ' elt '  => ' <= ',
             ' lt '   => ' < ',
         ];
-
+        
         /**
          * @access public
          */
@@ -76,12 +76,14 @@
             $this->tagLib = strtolower(substr(get_class($this), 6));
             $this->tpl = Think::instance(\Think\Template::class);
         }
-
+    
         /**
          * TagLib标签属性分析 返回标签属性数组
-         * @access public
-         * @param string $tagStr 标签内容
+         * @access   public
+         * @param $attr
+         * @param $tag
          * @return array
+         * @internal param string $tagStr 标签内容
          */
         public function parseXmlAttr($attr, $tag)
         {
@@ -121,14 +123,14 @@
                             E(L('_PARAM_ERROR_') . ':' . $name);
                         }
                     }
-
+                    
                     return $array;
                 }
             } else {
                 return [];
             }
         }
-
+        
         /**
          * 解析条件表达式
          * @access public
@@ -152,13 +154,14 @@
                 default:
                     $condition = preg_replace('/\$(\w+)\.(\w+)\s/is', '(is_array($\\1)?$\\1["\\2"]:$\\1->\\2) ', $condition);
             }
+            //@todo remove in future
             if (false !== strpos($condition, '$Think')) {
                 $condition = preg_replace_callback('/(\$Think.*?)\s/is', [$this, 'parseThinkVar'], $condition);
             }
-
+            
             return $condition;
         }
-
+        
         /**
          * 自动识别构建变量
          * @access public
@@ -209,10 +212,10 @@
             elseif (!defined($name)) {
                 $name = '$' . $name;
             }
-
+            
             return $name;
         }
-
+        
         /**
          * 用于标签属性里面的特殊模板变量解析
          * @todo   与\Think\Template::parseThinkVar()重复定义了
@@ -224,7 +227,8 @@
          */
         public function parseThinkVar($varStr)
         {
-            if (is_array($varStr)) {//用于正则替换回调函数
+            //用于正则替换回调函数
+            if (is_array($varStr)) {
                 $varStr = $varStr[1];
             }
             $vars = explode('.', $varStr);
@@ -292,10 +296,10 @@
                         }
                 }
             }
-
+            
             return $parseStr;
         }
-
+        
         /**
          * 获取标签定义
          * @return array

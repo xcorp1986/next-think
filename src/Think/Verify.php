@@ -9,6 +9,10 @@
      */
     class Verify
     {
+        /**
+         * 配置
+         * @var array $config
+         */
         protected $config = [
             'seKey'    => 'SecretKey',   // 验证码加密密钥
             'codeSet'  => '2345678abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRTUVWXY',             // 验证码字符集合
@@ -26,16 +30,25 @@
             'bg'       => [243, 251, 254],  // 背景颜色
             'reset'    => true,           // 验证成功后是否重置
         ];
-
-        private $_image = null;     // 验证码图片实例
-        private $_color = null;     // 验证码字体颜色
+    
+        /**
+         * 验证码图片实例
+         * @var null $_image
+         */
+        private $_image = null;
+        
+        /**
+         * 验证码字体颜色
+         * @var null $_color
+         */
+        private $_color = null;
 
         /**
          * 架构方法 设置参数
          * @access public
          * @param  array $config 配置参数
          */
-        public function __construct($config = [])
+        public function __construct(array $config = [])
         {
             $this->config = array_merge($this->config, $config);
         }

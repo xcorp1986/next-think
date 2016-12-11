@@ -1,19 +1,20 @@
 <?php
-
-
+    
+    
     namespace Think\Crypt\Driver;
     /**
      * Base64 加密实现类
      */
     class Base64
     {
-
+        
         /**
          * 加密字符串
-         * @param string $str    字符串
+         * @param        $data
          * @param string $key    加密key
          * @param int    $expire 有效期（秒）
          * @return string
+         * @internal param string $str 字符串
          */
         public static function encrypt($data, $key, $expire = 0)
         {
@@ -23,24 +24,28 @@
             $x = 0;
             $len = strlen($data);
             $l = strlen($key);
+            $char = $str = '';
             for ($i = 0; $i < $len; $i++) {
-                if ($x == $l) $x = 0;
+                if ($x == $l) {
+                    $x = 0;
+                }
                 $char .= substr($key, $x, 1);
                 $x++;
             }
-
+            
             for ($i = 0; $i < $len; $i++) {
                 $str .= chr(ord(substr($data, $i, 1)) + (ord(substr($char, $i, 1))) % 256);
             }
-
+            
             return $str;
         }
-
+        
         /**
          * 解密字符串
-         * @param string $str 字符串
+         * @param        $data
          * @param string $key 加密key
          * @return string
+         * @internal param string $str 字符串
          */
         public static function decrypt($data, $key)
         {
@@ -48,8 +53,11 @@
             $x = 0;
             $len = strlen($data);
             $l = strlen($key);
+            $char = $str = '';
             for ($i = 0; $i < $len; $i++) {
-                if ($x == $l) $x = 0;
+                if ($x == $l) {
+                    $x = 0;
+                }
                 $char .= substr($key, $x, 1);
                 $x++;
             }
@@ -65,8 +73,7 @@
             if ($expire > 0 && $expire < time()) {
                 return '';
             }
-            $data = substr($data, 10);
-
-            return $data;
+            
+            return substr($data, 10);
         }
     }

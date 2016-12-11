@@ -1,17 +1,17 @@
 <?php
-
-
+    
+    
     namespace Think\Cache\Driver;
-
+    
     use Think\Cache;
-
-
+    
+    
     /**
      * Shmop缓存驱动
      */
     class Shmop extends Cache
     {
-
+        
         /**
          * @param array $options 缓存参数
          * @access public
@@ -34,7 +34,7 @@
             $this->options['length'] = isset($options['length']) ? $options['length'] : 0;
             $this->handler = $this->_ftok($this->options['project']);
         }
-
+        
         /**
          * 读取缓存
          * @access public
@@ -48,7 +48,7 @@
             if ($id !== false) {
                 $ret = unserialize(shmop_read($id, 0, shmop_size($id)));
                 shmop_close($id);
-
+                
                 if ($name === false) {
                     return $ret;
                 }
@@ -59,7 +59,7 @@
                         //启用数据压缩
                         $content = gzuncompress($content);
                     }
-
+                    
                     return $content;
                 } else {
                     return null;
@@ -68,7 +68,7 @@
                 return false;
             }
         }
-
+        
         /**
          * 写入缓存
          * @access public
@@ -94,13 +94,13 @@
                     // 记录缓存队列
                     $this->queue($name);
                 }
-
+                
                 return true;
             }
-
+            
             return false;
         }
-
+        
         /**
          * 删除缓存
          * @access public
@@ -115,37 +115,39 @@
             $name = $this->options['prefix'] . $name;
             unset($val[$name]);
             $val = serialize($val);
-
+            
             return $this->_write($val, $lh);
         }
-
+        
         /**
          * 生成IPC key
          * @access private
          * @param string $project 项目标识名
-         * @return integer
+         * @return int
          */
         private function _ftok($project)
         {
-            if (function_exists('ftok')) return ftok(__FILE__, $project);
+            if (function_exists('ftok')) {
+                return ftok(__FILE__, $project);
+            }
             if (strtoupper(PHP_OS) == 'WINNT') {
                 $s = stat(__FILE__);
-
+                
                 return sprintf("%u", (($s['ino'] & 0xffff) | (($s['dev'] & 0xff) << 16) |
                     (($project & 0xff) << 24)));
             } else {
                 $filename = __FILE__ . (string)$project;
                 for ($key = []; sizeof($key) < strlen($filename); $key[] = ord(substr($filename, sizeof($key), 1))) ;
-
+                
                 return dechex(array_sum($key));
             }
         }
-
+        
         /**
          * 写入操作
          * @access private
          * @param string $name 缓存变量名
-         * @return integer|boolean
+         * @return int|bool
          */
         private function _write(&$val, &$lh)
         {
@@ -154,14 +156,14 @@
                 $ret = shmop_write($id, $val, 0) == strlen($val);
                 shmop_close($id);
                 $this->_unlock($lh);
-
+                
                 return $ret;
             }
             $this->_unlock($lh);
-
+            
             return false;
         }
-
+        
         /**
          * 共享锁定
          * @access private
@@ -177,10 +179,10 @@
                 $fp = fopen($this->options['temp'] . $this->options['prefix'] . md5($this->handler), 'w');
                 flock($fp, LOCK_EX);
             }
-
+            
             return $fp;
         }
-
+        
         /**
          * 解除共享锁定
          * @access private

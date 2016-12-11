@@ -1,6 +1,6 @@
 <?php
-
-
+    
+    
     namespace Org\Util;
     /**
      * ArrayList实现类
@@ -10,14 +10,14 @@
      */
     class ArrayList implements \IteratorAggregate
     {
-
+        
         /**
          * 集合元素
          * @var array
          * @access protected
          */
         protected $_elements = [];
-
+        
         /**
          * @access public
          * @param string $elements 初始化数组元素
@@ -28,7 +28,7 @@
                 $this->_elements = $elements;
             }
         }
-
+        
         /**
          * 若要获得迭代因子，通过getIterator方法实现
          * @access public
@@ -38,7 +38,7 @@
         {
             return new \ArrayObject($this->_elements);
         }
-
+        
         /**
          * 增加元素
          * @access public
@@ -49,19 +49,24 @@
         {
             return (array_push($this->_elements, $element)) ? true : false;
         }
-
-        //
+    
+        /**
+         * @param $element
+         * @return bool
+         */
         public function unshift($element)
         {
             return (array_unshift($this->_elements, $element)) ? true : false;
         }
-
-        //
+    
+        /**
+         * @return mixed
+         */
         public function pop()
         {
             return array_pop($this->_elements);
         }
-
+        
         /**
          * 增加元素列表
          * @access public
@@ -75,10 +80,10 @@
                 $this->add($element);
             }
             $after = $this->size();
-
+            
             return ($before < $after);
         }
-
+        
         /**
          * 清除所有元素
          * @access public
@@ -87,7 +92,7 @@
         {
             $this->_elements = [];
         }
-
+        
         /**
          * 是否包含某个元素
          * @access public
@@ -98,7 +103,7 @@
         {
             return (array_search($element, $this->_elements) !== false);
         }
-
+        
         /**
          * 根据索引取得元素
          * @access public
@@ -109,19 +114,19 @@
         {
             return $this->_elements[$index];
         }
-
+        
         /**
          * 查找匹配元素，并返回第一个元素所在位置
          * 注意 可能存在0的索引位置 因此要用===False来判断查找失败
          * @access public
          * @param mixed $element 查找元素
-         * @return integer
+         * @return int
          */
         public function indexOf($element)
         {
             return array_search($element, $this->_elements);
         }
-
+        
         /**
          * 判断元素是否为空
          * @access public
@@ -131,12 +136,12 @@
         {
             return empty($this->_elements);
         }
-
+        
         /**
          * 最后一个匹配的元素位置
          * @access public
          * @param mixed $element 查找元素
-         * @return integer
+         * @return int
          */
         public function lastIndexOf($element)
         {
@@ -146,12 +151,15 @@
                 }
             }
         }
-
+    
+        /**
+         * @return string
+         */
         public function toJson()
         {
             return json_encode($this->_elements);
         }
-
+        
         /**
          * 根据索引移除元素
          * 返回被移除的元素
@@ -165,10 +173,10 @@
             if (!is_null($element)) {
                 array_splice($this->_elements, $index, 1);
             }
-
+            
             return $element;
         }
-
+        
         /**
          * 移出一定范围的数组列表
          * @access public
@@ -179,7 +187,7 @@
         {
             array_splice($this->_elements, $offset, $length);
         }
-
+        
         /**
          * 移出重复的值
          * @access public
@@ -188,7 +196,7 @@
         {
             $this->_elements = array_unique($this->_elements);
         }
-
+        
         /**
          * 取出一定范围的数组列表
          * @access public
@@ -199,7 +207,7 @@
         {
             return array_slice($this->_elements, $offset, $length);
         }
-
+        
         /**
          * 设置列表元素
          * 返回修改之前的值
@@ -212,20 +220,20 @@
         {
             $previous = $this->get($index);
             $this->_elements[$index] = $element;
-
+            
             return $previous;
         }
-
+        
         /**
          * 获取列表长度
          * @access public
-         * @return integer
+         * @return int
          */
         public function size()
         {
             return count($this->_elements);
         }
-
+        
         /**
          * 转换成数组
          * @access public
@@ -235,29 +243,37 @@
         {
             return $this->_elements;
         }
-
-        // 列表排序
+    
+        /**
+         * 列表排序
+         */
         public function ksort()
         {
             ksort($this->_elements);
         }
-
-        // 列表排序
+    
+        /**
+         * 列表排序
+         */
         public function asort()
         {
             asort($this->_elements);
         }
-
-        // 逆向排序
+    
+        /**
+         * 逆向排序
+         */
         public function rsort()
         {
             rsort($this->_elements);
         }
-
-        // 自然排序
+    
+        /**
+         * 自然排序
+         */
         public function natsort()
         {
             natsort($this->_elements);
         }
-
+        
     }

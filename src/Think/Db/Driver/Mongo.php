@@ -1,16 +1,16 @@
 <?php
-
-
+    
+    
     namespace Think\Db\Driver;
-
+    
     use Think\Db\Driver;
-
+    
     /**
      * Mongo数据库驱动
      */
     class Mongo extends Driver
     {
-
+        
         // MongoDb Object
         protected $_mongo = null;
         // MongoCollection Object
@@ -34,13 +34,13 @@
             'not in' => 'nin',
             'nin'    => 'nin',
         ];
-
+        
         /**
          * 读取数据库配置信息
          * @access public
          * @param array $config 数据库配置数组
          */
-        public function __construct($config = '')
+        public function __construct(array $config = [])
         {
             if (!class_exists('mongoClient')) {
                 E(L('_NOT_SUPPORT_') . ':Mongo');
@@ -52,10 +52,14 @@
                 }
             }
         }
-
+        
         /**
          * 连接数据库方法
          * @access public
+         * @param string $config
+         * @param int    $linkNum
+         * @return mixed|\PDO
+         * @throws \MongoConnectionException
          */
         public function connect($config = '', $linkNum = 0)
         {
@@ -70,17 +74,18 @@
                     E($e->getmessage());
                 }
             }
-
+            
             return $this->linkID[$linkNum];
         }
-
+        
         /**
          * 切换当前操作的Db和Collection
          * @access public
          * @param string  $collection collection
          * @param string  $db         db
-         * @param boolean $master     是否主服务器
+         * @param bool $master     是否主服务器
          * @return void
+         * @throws \MongoException
          */
         public function switchCollection($collection, $db = '', $master = true)
         {
@@ -89,7 +94,8 @@
                 $this->initConnect($master);
             }
             try {
-                if (!empty($db)) { // 传人Db则切换数据库
+                // 传人Db则切换数据库
+                if (!empty($db)) {
                     // 当前MongoDb对象
                     $this->_dbName = $db;
                     $this->_mongo = $this->_linkID->selectDb($db);
@@ -104,13 +110,14 @@
                     $this->debug(true);
                     $this->_collection = $this->_mongo->selectCollection($collection);
                     $this->debug(false);
-                    $this->_collectionName = $collection; // 记录当前Collection名称
+                    // 记录当前Collection名称
+                    $this->_collectionName = $collection;
                 }
             } catch (\MongoException $e) {
                 E($e->getMessage());
             }
         }
-
+        
         /**
          * 释放查询结果
          * @access public
@@ -119,19 +126,22 @@
         {
             $this->_cursor = null;
         }
-
+        
         /**
          * 执行命令
          * @access public
          * @param array $command 指令
+         * @param array $options
          * @return array
+         * @throws \MongoCursorException
          */
         public function command($command = [], $options = [])
         {
             $cache = isset($options['cache']) ? $options['cache'] : false;
-            if ($cache) { // 查询缓存检测
+            // 查询缓存检测
+            if ($cache) {
                 $key = is_string($cache['key']) ? $cache['key'] : md5(serialize($command));
-                $value = S($key, '', '', $cache['type']);
+                $value = S($key, '', $cache['type']);
                 if (false !== $value) {
                     return $value;
                 }
@@ -147,17 +157,18 @@
                 $this->debug(true);
                 $result = $this->_mongo->command($command);
                 $this->debug(false);
-
-                if ($cache && $result['ok']) { // 查询缓存写入
-                    S($key, $result, $cache['expire'], $cache['type']);
+                
+                // 查询缓存写入
+                if ($cache && $result['ok']) {
+                    S($key, $result, $cache);
                 }
-
+                
                 return $result;
             } catch (\MongoCursorException $e) {
                 E($e->getMessage());
             }
         }
-
+        
         /**
          * 执行语句
          * @access public
@@ -179,7 +190,7 @@
                 E($result['errmsg']);
             }
         }
-
+        
         /**
          * 关闭数据库
          * @access public
@@ -194,7 +205,7 @@
                 $this->_cursor = null;
             }
         }
-
+        
         /**
          * 数据库错误信息
          * @access public
@@ -204,17 +215,18 @@
         {
             $this->error = $this->_mongo->lastError();
             trace($this->error, '', 'ERR');
-
+            
             return $this->error;
         }
-
+        
         /**
          * 插入记录
          * @access public
          * @param mixed   $data    数据
          * @param array   $options 参数表达式
-         * @param boolean $replace 是否replace
-         * @return false | integer
+         * @param bool $replace 是否replace
+         * @return false | int
+         * @throws \MongoCursorException
          */
         public function insert($data, $options = [], $replace = false)
         {
@@ -240,19 +252,20 @@
                     }
                     $this->lastInsID = $_id;
                 }
-
+                
                 return $result;
             } catch (\MongoCursorException $e) {
                 E($e->getMessage());
             }
         }
-
+        
         /**
          * 插入多条记录
          * @access public
          * @param array $dataList 数据
          * @param array $options  参数表达式
          * @return bool
+         * @throws \MongoCursorException
          */
         public function insertAll($dataList, $options = [])
         {
@@ -266,18 +279,19 @@
                 $this->debug(true);
                 $result = $this->_collection->batchInsert($dataList);
                 $this->debug(false);
-
+                
                 return $result;
             } catch (\MongoCursorException $e) {
                 E($e->getMessage());
             }
         }
-
+        
         /**
          * 生成下一条记录ID 用于自增非MongoId主键
          * @access public
          * @param string $pk 主键名
-         * @return integer
+         * @return int
+         * @throws \MongoCursorException
          */
         public function getMongoNextId($pk)
         {
@@ -292,16 +306,17 @@
                 E($e->getMessage());
             }
             $data = $result->getNext();
-
+            
             return isset($data[$pk]) ? $data[$pk] + 1 : 1;
         }
-
+        
         /**
          * 更新记录
          * @access public
          * @param mixed $data    数据
          * @param array $options 表达式
          * @return bool
+         * @throws \MongoCursorException
          */
         public function update($data, $options)
         {
@@ -321,24 +336,25 @@
             try {
                 $this->debug(true);
                 if (isset($options['limit']) && $options['limit'] == 1) {
-                    $multiple = ["multiple" => false];
+                    $multiple = ['multiple' => false];
                 } else {
-                    $multiple = ["multiple" => true];
+                    $multiple = ['multiple' => true];
                 }
                 $result = $this->_collection->update($query, $set, $multiple);
                 $this->debug(false);
-
+                
                 return $result;
             } catch (\MongoCursorException $e) {
                 E($e->getMessage());
             }
         }
-
+        
         /**
          * 删除记录
          * @access public
          * @param array $options 表达式
-         * @return false | integer
+         * @return false | int
+         * @throws \MongoCursorException
          */
         public function delete($options = [])
         {
@@ -356,18 +372,19 @@
                 $this->debug(true);
                 $result = $this->_collection->remove($query);
                 $this->debug(false);
-
+                
                 return $result;
             } catch (\MongoCursorException $e) {
                 E($e->getMessage());
             }
         }
-
+        
         /**
          * 清空记录
          * @access public
          * @param array $options 表达式
-         * @return false | integer
+         * @return false | int
+         * @throws \MongoCursorException
          */
         public function clear($options = [])
         {
@@ -384,18 +401,19 @@
                 $this->debug(true);
                 $result = $this->_collection->drop();
                 $this->debug(false);
-
+                
                 return $result;
             } catch (\MongoCursorException $e) {
                 E($e->getMessage());
             }
         }
-
+        
         /**
          * 查找记录
          * @access public
          * @param array $options 表达式
-         * @return iterator
+         * @return \iterator
+         * @throws \MongoCursorException
          */
         public function select($options = [])
         {
@@ -415,7 +433,7 @@
                         foreach ($field as $f => $v) {
                             $_field_array[$f] = $v ? 1 : 0;
                         }
-
+                        
                         $this->queryStr .= $field ? ', ' . json_encode($_field_array) : ', {}';
                     }
                     $this->queryStr .= ')';
@@ -452,13 +470,13 @@
                 $this->debug(false);
                 $this->_cursor = $_cursor;
                 $resultSet = iterator_to_array($_cursor);
-
+                
                 return $resultSet;
             } catch (\MongoCursorException $e) {
                 E($e->getMessage());
             }
         }
-
+        
         /**
          * 查找某个记录
          * @access public
@@ -469,15 +487,16 @@
         {
             $options['limit'] = 1;
             $find = $this->select($options);
-
+            
             return array_shift($find);
         }
-
+        
         /**
          * 统计记录数
          * @access public
          * @param array $options 表达式
-         * @return iterator
+         * @return \iterator
+         * @throws \MongoCursorException
          */
         public function count($options = [])
         {
@@ -497,19 +516,27 @@
                 $this->debug(true);
                 $count = $this->_collection->count($query);
                 $this->debug(false);
-
+                
                 return $count;
             } catch (\MongoCursorException $e) {
                 E($e->getMessage());
             }
         }
-
+        
+        /**
+         * @param       $keys
+         * @param       $initial
+         * @param       $reduce
+         * @param array $options
+         * @return mixed
+         * @throws \MongoCursorException
+         */
         public function group($keys, $initial, $reduce, $options = [])
         {
             if (isset($options['table']) && $this->_collectionName != $options['table']) {
                 $this->switchCollection($options['table'], '', false);
             }
-
+            
             $cache = isset($options['cache']) ? $options['cache'] : false;
             if ($cache) {
                 $key = is_string($cache['key']) ? $cache['key'] : md5(serialize($options));
@@ -518,12 +545,12 @@
                     return $value;
                 }
             }
-
+            
             $this->model = $options['model'];
             $this->queryTimes++;
             N('db_query', 1); // 兼容代码
             $query = $this->parseWhere(isset($options['where']) ? $options['where'] : []);
-
+            
             if ($this->config['debug']) {
                 $this->queryStr = $this->_dbName . '.' . $this->_collectionName . '.group({key:' . json_encode($keys) . ',cond:' .
                     json_encode($options['condition']) . ',reduce:' .
@@ -535,20 +562,21 @@
                 $option = ['condition' => $options['condition'], 'finalize' => $options['finalize'], 'maxTimeMS' => $options['maxTimeMS']];
                 $group = $this->_collection->group($keys, $initial, $reduce, $options);
                 $this->debug(false);
-
+                
                 if ($cache && $group['ok'])
-                    S($key, $group, $cache['expire'], $cache['type']);
-
+                    S($key, $group, $cache);
+                
                 return $group;
             } catch (\MongoCursorException $e) {
                 E($e->getMessage());
             }
         }
-
+        
         /**
          * 取得数据表的字段信息
          * @access public
-         * @return array
+         * @return array|bool
+         * @throws \MongoCursorException
          */
         public function getFields($collection = '')
         {
@@ -567,7 +595,8 @@
             } catch (\MongoCursorException $e) {
                 E($e->getMessage());
             }
-            if ($result) { // 存在数据则分析字段
+            // 存在数据则分析字段
+            if ($result) {
                 $info = [];
                 foreach ($result as $key => $val) {
                     $info[$key] = [
@@ -575,14 +604,14 @@
                         'type' => getType($val),
                     ];
                 }
-
+                
                 return $info;
             }
-
+            
             // 暂时没有数据 返回false
             return false;
         }
-
+        
         /**
          * 取得当前数据库的collection信息
          * @access public
@@ -601,10 +630,10 @@
             foreach ($list as $collection) {
                 $info[] = $collection->getName();
             }
-
+            
             return $info;
         }
-
+        
         /**
          * 取得当前数据库的对象
          * @access public
@@ -614,7 +643,7 @@
         {
             return $this->_mongo;
         }
-
+        
         /**
          * 取得当前集合的对象
          * @access public
@@ -624,7 +653,7 @@
         {
             return $this->_collection;
         }
-
+        
         /**
          * set分析
          * @access protected
@@ -657,10 +686,10 @@
                     $result['$set'][$key] = $val;
                 }
             }
-
+            
             return $result;
         }
-
+        
         /**
          * order分析
          * @access protected
@@ -682,10 +711,10 @@
                     $order[$arr[0]] = $arr[1];
                 }
             }
-
+            
             return $order;
         }
-
+        
         /**
          * limit分析
          * @access protected
@@ -699,10 +728,10 @@
             } else {
                 $array = [0, $limit];
             }
-
+            
             return $array;
         }
-
+        
         /**
          * field分析
          * @access protected
@@ -731,10 +760,10 @@
                     }
                 }
             }
-
+            
             return $fields;
         }
-
+        
         /**
          * where分析
          * @access protected
@@ -785,14 +814,14 @@
             if ($_logic == '$and') {
                 return $query;
             }
-
+            
             foreach ($query as $key => $val) {
                 $return[$_logic][] = [$key => $val];
             }
-
+            
             return $return;
         }
-
+        
         /**
          * 特殊条件分析
          * @access protected
@@ -804,23 +833,26 @@
         {
             $query = [];
             $_logic = ['or', 'xor', 'nor', 'and'];
-
+            
             switch ($key) {
-                case '_query': // 字符串模式查询条件
+                // 字符串模式查询条件
+                case '_query':
                     parse_str($val, $query);
                     if (isset($query['_logic']) && strtolower($query['_logic']) == 'or') {
                         unset($query['_logic']);
                         $query['$or'] = $query;
                     }
                     break;
-                case '_complex': // 子查询模式查询条件
+                // 子查询模式查询条件
+                case '_complex':
                     $__logic = strtolower($val['_logic']);
                     if (isset($val['_logic']) && in_array($__logic, $_logic)) {
                         unset($val['_logic']);
                         $query['$' . $__logic] = $val;
                     }
                     break;
-                case '_string':// MongoCode查询
+                // MongoCode查询
+                case '_string':
                     $query['$where'] = new \MongoCode($val);
                     break;
                 default:
@@ -834,10 +866,10 @@
                 }
                 $query['$or'] = $val;
             }
-
+            
             return $query;
         }
-
+        
         /**
          * where子单元分析
          * @access protected
@@ -869,20 +901,25 @@
                         $data = is_string($val[1]) ? explode(',', $val[1]) : $val[1];
                         $k = '$' . $this->comparison[$con];
                         $query[$key] = [$k => $data];
-                    } elseif ('all' == $con) { // 满足所有指定条件
+                        // 满足所有指定条件
+                    } elseif ('all' == $con) {
                         $data = is_string($val[1]) ? explode(',', $val[1]) : $val[1];
                         $query[$key] = ['$all' => $data];
-                    } elseif ('between' == $con) { // BETWEEN运算
+                        // BETWEEN运算
+                    } elseif ('between' == $con) {
                         $data = is_string($val[1]) ? explode(',', $val[1]) : $val[1];
                         $query[$key] = ['$gte' => $data[0], '$lte' => $data[1]];
                     } elseif ('not between' == $con) {
                         $data = is_string($val[1]) ? explode(',', $val[1]) : $val[1];
                         $query[$key] = ['$lt' => $data[0], '$gt' => $data[1]];
-                    } elseif ('exp' == $con) { // 表达式查询
+                        // 表达式查询
+                    } elseif ('exp' == $con) {
                         $query['$where'] = new \MongoCode($val[1]);
-                    } elseif ('exists' == $con) { // 字段是否存在
+                        // 字段是否存在
+                    } elseif ('exists' == $con) {
                         $query[$key] = ['$exists' => (bool)$val[1]];
-                    } elseif ('size' == $con) { // 限制属性大小
+                        // 限制属性大小
+                    } elseif ('size' == $con) {
                         $query[$key] = ['$size' => intval($val[1])];
                         // 限制字段类型 1 浮点型 2 字符型 3 对象或者MongoDBRef 5 MongoBinData 7 MongoId 8 布尔型 9 MongoDate
                         // 10 NULL 15 MongoCode 16 32位整型 17 MongoTimestamp 18 MongoInt64 如果是数组的话判断元素的类型
@@ -891,12 +928,12 @@
                     } else {
                         $query[$key] = $val;
                     }
-
+                    
                     return $query;
                 }
             }
             $query[$key] = $val;
-
+            
             return $query;
         }
     }

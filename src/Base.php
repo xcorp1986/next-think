@@ -1,15 +1,15 @@
 <?php
-
+    
     /**
      * 系统常量定义
      */
     defined('APP_PATH') || die('请在入口文件中定义常量APP_PATH');
-
+    
     /*
      * 记录开始运行时间
      */
     $GLOBALS['_beginTime'] = microtime(true);
-
+    
     /*
      * 记录内存初始使用
      */
@@ -17,12 +17,12 @@
     if (MEMORY_LIMIT_ON) {
         $GLOBALS['_startUseMems'] = memory_get_usage();
     }
-
+    
     /*
      * 版本信息
      */
     const THINK_VERSION = '3.2.3';
-
+    
     /*
      * URL 模式定义
      */
@@ -30,12 +30,12 @@
 //    const URL_PATHINFO = 1;  //PATHINFO模式
     const URL_REWRITE = 2;  //REWRITE模式
     const URL_COMPAT = 3;  // 兼容模式
-
+    
     /*
      * 类文件后缀(统一都是这个后缀了) modified by Kwan 2016-9-12
      */
     const EXT = '.php';
-
+    
     // 应用状态 加载对应的配置文件
     defined('APP_STATUS') || define('APP_STATUS', null);
     defined('APP_DEBUG') || define('APP_DEBUG', false); // 是否调试模式

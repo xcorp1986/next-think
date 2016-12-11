@@ -1,7 +1,7 @@
 <?php
-
+    
     namespace Think;
-
+    
     /**
      * 自动生成类
      * Class Build
@@ -9,8 +9,8 @@
      */
     class Build
     {
-
-        static protected $controller = '<?php
+        
+        protected static $controller = '<?php
 namespace [MODULE]\Controller;
 use Think\Controller;
 class [CONTROLLER]Controller extends Controller {
@@ -18,19 +18,19 @@ class [CONTROLLER]Controller extends Controller {
         $this->show(\'欢迎\');
     }
 }';
-
-        static protected $model = '<?php
+        
+        protected static $model = '<?php
 namespace [MODULE]\Model;
 use Think\Model;
 class [MODEL]Model extends Model {
 
 }';
-
+        
         /**
          * 检测应用目录是否需要自动创建
          * @param $module
          */
-        static public function checkDir($module)
+        public static function checkDir($module)
         {
             if (!is_dir(APP_PATH . $module)) {
                 // 创建模块的目录结构
@@ -40,12 +40,12 @@ class [MODEL]Model extends Model {
                 self::buildRuntime();
             }
         }
-
+        
         /**
          * 创建应用和模块的目录结构
          * @param $module
          */
-        static public function buildAppDir($module)
+        public static function buildAppDir($module)
         {
             // 没有创建的话自动创建
             if (!is_dir(APP_PATH)) mkdir(APP_PATH, 0755, true);
@@ -102,21 +102,21 @@ class [MODEL]Model extends Model {
                 }
             } else {
                 header('Content-Type:text/html; charset=utf-8');
-                \Think\Think::halt('应用目录[' . APP_PATH . ']不可写，目录无法自动生成！<BR>请手动生成项目目录~');
+                Think::halt('应用目录[' . APP_PATH . ']不可写，目录无法自动生成！<BR>请手动生成项目目录~');
             }
         }
-
+        
         /**
          * 检查缓存目录(Runtime) 如果不存在则自动创建
          * @return bool
          */
-        static public function buildRuntime()
+        public static function buildRuntime()
         {
             if (!is_dir(RUNTIME_PATH)) {
                 mkdir(RUNTIME_PATH);
             } elseif (!is_writeable(RUNTIME_PATH)) {
                 header('Content-Type:text/html; charset=utf-8');
-                \Think\Think::halt('目录 [ ' . RUNTIME_PATH . ' ] 不可写！');
+                Think::halt('目录 [ ' . RUNTIME_PATH . ' ] 不可写！');
             }
             mkdir(CACHE_PATH);  // 模板缓存目录
             // 日志目录
@@ -131,16 +131,16 @@ class [MODEL]Model extends Model {
             if (!is_dir(DATA_PATH)) {
                 mkdir(DATA_PATH);
             }
-
+            
             return true;
         }
-
+        
         /**
          * 创建控制器类
          * @param        $module
          * @param string $controller
          */
-        static public function buildController($module, $controller = 'Index')
+        public static function buildController($module, $controller = 'Index')
         {
             $file = APP_PATH . $module . '/Controller/' . $controller . 'Controller' . EXT;
             if (!is_file($file)) {
@@ -155,13 +155,13 @@ class [MODEL]Model extends Model {
                 file_put_contents($file, $content);
             }
         }
-
+        
         /**
          * 创建模型类
          * @param $module
          * @param $model
          */
-        static public function buildModel($module, $model)
+        public static function buildModel($module, $model)
         {
             $file = APP_PATH . $module . '/Model/' . $model . 'Model' . EXT;
             if (!is_file($file)) {

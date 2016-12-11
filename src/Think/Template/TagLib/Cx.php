@@ -1,17 +1,20 @@
 <?php
-
-
+    
+    
     namespace Think\Template\TagLib;
-
+    
     use Think\Template\TagLib;
-
+    
     /**
      * CX标签库解析类
      */
     class Cx extends TagLib
     {
-
-        // 标签定义
+    
+        /**
+         * 标签定义
+         * @var array $tags
+         */
         protected $tags = [
             // 标签定义： attr 属性列表 close 是否闭合（0 或者1 默认1） alias 标签别名 level 嵌套层次
             'php'        => [],
@@ -31,12 +34,11 @@
             'notpresent' => ['attr' => 'name', 'level' => 3],
             'defined'    => ['attr' => 'name', 'level' => 3],
             'notdefined' => ['attr' => 'name', 'level' => 3],
-            'import'     => ['attr' => 'file,href,type,value,basepath', 'close' => 0, 'alias' => 'load,css,js'],
             'assign'     => ['attr' => 'name,value', 'close' => 0],
             'define'     => ['attr' => 'name,value', 'close' => 0],
             'for'        => ['attr' => 'start,end,name,comparison,step', 'level' => 3],
         ];
-
+        
         /**
          * php标签解析
          * @access public
@@ -46,11 +48,9 @@
          */
         public function _php($tag, $content)
         {
-            $parseStr = '<?php ' . $content . ' ?>';
-
-            return $parseStr;
+            return '<?php ' . $content . ' ?>';
         }
-
+        
         /**
          * volist标签解析 循环输出数据集
          * 格式：
@@ -61,9 +61,9 @@
          * @access public
          * @param array  $tag     标签属性
          * @param string $content 标签内容
-         * @return string|void
+         * @return string
          */
-        public function _volist($tag, $content)
+        public function _volist(array $tag = [], $content = '')
         {
             $name = $tag['name'];
             $id = $tag['id'];
@@ -93,22 +93,22 @@
             $parseStr .= '++$' . $key . ';?>';
             $parseStr .= $this->tpl->parse($content);
             $parseStr .= '<?php endforeach; endif; else: echo "' . $empty . '" ;endif; ?>';
-
+            
             if (!empty($parseStr)) {
                 return $parseStr;
             }
-
-            return;
+            
+            return '';
         }
-
+        
         /**
          * foreach标签解析 循环输出数据集
          * @access public
          * @param array  $tag     标签属性
          * @param string $content 标签内容
-         * @return string|void
+         * @return string
          */
-        public function _foreach($tag, $content)
+        public function _foreach(array $tag = [], $content = '')
         {
             $name = $tag['name'];
             $item = $tag['item'];
@@ -117,14 +117,14 @@
             $parseStr = '<?php if(is_array(' . $name . ')): foreach(' . $name . ' as $' . $key . '=>$' . $item . '): ?>';
             $parseStr .= $this->tpl->parse($content);
             $parseStr .= '<?php endforeach; endif; ?>';
-
+            
             if (!empty($parseStr)) {
                 return $parseStr;
             }
-
-            return;
+            
+            return '';
         }
-
+        
         /**
          * if标签解析
          * 格式：
@@ -138,14 +138,13 @@
          * @param string $content 标签内容
          * @return string
          */
-        public function _if($tag, $content)
+        public function _if(array $tag = [], $content = '')
         {
             $condition = $this->parseCondition($tag['condition']);
-            $parseStr = '<?php if(' . $condition . '): ?>' . $content . '<?php endif; ?>';
-
-            return $parseStr;
+            
+            return '<?php if(' . $condition . '): ?>' . $content . '<?php endif; ?>';
         }
-
+        
         /**
          * else标签解析
          * 格式：见if标签
@@ -157,11 +156,10 @@
         public function _elseif($tag, $content)
         {
             $condition = $this->parseCondition($tag['condition']);
-            $parseStr = '<?php elseif(' . $condition . '): ?>';
-
-            return $parseStr;
+            
+            return '<?php elseif(' . $condition . '): ?>';
         }
-
+        
         /**
          * else标签解析
          * @access public
@@ -170,11 +168,9 @@
          */
         public function _else($tag)
         {
-            $parseStr = '<?php else: ?>';
-
-            return $parseStr;
+            return '<?php else: ?>';
         }
-
+        
         /**
          * switch标签解析
          * 格式：
@@ -188,19 +184,19 @@
          * @param string $content 标签内容
          * @return string
          */
-        public function _switch($tag, $content)
+        public function _switch(array $tag = [], $content = '')
         {
             $name = $tag['name'];
             $varArray = explode('|', $name);
             $name = array_shift($varArray);
             $name = $this->autoBuildVar($name);
-            if (count($varArray) > 0)
+            if (count($varArray) > 0) {
                 $name = $this->tpl->parseVarFunction($name, $varArray);
-            $parseStr = '<?php switch(' . $name . '): ?>' . $content . '<?php endswitch;?>';
-
-            return $parseStr;
+            }
+            
+            return '<?php switch(' . $name . '): ?>' . $content . '<?php endswitch;?>';
         }
-
+        
         /**
          * case标签解析 需要配合switch才有效
          * @access public
@@ -208,15 +204,16 @@
          * @param string $content 标签内容
          * @return string
          */
-        public function _case($tag, $content)
+        public function _case(array $tag = [], $content = '')
         {
             $value = $tag['value'];
             if ('$' == substr($value, 0, 1)) {
                 $varArray = explode('|', $value);
                 $value = array_shift($varArray);
                 $value = $this->autoBuildVar(substr($value, 1));
-                if (count($varArray) > 0)
+                if (count($varArray) > 0) {
                     $value = $this->tpl->parseVarFunction($value, $varArray);
+                }
                 $value = 'case ' . $value . ': ';
             } elseif (strpos($value, '|')) {
                 $values = explode('|', $value);
@@ -232,25 +229,22 @@
             if ('' == $isBreak || $isBreak) {
                 $parseStr .= '<?php break;?>';
             }
-
+            
             return $parseStr;
         }
-
+        
         /**
          * default标签解析 需要配合switch才有效
          * 使用： <default />ddfdf
          * @access public
          * @param array  $tag     标签属性
-         * @param string $content 标签内容
          * @return string
          */
         public function _default($tag)
         {
-            $parseStr = '<?php default: ?>';
-
-            return $parseStr;
+            return '<?php default: ?>';
         }
-
+        
         /**
          * compare标签解析
          * 用于值的比较 支持 eq neq gt lt egt elt heq nheq 默认是eq
@@ -258,9 +252,10 @@
          * @access public
          * @param array  $tag     标签属性
          * @param string $content 标签内容
+         * @param string $type
          * @return string
          */
-        public function _compare($tag, $content, $type = 'eq')
+        public function _compare(array $tag = [], $content = '', $type = 'eq')
         {
             $name = $tag['name'];
             $value = $tag['value'];
@@ -277,61 +272,111 @@
             } else {
                 $value = '"' . $value . '"';
             }
-            $parseStr = '<?php if((' . $name . ') ' . $type . ' ' . $value . '): ?>' . $content . '<?php endif; ?>';
-
-            return $parseStr;
+            
+            return '<?php if((' . $name . ') ' . $type . ' ' . $value . '): ?>' . $content . '<?php endif; ?>';
         }
-
-        public function _eq($tag, $content)
+        
+        /**
+         * <EQ>...</EQ>
+         * @param $tag
+         * @param $content
+         * @return string
+         */
+        public function _eq(array $tag = [], $content = '')
         {
             return $this->_compare($tag, $content, 'eq');
         }
-
-        public function _equal($tag, $content)
+        
+        /**
+         * @param array  $tag
+         * @param string $content
+         * @return string
+         */
+        public function _equal(array $tag = [], $content = '')
         {
             return $this->_compare($tag, $content, 'eq');
         }
-
-        public function _neq($tag, $content)
+        
+        /**
+         * @param array  $tag
+         * @param string $content
+         * @return string
+         */
+        public function _neq(array $tag = [], $content = '')
         {
             return $this->_compare($tag, $content, 'neq');
         }
-
-        public function _notequal($tag, $content)
+        
+        /**
+         * @param array  $tag
+         * @param string $content
+         * @return string
+         */
+        public function _notequal(array $tag = [], $content = '')
         {
             return $this->_compare($tag, $content, 'neq');
         }
-
-        public function _gt($tag, $content)
+        
+        /**
+         * @param array  $tag
+         * @param string $content
+         * @return string
+         */
+        public function _gt(array $tag = [], $content = '')
         {
             return $this->_compare($tag, $content, 'gt');
         }
-
-        public function _lt($tag, $content)
+        
+        /**
+         * @param array  $tag
+         * @param string $content
+         * @return string
+         */
+        public function _lt(array $tag = [], $content = '')
         {
             return $this->_compare($tag, $content, 'lt');
         }
-
-        public function _egt($tag, $content)
+        
+        /**
+         * @param array  $tag
+         * @param string $content
+         * @return string
+         */
+        public function _egt(array $tag = [], $content = '')
         {
             return $this->_compare($tag, $content, 'egt');
         }
-
-        public function _elt($tag, $content)
+        
+        /**
+         * @param array  $tag
+         * @param string $content
+         * @return string
+         */
+        public function _elt(array $tag = [], $content = '')
         {
             return $this->_compare($tag, $content, 'elt');
         }
-
-        public function _heq($tag, $content)
+        
+        /**
+         * @param array  $tag
+         * @param string $content
+         * @return string
+         */
+        public function _heq(array $tag = [], $content = '')
         {
             return $this->_compare($tag, $content, 'heq');
         }
-
-        public function _nheq($tag, $content)
+        
+        /**
+         * @param array  $tag
+         * @param string $content
+         * @return string
+         */
+        public function _nheq(array $tag = [], $content = '')
         {
             return $this->_compare($tag, $content, 'nheq');
         }
-
+        
         /**
          * range标签解析
          * 如果某个变量存在于某个范围 则输出内容 type= in 表示在范围内 否则表示在范围外
@@ -343,7 +388,7 @@
          * @param string $type    比较类型
          * @return string
          */
-        public function _range($tag, $content, $type = 'in')
+        public function _range(array $tag = [], $content = '', $type = 'in')
         {
             $name = $tag['name'];
             $value = $tag['value'];
@@ -353,9 +398,9 @@
             if (count($varArray) > 0) {
                 $name = $this->tpl->parseVarFunction($name, $varArray);
             }
-
+            
             $type = isset($tag['type']) ? $tag['type'] : $type;
-
+            
             if ('$' == substr($value, 0, 1)) {
                 $value = $this->autoBuildVar(substr($value, 1));
                 $str = 'is_array(' . $value . ')?' . $value . ':explode(\',\',' . $value . ')';
@@ -371,54 +416,54 @@
                 $fun = ($type == 'in') ? 'in_array' : '!in_array';
                 $parseStr = '<?php if(' . $fun . '((' . $name . '), ' . $str . ')): ?>' . $content . '<?php endif; ?>';
             }
-
+            
             return $parseStr;
         }
-
+        
         /**
          * range标签的别名 用于in判断
-         * @param $tag
-         * @param $content
+         * @param array  $tag
+         * @param string $content
          * @return string
          */
-        public function _in($tag, $content)
+        public function _in(array $tag = [], $content = '')
         {
             return $this->_range($tag, $content, 'in');
         }
-
+        
         /**
          * range标签的别名 用于notin判断
-         * @param $tag
-         * @param $content
+         * @param array  $tag
+         * @param string $content
          * @return string
          */
-        public function _notin($tag, $content)
+        public function _notin(array $tag = [], $content = '')
         {
             return $this->_range($tag, $content, 'notin');
         }
-
+        
         /**
          * 判断变量是否在某个区间范围内
-         * @param $tag
-         * @param $content
+         * @param array  $tag
+         * @param string $content
          * @return string
          */
-        public function _between($tag, $content)
+        public function _between(array $tag = [], $content = '')
         {
             return $this->_range($tag, $content, 'between');
         }
-
+        
         /**
          * 判断变量是否不在某个区间范围内
-         * @param $tag
-         * @param $content
+         * @param array  $tag
+         * @param string $content
          * @return string
          */
-        public function _notbetween($tag, $content)
+        public function _notbetween(array $tag = [], $content = '')
         {
             return $this->_range($tag, $content, 'notbetween');
         }
-
+        
         /**
          * present标签解析
          * 如果某个变量已经设置 则输出内容
@@ -428,15 +473,14 @@
          * @param string $content 标签内容
          * @return string
          */
-        public function _present($tag, $content)
+        public function _present(array $tag = [], $content = '')
         {
             $name = $tag['name'];
             $name = $this->autoBuildVar($name);
-            $parseStr = '<?php if(isset(' . $name . ')): ?>' . $content . '<?php endif; ?>';
-
-            return $parseStr;
+            
+            return '<?php if(isset(' . $name . ')): ?>' . $content . '<?php endif; ?>';
         }
-
+        
         /**
          * notpresent标签解析
          * 如果某个变量没有设置，则输出内容
@@ -446,15 +490,14 @@
          * @param string $content 标签内容
          * @return string
          */
-        public function _notpresent($tag, $content)
+        public function _notpresent(array $tag = [], $content = '')
         {
             $name = $tag['name'];
             $name = $this->autoBuildVar($name);
-            $parseStr = '<?php if(!isset(' . $name . ')): ?>' . $content . '<?php endif; ?>';
-
-            return $parseStr;
+            
+            return '<?php if(!isset(' . $name . ')): ?>' . $content . '<?php endif; ?>';
         }
-
+        
         /**
          * empty标签解析
          * 如果某个变量为empty则输出内容
@@ -464,180 +507,55 @@
          * @param string $content 标签内容
          * @return string
          */
-        public function _empty($tag, $content)
+        public function _empty(array $tag = [], $content = '')
         {
             $name = $tag['name'];
             $name = $this->autoBuildVar($name);
-            $parseStr = '<?php if(empty(' . $name . ')): ?>' . $content . '<?php endif; ?>';
-
-            return $parseStr;
+            
+            return '<?php if(empty(' . $name . ')): ?>' . $content . '<?php endif; ?>';
         }
-
+        
         /**
          * 如果某个变量不为empty则输出内容
-         * @param $tag
-         * @param $content
+         * @param array  $tag
+         * @param string $content
          * @return string
          */
-        public function _notempty($tag, $content)
+        public function _notempty(array $tag = [], $content = '')
         {
             $name = $tag['name'];
             $name = $this->autoBuildVar($name);
-            $parseStr = '<?php if(!empty(' . $name . ')): ?>' . $content . '<?php endif; ?>';
-
-            return $parseStr;
+            
+            return '<?php if(!empty(' . $name . ')): ?>' . $content . '<?php endif; ?>';
         }
-
+        
         /**
          * 判断是否已经定义了该常量
          * <defined name='TXT'>已定义</defined>
-         * @param <type> $attr
-         * @param <type> $content
+         * @param array  $tag
+         * @param string $content
          * @return string
          */
-        public function _defined($tag, $content)
+        public function _defined(array $tag = [], $content = '')
         {
             $name = $tag['name'];
-            $parseStr = '<?php if(defined("' . $name . '")): ?>' . $content . '<?php endif; ?>';
-
-            return $parseStr;
+            
+            return '<?php if(defined("' . $name . '")): ?>' . $content . '<?php endif; ?>';
         }
-
+        
         /**
          * 判断是否未某常量
-         * @param $tag
-         * @param $content
+         * @param array  $tag
+         * @param string $content
          * @return string
          */
-        public function _notdefined($tag, $content)
+        public function _notdefined(array $tag = [], $content = '')
         {
             $name = $tag['name'];
-            $parseStr = '<?php if(!defined("' . $name . '")): ?>' . $content . '<?php endif; ?>';
-
-            return $parseStr;
+            
+            return '<?php if(!defined("' . $name . '")): ?>' . $content . '<?php endif; ?>';
         }
-
-        /**
-         * import 标签解析 <import file="Js.Base" />
-         * <import file="Css.Base" type="css" />
-         * @deprecated
-         * @access public
-         * @param array   $tag     标签属性
-         * @param string  $content 标签内容
-         * @param boolean $isFile  是否文件方式
-         * @param string  $type    类型
-         * @return string
-         */
-        public function _import($tag, $content, $isFile = false, $type = '')
-        {
-            $file = isset($tag['file']) ? $tag['file'] : $tag['href'];
-            $parseStr = '';
-            $endStr = '';
-            // 判断是否存在加载条件 允许使用函数判断(默认为isset)
-            if (isset($tag['value'])) {
-                $varArray = explode('|', $tag['value']);
-                $name = array_shift($varArray);
-                $name = $this->autoBuildVar($name);
-                if (!empty($varArray)) {
-                    $name = $this->tpl->parseVarFunction($name, $varArray);
-                } else {
-                    $name = 'isset(' . $name . ')';
-                }
-                $parseStr .= '<?php if(' . $name . '): ?>';
-                $endStr = '<?php endif; ?>';
-            }
-            if ($isFile) {
-                // 根据文件名后缀自动识别
-                $type = $type ? $type : (!empty($tag['type']) ? strtolower($tag['type']) : null);
-                // 文件方式导入
-                $array = explode(',', $file);
-                foreach ($array as $val) {
-                    if (!$type || isset($reset)) {
-                        $type = $reset = strtolower(substr(strrchr($val, '.'), 1));
-                    }
-                    switch ($type) {
-                        case 'js':
-                            $parseStr .= '<script src="' . $val . '"></script>';
-                            break;
-                        case 'css':
-                            $parseStr .= '<link rel="stylesheet" href="' . $val . '" />';
-                            break;
-                        case 'php':
-                            $parseStr .= '<?php require_cache("' . $val . '"); ?>';
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            } else {
-                // 命名空间导入模式 默认是js
-                $type = $type ? $type : (!empty($tag['type']) ? strtolower($tag['type']) : 'js');
-                $basepath = !empty($tag['basepath']) ? $tag['basepath'] : __ROOT__ . '/Public';
-                // 命名空间方式导入外部文件
-                $array = explode(',', $file);
-                foreach ($array as $val) {
-                    if (strpos($val, '?')) {
-                        list($val, $version) = explode('?', $val);
-                    } else {
-                        $version = '';
-                    }
-                    switch ($type) {
-                        case 'js':
-                            $parseStr .= '<script src="' . $basepath . '/' . str_replace(['.', '#'], ['/', '.'], $val) . '.js' . ($version ? '?' . $version : '') . '"></script>';
-                            break;
-                        case 'css':
-                            $parseStr .= '<link rel="stylesheet" href="' . $basepath . '/' . str_replace(['.', '#'], ['/', '.'], $val) . '.css' . ($version ? '?' . $version : '') . '" />';
-                            break;
-                        case 'php':
-                            $parseStr .= '<?php import("' . $val . '"); ?>';
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-
-            return $parseStr . $endStr;
-        }
-
-        /**
-         * import别名 采用文件方式加载(要使用命名空间必须用import)
-         * <load file="__PUBLIC__/Js/Base.js" />
-         * @deprecated
-         * @param $tag
-         * @param $content
-         * @return string
-         */
-        public function _load($tag, $content)
-        {
-            return $this->_import($tag, $content, true);
-        }
-
-        /**
-         * import别名使用 导入css文件
-         * <css file="__PUBLIC__/Css/Base.css" />
-         * @param $tag
-         * @param $content
-         * @return string
-         */
-        public function _css($tag, $content)
-        {
-            return $this->_import($tag, $content, true, 'css');
-        }
-
-        /**
-         * import别名使用 导入js文件
-         * <js file="__PUBLIC__/Js/Base.js" />
-         * @deprecated
-         * @param $tag
-         * @param $content
-         * @return string
-         */
-        public function _js($tag, $content)
-        {
-            return $this->_import($tag, $content, true, 'js');
-        }
-
+        
         /**
          * assign标签解析
          * 在模板中给某个变量赋值 支持变量赋值
@@ -656,11 +574,10 @@
             } else {
                 $value = '\'' . $tag['value'] . '\'';
             }
-            $parseStr = '<?php ' . $name . ' = ' . $value . '; ?>';
-
-            return $parseStr;
+            
+            return '<?php ' . $name . ' = ' . $value . '; ?>';
         }
-
+        
         /**
          * define标签解析
          * 在模板中定义常量 支持变量赋值
@@ -678,11 +595,10 @@
             } else {
                 $value = '\'' . $tag['value'] . '\'';
             }
-            $parseStr = '<?php define(' . $name . ', ' . $value . '); ?>';
-
-            return $parseStr;
+            
+            return '<?php define(' . $name . ', ' . $value . '); ?>';
         }
-
+        
         /**
          * for标签解析
          * 格式： <for start="" end="" comparison="" step="" name="" />
@@ -691,7 +607,7 @@
          * @param string $content 标签内容
          * @return string
          */
-        public function _for($tag, $content)
+        public function _for(array $tag = [], $content = '')
         {
             //设置默认值
             $start = 0;
@@ -699,7 +615,8 @@
             $step = 1;
             $comparison = 'lt';
             $name = 'i';
-            $rand = rand(); //添加随机数，防止嵌套变量冲突
+            //添加随机数，防止嵌套变量冲突
+            $rand = rand();
             //获取属性
             foreach ($tag as $key => $value) {
                 $value = trim($value);
@@ -728,13 +645,13 @@
                         break;
                 }
             }
-
+            
             $parseStr = '<?php $__FOR_START_' . $rand . '__=' . $start . ';$__FOR_END_' . $rand . '__=' . $end . ';';
             $parseStr .= 'for($' . $name . '=$__FOR_START_' . $rand . '__;' . $this->parseCondition('$' . $name . ' ' . $comparison . ' $__FOR_END_' . $rand . '__') . ';$' . $name . '+=' . $step . '){ ?>';
             $parseStr .= $content;
             $parseStr .= '<?php } ?>';
-
+            
             return $parseStr;
         }
-
+        
     }

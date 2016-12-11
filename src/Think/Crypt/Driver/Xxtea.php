@@ -1,13 +1,13 @@
 <?php
-
-
+    
+    
     namespace Think\Crypt\Driver;
     /**
      * Xxtea 加密实现类
      */
     class Xxtea
     {
-
+        
         /**
          * 加密字符串
          * @param string $str    字符串
@@ -22,7 +22,7 @@
             $v = self::str2long($str, true);
             $k = self::str2long($key, false);
             $n = count($v) - 1;
-
+            
             $z = $v[$n];
             $y = $v[0];
             $delta = 0x9E3779B9;
@@ -40,10 +40,10 @@
                 $mx = self::int32((($z >> 5 & 0x07ffffff) ^ $y << 2) + (($y >> 3 & 0x1fffffff) ^ $z << 4)) ^ self::int32(($sum ^ $y) + ($k[$p & 3 ^ $e] ^ $z));
                 $z = $v[$n] = self::int32($v[$n] + $mx);
             }
-
+            
             return self::long2str($v, false);
         }
-
+        
         /**
          * 解密字符串
          * @param string $str 字符串
@@ -55,7 +55,7 @@
             $v = self::str2long($str, false);
             $k = self::str2long($key, false);
             $n = count($v) - 1;
-
+            
             $z = $v[$n];
             $y = $v[0];
             $delta = 0x9E3779B9;
@@ -78,11 +78,15 @@
             if ($expire > 0 && $expire < time()) {
                 return '';
             }
-            $data = substr($data, 10);
-
-            return $data;
+            
+            return substr($data, 10);
         }
-
+        
+        /**
+         * @param $v
+         * @param $w
+         * @return string
+         */
         private static function long2str($v, $w)
         {
             $len = count($v);
@@ -96,7 +100,12 @@
                 return join('', $s);
             }
         }
-
+        
+        /**
+         * @param $s
+         * @param $w
+         * @return array
+         */
         private static function str2long($s, $w)
         {
             $v = unpack("V*", $s . str_repeat("\0", (4 - strlen($s) % 4) & 3));
@@ -104,16 +113,24 @@
             if ($w) {
                 $v[count($v)] = strlen($s);
             }
-
+            
             return $v;
         }
-
+        
+        /**
+         * @param $n
+         * @return int
+         */
         private static function int32($n)
         {
-            while ($n >= 2147483648) $n -= 4294967296;
-            while ($n <= -2147483649) $n += 4294967296;
-
+            while ($n >= 2147483648) {
+                $n -= 4294967296;
+            }
+            while ($n <= -2147483649) {
+                $n += 4294967296;
+            }
+            
             return (int)$n;
         }
-
+        
     }

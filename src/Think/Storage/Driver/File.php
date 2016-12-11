@@ -1,21 +1,23 @@
 <?php
-
-
+    
+    
     namespace Think\Storage\Driver;
-
+    
     use Think\Storage;
-
+    
     /**
      * 本地文件存储类
      * Class File
-     * @todo 重写成静态调用
+     * @todo    重写成静态调用
      * @package Think\Storage\Driver
      */
     class File extends Storage
     {
-
+        /**
+         * @var array
+         */
         private static $contents = [];
-
+        
         /**
          * 读取文件内容
          * @access public
@@ -27,7 +29,7 @@
         {
             return self::get($filename, 'content');
         }
-
+        
         /**
          * 文件写入
          * @access public
@@ -45,11 +47,11 @@
                 E(L('_STORAGE_WRITE_ERROR_') . ':' . $filename);
             } else {
                 self::$contents[$filename] = $content;
-
+                
                 return true;
             }
         }
-
+        
         /**
          * 文件追加写入
          * @access public
@@ -62,10 +64,10 @@
             if (is_file($filename)) {
                 $content = self::read($filename) . $content;
             }
-
+            
             return self::put($filename, $content);
         }
-
+        
         /**
          * 加载文件
          * @access public
@@ -80,7 +82,7 @@
             }
             include $_filename;
         }
-
+        
         /**
          * 文件是否存在
          * @access public
@@ -92,7 +94,7 @@
         {
             return is_file($filename);
         }
-
+        
         /**
          * 文件删除
          * @access public
@@ -102,10 +104,10 @@
         public static function unlink($filename)
         {
             unset(self::$contents[$filename]);
-
+            
             return is_file($filename) ? unlink($filename) : false;
         }
-
+        
         /**
          * 读取文件信息
          * @access public
@@ -116,7 +118,9 @@
         public static function get($filename, $name)
         {
             if (!isset(self::$contents[$filename])) {
-                if (!is_file($filename)) return false;
+                if (!is_file($filename)) {
+                    return false;
+                }
                 self::$contents[$filename] = file_get_contents($filename);
             }
             $content = self::$contents[$filename];
@@ -124,7 +128,7 @@
                 'mtime'   => filemtime($filename),
                 'content' => $content,
             ];
-
+            
             return $info[$name];
         }
     }

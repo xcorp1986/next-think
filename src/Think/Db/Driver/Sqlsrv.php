@@ -1,11 +1,11 @@
 <?php
-
-
+    
+    
     namespace Think\Db\Driver;
-
+    
     use PDO;
     use Think\Db\Driver;
-
+    
     /**
      * Sqlsrv数据库驱动
      */
@@ -19,7 +19,7 @@
             PDO::ATTR_STRINGIFY_FETCHES => false,
             PDO::SQLSRV_ATTR_ENCODING   => PDO::SQLSRV_ENCODING_UTF8,
         ];
-
+        
         /**
          * 解析pdo连接的dsn信息
          * @access public
@@ -32,10 +32,10 @@
             if (!empty($config['hostport'])) {
                 $dsn .= ',' . $config['hostport'];
             }
-
+            
             return $dsn;
         }
-
+        
         /**
          * 取得数据表的字段信息
          * @access public
@@ -65,10 +65,10 @@
                     ];
                 }
             }
-
+            
             return $info;
         }
-
+        
         /**
          * 取得数据表的字段信息
          * @access public
@@ -84,10 +84,10 @@
             foreach ($result as $key => $val) {
                 $info[$key] = current($val);
             }
-
+            
             return $info;
         }
-
+        
         /**
          * order分析
          * @access protected
@@ -98,7 +98,7 @@
         {
             return !empty($order) ? ' ORDER BY ' . $order : ' ORDER BY rand()';
         }
-
+        
         /**
          * 字段名分析
          * @access protected
@@ -111,10 +111,10 @@
             if (!is_numeric($key) && !preg_match('/[,\'\"\*\(\)\[.\s]/', $key)) {
                 $key = '[' . $key . ']';
             }
-
+            
             return $key;
         }
-
+        
         /**
          * limit
          * @access public
@@ -132,16 +132,16 @@
             } else {
                 $limitStr = '(T1.ROW_NUMBER BETWEEN 1 AND ' . $limit[0] . ")";
             }
-
+            
             return 'WHERE ' . $limitStr;
         }
-
+        
         /**
          * 更新记录
          * @access public
          * @param mixed $data    数据
          * @param array $options 表达式
-         * @return false | integer
+         * @return false | int
          */
         public function update($data, $options)
         {
@@ -153,15 +153,15 @@
                 . $this->parseWhere(!empty($options['where']) ? $options['where'] : '')
                 . $this->parseLock(isset($options['lock']) ? $options['lock'] : false)
                 . $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
-
+            
             return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
         }
-
+        
         /**
          * 删除记录
          * @access public
          * @param array $options 表达式
-         * @return false | integer
+         * @return false | int
          */
         public function delete($options = [])
         {
@@ -172,8 +172,8 @@
                 . $this->parseWhere(!empty($options['where']) ? $options['where'] : '')
                 . $this->parseLock(isset($options['lock']) ? $options['lock'] : false)
                 . $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
-
+            
             return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
         }
-
+        
     }

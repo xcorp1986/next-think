@@ -9,11 +9,6 @@
     {
         
         /**
-         * @var array $_map 类映射
-         */
-        private static $_map = [];
-        
-        /**
          * @var array $_instance 实例化对象
          */
         private static $_instance = [];
@@ -23,7 +18,7 @@
          * @access public
          * @return void
          */
-        static public function start()
+        public static function start()
         {
             /*
              * 设定错误和异常处理
@@ -153,7 +148,7 @@
          * @param string $method 类的静态方法名
          * @return object
          */
-        static public function instance($class, $method = '')
+        public static function instance($class, $method = '')
         {
             $identify = $class . $method;
             if (!isset(self::$_instance[$identify])) {
@@ -177,7 +172,7 @@
          * @access public
          * @param mixed $e 异常对象
          */
-        static public function appException($e)
+        public static function appException($e)
         {
             $error = [];
             $error['message'] = $e->getMessage();
@@ -202,29 +197,29 @@
         /**
          * 自定义错误处理
          * @access public
-         * @param int    $errno   错误类型
-         * @param string $errstr  错误信息
-         * @param string $errfile 错误文件
-         * @param int    $errline 错误行数
+         * @param int    $errNo   错误类型
+         * @param string $errStr  错误信息
+         * @param string $errFile 错误文件
+         * @param int    $errLine 错误行数
          * @return void
          */
-        static public function appError($errno, $errstr, $errfile, $errline)
+        public static function appError($errNo, $errStr, $errFile, $errLine)
         {
-            switch ($errno) {
+            switch ($errNo) {
                 case E_ERROR:
                 case E_PARSE:
                 case E_CORE_ERROR:
                 case E_COMPILE_ERROR:
                 case E_USER_ERROR:
                     ob_end_clean();
-                    $errorStr = "$errstr " . $errfile . " 第 $errline 行.";
+                    $errorStr = "$errStr " . $errFile . " 第 $errLine 行.";
                     if (C('LOG_RECORD')) {
-                        Log::write("[$errno] " . $errorStr, Log::ERR);
+                        Log::write("[$errNo] " . $errorStr, Log::ERR);
                     }
                     self::halt($errorStr);
                     break;
                 default:
-                    $errorStr = "[$errno] $errstr " . $errfile . " 第 $errline 行.";
+                    $errorStr = "[$errNo] $errStr " . $errFile . " 第 $errLine 行.";
                     self::trace($errorStr, '', 'NOTIC');
                     break;
             }
@@ -233,7 +228,7 @@
         /**
          * 致命错误捕获
          */
-        static public function fatalError()
+        public static function fatalError()
         {
             Log::save();
             if ($e = error_get_last()) {
@@ -257,7 +252,7 @@
          * @param mixed $error 错误
          * @return void
          */
-        static public function halt($error)
+        public static function halt($error)
         {
             $e = [];
             if (APP_DEBUG || IS_CLI) {
@@ -294,13 +289,13 @@
         
         /**
          * 添加和获取页面Trace记录
-         * @param string  $value  变量
-         * @param string  $label  标签
-         * @param string  $level  日志级别(或者页面Trace的选项卡)
-         * @param boolean $record 是否记录日志
+         * @param string $value  变量
+         * @param string $label  标签
+         * @param string $level  日志级别(或者页面Trace的选项卡)
+         * @param bool   $record 是否记录日志
          * @return void|array
          */
-        static public function trace($value = '[think]', $label = '', $level = 'DEBUG', $record = false)
+        public static function trace($value = '[think]', $label = '', $level = 'DEBUG', $record = false)
         {
             static $_trace = [];
             // 获取trace信息
@@ -319,5 +314,21 @@
                     $_trace[$level][] = $info;
                 }
             }
+        }
+        
+        /**
+         * 禁止clone对象
+         */
+        public function __clone()
+        {
+            trigger_error('Cloning ' . __CLASS__ . ' is not allowed.', E_USER_ERROR);
+        }
+        
+        /**
+         * 禁止反序列化对象
+         */
+        public function __wakeup()
+        {
+            trigger_error('Unserializing ' . __CLASS__ . ' is not allowed.', E_USER_ERROR);
         }
     }

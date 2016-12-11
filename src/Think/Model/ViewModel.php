@@ -1,18 +1,18 @@
 <?php
-
-
+    
+    
     namespace Think\Model;
-
+    
     use Think\Model;
-
+    
     /**
-     * 视图模型扩展
+     * 视图模型
      */
     class ViewModel extends Model
     {
-
+        
         protected $viewFields = [];
-
+        
         /**
          * 自动检测数据表信息
          * @access protected
@@ -21,7 +21,7 @@
         protected function _checkTableInfo()
         {
         }
-
+        
         /**
          * 得到完整的数据表名
          * @access public
@@ -57,10 +57,10 @@
                 $tableName = substr($tableName, 0, -$len);
                 $this->trueTableName = $tableName;
             }
-
+            
             return $this->trueTableName;
         }
-
+        
         /**
          * 表达式过滤方法
          * @access protected
@@ -84,7 +84,7 @@
                 $options['order'] = $this->checkOrder($options['order']);
             }
         }
-
+        
         /**
          * 检查是否定义了所有字段
          * @access protected
@@ -94,21 +94,22 @@
          */
         private function _checkFields($name, $fields)
         {
-            if (false !== $pos = array_search('*', $fields)) {// 定义所有字段
+            // 定义所有字段
+            if (false !== $pos = array_search('*', $fields)) {
                 $fields = array_merge($fields, M($name)->getDbFields());
                 unset($fields[$pos]);
             }
-
+            
             return $fields;
         }
-
+        
         /**
          * 检查条件中的视图字段
          * @access protected
-         * @param mixed $data 条件表达式
+         * @param array $where 条件表达式
          * @return array
          */
-        protected function checkCondition($where)
+        protected function checkCondition(array $where = [])
         {
             if (is_array($where)) {
                 $view = [];
@@ -127,10 +128,10 @@
                 }
                 $where = array_merge($where, $view);
             }
-
+            
             return $where;
         }
-
+        
         /**
          * 检查Order表达式中的视图字段
          * @access protected
@@ -160,10 +161,10 @@
                 }
                 $order = implode(',', $_order);
             }
-
+            
             return $order;
         }
-
+        
         /**
          * 检查Group表达式中的视图字段
          * @access protected
@@ -190,10 +191,10 @@
                 }
                 $group = implode(',', $_group);
             }
-
+            
             return $group;
         }
-
+        
         /**
          * 检查fields表达式中的视图字段
          * @access protected
@@ -257,7 +258,7 @@
                 }
                 $fields = implode(',', $array);
             }
-
+            
             return $fields;
         }
     }

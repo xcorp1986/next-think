@@ -1,19 +1,19 @@
 <?php
-
-
+    
+    
     namespace Think\Db\Driver;
-
+    
     use Think\Db\Driver;
-
+    
     /**
      * Oracle数据库驱动
      */
     class Oracle extends Driver
     {
-
+        
         private $table = '';
         protected $selectSql = 'SELECT * FROM (SELECT thinkphp.*, rownum AS numrow FROM (SELECT  %DISTINCT% %FIELD% FROM %TABLE%%JOIN%%WHERE%%GROUP%%HAVING%%ORDER%) thinkphp ) %LIMIT%%COMMENT%';
-
+        
         /**
          * 解析pdo连接的dsn信息
          * @access public
@@ -26,16 +26,16 @@
             if (!empty($config['charset'])) {
                 $dsn .= ';charset=' . $config['charset'];
             }
-
+            
             return $dsn;
         }
-
+        
         /**
          * 执行语句
          * @access public
-         * @param string  $str      sql指令
-         * @param boolean $fetchSql 不执行只是获取SQL
-         * @return integer
+         * @param string $str      sql指令
+         * @param bool   $fetchSql 不执行只是获取SQL
+         * @return int
          */
         public function execute($str, $fetchSql = false)
         {
@@ -56,7 +56,7 @@
             $flag = false;
             if (preg_match("/^\s*(INSERT\s+INTO)\s+(\w+)\s+/i", $str, $match)) {
                 $this->table = C("DB_SEQUENCE_PREFIX") . str_ireplace(C("DB_PREFIX"), "", $match[2]);
-                $flag = (boolean)$this->query("SELECT * FROM user_sequences WHERE sequence_name='" . strtoupper($this->table) . "'");
+                $flag = (bool)$this->query("SELECT * FROM user_sequences WHERE sequence_name='" . strtoupper($this->table) . "'");
             }
             //释放前次的查询结果
             if (!empty($this->PDOStatement)) {
@@ -70,7 +70,7 @@
             $this->PDOStatement = $this->_linkID->prepare($str);
             if (false === $this->PDOStatement) {
                 $this->error();
-
+                
                 return false;
             }
             foreach ($this->bind as $key => $val) {
@@ -85,18 +85,18 @@
             $this->debug(false);
             if (false === $result) {
                 $this->error();
-
+                
                 return false;
             } else {
                 $this->numRows = $this->PDOStatement->rowCount();
                 if ($flag || preg_match("/^\s*(INSERT\s+INTO|REPLACE\s+INTO)\s+/i", $str)) {
                     $this->lastInsID = $this->_linkID->lastInsertId();
                 }
-
+                
                 return $this->numRows;
             }
         }
-
+        
         /**
          * 取得数据表的字段信息
          * @access public
@@ -121,10 +121,10 @@
                     ];
                 }
             }
-
+            
             return $info;
         }
-
+        
         /**
          * 取得数据库的表信息（暂时实现取得用户表信息）
          * @access public
@@ -136,10 +136,10 @@
             foreach ($result as $key => $val) {
                 $info[$key] = current($val);
             }
-
+            
             return $info;
         }
-
+        
         /**
          * SQL指令安全过滤
          * @access public
@@ -150,7 +150,7 @@
         {
             return str_ireplace("'", "''", $str);
         }
-
+        
         /**
          * limit
          * @access public
@@ -167,10 +167,10 @@
                     $limitStr = "(numrow>0 AND numrow<=" . $limit[0] . ")";
                 }
             }
-
+            
             return $limitStr ? ' WHERE ' . $limitStr : '';
         }
-
+        
         /**
          * 设置锁机制
          * @access protected
@@ -181,7 +181,7 @@
             if (!$lock) {
                 return '';
             }
-
+            
             return ' FOR UPDATE NOWAIT ';
         }
     }

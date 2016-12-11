@@ -41,13 +41,14 @@
          * @var Object
          */
         private $uploader;
-
+    
         /**
          * 构造方法，用于构造上传实例
          * @param array  $config 配置
          * @param string $driver 要使用的上传驱动 LOCAL-本地上传驱动，FTP-FTP上传驱动
+         * @param null   $driverConfig 驱动配置
          */
-        public function __construct($config = [], $driver = '', $driverConfig = null)
+        public function __construct(array $config = [], $driver = '', $driverConfig = null)
         {
             /* 获取配置 */
             $this->config = array_merge($this->config, $config);
@@ -79,7 +80,11 @@
         {
             return $this->config[$name];
         }
-
+    
+        /**
+         * @param $name
+         * @param $value
+         */
         public function __set($name, $value)
         {
             if (isset($this->config[$name])) {
@@ -91,7 +96,11 @@
                 }
             }
         }
-
+    
+        /**
+         * @param $name
+         * @return bool
+         */
         public function __isset($name)
         {
             return isset($this->config[$name]);
@@ -120,6 +129,7 @@
 
         /**
          * 上传文件
+         * @todo
          * @param mixed $files ，通常是 $_FILES数组
          */
         public function upload($files = '')
@@ -363,6 +373,7 @@
         /**
          * 检查文件大小是否合法
          * @param int $size 数据
+         * @return int
          */
         private function checkSize($size)
         {
@@ -372,6 +383,7 @@
         /**
          * 检查上传的文件MIME类型是否合法
          * @param string $mime 数据
+         * @return bool
          */
         private function checkMime($mime)
         {
@@ -381,6 +393,7 @@
         /**
          * 检查上传的文件后缀是否合法
          * @param string $ext 后缀
+         * @return bool
          */
         private function checkExt($ext)
         {
@@ -390,6 +403,7 @@
         /**
          * 根据上传文件命名规则取得保存文件名
          * @param string $file 文件信息
+         * @return mixed
          */
         private function getSaveName($file)
         {
@@ -415,7 +429,8 @@
 
         /**
          * 获取子目录的名称
-         * @param array $file 上传的文件信息
+         * @param array $filename 上传的文件信息
+         * @return mixed
          */
         private function getSubPath($filename)
         {

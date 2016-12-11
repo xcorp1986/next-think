@@ -1,27 +1,30 @@
 <?php
-
-
+    
+    
     namespace Think\Log\Driver;
-
+    
     class File
     {
-
+        /**
+         * 配置
+         * @var array $config
+         */
         protected $config = [
             'log_time_format' => ' c ',
             'log_file_size'   => 2097152,
             'log_path'        => '',
         ];
-
+        
         /**
          * File constructor.
          * 实例化并传入参数
          * @param array $config
          */
-        public function __construct($config = [])
+        public function __construct(array $config = [])
         {
             $this->config = array_merge($this->config, $config);
         }
-
+        
         /**
          * 日志写入接口
          * @access public

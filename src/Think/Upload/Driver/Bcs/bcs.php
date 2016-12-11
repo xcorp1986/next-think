@@ -1,6 +1,6 @@
 <?php
     namespace Think\Upload\Driver\Bcs;
-
+    
     if (!defined('BCS_API_PATH')) {
         define('BCS_API_PATH', dirname(__FILE__));
     }
@@ -13,17 +13,17 @@
     define('BCS_SUPERFILE_POSTFIX', '_bcs_superfile_');
 //sdk superfile分片大小 ，单位 B（字节）
     define('BCS_SUPERFILE_SLICE_SIZE', 1024 * 1024);
-
+    
     require_once(BCS_API_PATH . '/requestcore.class.php');
     require_once(BCS_API_PATH . '/mimetypes.class.php');
-
+    
     /**
      * Default BCS Exception.
      */
     class BCS_Exception extends \Exception
     {
     }
-
+    
     /**
      * BCS API
      */
@@ -109,7 +109,7 @@
         private $sk;
         //云存储server地址
         private $hostname;
-
+        
         /**
          * 构造函数
          * @param string $ak       云存储公钥
@@ -147,7 +147,7 @@
                 $this->hostname = self::DEFAULT_URL;
             }
         }
-
+        
         /**
          * 将消息发往Baidu BCS.
          * @param array $opt
@@ -158,7 +158,7 @@
             //set common param into opt
             $opt [self::AK] = $this->ak;
             $opt [self::SK] = $this->sk;
-
+            
             // Validate the S3 bucket name, only list_bucket didnot need validate_bucket
             if (!('/' == $opt [self::OBJECT] && '' == $opt [self::BUCKET] && 'GET' == $opt [self::METHOD] && !isset ($opt [self::QUERY_STRING] [self::ACL])) && !self::validate_bucket($opt [self::BUCKET])) {
                 throw new BCS_Exception ($opt [self::BUCKET] . 'is not valid, please check!');
@@ -178,7 +178,7 @@
             $request = new BCS_RequestCore ($opt ['url']);
             $headers = [
                 'Content-Type' => 'application/x-www-form-urlencoded'];
-
+            
             $request->set_method($opt [self::METHOD]);
             //Write get_object content to fileWriteTo
             if (isset ($opt ['fileWriteTo'])) {
@@ -209,7 +209,7 @@
                 }
                 if (isset ($opt ['seekTo']) && !isset ($opt ["length"])) {
                     // Read from seekTo until EOF by default, when set seekTo but not set $opt["length"]
-                    $length -= ( integer )$opt ['seekTo'];
+                    $length -= ( int )$opt ['seekTo'];
                 }
                 $request->set_read_stream_size($length);
                 // Attempt to guess the correct mime-type
@@ -224,7 +224,7 @@
             // Handle streaming file offsets
             if (isset ($opt ['seekTo'])) {
                 // Pass the seek position to BCS_RequestCore
-                $request->set_seek_position(( integer )$opt ['seekTo']);
+                $request->set_seek_position(( int )$opt ['seekTo']);
             }
             // Add headers to request and compute the string to sign
             foreach ($headers as $header_key => $header_value) {
@@ -243,10 +243,10 @@
             }
             $request->send_request();
             require_once(dirname(__FILE__) . "/requestcore.class.php");
-
+            
             return new BCS_ResponseCore ($request->get_response_header(), $request->get_response_body(), $request->get_response_code());
         }
-
+        
         /**
          * 获取当前密钥对拥有者的bucket列表
          * @param array $opt (Optional)
@@ -262,10 +262,10 @@
             $opt [self::OBJECT] = '/';
             $response = $this->authenticate($opt);
             $this->log($response->isOK() ? "List bucket success!" : "List bucket failed! Response: [" . $response->body . "]", $opt);
-
+            
             return $response;
         }
-
+        
         /**
          * 创建 bucket
          * @param string $bucket (Required) bucket名称
@@ -288,10 +288,10 @@
             }
             $response = $this->authenticate($opt);
             $this->log($response->isOK() ? "Create bucket success!" : "Create bucket failed! Response: [" . $response->body . "]", $opt);
-
+            
             return $response;
         }
-
+        
         /**
          * 删除bucket
          * @param string $bucket (Required)
@@ -306,10 +306,10 @@
             $opt [self::OBJECT] = '/';
             $response = $this->authenticate($opt);
             $this->log($response->isOK() ? "Delete bucket success!" : "Delete bucket failed! Response: [" . $response->body . "]", $opt);
-
+            
             return $response;
         }
-
+        
         /**
          * 设置bucket的acl，有三种模式，
          * (1).设置详细json格式的acl；
@@ -334,10 +334,10 @@
                 self::ACL => 1];
             $response = $this->authenticate($opt);
             $this->log($response->isOK() ? "Set bucket acl success!" : "Set bucket acl failed! Response: [" . $response->body . "]", $opt);
-
+            
             return $response;
         }
-
+        
         /**
          * 获取bucket的acl
          * @param string $bucket (Required)
@@ -354,10 +354,10 @@
                 self::ACL => 1];
             $response = $this->authenticate($opt);
             $this->log($response->isOK() ? "Get bucket acl success!" : "Get bucket acl failed! Response: [" . $response->body . "]", $opt);
-
+            
             return $response;
         }
-
+        
         /**
          * 获取bucket中object列表
          * @param string $bucket (Required)
@@ -389,10 +389,10 @@
             }
             $response = $this->authenticate($opt);
             $this->log($response->isOK() ? "List object success!" : "Lit object failed! Response: [" . $response->body . "]", $opt);
-
+            
             return $response;
         }
-
+        
         /**
          * 以目录形式获取bucket中object列表
          * @param string $bucket     (Required)
@@ -425,16 +425,16 @@
             if (isset ($opt ['limit']) && is_int($opt ['limit'])) {
                 $opt [self::QUERY_STRING] ['limit'] = $opt ['limit'];
             }
-
+            
             $opt [self::QUERY_STRING] ['prefix'] = rawurlencode($dir);
             $opt [self::QUERY_STRING] ['dir'] = $list_model;
-
+            
             $response = $this->authenticate($opt);
             $this->log($response->isOK() ? "List object success!" : "Lit object failed! Response: [" . $response->body . "]", $opt);
-
+            
             return $response;
         }
-
+        
         /**
          * 上传文件
          * @param string $bucket (Required)
@@ -467,10 +467,10 @@
             }
             $response = $this->authenticate($opt);
             $this->log($response->isOK() ? "Create object[$object] file[$file] success!" : "Create object[$object] file[$file] failed! Response: [" . $response->body . "] Logid[" . $response->header ["x-bs-request-id"] . "]", $opt);
-
+            
             return $response;
         }
-
+        
         /**
          * 上传文件
          * @param string $bucket (Required)
@@ -505,10 +505,10 @@
             }
             $response = $this->authenticate($opt);
             $this->log($response->isOK() ? "Create object[$object] success!" : "Create object[$object] failed! Response: [" . $response->body . "] Logid[" . $response->header ["x-bs-request-id"] . "]", $opt);
-
+            
             return $response;
         }
-
+        
         /**
          * 通过superfile的方式上传文件
          * @param string $bucket (Required)
@@ -560,7 +560,7 @@
             for ($i = 0; $i < $sliceNum; $i++) {
                 //send slice
                 $opt ['seekTo'] = $i * $sub_object_size;
-
+                
                 if (($i + 1) === $sliceNum) {
                     //last sub object
                     $opt ['length'] = (0 === $fileSize % $sub_object_size) ? $sub_object_size : $fileSize % $sub_object_size;
@@ -578,7 +578,7 @@
                     continue;
                 } else {
                     $this->log("Sub-object upload[" . $opt [self::OBJECT] . "][$i/$sliceNum] failed! ", $opt);
-
+                    
                     return $response;
                 }
             }
@@ -595,10 +595,10 @@
             }
             $response = $this->authenticate($opt);
             $this->log($response->isOK() ? "Create object-superfile success!" : "Create object-superfile failed! Response: [" . $response->body . "]", $opt);
-
+            
             return $response;
         }
-
+        
         /**
          * 将目录中的所有文件进行上传，每个文件为单独object，object命名方式下详：
          * 如有 /home/worker/a/b/c.txt  需上传目录为$dir=/home/worker/a
@@ -610,12 +610,12 @@
          * @param string $dir    (Required)
          * @param array  $opt    (Optional)
          *                       string prefix 文件object前缀
-         *                       boolean has_sub_directory(default=true)
+         *                       bool has_sub_directory(default=true)
          *                       object命名中是否携带文件的子目录结构，若置为false，请确认待上传的目录和所有子目录中没有重名文件，否则会产生object覆盖问题
          *                       BaiduBCS::IMPORT_BCS_PRE_FILTER   用户可自定义上传文件前的操作函数
          *                       1. 函数参数列表顺序需为
          *                       ($bucket,$object,$file,&$opt)，注意$opt为upload_directory函数传入的$opt的拷贝，只对当前object生效
-         *                       2. 函数返回值必须为boolean，当true该文件进行上传，若false跳过上传
+         *                       2. 函数返回值必须为bool，当true该文件进行上传，若false跳过上传
          *                       3. 如果函数返回false，将不会进行post_filter的调用
          *                       BaiduBCS::IMPORT_BCS_POST_FILTER  用户可自定义上传文件后的操作函数
          *                       1. 函数参数列表顺序需为
@@ -668,7 +668,7 @@
             if (isset ($opt ["seek_object_id"]) && isset ($opt ["seek_object"])) {
                 throw new BCS_Exception ("Can not set see_object_id and seek_object at the same time!", -1);
             }
-
+            
             $num = 1;
             if (isset ($opt ["seek_object"])) {
                 if (isset ($objects [$opt ["seek_object"]])) {
@@ -763,10 +763,10 @@
             } else {
                 echo $result_str;
             }
-
+            
             return $result;
         }
-
+        
         /**
          * 通过此方法以拷贝的方式创建object，object来源为$source
          * @param array $source (Required)  object 来源
@@ -799,10 +799,10 @@
             }
             $response = $this->authenticate($opt);
             $this->log($response->isOK() ? "Copy object success!" : "Copy object failed! Response: [" . $response->body . "]", $opt);
-
+            
             return $response;
         }
-
+        
         /**
          * 设置object的meta信息
          * @param string $bucket (Required)
@@ -837,10 +837,10 @@
                 self::OBJECT => $object];
             $response = $this->copy_object($source, $source, $opt);
             $this->log($response->isOK() ? "Set object meta success!" : "Set object meta failed! Response: [" . $response->body . "]", $opt);
-
+            
             return $response;
         }
-
+        
         /**
          * 获取object的acl
          * @param string $bucket (Required)
@@ -859,10 +859,10 @@
                 self::ACL => 1];
             $response = $this->authenticate($opt);
             $this->log($response->isOK() ? "Get object acl success!" : "Get object acl failed! Response: [" . $response->body . "]", $opt);
-
+            
             return $response;
         }
-
+        
         /**
          * 设置object的acl，有三种模式，
          * (1).设置详细json格式的acl；
@@ -889,10 +889,10 @@
                 self::ACL => 1];
             $response = $this->authenticate($opt);
             $this->log($response->isOK() ? "Set object acl success!" : "Set object acl failed! Response: [" . $response->body . "]", $opt);
-
+            
             return $response;
         }
-
+        
         /**
          * 删除object
          * @param string $bucket (Required)
@@ -909,10 +909,10 @@
             $opt [self::OBJECT] = $object;
             $response = $this->authenticate($opt);
             $this->log($response->isOK() ? "Delete object success!" : "Delete object failed! Response: [" . $response->body . "]", $opt);
-
+            
             return $response;
         }
-
+        
         /**
          * 判断object是否存在
          * @param string $bucket (Required)
@@ -936,10 +936,10 @@
             } elseif ($response->status === 404) {
                 return false;
             }
-
+            
             return $response;
         }
-
+        
         /**
          * 获取文件信息，发送的为HTTP HEAD请求，文件信息都在http response的header中，不会提取文件的内容
          * @param string $bucket (Required)
@@ -956,10 +956,10 @@
             $opt [self::OBJECT] = $object;
             $response = $this->authenticate($opt);
             $this->log($response->isOK() ? "Get object info success!" : "Get object info failed! Response: [" . $response->body . "]", $opt);
-
+            
             return $response;
         }
-
+        
         /**
          * 下载object
          * @param string $bucket (Required)
@@ -999,10 +999,10 @@
             if (!$response->isOK() && isset ($opt ["fileWriteTo"])) {
                 unlink($opt ["fileWriteTo"]);
             }
-
+            
             return $response;
         }
-
+        
         /**
          * 生成签名链接
          */
@@ -1020,10 +1020,10 @@
             if (isset ($opt ["size"])) {
                 $opt [self::QUERY_STRING] ["size"] = $opt ["size"];
             }
-
+            
             return $this->format_url($opt);
         }
-
+        
         /**
          * 生成get_object的url
          * @param string $bucket (Required)
@@ -1033,10 +1033,10 @@
         public function generate_get_object_url($bucket, $object, $opt = [])
         {
             $this->assertParameterArray($opt);
-
+            
             return $this->generate_user_url("GET", $bucket, $object, $opt);
         }
-
+        
         /**
          * 生成put_object的url
          * @param string $bucket (Required)
@@ -1046,10 +1046,10 @@
         public function generate_put_object_url($bucket, $object, $opt = [])
         {
             $this->assertParameterArray($opt);
-
+            
             return $this->generate_user_url("PUT", $bucket, $object, $opt);
         }
-
+        
         /**
          * 生成post_object的url
          * @param string $bucket (Required)
@@ -1059,10 +1059,10 @@
         public function generate_post_object_url($bucket, $object, $opt = [])
         {
             $this->assertParameterArray($opt);
-
+            
             return $this->generate_user_url("POST", $bucket, $object, $opt);
         }
-
+        
         /**
          * 生成delete_object的url
          * @param string $bucket (Required)
@@ -1072,10 +1072,10 @@
         public function generate_delete_object_url($bucket, $object, $opt = [])
         {
             $this->assertParameterArray($opt);
-
+            
             return $this->generate_user_url("DELETE", $bucket, $object, $opt);
         }
-
+        
         /**
          * 生成head_object的url
          * @param string $bucket (Required)
@@ -1085,26 +1085,26 @@
         public function generate_head_object_url($bucket, $object, $opt = [])
         {
             $this->assertParameterArray($opt);
-
+            
             return $this->generate_user_url("HEAD", $bucket, $object, $opt);
         }
-
+        
         /**
-         * @return the $use_ssl
+         * @return bool $use_ssl
          */
         public function getUse_ssl()
         {
             return $this->use_ssl;
         }
-
+        
         /**
-         * @param boolean $use_ssl
+         * @param bool $use_ssl
          */
         public function setUse_ssl($use_ssl)
         {
             $this->use_ssl = $use_ssl;
         }
-
+        
         /**
          * 校验bucket是否合法，bucket规范
          * 1. 由小写字母，数字和横线'-'组成，长度为6~63位
@@ -1120,10 +1120,10 @@
             if (!preg_match($pattern1, $bucket)) {
                 return false;
             }
-
+            
             return true;
         }
-
+        
         /**
          * 校验object是否合法，object命名规范
          * 1. object必须以'/'开头
@@ -1136,10 +1136,10 @@
             if (empty ($object) || !preg_match($pattern, $object)) {
                 return false;
             }
-
+            
             return true;
         }
-
+        
         /**
          * 将常用set http-header的动作抽离出来
          * @param string $header
@@ -1160,12 +1160,12 @@
             }
             $opt [self::HEADERS] [$header] = $value;
         }
-
+        
         /**
          * 使用特定function对数组中所有元素做处理
-         * @param string  &$array             要处理的字符串
-         * @param string  $function           要执行的函数
-         * @param boolean $apply_to_keys_also 是否也应用到key上
+         * @param string &$array             要处理的字符串
+         * @param string $function           要执行的函数
+         * @param bool   $apply_to_keys_also 是否也应用到key上
          */
         private static function array_recursive(&$array, $function, $apply_to_keys_also = false)
         {
@@ -1175,7 +1175,7 @@
                 } else {
                     $array [$key] = $function ($value);
                 }
-
+                
                 if ($apply_to_keys_also && is_string($key)) {
                     $new_key = $function ($key);
                     if ($new_key != $key) {
@@ -1185,7 +1185,7 @@
                 }
             }
         }
-
+        
         /**
          * 由数组构造json字符串，增加了一些特殊处理以支持特殊字符和不同编码的中文
          * @param array $array
@@ -1197,10 +1197,10 @@
             }
             self::array_recursive($array, 'addslashes', false);
             self::array_recursive($array, 'rawurlencode', false);
-
+            
             return rawurldecode(json_encode($array));
         }
-
+        
         /**
          * 根据用户传入的acl，进行相应的处理
          * (1).设置详细json格式的acl；
@@ -1229,10 +1229,10 @@
             } else {
                 throw new BCS_Exception ("Invalid acl.", -1);
             }
-
+            
             return $result;
         }
-
+        
         /**
          * 生成签名
          * @param array $opt
@@ -1244,7 +1244,7 @@
             $content = '';
             if (!isset ($opt [self::AK]) || !isset ($opt [self::SK])) {
                 trigger_error('ak or sk is not in the array when create factor!');
-
+                
                 return false;
             }
             if (isset ($opt [self::BUCKET]) && isset ($opt [self::METHOD]) && isset ($opt [self::OBJECT])) {
@@ -1254,7 +1254,7 @@
                 $content .= "Object=" . self::trimUrl($opt [self::OBJECT]) . "\n"; //object
             } else {
                 trigger_error('bucket、method and object cann`t be NULL!');
-
+                
                 return false;
             }
             if (isset ($opt ['ip'])) {
@@ -1271,10 +1271,10 @@
             }
             $content = $flags . "\n" . $content;
             $sign = base64_encode(hash_hmac('sha1', $content, $opt [self::SK], true));
-
+            
             return 'sign=' . $flags . ':' . $opt [self::AK] . ':' . urlencode($sign);
         }
-
+        
         /**
          * 检查用户输入的acl array是否合法，并转为json
          * @param array $acl
@@ -1306,10 +1306,10 @@
                     }
                 }
             }
-
+            
             return self::array_to_json($acl);
         }
-
+        
         /**
          * 构造url
          * @param array $opt
@@ -1320,7 +1320,7 @@
             $sign = $this->format_signature($opt);
             if ($sign === false) {
                 trigger_error("Format signature failed, please check!");
-
+                
                 return false;
             }
             $opt ['sign'] = $sign;
@@ -1337,10 +1337,10 @@
                     $url .= '&' . $key . '=' . $value;
                 }
             }
-
+            
             return $url;
         }
-
+        
         /**
          * 将url中 '//' 替换为  '/'
          * @param $url
@@ -1353,10 +1353,10 @@
                 $url = $result;
                 $result = str_replace("//", "/", $url);
             }
-
+            
             return $result;
         }
-
+        
         /**
          * 获取传入目录的文件列表
          * @param string $dir 文件目录
@@ -1372,10 +1372,10 @@
                     $tree [] = $single;
                 }
             }
-
+            
             return $tree;
         }
-
+        
         /**
          * 内置的日志函数，可以根据用户传入的log函数，进行日志输出
          * @param string $log
@@ -1389,7 +1389,7 @@
                 trigger_error($log);
             }
         }
-
+        
         /**
          * make sure $opt is an array
          * @param $opt

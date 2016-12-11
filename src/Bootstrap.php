@@ -1,11 +1,11 @@
 <?php
-
+    
     /**
      * 公共入口文件
      */
-
+    
     require __DIR__ . '/Base.php';
-
+    
     if (!IS_CLI) {
         // 当前文件名
         if (!defined('_PHP_FILE_')) {

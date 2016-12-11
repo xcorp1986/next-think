@@ -1,11 +1,11 @@
 <?php
-
-
+    
+    
     namespace Think\Cache\Driver;
-
+    
     use Think\Cache;
-
-
+    
+    
     /**
      * 数据库方式缓存驱动
      *    CREATE TABLE think_cache (
@@ -18,12 +18,12 @@
      */
     class Db extends Cache
     {
-
+        
         /**
          * @param array $options 缓存参数
          * @access public
          */
-        public function __construct($options = [])
+        public function __construct(array $options = [])
         {
             if (empty($options)) {
                 $options = [
@@ -36,7 +36,7 @@
             $this->options['expire'] = isset($options['expire']) ? $options['expire'] : C('DATA_CACHE_TIME');
             $this->handler = \Think\Db::getInstance();
         }
-
+        
         /**
          * 读取缓存
          * @access public
@@ -60,14 +60,13 @@
                     //启用数据压缩
                     $content = gzuncompress($content);
                 }
-                $content = unserialize($content);
-
-                return $content;
+                
+                return unserialize($content);
             } else {
                 return false;
             }
         }
-
+        
         /**
          * 写入缓存
          * @access public
@@ -107,13 +106,13 @@
                     // 记录缓存队列
                     $this->queue($name);
                 }
-
+                
                 return true;
             } else {
                 return false;
             }
         }
-
+        
         /**
          * 删除缓存
          * @access public
@@ -123,10 +122,10 @@
         public function rm($name)
         {
             $name = $this->options['prefix'] . addslashes($name);
-
+            
             return $this->handler->execute('DELETE FROM `' . $this->options['table'] . '` WHERE `cachekey`=\'' . $name . '\'');
         }
-
+        
         /**
          * 清除缓存
          * @access public
@@ -136,5 +135,5 @@
         {
             return $this->handler->execute('TRUNCATE TABLE `' . $this->options['table'] . '`');
         }
-
+        
     }

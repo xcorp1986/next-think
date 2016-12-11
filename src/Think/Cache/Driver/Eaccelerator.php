@@ -16,7 +16,7 @@
          * @param array $options 缓存参数
          * @access public
          */
-        public function __construct($options = [])
+        public function __construct(array $options = [])
         {
             $this->options['expire'] = isset($options['expire']) ? $options['expire'] : C('DATA_CACHE_TIME');
             $this->options['prefix'] = isset($options['prefix']) ? $options['prefix'] : C('DATA_CACHE_PREFIX');

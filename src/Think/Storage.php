@@ -1,7 +1,7 @@
 <?php
-
+    
     namespace Think;
-
+    
     /**
      * 文件存储类
      * Class Storage
@@ -16,14 +16,14 @@
      */
     class Storage
     {
-
+        
         /**
          * 操作句柄
          * @var string
          * @access protected
          */
         static protected $handler;
-
+        
         /**
          * 连接操作句柄
          * @access public
@@ -31,13 +31,18 @@
          * @param array  $options 配置数组
          * @return void
          */
-        static public function connect($type = 'File')
+        public static function connect($type = 'File')
         {
             $class = 'Think\\Storage\\Driver\\' . ucwords($type);
             self::$handler = \Think\Think::instance($class);
         }
-
-        static public function __callStatic($method, $args)
+        
+        /**
+         * @param $method
+         * @param $args
+         * @return mixed
+         */
+        public static function __callStatic($method, $args)
         {
             //静态调用驱动的方法
             if (method_exists(self::$handler, $method)) {

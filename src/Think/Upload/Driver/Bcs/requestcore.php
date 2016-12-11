@@ -415,7 +415,7 @@
          */
         public function set_seek_position($position)
         {
-            $this->seek_position = isset ($position) ? ( integer )$position : null;
+            $this->seek_position = isset ($position) ? ( int )$position : null;
 
             return $this;
         }
@@ -519,7 +519,7 @@
          *
          * @param resource $curl_handle (Required) The cURL handle for the request.
          * @param binary   $data        (Required) The data to write.
-         * @return integer The number of bytes written.
+         * @return int The number of bytes written.
          */
         public function streaming_write_callback($curl_handle, $data)
         {
@@ -722,7 +722,7 @@
         /**
          * Sends the request, calling necessary utility functions to update built-in properties.
          *
-         * @param boolean $parse (Optional) Whether to parse the response with BCS_ResponseCore or not.
+         * @param bool $parse (Optional) Whether to parse the response with BCS_ResponseCore or not.
          * @return string The resulting unparsed data from the request.
          */
         public function send_request($parse = false)
