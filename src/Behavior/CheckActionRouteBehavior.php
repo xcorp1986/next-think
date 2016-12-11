@@ -1,16 +1,17 @@
 <?php
-
-
+    
+    
     namespace Behavior;
-
+    
     use Think\Behavior;
-
+    
     /**
      * 系统行为扩展：操作路由检测
+     * @deprecated
      */
     class CheckActionRouteBehavior extends Behavior
     {
-
+        
         /**
          * 执行入口
          * @param mixed $config
@@ -20,7 +21,9 @@
         {
             // 优先检测是否存在PATH_INFO
             $regx = trim($_SERVER['PATH_INFO'], '/');
-            if (empty($regx)) return;
+            if (empty($regx)) {
+                return;
+            }
             // 路由定义文件优先于config中的配置定义
             // 路由处理
             $routes = $config['routes'];
@@ -47,13 +50,15 @@
                                 }
                             }
                             $match = $this->checkUrlMatch($regx, $rule);
-                            if ($match) return C('ACTION_NAME', $this->parseRule($rule, $route, $regx));
+                            if ($match) {
+                                return C('ACTION_NAME', $this->parseRule($rule, $route, $regx));
+                            }
                         }
                     }
                 }
             }
         }
-
+        
         /**
          * 检测URL和规则路由是否匹配
          * @param $regx
@@ -87,10 +92,10 @@
                     break;
                 }
             }
-
+            
             return $match;
         }
-
+        
         /**
          *
          * 解析规范的路由地址
@@ -111,10 +116,10 @@
                 $path = $url;
             }
             $var[C('VAR_ACTION')] = $path;
-
+            
             return $var;
         }
-
+        
         /**
          *
          * 解析规则路由
@@ -187,11 +192,11 @@
                 $action = $var[C('VAR_ACTION')];
                 unset($var[C('VAR_ACTION')]);
                 $_GET = array_merge($var, $_GET);
-
+                
                 return $action;
             }
         }
-
+        
         /**
          * 解析正则路由
          * '路由正则'=>'[分组/模块/操作]?参数1=值1&参数2=值2...'
@@ -232,7 +237,7 @@
                 unset($var[C('VAR_ACTION')]);
                 $_GET = array_merge($var, $_GET);
             }
-
+            
             return $action;
         }
     }

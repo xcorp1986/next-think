@@ -1,12 +1,12 @@
 <?php
-
-
+    
+    
     namespace Behavior;
-
+    
     use Think\Behavior;
     use Think\Storage;
     use Think\Think;
-
+    
     /**
      * 静态缓存读取
      */
@@ -21,16 +21,20 @@
             // 开启静态缓存
             if (IS_GET && C('HTML_CACHE_ON')) {
                 $cacheTime = $this->requireHtmlCache();
-                if (false !== $cacheTime && $this->checkHTMLCache(HTML_FILE_NAME, $cacheTime)) { //静态页面有效
+                //静态页面有效
+                if (false !== $cacheTime && $this->checkHTMLCache(HTML_FILE_NAME, $cacheTime)) {
                     // 读取静态页面输出
                     echo Storage::read(HTML_FILE_NAME);
                     exit();
                 }
             }
         }
-
-        // 判断是否需要静态缓存
-        static private function requireHtmlCache()
+        
+        /**
+         * 判断是否需要静态缓存
+         * @return bool|mixed
+         */
+        private static function requireHtmlCache()
         {
             // 读取静态规则
             $htmls = C('HTML_CACHE_RULES');
@@ -81,7 +85,7 @@
                             default:
                                 break;
                         }
-
+                        
                         return (count($match) == 4) ? $match[3]($var) : $var;
                     };
                     $rule = preg_replace_callback('/{\$(_\w+)\.(\w+)(?:\|(\w+))?}/', $callback, $rule);
@@ -109,21 +113,19 @@
                         }
                         // 缓存有效期
                         $cacheTime = isset($html[1]) ? $html[1] : $cacheTime;
-                    } else {
-                        $cacheTime = $cacheTime;
                     }
-
+                    
                     // 当前缓存文件
                     define('HTML_FILE_NAME', HTML_PATH . $rule . C('HTML_FILE_SUFFIX', null, '.html'));
-
+                    
                     return $cacheTime;
                 }
             }
-
+            
             // 无需缓存
             return false;
         }
-
+        
         /**
          * 检查静态HTML文件是否有效
          * 如果无效需要重新更新
@@ -132,7 +134,7 @@
          * @param int    $cacheTime 缓存有效期
          * @return bool
          */
-        static public function checkHTMLCache($cacheFile = '', $cacheTime = '')
+        public static function checkHTMLCache($cacheFile = '', $cacheTime = '')
         {
 //            if (!is_file($cacheFile) && 'sae' != APP_MODE) {
             if (!is_file($cacheFile)) {
@@ -146,9 +148,9 @@
                 // 文件是否在有效期
                 return false;
             }
-
+            
             //静态文件有效
             return true;
         }
-
+        
     }

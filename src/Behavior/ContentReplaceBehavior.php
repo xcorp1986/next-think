@@ -1,16 +1,16 @@
 <?php
-
-
+    
+    
     namespace Behavior;
-
+    
     use Think\Behavior;
-
+    
     /**
      * 模板内容输出替换
      */
     class ContentReplaceBehavior extends Behavior
     {
-
+        
         /**
          * 执行入口
          * @param mixed $content
@@ -19,7 +19,7 @@
         {
             $content = $this->templateContentReplace($content);
         }
-
+        
         /**
          * 模板内容替换
          * @access protected
@@ -43,9 +43,8 @@
             if (is_array(C('TMPL_PARSE_STRING'))) {
                 $replace = array_merge($replace, C('TMPL_PARSE_STRING'));
             }
-            $content = str_replace(array_keys($replace), array_values($replace), $content);
-
-            return $content;
+            
+            return str_replace(array_keys($replace), array_values($replace), $content);
         }
-
+        
     }

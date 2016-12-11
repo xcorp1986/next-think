@@ -1,16 +1,16 @@
 <?php
-
-
+    
+    
     namespace Behavior;
-
+    
     use Think\Behavior;
-
+    
     /**
      * 机器人检测
      */
     class RobotCheckBehavior extends Behavior
     {
-
+        
         /**
          * 执行入口
          * @param mixed $params
@@ -23,8 +23,11 @@
                 exit('Access Denied');
             }
         }
-
-        static private function _isRobot()
+        
+        /**
+         * @return bool|null
+         */
+        private static function _isRobot()
         {
             static $_robot = null;
             if (is_null($_robot)) {
@@ -38,7 +41,7 @@
                     $_robot = false;
                 }
             }
-
+            
             return $_robot;
         }
     }
