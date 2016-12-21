@@ -29,4 +29,4 @@
     /*
      * 应用初始化
      */
-    Think\Think::start();
+//    Think\Think::start();
