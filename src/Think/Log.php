@@ -67,12 +67,12 @@
                 self::$log[] = "{$level}: {$message}\r\n";
             }
         }
-        
+    
         /**
          * 日志保存
          * @static
          * @access public
-         * @param int    $type        日志记录方式
+         * @param string $type
          * @param string $destination 写入目标
          * @return void
          */
@@ -100,7 +100,7 @@
          * @access public
          * @param string $message     日志信息
          * @param string $level       日志级别
-         * @param int    $type        日志记录方式
+         * @param string    $type        日志记录方式
          * @param string $destination 写入目标
          * @return void
          */
