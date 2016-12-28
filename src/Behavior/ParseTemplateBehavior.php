@@ -10,7 +10,7 @@
     /**
      * 模板解析
      */
-    class ParseTemplateBehavior extends Behavior
+    final class ParseTemplateBehavior extends Behavior
     {
 
         /**
@@ -50,12 +50,13 @@
                 }
             }
         }
-
+    
         /**
          * 检查缓存文件是否有效
          * 如果无效则需要重新编译
          * @access public
          * @param string $tmplTemplateFile 模板文件名
+         * @param string $prefix
          * @return bool
          */
         protected function checkCache($tmplTemplateFile, $prefix = '')
@@ -85,20 +86,17 @@
             // 缓存有效
             return true;
         }
-
+    
         /**
          * 检查缓存内容是否有效
          * 如果无效则需要重新编译
          * @access public
          * @param string $tmplContent 模板内容
+         * @param string $prefix
          * @return bool
          */
         protected function checkContentCache($tmplContent, $prefix = '')
         {
-            if (Storage::has(C('CACHE_PATH') . $prefix . md5($tmplContent) . C('TMPL_CACHFILE_SUFFIX'))) {
-                return true;
-            } else {
-                return false;
-            }
+            return Storage::has(C('CACHE_PATH') . $prefix . md5($tmplContent) . C('TMPL_CACHFILE_SUFFIX')) ? true : false;
         }
     }

@@ -42,6 +42,7 @@
             }
             
             // URL调度结束标签
+            //@todo check
             Hook::listen('url_dispatch');
             
             define('IS_AJAX', ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') || !empty($_POST[C('VAR_AJAX_SUBMIT')]) || !empty($_GET[C('VAR_AJAX_SUBMIT')])) ? true : false);
@@ -164,17 +165,6 @@
                             E(L('_PARAM_ERROR_') . ':' . $name);
                         }
                     }
-                    // 开启绑定参数过滤机制 @todo 检查一下这段代码是否有存在的必要
-//                    if (C('URL_PARAMS_SAFE')) {
-//                        $filters = C('URL_PARAMS_FILTER') ?: C('DEFAULT_FILTER');
-//                        if ($filters) {
-//                            $filters = explode(',', $filters);
-//                            foreach ($filters as $filter) {
-//                                // 参数过滤
-//                                $args = array_map_recursive($filter, $args);
-//                            }
-//                        }
-//                    }
                     array_walk_recursive($args, 'think_filter');
                     $method->invokeArgs($module, $args);
                 } else {

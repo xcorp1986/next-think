@@ -10,7 +10,7 @@
     /**
      * 静态缓存读取
      */
-    class ReadHtmlCacheBehavior extends Behavior
+    final class ReadHtmlCacheBehavior extends Behavior
     {
         /**
          * 执行入口

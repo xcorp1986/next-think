@@ -8,7 +8,7 @@
     /**
      * 表单令牌生成
      */
-    class TokenBuildBehavior extends Behavior
+    final class TokenBuildBehavior extends Behavior
     {
 
         /**

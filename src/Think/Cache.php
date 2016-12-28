@@ -55,7 +55,7 @@
          * @access public
          * @return mixed
          */
-        static function getInstance($type = '', $options = [])
+        public static function getInstance($type = '', $options = [])
         {
             static $_instance = [];
             $guid = $type . to_guid_string($options);

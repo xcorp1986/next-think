@@ -192,8 +192,9 @@
                     define('PHP_FILE', _PHP_FILE_ . '?' . $varPath . '=');
                 } elseif ($urlMode == URL_REWRITE) {
                     $url = dirname(_PHP_FILE_);
-                    if ($url == '/' || $url == '\\')
+                    if ($url == '/' || $url == '\\') {
                         $url = '';
+                    }
                     define('PHP_FILE', $url);
                 } else {
                     define('PHP_FILE', _PHP_FILE_);
@@ -262,7 +263,7 @@
             //保证$_REQUEST正常取值
             $_REQUEST = array_merge($_POST, $_GET, $_COOKIE);
         }
-    
+        
         /**
          * 获得控制器的命名空间路径 便于插件机制访问
          * @param $var
@@ -275,7 +276,7 @@
             
             return $space;
         }
-    
+        
         /**
          * 获得实际的控制器名称
          * @param $var
@@ -306,7 +307,7 @@
             
             return strip_tags(ucfirst($controller));
         }
-    
+        
         /**
          * 获得实际的操作名称
          * @param $var
@@ -344,7 +345,7 @@
             
             return strip_tags($urlCase ? strtolower($action) : $action);
         }
-    
+        
         /**
          * 获得实际的模块名称
          * @param $var

@@ -38,12 +38,13 @@
          * @var resource
          */
         private $img;
-        
+    
         /**
          * 构造方法，用于实例化一个图片处理对象
-         * @param string $type 要使用的类库，默认使用GD库
+         * @param int|string $type 要使用的类库，默认使用GD库
+         * @param null       $imgName
          */
-        public function __construct($type = self::IMAGE_GD, $imgname = null)
+        public function __construct($type = self::IMAGE_GD, $imgName = null)
         {
             /* 判断调用库的类型 */
             switch ($type) {
@@ -59,32 +60,32 @@
             
             /* 引入处理库，实例化图片处理对象 */
             $class = "Think\\Image\\Driver\\{$class}";
-            $this->img = new $class($imgname);
+            $this->img = new $class($imgName);
         }
         
         /**
          * 打开一幅图像
-         * @param  string $imgname 图片路径
+         * @param  string $imgName 图片路径
          * @return $this          当前图片处理库对象
          */
-        public function open($imgname)
+        public function open($imgName)
         {
-            $this->img->open($imgname);
+            $this->img->open($imgName);
             
             return $this;
         }
         
         /**
          * 保存图片
-         * @param  string $imgname   图片保存名称
+         * @param  string $imgName   图片保存名称
          * @param  string $type      图片类型
          * @param  int    $quality   图像质量
          * @param  bool   $interlace 是否对JPEG类型图片设置隔行扫描
          * @return $this             当前图片处理库对象
          */
-        public function save($imgname, $type = null, $quality = 80, $interlace = true)
+        public function save($imgName, $type = null, $quality = 80, $interlace = true)
         {
-            $this->img->save($imgname, $type, $quality, $interlace);
+            $this->img->save($imgName, $type, $quality, $interlace);
             
             return $this;
         }

@@ -1,17 +1,24 @@
 <?php
-
-
+    
+    
     namespace Behavior;
-
+    
     use Think\Behavior;
-
+    
     /**
      * 页面Trace显示输出
      */
     class ShowPageTraceBehavior extends Behavior
     {
-        protected $tracePageTabs = ['BASE' => '基本', 'FILE' => '文件', 'INFO' => '流程', 'ERR|NOTIC' => '错误', 'SQL' => 'SQL', 'DEBUG' => '调试'];
-
+        protected $tracePageTabs = [
+            'BASE'      => '基本',
+            'FILE'      => '文件',
+            'INFO'      => '流程',
+            'ERR|NOTIC' => '错误',
+            'SQL'       => 'SQL',
+            'DEBUG'     => '调试',
+        ];
+        
         /**
          * 执行入口
          * @param mixed $params
@@ -22,7 +29,7 @@
                 echo $this->_showTrace();
             }
         }
-
+        
         /**
          * 显示页面Trace信息
          * @access private
@@ -84,10 +91,10 @@
             // 调用Trace页面模板
             ob_start();
             include C('TMPL_TRACE_FILE') ? C('TMPL_TRACE_FILE') : __DIR__ . '/../Tpl/page_trace.tpl';
-
+            
             return ob_get_clean();
         }
-
+        
         /**
          * 获取运行时间
          */
@@ -96,7 +103,7 @@
             // 显示运行时间
             G('beginTime', $GLOBALS['_beginTime']);
             G('viewEndTime');
-
+            
             // 显示详细运行时间
             return G('beginTime', 'viewEndTime') . 's ( Load:' . G('beginTime', 'loadTime') . 's Init:' . G('loadTime', 'initTime') . 's Exec:' . G('initTime', 'viewStartTime') . 's Template:' . G('viewStartTime', 'viewEndTime') . 's )';
         }

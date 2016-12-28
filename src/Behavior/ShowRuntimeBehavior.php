@@ -8,7 +8,7 @@
     /**
      * 运行时间信息显示
      */
-    class ShowRuntimeBehavior extends Behavior
+    final class ShowRuntimeBehavior extends Behavior
     {
 
         /**

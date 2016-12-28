@@ -94,18 +94,18 @@
         /**
          *  创建静态页面
          * @access   protected
-         * @htmlfile 生成的静态文件名称
-         * @htmlpath 生成的静态文件路径
+         * @param string $htmlFile     生成的静态文件名称
+         * @param string $htmlPath     生成的静态文件路径
          * @param string $templateFile 指定要调用的模板文件
          *                             默认为空 由系统自动定位模板文件
          * @return string
          */
-        protected function buildHtml($htmlfile = '', $htmlpath = '', $templateFile = '')
+        protected function buildHtml($htmlFile = '', $htmlPath = '', $templateFile = '')
         {
             $content = $this->fetch($templateFile);
-            $htmlpath = !empty($htmlpath) ? $htmlpath : HTML_PATH;
-            $htmlfile = $htmlpath . $htmlfile . C('HTML_FILE_SUFFIX');
-            Storage::put($htmlfile, $content);
+            $htmlPath = !empty($htmlPath) ? $htmlPath : HTML_PATH;
+            $htmlFile = $htmlPath . $htmlFile . C('HTML_FILE_SUFFIX');
+            Storage::put($htmlFile, $content);
             
             return $content;
         }

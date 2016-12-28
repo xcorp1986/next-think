@@ -8,7 +8,6 @@
     /**
      * 本地文件存储类
      * Class File
-     * @todo    重写成静态调用
      * @package Think\Storage\Driver
      */
     class File extends Storage

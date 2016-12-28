@@ -29,7 +29,8 @@
       "Org\\": "src/Org"
     },
     "files": [
-      "src/Bootstrap.php"
+      "src/Bootstrap.php",
+      "src/Common/function.php"
     ]
   },
   "autoload-dev": {
@@ -39,7 +40,8 @@
       "Org\\": "src/Org"
     },
     "files": [
-      "src/Bootstrap.php"
+      "src/Bootstrap.php",
+      "src/Common/function.php"
     ]
   }
 }

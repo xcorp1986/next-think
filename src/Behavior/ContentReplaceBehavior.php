@@ -8,7 +8,7 @@
     /**
      * 模板内容输出替换
      */
-    class ContentReplaceBehavior extends Behavior
+    final class ContentReplaceBehavior extends Behavior
     {
         
         /**

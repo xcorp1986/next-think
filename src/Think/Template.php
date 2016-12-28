@@ -212,10 +212,9 @@
             foreach ($tagLibs as $tag) {
                 $this->parseTagLib($tag, $content, true);
             }
-            //解析普通模板标签 {$tagName}
-            $content = preg_replace_callback('/(' . $this->config['tmpl_begin'] . ')([^\d\w\s' . $this->config['tmpl_begin'] . $this->config['tmpl_end'] . '].+?)(' . $this->config['tmpl_end'] . ')/is', [$this, 'parseTag'], $content);
             
-            return $content;
+            //解析普通模板标签 {$tagName}
+            return preg_replace_callback('/(' . $this->config['tmpl_begin'] . ')([^\d\w\s' . $this->config['tmpl_begin'] . $this->config['tmpl_end'] . '].+?)(' . $this->config['tmpl_end'] . ')/is', [$this, 'parseTag'], $content);
         }
         
         /**
@@ -467,9 +466,9 @@
         /**
          * TagLib库解析
          * @access public
-         * @param string  $tagLib  要解析的标签库
-         * @param string  $content 要解析的模板内容
-         * @param bool $hide    是否隐藏标签库前缀
+         * @param string $tagLib  要解析的标签库
+         * @param string $content 要解析的模板内容
+         * @param bool   $hide    是否隐藏标签库前缀
          * @return string
          */
         public function parseTagLib($tagLib, &$content, $hide = false)
@@ -600,10 +599,7 @@
                 $varArray = explode('|', $varStr);
                 //取得变量名称
                 $var = array_shift($varArray);
-                if ('Think.' == substr($var, 0, 6)) {
-                    // 所有以Think.打头的以特殊变量对待 无需模板赋值就可以输出
-                    $name = $this->parseThinkVar($var);
-                } elseif (false !== strpos($var, '.')) {
+                if (false !== strpos($var, '.')) {
                     //支持 {$var.property}
                     $vars = explode('.', $var);
                     $var = array_shift($vars);
@@ -692,84 +688,6 @@
             }
             
             return $name;
-        }
-        
-        /**
-         * 特殊模板变量解析
-         * 格式 以 $Think. 打头的变量属于特殊模板变量
-         * @access public
-         * @deprecated
-         * @param string $varStr 变量字符串
-         * @return string
-         */
-        public function parseThinkVar($varStr)
-        {
-            $vars = explode('.', $varStr);
-            $vars[1] = strtoupper(trim($vars[1]));
-            $parseStr = '';
-            if (count($vars) >= 3) {
-                $vars[2] = trim($vars[2]);
-                switch ($vars[1]) {
-                    case 'SERVER':
-                        $parseStr = '$_SERVER[\'' . strtoupper($vars[2]) . '\']';
-                        break;
-                    case 'GET':
-                        $parseStr = '$_GET[\'' . $vars[2] . '\']';
-                        break;
-                    case 'POST':
-                        $parseStr = '$_POST[\'' . $vars[2] . '\']';
-                        break;
-                    case 'COOKIE':
-                        if (isset($vars[3])) {
-                            $parseStr = '$_COOKIE[\'' . $vars[2] . '\'][\'' . $vars[3] . '\']';
-                        } else {
-                            $parseStr = 'cookie(\'' . $vars[2] . '\')';
-                        }
-                        break;
-                    case 'SESSION':
-                        if (isset($vars[3])) {
-                            $parseStr = '$_SESSION[\'' . $vars[2] . '\'][\'' . $vars[3] . '\']';
-                        } else {
-                            $parseStr = 'session(\'' . $vars[2] . '\')';
-                        }
-                        break;
-                    case 'ENV':
-                        $parseStr = '$_ENV[\'' . strtoupper($vars[2]) . '\']';
-                        break;
-                    case 'REQUEST':
-                        $parseStr = '$_REQUEST[\'' . $vars[2] . '\']';
-                        break;
-                    case 'CONST':
-                        $parseStr = strtoupper($vars[2]);
-                        break;
-                    case 'LANG':
-                        $parseStr = 'L("' . $vars[2] . '")';
-                        break;
-                    case 'CONFIG':
-                        if (isset($vars[3])) {
-                            $vars[2] .= '.' . $vars[3];
-                        }
-                        $parseStr = 'C("' . $vars[2] . '")';
-                        break;
-                    default:
-                        break;
-                }
-            } elseif (count($vars) == 2) {
-                switch ($vars[1]) {
-                    case 'NOW':
-                        $parseStr = "date('Y-m-d g:i a',time())";
-                        break;
-                    case 'VERSION':
-                        $parseStr = 'THINK_VERSION';
-                        break;
-                    default:
-                        if (defined($vars[1])) {
-                            $parseStr = $vars[1];
-                        }
-                }
-            }
-            
-            return $parseStr;
         }
         
         /**

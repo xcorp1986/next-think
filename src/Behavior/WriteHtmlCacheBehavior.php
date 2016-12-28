@@ -9,7 +9,7 @@
     /**
      * 静态缓存写入
      */
-    class WriteHtmlCacheBehavior extends Behavior
+    final class WriteHtmlCacheBehavior extends Behavior
     {
 
         /**

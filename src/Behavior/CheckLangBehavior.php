@@ -8,7 +8,7 @@
     /**
      * 语言检测 并自动加载语言包
      */
-    class CheckLangBehavior extends Behavior
+    final class CheckLangBehavior extends Behavior
     {
 
         /**

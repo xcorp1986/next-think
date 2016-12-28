@@ -26,7 +26,3 @@
      * 加载引导类
      */
     require __DIR__ . '/Think/Think.php';
-    /*
-     * 应用初始化
-     */
-//    Think\Think::start();

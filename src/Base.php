@@ -38,7 +38,8 @@
     
     // 应用状态 加载对应的配置文件
     defined('APP_STATUS') || define('APP_STATUS', null);
-    defined('APP_DEBUG') || define('APP_DEBUG', false); // 是否调试模式
+    // 是否调试模式
+    defined('APP_DEBUG') || define('APP_DEBUG', false);
     // 应用公共目录
     defined('COMMON_PATH') || define('COMMON_PATH', APP_PATH . 'Common/');
     // 系统运行时目录

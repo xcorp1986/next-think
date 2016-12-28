@@ -48,7 +48,9 @@ class [MODEL]Model extends Model {
         public static function buildAppDir($module)
         {
             // 没有创建的话自动创建
-            if (!is_dir(APP_PATH)) mkdir(APP_PATH, 0755, true);
+            if (!is_dir(APP_PATH)) {
+                mkdir(APP_PATH, 0755, true);
+            }
             if (is_writeable(APP_PATH)) {
                 $dirs = [
                     COMMON_PATH,
@@ -118,7 +120,8 @@ class [MODEL]Model extends Model {
                 header('Content-Type:text/html; charset=utf-8');
                 Think::halt('目录 [ ' . RUNTIME_PATH . ' ] 不可写！');
             }
-            mkdir(CACHE_PATH);  // 模板缓存目录
+            // 模板缓存目录
+            mkdir(CACHE_PATH);
             // 日志目录
             if (!is_dir(LOG_PATH)) {
                 mkdir(LOG_PATH);
@@ -145,9 +148,6 @@ class [MODEL]Model extends Model {
             $file = APP_PATH . $module . '/Controller/' . $controller . 'Controller' . EXT;
             if (!is_file($file)) {
                 $content = str_replace(['[MODULE]', '[CONTROLLER]'], [$module, $controller], self::$controller);
-                if (!C('APP_USE_NAMESPACE')) {
-                    $content = preg_replace('/namespace\s(.*?);/', '', $content, 1);
-                }
                 $dir = dirname($file);
                 if (!is_dir($dir)) {
                     mkdir($dir, 0755, true);
@@ -166,9 +166,6 @@ class [MODEL]Model extends Model {
             $file = APP_PATH . $module . '/Model/' . $model . 'Model' . EXT;
             if (!is_file($file)) {
                 $content = str_replace(['[MODULE]', '[MODEL]'], [$module, $model], self::$model);
-                if (!C('APP_USE_NAMESPACE')) {
-                    $content = preg_replace('/namespace\s(.*?);/', '', $content, 1);
-                }
                 $dir = dirname($file);
                 if (!is_dir($dir)) {
                     mkdir($dir, 0755, true);

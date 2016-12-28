@@ -185,7 +185,7 @@
      * @param string $label  标签
      * @param string $level  日志级别
      * @param bool   $record 是否记录日志
-     * @return void|array
+     * @return void
      */
     function trace($value = '[think]', $label = '', $level = 'DEBUG', $record = false)
     {
@@ -298,10 +298,10 @@
             $method = 'param';
         }
         switch (strtolower($method)) {
-            case 'get'     :
+            case 'get':
                 $input =& $_GET;
                 break;
-            case 'post'    :
+            case 'post':
                 $input =& $_POST;
                 break;
             case 'put'     :
@@ -310,7 +310,7 @@
                 }
                 $input = $_PUT;
                 break;
-            case 'param'   :
+            case 'param':
                 switch ($_SERVER['REQUEST_METHOD']) {
                     case 'POST':
                         $input = $_POST;
@@ -325,29 +325,29 @@
                         $input = $_GET;
                 }
                 break;
-            case 'path'    :
+            case 'path':
                 $input = [];
                 if (!empty($_SERVER['PATH_INFO'])) {
                     $depr = C('URL_PATHINFO_DEPR');
                     $input = explode($depr, trim($_SERVER['PATH_INFO'], $depr));
                 }
                 break;
-            case 'request' :
+            case 'request':
                 $input =& $_REQUEST;
                 break;
-            case 'session' :
+            case 'session':
                 $input =& $_SESSION;
                 break;
-            case 'cookie'  :
+            case 'cookie':
                 $input =& $_COOKIE;
                 break;
-            case 'server'  :
+            case 'server':
                 $input =& $_SERVER;
                 break;
-            case 'globals' :
+            case 'globals':
                 $input =& $GLOBALS;
                 break;
-            case 'data'    :
+            case 'data':
                 $input =& $datas;
                 break;
             default:
@@ -527,10 +527,8 @@
     function file_exists_case($filename)
     {
         if (is_file($filename)) {
-            if (IS_WIN && APP_DEBUG) {
-                if (basename(realpath($filename)) != basename($filename)) {
-                    return false;
-                }
+            if (IS_WIN && APP_DEBUG && (basename(realpath($filename)) != basename($filename))) {
+                return false;
             }
             
             return true;
@@ -587,36 +585,6 @@
     }
     
     /**
-     * 基于命名空间方式导入函数库
-     * load('@.Util.Array')
-     * @deprecated
-     * @param string $name    函数库命名空间字符串
-     * @param string $baseUrl 起始路径
-     * @param string $ext     导入的文件扩展名
-     * @return void
-     */
-    function load($name, $baseUrl = '', $ext = '.php')
-    {
-        $name = str_replace(['.', '#'], ['/', '.'], $name);
-        if (empty($baseUrl)) {
-            //加载当前模块函数库
-            if (0 === strpos($name, '@/')) {
-                $baseUrl = MODULE_PATH . 'Common/';
-                $name = substr($name, 2);
-                //加载其他模块函数库
-            } else {
-                $array = explode('/', $name);
-                $baseUrl = APP_PATH . array_shift($array) . '/Common/';
-                $name = implode('/', $array);
-            }
-        }
-        if (substr($baseUrl, -1) != '/') {
-            $baseUrl .= '/';
-        }
-        require_cache($baseUrl . $name . $ext);
-    }
-    
-    /**
      * 实例化模型类 格式 [资源://][模块/]模型
      * @param string $name  资源地址
      * @param string $layer 模型层名称
@@ -637,11 +605,7 @@
             $model = new $class(basename($name));
         } elseif (false === strpos($name, '/')) {
             // 自动加载公共模块下面的模型
-//            if (!C('APP_USE_NAMESPACE')) {
-//                import('Common/' . $layer . '/' . $class);
-//            } else {
             $class = '\\Common\\' . $layer . '\\' . $name . $layer;
-//            }
             $model = class_exists($class) ? new $class($name) : new \Think\Model($name);
         } else {
             \Think\Log::record('D方法实例化没找到模型类' . $class, \Think\Log::NOTICE);
@@ -699,20 +663,16 @@
             $module = defined('MODULE_NAME') ? MODULE_NAME : '';
         }
         $array = explode('/', $name);
-        if (!C('APP_USE_NAMESPACE')) {
-            $class = parse_name($name, 1);
-            import($module . '/' . $layer . '/' . $class . $layer);
-        } else {
-            $class = $module . '\\' . $layer;
-            foreach ($array as $name) {
-                $class .= '\\' . parse_name($name, 1);
-            }
-            // 导入资源类库
-            // 扩展资源
-            if ($extend) {
-                $class = $extend . '\\' . $class;
-            }
+        $class = $module . '\\' . $layer;
+        foreach ($array as $name) {
+            $class .= '\\' . parse_name($name, 1);
         }
+        // 导入资源类库
+        // 扩展资源
+        if ($extend) {
+            $class = $extend . '\\' . $class;
+        }
+        
         
         return $class . $layer;
     }
@@ -726,17 +686,14 @@
     function controller($name, $path = '')
     {
         $layer = C('DEFAULT_C_LAYER');
-        if (!C('APP_USE_NAMESPACE')) {
-            $class = parse_name($name, 1) . $layer;
-            import(MODULE_NAME . '/' . $layer . '/' . $class);
-        } else {
-            $class = ($path ? basename(ADDON_PATH) . '\\' . $path : MODULE_NAME) . '\\' . $layer;
-            $array = explode('/', $name);
-            foreach ($array as $name) {
-                $class .= '\\' . parse_name($name, 1);
-            }
-            $class .= $layer;
+        
+        $class = ($path ? basename(ADDON_PATH) . '\\' . $path : MODULE_NAME) . '\\' . $layer;
+        $array = explode('/', $name);
+        foreach ($array as $name) {
+            $class .= '\\' . parse_name($name, 1);
         }
+        $class .= $layer;
+        
         if (class_exists($class)) {
             return new $class();
         } else {
@@ -1316,9 +1273,8 @@
         $xml = "<?xml version=\"1.0\" encoding=\"{$encoding}\"?>";
         $xml .= "<{$root}{$attr}>";
         $xml .= data_to_xml($data, $item, $id);
-        $xml .= "</{$root}>";
         
-        return $xml;
+        return $xml . "</{$root}>";
     }
     
     /**
@@ -1363,10 +1319,6 @@
             } elseif (isset($name['id'])) {
                 session_id($name['id']);
             }
-//            if ('common' == APP_MODE) {
-//                // 其它模式可能不支持
-//                ini_set('session.auto_start', 0);
-//            }
             if (isset($name['name'])) {
                 session_name($name['name']);
             }
@@ -1517,12 +1469,18 @@
     {
         // 默认设置
         $config = [
-            'prefix'   => C('COOKIE_PREFIX'), // cookie 名称前缀
-            'expire'   => C('COOKIE_EXPIRE'), // cookie 保存时间
-            'path'     => C('COOKIE_PATH'), // cookie 保存路径
-            'domain'   => C('COOKIE_DOMAIN'), // cookie 有效域名
-            'secure'   => C('COOKIE_SECURE'), //  cookie 启用安全传输
-            'httponly' => C('COOKIE_HTTPONLY'), // httponly设置
+            // cookie 名称前缀
+            'prefix'   => C('COOKIE_PREFIX'),
+            // cookie 保存时间
+            'expire'   => C('COOKIE_EXPIRE'),
+            // cookie 保存路径
+            'path'     => C('COOKIE_PATH'),
+            // cookie 有效域名
+            'domain'   => C('COOKIE_DOMAIN'),
+            //  cookie 启用安全传输
+            'secure'   => C('COOKIE_SECURE'),
+            // httponly设置
+            'httponly' => C('COOKIE_HTTPONLY'),
         ];
         // 参数设置(会覆盖黙认设置)
         if (!is_null($option)) {

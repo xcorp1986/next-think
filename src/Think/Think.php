@@ -293,7 +293,7 @@
          * @param string $label  标签
          * @param string $level  日志级别(或者页面Trace的选项卡)
          * @param bool   $record 是否记录日志
-         * @return void|array
+         * @return array
          */
         public static function trace($value = '[think]', $label = '', $level = 'DEBUG', $record = false)
         {
