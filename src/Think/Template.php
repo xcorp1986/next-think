@@ -444,7 +444,6 @@
          * @access public
          * @param TagLib $tagLib  要解析的标签库
          * @param string $content 要解析的模板内容
-         * @param bool   $hide    是否隐藏标签库前缀
          * @return string
          */
         public function parseTagLib(TagLib $tagLib, &$content)
