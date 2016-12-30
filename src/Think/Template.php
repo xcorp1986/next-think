@@ -204,7 +204,7 @@
              * @var $tag \Think\Template\TagLib
              */
             foreach ($tagLibs as $tag) {
-                $this->parseTagLib(\Think\Think::instance($tag), $content, true);
+                $this->parseTagLib(\Think\Think::instance($tag), $content);
             }
             
             //解析普通模板标签 {$tagName}
@@ -447,7 +447,7 @@
          * @param bool   $hide    是否隐藏标签库前缀
          * @return string
          */
-        public function parseTagLib(TagLib $tagLib, &$content, $hide = false)
+        public function parseTagLib(TagLib $tagLib, &$content)
         {
             $begin = $this->config['taglib_begin'];
             $end = $this->config['taglib_end'];
@@ -462,8 +462,6 @@
                 $level = isset($val['level']) ? $val['level'] : 1;
                 $closeTag = isset($val['close']) ? $val['close'] : true;
                 foreach ($tags as $tag) {
-                    // 实际要解析的标签名称
-                    $parseTag = !$hide ? $tagLib . ':' . $tag : $tag;
                     if (!method_exists($tagLib, '_' . $tag)) {
                         // 别名可以无需定义解析方法
                         $tag = $name;
@@ -471,12 +469,12 @@
                     $patternTail = empty($val['attr']) ? '(\s*?)' : '\s([^' . $end . ']*)';
                     
                     if (!$closeTag) {
-                        $patterns = '/' . $begin . $parseTag . $patternTail . '\/(\s*?)' . $end . '/is';
+                        $patterns = '/' . $begin . $tag . $patternTail . '\/(\s*?)' . $end . '/is';
                         $content = preg_replace_callback($patterns, function ($matches) use ($tagLib, $tag, $that) {
                             return $that->parseXmlTag($tagLib, $tag, $matches[1], $matches[2]);
                         }, $content);
                     } else {
-                        $patterns = '/' . $begin . $parseTag . $patternTail . $end . '(.*?)' . $begin . '\/' . $parseTag . '(\s*?)' . $end . '/is';
+                        $patterns = '/' . $begin . $tag . $patternTail . $end . '(.*?)' . $begin . '\/' . $tag . '(\s*?)' . $end . '/is';
                         for ($i = 0; $i < $level; $i++) {
                             $content = preg_replace_callback($patterns, function ($matches) use ($tagLib, $tag, $that) {
                                 return $that->parseXmlTag($tagLib, $tag, $matches[1], $matches[2]);
