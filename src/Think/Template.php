@@ -2,6 +2,8 @@
     
     namespace Think;
     
+    use Think\Template\TagLib;
+    
     /**
      * 内置模板引擎类
      * 支持XML标签和普通标签的模板解析
@@ -186,35 +188,28 @@
             // 首先替换literal标签
             $content = preg_replace_callback('/' . $begin . 'literal' . $end . '(.*?)' . $begin . '\/literal' . $end . '/is', [$this, 'parseLiteral'], $content);
             
-            // 获取需要引入的标签库列表
-            // 标签库只需要定义一次，允许引入多个一次
-            // 一般放在文件的最前面
-            // 格式：<taglib name="html,mytag..." />
-            // 当TAGLIB_LOAD配置为true时才会进行检测
-//            if (C('TAGLIB_LOAD')) {
-            $this->getIncludeTagLib($content);
-            if (!empty($this->tagLib)) {
-                // 对导入的TagLib进行解析
-                foreach ($this->tagLib as $tagLibName) {
-                    $this->parseTagLib($tagLibName, $content);
-                }
-            }
-//            }
-            // 预先加载的标签库 必须使用标签库XML前缀
-            if (C('TAGLIB_PRE_LOAD')) {
-                $tagLibs = explode(',', C('TAGLIB_PRE_LOAD'));
-                foreach ($tagLibs as $tag) {
-                    $this->parseTagLib($tag, $content);
-                }
-            }
             // 内置标签库 不需使用标签库XML前缀
-            $tagLibs = explode(',', C('TAGLIB_BUILD_IN'));
+            $tagLibs = C('TAGLIB_BUILD_IN');
+            /*
+             * check if \Think\Template\TagLib\Cx::class is not loaded
+             * \Think\Template\TagLib\Cx::class should load at last,
+             * because other taglibs may depend on it,so push it at the
+             * end of $tagLibs
+             * @todo improve in future
+             */
+            if (!in_array(\Think\Template\TagLib\Cx::class, $tagLibs)) {
+                array_push($tagLibs, \Think\Template\TagLib\Cx::class);
+            }
+            /**
+             * @var $tag \Think\Template\TagLib
+             */
             foreach ($tagLibs as $tag) {
-                $this->parseTagLib($tag, $content, true);
+                $this->parseTagLib(\Think\Think::instance($tag), $content, true);
             }
             
             //解析普通模板标签 {$tagName}
-            return preg_replace_callback('/(' . $this->config['tmpl_begin'] . ')([^\d\w\s' . $this->config['tmpl_begin'] . $this->config['tmpl_end'] . '].+?)(' . $this->config['tmpl_end'] . ')/is', [$this, 'parseTag'], $content);
+            return preg_replace_callback('/(' . $this->config['tmpl_begin'] . ')([^\d\w\s' . $this->config['tmpl_begin'] . $this->config['tmpl_end'] . '].+?)(' . $this->config['tmpl_end'] . ')/is'
+                , [$this, 'parseTag'], $content);
         }
         
         /**
@@ -338,6 +333,9 @@
         private function parseXmlAttrs($attr)
         {
             $xml = '<tpl><tag ' . $attr . ' /></tpl>';
+            /**
+             * @var $xml \SimpleXMLElement
+             */
             $xml = \simplexml_load_string($xml);
             if (!$xml) {
                 E(L('_XML_TAG_ERROR_'));
@@ -442,49 +440,19 @@
         }
         
         /**
-         * 搜索模板页面中包含的TagLib库
-         * 并返回列表
-         * @access public
-         * @param string $content 模板内容
-         * @return string|false
-         */
-        public function getIncludeTagLib(& $content)
-        {
-            //搜索是否有TagLib标签
-            $find = preg_match('/' . $this->config['taglib_begin'] . 'taglib\s(.+?)(\s*?)\/' . $this->config['taglib_end'] . '\W/is', $content, $matches);
-            if ($find) {
-                //替换TagLib标签
-                $content = str_replace($matches[0], '', $content);
-                //解析TagLib标签
-                $array = $this->parseXmlAttrs($matches[1]);
-                $this->tagLib = explode(',', $array['name']);
-            }
-            
-            return;
-        }
-        
-        /**
          * TagLib库解析
          * @access public
-         * @param string $tagLib  要解析的标签库
+         * @param TagLib $tagLib  要解析的标签库
          * @param string $content 要解析的模板内容
          * @param bool   $hide    是否隐藏标签库前缀
          * @return string
          */
-        public function parseTagLib($tagLib, &$content, $hide = false)
+        public function parseTagLib(TagLib $tagLib, &$content, $hide = false)
         {
             $begin = $this->config['taglib_begin'];
             $end = $this->config['taglib_end'];
-            if (strpos($tagLib, '\\')) {
-                // 支持指定标签库的命名空间
-                $className = $tagLib;
-                $tagLib = substr($tagLib, strrpos($tagLib, '\\') + 1);
-            } else {
-                $className = 'Think\\Template\TagLib\\' . ucwords($tagLib);
-            }
-            $tLib = Think::instance($className);
-            $that = $this;
-            foreach ($tLib->getTags() as $name => $val) {
+            $that = &$this;
+            foreach ($tagLib->getTags() as $name => $val) {
                 $tags = [$name];
                 // 别名设置
                 if (isset($val['alias'])) {
@@ -496,23 +464,22 @@
                 foreach ($tags as $tag) {
                     // 实际要解析的标签名称
                     $parseTag = !$hide ? $tagLib . ':' . $tag : $tag;
-                    if (!method_exists($tLib, '_' . $tag)) {
+                    if (!method_exists($tagLib, '_' . $tag)) {
                         // 别名可以无需定义解析方法
                         $tag = $name;
                     }
-                    $n1 = empty($val['attr']) ? '(\s*?)' : '\s([^' . $end . ']*)';
-                    $this->tempVar = [$tagLib, $tag];
+                    $patternTail = empty($val['attr']) ? '(\s*?)' : '\s([^' . $end . ']*)';
                     
                     if (!$closeTag) {
-                        $patterns = '/' . $begin . $parseTag . $n1 . '\/(\s*?)' . $end . '/is';
-                        $content = preg_replace_callback($patterns, function ($matches) use ($tLib, $tag, $that) {
-                            return $that->parseXmlTag($tLib, $tag, $matches[1], $matches[2]);
+                        $patterns = '/' . $begin . $parseTag . $patternTail . '\/(\s*?)' . $end . '/is';
+                        $content = preg_replace_callback($patterns, function ($matches) use ($tagLib, $tag, $that) {
+                            return $that->parseXmlTag($tagLib, $tag, $matches[1], $matches[2]);
                         }, $content);
                     } else {
-                        $patterns = '/' . $begin . $parseTag . $n1 . $end . '(.*?)' . $begin . '\/' . $parseTag . '(\s*?)' . $end . '/is';
+                        $patterns = '/' . $begin . $parseTag . $patternTail . $end . '(.*?)' . $begin . '\/' . $parseTag . '(\s*?)' . $end . '/is';
                         for ($i = 0; $i < $level; $i++) {
-                            $content = preg_replace_callback($patterns, function ($matches) use ($tLib, $tag, $that) {
-                                return $that->parseXmlTag($tLib, $tag, $matches[1], $matches[2]);
+                            $content = preg_replace_callback($patterns, function ($matches) use ($tagLib, $tag, $that) {
+                                return $that->parseXmlTag($tagLib, $tag, $matches[1], $matches[2]);
                             }, $content);
                         }
                     }
@@ -524,17 +491,14 @@
          * 解析标签库的标签
          * 需要调用对应的标签库文件解析类
          * @access public
-         * @param object $tagLib  标签库对象实例
+         * @param TagLib $tagLib  标签库对象实例
          * @param string $tag     标签名
          * @param string $attr    标签属性
          * @param string $content 标签内容
          * @return string|false
          */
-        public function parseXmlTag($tagLib, $tag, $attr, $content)
+        public function parseXmlTag(TagLib $tagLib, $tag, $attr, $content)
         {
-            if (ini_get('magic_quotes_sybase')) {
-                $attr = str_replace('\"', '\'', $attr);
-            }
             $parse = '_' . $tag;
             $content = trim($content);
             $tags = $tagLib->parseXmlAttr($attr, $tag);
