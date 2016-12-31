@@ -29,13 +29,30 @@
      */
     class Model
     {
-        // 操作状态
-        const MODEL_INSERT = 1;      //  插入模型数据
-        const MODEL_UPDATE = 2;      //  更新模型数据
-        const MODEL_BOTH = 3;      //  包含上面两种方式
-        const MUST_VALIDATE = 1;      // 必须验证
-        const EXISTS_VALIDATE = 0;      // 表单存在字段则验证
-        const VALUE_VALIDATE = 2;      // 表单值不为空则验证
+        /**
+         * @const MODEL_INSERT 插入模型数据
+         */
+        const MODEL_INSERT = 1;
+        /**
+         * @const MODEL_UPDATE 更新模型数据
+         */
+        const MODEL_UPDATE = 2;
+        /**
+         * @const MODEL_BOTH 包含上面两种方式
+         */
+        const MODEL_BOTH = 3;
+        /**
+         * @const MUST_VALIDATE 必须验证
+         */
+        const MUST_VALIDATE = 1;
+        /**
+         * @const EXISTS_VALIDATE 表单存在字段则验证
+         */
+        const EXISTS_VALIDATE = 0;
+        /**
+         * @const VALUE_VALIDATE 表单值不为空则验证
+         */
+        const VALUE_VALIDATE = 2;
         
         /**
          * @var \Think\Db|\Think\Db\Driver|\PDO $db 当前数据库操作对象
