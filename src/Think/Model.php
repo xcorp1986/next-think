@@ -7,25 +7,25 @@
      * 实现了ORM和ActiveRecords模式
      * Class Model
      * @package Think
-     * @method count()
-     * @method sum()
-     * @method min()
-     * @method max()
-     * @method avg()
-     * @method strict()
-     * @method order()
-     * @method alias()
-     * @method having()
-     * @method group()
-     * @method lock()
-     * @method distinct()
-     * @method auto()
-     * @method filter()
-     * @method validate()
-     * @method result()
-     * @method token()
-     * @method index()
-     * @method force()
+     * @method mixed count(string $count = '') 统计数量，参数是要统计的字段名（可选）
+     * @method string sum(string $sum) 获取求和，参数是要统计的字段名（必须）
+     * @method string min(string $min) 获取最小值，参数是要统计的字段名（必须）
+     * @method string max(string $max) 获取最大值，参数是要统计的字段名（必须）
+     * @method string avg(string $avg) 获取平均值，参数是要统计的字段名（必须）
+     * @method $this strict(bool $strict) 用于数据入库的严格检测
+     * @method $this order(string | array $order) 用于对结果排序
+     * @method $this alias(string $alias) 用于给当前数据表定义别名
+     * @method $this having(string $having) 用于对查询的having支持
+     * @method $this group(string $group) 用于对查询的group支持
+     * @method $this lock(bool $lock) 用于数据库的锁机制
+     * @method $this distinct(bool $distinct) 用于查询的distinct支持
+     * @method $this auto(array $auto) 用于数据自动完成
+     * @method $this filter(string $filter) 写入数据过滤
+     * @method $this validate(array $validate) 用于数据自动验证
+     * @method $this result(string $result) 用于返回数据转换
+     * @method $this token(bool $token) 用于令牌验证
+     * @method $this index(string $index) 用于数据集的强制索引
+     * @method $this force($force)
      */
     class Model
     {
