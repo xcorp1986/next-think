@@ -235,7 +235,7 @@
         
         /**
          * default标签解析 需要配合switch才有效
-         * 使用： <default />ddfdf
+         * 使用： <default />some value
          * @access public
          * @param array  $tag     标签属性
          * @return string
@@ -616,7 +616,7 @@
             $comparison = 'lt';
             $name = 'i';
             //添加随机数，防止嵌套变量冲突
-            $rand = rand();
+            $rand = mt_rand();
             //获取属性
             foreach ($tag as $key => $value) {
                 $value = trim($value);
@@ -649,9 +649,7 @@
             $parseStr = '<?php $__FOR_START_' . $rand . '__=' . $start . ';$__FOR_END_' . $rand . '__=' . $end . ';';
             $parseStr .= 'for($' . $name . '=$__FOR_START_' . $rand . '__;' . $this->parseCondition('$' . $name . ' ' . $comparison . ' $__FOR_END_' . $rand . '__') . ';$' . $name . '+=' . $step . '){ ?>';
             $parseStr .= $content;
-            $parseStr .= '<?php } ?>';
-            
-            return $parseStr;
+            return $parseStr.'<?php } ?>';
         }
         
     }
