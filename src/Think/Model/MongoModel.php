@@ -135,7 +135,8 @@
         
         /**
          * 获取唯一值
-         * @access public
+         * @access       public
+         * @noinspection PhpSignatureMismatchDuringInheritanceInspection
          * @param       $field
          * @param array $where
          * @return array|false
@@ -306,7 +307,8 @@
         
         /**
          * 字段值增长
-         * @access public
+         * @access       public
+         * @noinspection PhpSignatureMismatchDuringInheritanceInspection
          * @param string $field 字段名
          * @param int    $step  增长值
          * @return bool
@@ -318,7 +320,8 @@
         
         /**
          * 字段值减少
-         * @access public
+         * @access       public
+         * @noinspection PhpSignatureMismatchDuringInheritanceInspection
          * @param string $field 字段名
          * @param int    $step  减少值
          * @return bool
@@ -331,8 +334,8 @@
         /**
          * 获取一条记录的某个字段值
          * @access public
-         * @param string $field 字段名
-         * @param null $separator  字段数据间隔符号
+         * @param string $field     字段名
+         * @param null   $separator 字段数据间隔符号
          * @return mixed
          */
         public function getField($field, $separator = null)
@@ -448,7 +451,8 @@
         
         /**
          * 分组查询
-         * @access public
+         * @access       public
+         * @noinspection PhpSignatureMismatchDuringInheritanceInspection
          * @param       $key
          * @param       $init
          * @param       $reduce

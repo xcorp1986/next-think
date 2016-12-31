@@ -55,7 +55,8 @@
         
         /**
          * 连接数据库方法
-         * @access public
+         * @access       public
+         * @noinspection PhpSignatureMismatchDuringInheritanceInspection
          * @param string $config
          * @param int    $linkNum
          * @return mixed|\PDO
@@ -81,9 +82,9 @@
         /**
          * 切换当前操作的Db和Collection
          * @access public
-         * @param string  $collection collection
-         * @param string  $db         db
-         * @param bool $master     是否主服务器
+         * @param string $collection collection
+         * @param string $db         db
+         * @param bool   $master     是否主服务器
          * @return void
          * @throws \MongoException
          */
@@ -222,9 +223,9 @@
         /**
          * 插入记录
          * @access public
-         * @param mixed   $data    数据
-         * @param array   $options 参数表达式
-         * @param bool $replace 是否replace
+         * @param mixed $data    数据
+         * @param array $options 参数表达式
+         * @param bool  $replace 是否replace
          * @return false | int
          * @throws \MongoCursorException
          */
@@ -261,6 +262,7 @@
         
         /**
          * 插入多条记录
+         * @noinspection PhpSignatureMismatchDuringInheritanceInspection
          * @access public
          * @param array $dataList 数据
          * @param array $options  参数表达式
@@ -571,7 +573,7 @@
                 E($e->getMessage());
             }
         }
-    
+        
         /**
          * 取得数据表的字段信息
          * @access public

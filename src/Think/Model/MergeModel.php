@@ -238,7 +238,8 @@
         
         /**
          * 删除聚合模型数据
-         * @access public
+         * @access       public
+         * @noinspection PhpSignatureMismatchDuringInheritanceInspection
          * @param mixed $options 表达式
          * @return mixed
          */
