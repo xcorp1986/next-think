@@ -6,7 +6,8 @@
     use Think\Behavior;
     use Think\Storage;
     use Think\Think;
-    
+    use Think\View;
+
     /**
      * 静态缓存读取
      */
@@ -131,7 +132,7 @@
          * 如果无效需要重新更新
          * @access public
          * @param string $cacheFile 静态文件名
-         * @param int    $cacheTime 缓存有效期
+         * @param mixed    $cacheTime 缓存有效期
          * @return bool
          */
         public static function checkHTMLCache($cacheFile = '', $cacheTime = '')
@@ -139,7 +140,7 @@
 //            if (!is_file($cacheFile) && 'sae' != APP_MODE) {
             if (!is_file($cacheFile)) {
                 return false;
-            } elseif (filemtime(Think::instance(\Think\View::class)->parseTemplate()) > Storage::get($cacheFile, 'mtime', 'html')) {
+            } elseif (filemtime(Think::instance(View::class)->parseTemplate()) > Storage::get($cacheFile, 'mtime', 'html')) {
                 // 模板文件如果更新静态文件需要更新
                 return false;
             } elseif (!is_numeric($cacheTime) && function_exists($cacheTime)) {

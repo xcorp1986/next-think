@@ -12,7 +12,7 @@
         
         /**
          * 视图实例对象
-         * @var \Think\View $view
+         * @var View $view
          * @access protected
          */
         protected $view = null;
@@ -32,7 +32,7 @@
         {
             Hook::listen('action_begin', $this->config);
             //实例化视图类
-            $this->view = Think::instance(\Think\View::class);
+            $this->view = Think::instance(View::class);
             //控制器初始化
             if (method_exists($this, '_init')) {
                 $this->_init();

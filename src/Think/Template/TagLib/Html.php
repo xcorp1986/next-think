@@ -297,7 +297,7 @@
             }
             //显示指定的字段
             foreach ($fields as $field) {
-                $property = explode('|', $field[0]);
+//                $property = explode('|', $field[0]);
                 $showname = explode('|', $field[1]);
                 if (isset($showname[1])) {
                     $parseStr .= '<th width="' . $showname[1] . '">';

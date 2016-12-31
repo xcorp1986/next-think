@@ -414,10 +414,11 @@
 
             return $items;
         }
-
+    
         /**
          * 获取请求错误信息
          * @param  string $header 请求返回头信息
+         * @param         $body
          */
         private function error($header, $body)
         {

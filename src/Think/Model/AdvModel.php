@@ -371,7 +371,7 @@
         /**
          * 写入数据的时候过滤数据字段
          * @access protected
-         * @param mixed $result 查询的数据
+         * @param mixed $data 查询的数据
          * @return array
          */
         protected function setFilterFields($data)

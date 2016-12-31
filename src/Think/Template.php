@@ -3,6 +3,7 @@
     namespace Think;
     
     use Think\Template\TagLib;
+    use Think\Template\TagLib\Cx;
     
     /**
      * 内置模板引擎类
@@ -197,14 +198,14 @@
              * end of $tagLibs
              * @todo improve in future
              */
-            if (!in_array(\Think\Template\TagLib\Cx::class, $tagLibs)) {
-                array_push($tagLibs, \Think\Template\TagLib\Cx::class);
+            if (!in_array(Cx::class, $tagLibs)) {
+                array_push($tagLibs, Cx::class);
             }
             /**
              * @var $tag \Think\Template\TagLib
              */
             foreach ($tagLibs as $tag) {
-                $this->parseTagLib(\Think\Think::instance($tag), $content);
+                $this->parseTagLib(Think::instance($tag), $content);
             }
             
             //解析普通模板标签 {$tagName}
@@ -656,6 +657,7 @@
          * @access private
          * @param string $tmplPublicName 公共模板文件名
          * @param array  $vars           要传递的变量列表
+         * @param bool   $extend
          * @return string
          */
         private function parseIncludeItem($tmplPublicName, $vars = [], $extend = true)

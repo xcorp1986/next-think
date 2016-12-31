@@ -11,12 +11,13 @@
          * @var \Memcache $handle
          */
         protected $handle = null;
-
+    
         /**
          * 打开Session
          * @access public
          * @param string $savePath
          * @param mixed  $sessName
+         * @return bool
          */
         public function open($savePath, $sessName)
         {
@@ -49,42 +50,46 @@
 
             return true;
         }
-
+    
         /**
          * 读取Session
          * @access public
          * @param string $sessID
+         * @return array|string
          */
         public function read($sessID)
         {
             return $this->handle->get($this->sessionName . $sessID);
         }
-
+    
         /**
          * 写入Session
          * @access public
          * @param string $sessID
          * @param String $sessData
+         * @return bool
          */
         public function write($sessID, $sessData)
         {
             return $this->handle->set($this->sessionName . $sessID, $sessData, 0, $this->lifeTime);
         }
-
+    
         /**
          * 删除Session
          * @access public
          * @param string $sessID
+         * @return bool
          */
         public function destroy($sessID)
         {
             return $this->handle->delete($this->sessionName . $sessID);
         }
-
+    
         /**
          * Session 垃圾回收
          * @access public
          * @param string $sessMaxLifeTime
+         * @return bool
          */
         public function gc($sessMaxLifeTime)
         {

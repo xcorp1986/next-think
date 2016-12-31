@@ -26,15 +26,14 @@
         
         /**
          * 连接操作句柄
-         * @access public
-         * @param string $type    文件类型
-         * @param array  $options 配置数组
+         * @access   public
+         * @param string $type 文件类型
          * @return void
          */
         public static function connect($type = 'File')
         {
             $class = 'Think\\Storage\\Driver\\' . ucwords($type);
-            self::$handler = \Think\Think::instance($class);
+            self::$handler = Think::instance($class);
         }
         
         /**

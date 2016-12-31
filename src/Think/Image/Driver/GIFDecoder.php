@@ -138,7 +138,7 @@
         */
         private function GIFReadDescriptor()
         {
-            $GIF_screen = [];
+//            $GIF_screen = [];
             
             $this->GIFGetByte(9);
             $GIF_screen = $this->GIF_buffer;

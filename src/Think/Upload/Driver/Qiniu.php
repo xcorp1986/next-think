@@ -17,7 +17,7 @@
          * 上传错误信息
          * @var string
          */
-        private $error = '';
+//        private $error = '';
         
         private $config = [
             'secretKey' => '', //七牛服务器

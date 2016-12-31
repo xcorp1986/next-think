@@ -43,7 +43,7 @@
         
         /**
          * 解密字符串
-         * @param string $str 字符串
+         * @param string $data 字符串
          * @param string $key 加密key
          * @return string
          */

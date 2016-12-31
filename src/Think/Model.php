@@ -1075,12 +1075,12 @@
                 return false;
             }
         }
-        
+    
         /**
          * 获取一条记录的某个字段值
-         * @access public
+         * @access   public
          * @param string $field 字段名
-         * @param string $spea  字段数据间隔符号 NULL返回数组
+         * @param null   $sepa  字段数据间隔符号 NULL返回数组
          * @return mixed
          */
         public function getField($field, $sepa = null)
@@ -1664,7 +1664,7 @@
         /**
          * 切换当前的数据库连接
          * @access public
-         * @param int     $linkNum 连接序号
+         * @param mixed     $linkNum 连接序号
          * @param mixed   $config  数据库连接信息
          * @param boolean $force   强制重新连接
          * @return $this

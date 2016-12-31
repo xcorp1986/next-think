@@ -96,10 +96,12 @@
                 return $this->numRows;
             }
         }
-        
+    
         /**
          * 取得数据表的字段信息
          * @access public
+         * @param $tableName
+         * @return array
          */
         public function getFields($tableName)
         {
@@ -124,10 +126,12 @@
             
             return $info;
         }
-        
+    
         /**
          * 取得数据库的表信息（暂时实现取得用户表信息）
          * @access public
+         * @param string $dbName
+         * @return array
          */
         public function getTables($dbName = '')
         {
@@ -150,10 +154,11 @@
         {
             return str_ireplace("'", "''", $str);
         }
-        
+    
         /**
          * limit
          * @access public
+         * @param mixed $limit
          * @return string
          */
         public function parseLimit($limit)
@@ -170,10 +175,11 @@
             
             return $limitStr ? ' WHERE ' . $limitStr : '';
         }
-        
+    
         /**
          * 设置锁机制
          * @access protected
+         * @param bool $lock
          * @return string
          */
         protected function parseLock($lock = false)

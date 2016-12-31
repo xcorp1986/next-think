@@ -38,7 +38,7 @@
         /**
          * 读取缓存
          * @access public
-         * @param string $name 缓存变量名
+         * @param mixed $name 缓存变量名
          * @return mixed
          */
         public function get($name = false)
@@ -142,12 +142,13 @@
                 return dechex(array_sum($key));
             }
         }
-        
+    
         /**
          * 写入操作
-         * @access private
-         * @param string $name 缓存变量名
-         * @return int|bool
+         * @access   private
+         * @param $val
+         * @param $lh
+         * @return bool|int
          */
         private function _write(&$val, &$lh)
         {
@@ -163,11 +164,10 @@
             
             return false;
         }
-        
+    
         /**
          * 共享锁定
-         * @access private
-         * @param string $name 缓存变量名
+         * @access   private
          * @return bool
          */
         private function _lock()
@@ -182,11 +182,11 @@
             
             return $fp;
         }
-        
+    
         /**
          * 解除共享锁定
-         * @access private
-         * @param string $name 缓存变量名
+         * @access   private
+         * @param $fp
          * @return bool
          */
         private function _unlock(&$fp)

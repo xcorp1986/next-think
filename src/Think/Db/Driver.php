@@ -102,12 +102,14 @@
                 }
             }
         }
-        
+    
         /**
          * 连接数据库方法
          * @access public
-         * @throws \PDOException
-         * @return \PDO|mixed
+         * @param string $config
+         * @param int    $linkNum
+         * @param bool   $autoConnection
+         * @return mixed|\PDO
          */
         public function connect($config = '', $linkNum = 0, $autoConnection = false)
         {
@@ -421,10 +423,11 @@
                 return $this->error;
             }
         }
-        
+    
         /**
          * 设置锁机制
          * @access protected
+         * @param bool $lock
          * @return string
          */
         protected function parseLock($lock = false)
@@ -535,11 +538,11 @@
             //TODO 如果是查询全部字段，并且是join的方式，那么就把要查的表加个别名，以免字段被覆盖
             return $fieldsStr;
         }
-        
+    
         /**
          * table分析
-         * @access protected
-         * @param mixed $table
+         * @access   protected
+         * @param $tables
          * @return string
          */
         protected function parseTable($tables)
@@ -756,7 +759,7 @@
         /**
          * limit分析
          * @access protected
-         * @param mixed $lmit
+         * @param mixed $limit
          * @return string
          */
         protected function parseLimit($limit)
@@ -991,14 +994,14 @@
             
             return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
         }
-        
+    
         /**
          * 通过Select方式插入记录
-         * @access public
+         * @access   public
          * @param string $fields 要插入的数据表字段名
          * @param string $table  要插入的数据表名
-         * @param array  $option 查询数据参数
-         * @return false | int
+         * @param array  $options 查询数据参数
+         * @return false|int
          */
         public function selectInsert($fields, $table, $options = [])
         {

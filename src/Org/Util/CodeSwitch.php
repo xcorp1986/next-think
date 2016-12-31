@@ -104,7 +104,7 @@
                 fclose($fpr);
             } else {
                 //文件需要转码
-                $originContent = "";
+//                $originContent = "";
                 
                 if ($originEncoding == "UTF-8 WITH BOM") {
                     //跳过三个字节,把后面的内容复制一遍得到utf-8的内容
@@ -133,7 +133,7 @@
                     self::info("文件" . $filename . "中没有出现中文,但是可以断定不是带BOM的UTF-8编码,没有进行编码转换,不影响使用");
             }
         }
-        
+    
         /**
          * 目录遍历函数
          * @access public
@@ -141,7 +141,8 @@
          * @param string $mode       遍历模式,一般取FILES,这样只返回带路径的文件名
          * @param array  $file_types 文件后缀过滤数组
          * @param int    $maxdepth   遍历深度,-1表示遍历到最底层
-         * @return void
+         * @param int    $d
+         * @return mixed
          */
         static function searchdir($path, $mode = "FULL", $file_types = [".html", ".php"], $maxdepth = -1, $d = 0)
         {
@@ -177,11 +178,12 @@
             
             return ($dirlist);
         }
-        
+    
         /**
          * 对整个项目目录中的PHP和HTML文件行进编码转换
          * @access public
          * @param string $app        要遍历的项目路径
+         * @param string $charset
          * @param string $mode       遍历模式,一般取FILES,这样只返回带路径的文件名
          * @param array  $file_types 文件后缀过滤数组
          * @return void

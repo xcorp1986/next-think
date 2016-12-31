@@ -104,7 +104,7 @@
         */
         private function GIFAddHeader()
         {
-            $cmap = 0;
+//            $cmap = 0;
             
             if (ord($this->BUF [0]{10}) & 0x80) {
                 $cmap = 3 * (2 << (ord($this->BUF [0]{10}) & 0x07));

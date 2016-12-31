@@ -20,7 +20,7 @@
         
         /**
          * @access public
-         * @param string $elements 初始化数组元素
+         * @param array $elements 初始化数组元素
          */
         public function __construct($elements = [])
         {
@@ -196,12 +196,13 @@
         {
             $this->_elements = array_unique($this->_elements);
         }
-        
+    
         /**
          * 取出一定范围的数组列表
          * @access public
          * @param int $offset 开始位置
          * @param int $length 长度
+         * @return array
          */
         public function range($offset, $length = null)
         {

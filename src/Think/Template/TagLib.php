@@ -3,6 +3,7 @@
     
     namespace Think\Template;
     
+    use Think\Template;
     use Think\Think;
     
     /**
@@ -74,9 +75,9 @@
         public function __construct()
         {
             $this->tagLib = strtolower(substr(get_class($this), 6));
-            $this->tpl = Think::instance(\Think\Template::class);
+            $this->tpl = Think::instance(Template::class);
         }
-    
+        
         /**
          * TagLib标签属性分析 返回标签属性数组
          * @access   public
@@ -192,8 +193,7 @@
                     default:
                         $name = 'is_array($' . $var . ')?$' . $var . '["' . $vars[0] . '"]:$' . $var . '->' . $vars[0];
                 }
-            }
-            elseif (!defined($name)) {
+            } elseif (!defined($name)) {
                 $name = '$' . $name;
             }
             

@@ -227,11 +227,12 @@
             
             return true;
         }
-        
+    
         /**
          * 取得当前认证号的所有权限列表
          * @param int $authId 用户ID
          * @access public
+         * @return array
          */
         public static function getAccessList($authId)
         {

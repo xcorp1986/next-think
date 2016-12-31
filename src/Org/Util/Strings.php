@@ -39,9 +39,9 @@
          */
         public static function isUtf8($str)
         {
-            $c = 0;
-            $b = 0;
-            $bits = 0;
+//            $c = 0;
+//            $b = 0;
+//            $bits = 0;
             $len = strlen($str);
             for ($i = 0; $i < $len; $i++) {
                 $c = ord($str[$i]);
@@ -86,7 +86,7 @@
          * @param int    $start   开始位置
          * @param int    $length  截取长度
          * @param string $charset 编码格式
-         * @param string $suffix  截断显示字符
+         * @param bool $suffix  截断显示字符
          * @return string
          */
         public static function msubstr($str, $start = 0, $length = 0, $charset = 'utf-8', $suffix = true)
@@ -110,7 +110,7 @@
         /**
          * 产生随机字串，可用来自动生成密码
          * 默认长度6位 字母和数字混合 支持中文
-         * @param string $len      长度
+         * @param int $len      长度
          * @param string $type     字串类型
          *                         0 字母 1 数字 其它 混合
          * @param string $addChars 额外字符
@@ -160,8 +160,8 @@
         /**
          * 生成一定数量的随机数，并且不重复
          * @param int    $number  数量
-         * @param string $len     长度
-         * @param string $type    字串类型
+         * @param int $length     长度
+         * @param int $mode    字串类型
          *                        0 字母 1 数字 其它 混合
          * @return string
          */

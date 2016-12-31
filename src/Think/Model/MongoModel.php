@@ -332,7 +332,7 @@
          * 获取一条记录的某个字段值
          * @access public
          * @param string $field 字段名
-         * @param string $spea  字段数据间隔符号
+         * @param null $separator  字段数据间隔符号
          * @return mixed
          */
         public function getField($field, $separator = null)

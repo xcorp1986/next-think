@@ -571,12 +571,12 @@
                 E($e->getMessage());
             }
         }
-        
+    
         /**
          * 取得数据表的字段信息
          * @access public
+         * @param string $collection
          * @return array|bool
-         * @throws \MongoCursorException
          */
         public function getFields($collection = '')
         {

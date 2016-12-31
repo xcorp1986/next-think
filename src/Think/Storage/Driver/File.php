@@ -70,7 +70,7 @@
         /**
          * 加载文件
          * @access public
-         * @param string $filename 文件名
+         * @param string $_filename 文件名
          * @param array  $vars     传入变量
          * @return void
          */
@@ -86,7 +86,6 @@
          * 文件是否存在
          * @access public
          * @param string $filename 文件名
-         * @param string $type
          * @return bool
          */
         public static function has($filename)

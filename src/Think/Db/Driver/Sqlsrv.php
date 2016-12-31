@@ -35,10 +35,11 @@
             
             return $dsn;
         }
-        
+    
         /**
          * 取得数据表的字段信息
          * @access public
+         * @param $tableName
          * @return array
          */
         public function getFields($tableName)
@@ -68,10 +69,11 @@
             
             return $info;
         }
-        
+    
         /**
          * 取得数据表的字段信息
          * @access public
+         * @param string $dbName
          * @return array
          */
         public function getTables($dbName = '')

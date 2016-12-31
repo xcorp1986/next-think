@@ -220,11 +220,12 @@
         {
             return strftime($format, $this->date);
         }
-        
+    
         /**
          * 是否为闰年
          * @static
          * @access public
+         * @param string $year
          * @return string
          */
         public function isLeapYear($year = '')
@@ -317,11 +318,12 @@
             
             return $since . '前';
         }
-        
+    
         /**
          * 返回周的某一天 返回Date对象
          * @access public
-         * @return Date
+         * @param $n
+         * @return \Org\Util\Date
          */
         public function getDayOfWeek($n)
         {

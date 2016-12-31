@@ -48,11 +48,13 @@
             
             return $cache;
         }
-        
+    
         /**
          * 取得缓存类实例
          * @static
          * @access public
+         * @param string $type
+         * @param array  $options
          * @return mixed
          */
         public static function getInstance($type = '', $options = [])
