@@ -67,7 +67,7 @@
                 self::$log[] = "{$level}: {$message}\r\n";
             }
         }
-    
+        
         /**
          * 日志保存
          * @static
@@ -78,7 +78,9 @@
          */
         public static function save($type = '', $destination = '')
         {
-            if (empty(self::$log)) return;
+            if (empty(self::$log)) {
+                return;
+            }
             
             if (empty($destination)) {
                 $destination = C('LOG_PATH') . date('y_m_d') . '.log';
@@ -100,7 +102,7 @@
          * @access public
          * @param string $message     日志信息
          * @param string $level       日志级别
-         * @param string    $type        日志记录方式
+         * @param string $type        日志记录方式
          * @param string $destination 写入目标
          * @return void
          */

@@ -835,25 +835,6 @@
     }
     
     /**
-     * 自定义异常处理
-     * @deprecated
-     * @param string $msg  异常消息
-     * @param string $type 异常类型 默认为Think\Exception
-     * @param int    $code 异常代码 默认为0
-     * @return void
-     */
-    function throw_exception($msg, $type = '\\Think\\Exception', $code = 0)
-    {
-        \Think\Log::record('建议使用E方法替代throw_exception', \Think\Log::NOTICE);
-        if (class_exists($type, false)) {
-            throw new $type($msg, $code);
-            // 异常类型不存在则输出错误信息字串
-        } else {
-            \Think\Think::halt($msg);
-        }
-    }
-    
-    /**
      * 浏览器友好的变量输出
      * @param mixed  $var    变量
      * @param bool   $echo   是否输出 默认为True 如果为false 则返回输出字符串

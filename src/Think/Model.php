@@ -900,6 +900,7 @@
         
         /**
          * 数据读取后的处理
+         * @todo check
          * @access protected
          * @param array $data 当前数据
          * @return array

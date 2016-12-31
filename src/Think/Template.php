@@ -433,9 +433,8 @@
                 } else {
                     $name = $content[2];
                     $content = $content[3];
-                    $content = isset($this->block[$name]) ? $this->block[$name] : $content;
                     
-                    return $content;
+                    return isset($this->block[$name]) ? $this->block[$name] : $content;
                 }
             }
         }
