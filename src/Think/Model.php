@@ -7,6 +7,25 @@
      * 实现了ORM和ActiveRecords模式
      * Class Model
      * @package Think
+     * @method count()
+     * @method sum()
+     * @method min()
+     * @method max()
+     * @method avg()
+     * @method strict()
+     * @method order()
+     * @method alias()
+     * @method having()
+     * @method group()
+     * @method lock()
+     * @method distinct()
+     * @method auto()
+     * @method filter()
+     * @method validate()
+     * @method result()
+     * @method token()
+     * @method index()
+     * @method force()
      */
     class Model
     {
@@ -57,7 +76,22 @@
         // 是否批处理验证
         protected $patchValidate = false;
         // 链操作方法列表
-        protected $methods = ['strict', 'order', 'alias', 'having', 'group', 'lock', 'distinct', 'auto', 'filter', 'validate', 'result', 'token', 'index', 'force'];
+        protected $methods = [
+            'strict',
+            'order',
+            'alias',
+            'having',
+            'group',
+            'lock',
+            'distinct',
+            'auto',
+            'filter',
+            'validate',
+            'result',
+            'token',
+            'index',
+            'force',
+        ];
         
         /**
          * 取得DB类的实例对象 字段检查
