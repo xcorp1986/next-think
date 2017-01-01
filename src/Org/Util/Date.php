@@ -114,7 +114,7 @@
         protected $CTIME;
         
         // 星期的输出
-        protected $Week = ["日", "一", "二", "三", "四", "五", "六"];
+        protected $Week = ['日', '一', '二', '三', '四', '五', '六'];
         
         /**
          * 创建一个Date对象
@@ -190,21 +190,21 @@
         {
             $dateArray = getdate($date);
             $this->date = $dateArray[0];            //时间戳
-            $this->second = $dateArray["seconds"];    //秒
-            $this->minute = $dateArray["minutes"];    //分
-            $this->hour = $dateArray["hours"];      //时
-            $this->day = $dateArray["mday"];       //日
-            $this->month = $dateArray["mon"];        //月
-            $this->year = $dateArray["year"];       //年
+            $this->second = $dateArray['seconds'];    //秒
+            $this->minute = $dateArray['minutes'];    //分
+            $this->hour = $dateArray['hours'];      //时
+            $this->day = $dateArray['mday'];       //日
+            $this->month = $dateArray['mon'];        //月
+            $this->year = $dateArray['year'];       //年
             
-            $this->weekday = $dateArray["wday"];       //星期 0～6
+            $this->weekday = $dateArray['wday'];       //星期 0～6
             $this->cWeekday = '星期' . $this->Week[$this->weekday];//$dateArray["weekday"];    //星期完整表示
-            $this->yDay = $dateArray["yday"];       //一年中的天数 0－365
-            $this->cMonth = $dateArray["month"];      //月份的完整表示
+            $this->yDay = $dateArray['yday'];       //一年中的天数 0－365
+            $this->cMonth = $dateArray['month'];      //月份的完整表示
             
-            $this->CDATE = $this->format("%Y-%m-%d");//日期表示
-            $this->YMD = $this->format("%Y%m%d");  //简单日期
-            $this->CTIME = $this->format("%H:%M:%S");//时间表示
+            $this->CDATE = $this->format('%Y-%m-%d');//日期表示
+            $this->YMD = $this->format('%Y%m%d');  //简单日期
+            $this->CTIME = $this->format('%H:%M:%S');//时间表示
             
             return;
         }
@@ -216,11 +216,11 @@
          * @param string $format 格式化参数
          * @return string
          */
-        public function format($format = "%Y-%m-%d %H:%M:%S")
+        public function format($format = '%Y-%m-%d %H:%M:%S')
         {
             return strftime($format, $this->date);
         }
-    
+        
         /**
          * 是否为闰年
          * @static
@@ -262,22 +262,22 @@
             //计算天数差
             $__DAYSELAPS = ($this->parse($date) - $this->date) / $__SECONDS_IN_A_DAY__;
             switch ($elaps) {
-                case "y"://转换成年
+                case 'y'://转换成年
                     $__DAYSELAPS = $__DAYSELAPS / $__DAYS_PER_YEAR__;
                     break;
-                case "M"://转换成月
+                case 'M'://转换成月
                     $__DAYSELAPS = $__DAYSELAPS / $__DAYS_PER_MONTH__;
                     break;
-                case "w"://转换成星期
+                case 'w'://转换成星期
                     $__DAYSELAPS = $__DAYSELAPS / $__DAYS_PER_WEEK__;
                     break;
-                case "h"://转换成小时
+                case 'h'://转换成小时
                     $__DAYSELAPS = $__DAYSELAPS * $__HOURS_IN_A_DAY__;
                     break;
-                case "m"://转换成分钟
+                case 'm'://转换成分钟
                     $__DAYSELAPS = $__DAYSELAPS * $__MINUTES_IN_A_DAY__;
                     break;
-                case "s"://转换成秒
+                case 's'://转换成秒
                     $__DAYSELAPS = $__DAYSELAPS * $__SECONDS_IN_A_DAY__;
                     break;
             }
@@ -318,7 +318,7 @@
             
             return $since . '前';
         }
-    
+        
         /**
          * 返回周的某一天 返回Date对象
          * @access public
@@ -430,44 +430,44 @@
             $_year = $this->year;
             
             switch ($interval) {
-                case "yyyy":
+                case 'yyyy':
                     //---Add $number to year
                     $_year += $number;
                     break;
                 
-                case "q":
+                case 'q':
                     //---Add $number to quarter
                     $_month += ($number * 3);
                     break;
                 
-                case "m":
+                case 'm':
                     //---Add $number to month
                     $_month += $number;
                     break;
                 
-                case "y":
-                case "d":
-                case "w":
+                case 'y':
+                case 'd':
+                case 'w':
                     //---Add $number to day of year, day, day of week
                     $_day += $number;
                     break;
                 
-                case "ww":
+                case 'ww':
                     //---Add $number to week
                     $_day += ($number * 7);
                     break;
                 
-                case "h":
+                case 'h':
                     //---Add $number to hours
                     $hours += $number;
                     break;
                 
-                case "n":
+                case 'n':
                     //---Add $number to minutes
                     $minutes += $number;
                     break;
                 
-                case "s":
+                case 's':
                     //---Add $number to seconds
                     $seconds += $number;
                     break;
@@ -550,13 +550,15 @@
                 case 'XZ'://星座
                     $XZDict = ['摩羯', '宝瓶', '双鱼', '白羊', '金牛', '双子', '巨蟹', '狮子', '处女', '天秤', '天蝎', '射手'];
                     $Zone = [1222, 122, 222, 321, 421, 522, 622, 722, 822, 922, 1022, 1122, 1222];
-                    if ((100 * $m + $d) >= $Zone[0] || (100 * $m + $d) < $Zone[1])
+                    if ((100 * $m + $d) >= $Zone[0] || (100 * $m + $d) < $Zone[1]) {
                         $i = 0;
-                    else
+                    } else {
                         for ($i = 1; $i < 12; $i++) {
-                            if ((100 * $m + $d) >= $Zone[$i] && (100 * $m + $d) < $Zone[$i + 1])
+                            if ((100 * $m + $d) >= $Zone[$i] && (100 * $m + $d) < $Zone[$i + 1]) {
                                 break;
+                            }
                         }
+                    }
                     $result = $XZDict[$i] . '座';
                     break;
                 

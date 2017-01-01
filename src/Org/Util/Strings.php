@@ -4,6 +4,14 @@
     
     class Strings
     {
+        /**
+         * 生成Guid主键
+         * @return bool
+         */
+        public static function keyGen()
+        {
+            return str_replace('-', '', substr(Strings::uuid(), 1, -1));
+        }
         
         /**
          * 生成UUID 单机使用
@@ -13,7 +21,8 @@
         public static function uuid()
         {
             $charid = md5(uniqid(mt_rand(), true));
-            $hyphen = chr(45);// "-"
+            $hyphen = chr(45);
+            
             return chr(123)
                 . substr($charid, 0, 8) . $hyphen
                 . substr($charid, 8, 4) . $hyphen
@@ -24,24 +33,12 @@
         }
         
         /**
-         * 生成Guid主键
-         * @return bool
-         */
-        public static function keyGen()
-        {
-            return str_replace('-', '', substr(self::uuid(), 1, -1));
-        }
-        
-        /**
          * 检查字符串是否是UTF8编码
          * @param string $str 字符串
          * @return bool
          */
         public static function isUtf8($str)
         {
-//            $c = 0;
-//            $b = 0;
-//            $bits = 0;
             $len = strlen($str);
             for ($i = 0; $i < $len; $i++) {
                 $c = ord($str[$i]);
@@ -79,38 +76,39 @@
         }
         
         /**
-         * 字符串截取，支持中文和其他编码
-         * @static
-         * @access public
-         * @param string $str     需要转换的字符串
-         * @param int    $start   开始位置
-         * @param int    $length  截取长度
-         * @param string $charset 编码格式
-         * @param bool $suffix  截断显示字符
+         * 生成一定数量的随机数，并且不重复
+         * @param int $number     数量
+         * @param int $length     长度
+         * @param int $mode       字串类型
+         *                        0 字母 1 数字 其它 混合
          * @return string
          */
-        public static function msubstr($str, $start = 0, $length = 0, $charset = 'utf-8', $suffix = true)
+        public static function buildCountRand($number, $length = 4, $mode = 1)
         {
-            if (function_exists('mb_substr')) {
-                $slice = mb_substr($str, $start, $length, $charset);
-            } elseif (function_exists('iconv_substr')) {
-                $slice = iconv_substr($str, $start, $length, $charset);
-            } else {
-                $re['utf-8'] = "/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|[\xe0-\xef][\x80-\xbf]{2}|[\xf0-\xff][\x80-\xbf]{3}/";
-                $re['gb2312'] = "/[\x01-\x7f]|[\xb0-\xf7][\xa0-\xfe]/";
-                $re['gbk'] = "/[\x01-\x7f]|[\x81-\xfe][\x40-\xfe]/";
-                $re['big5'] = "/[\x01-\x7f]|[\x81-\xfe]([\x40-\x7e]|\xa1-\xfe])/";
-                preg_match_all($re[$charset], $str, $match);
-                $slice = join("", array_slice($match[0], $start, $length));
+            if ($mode == 1 && $length < strlen($number)) {
+                //不足以生成一定数量的不重复数字
+                return false;
+            }
+            $rand = [];
+            for ($i = 0; $i < $number; $i++) {
+                $rand[] = self::randString($length, $mode);
+            }
+            $unique = array_unique($rand);
+            if (count($unique) == count($rand)) {
+                return $rand;
+            }
+            $count = count($rand) - count($unique);
+            for ($i = 0; $i < $count * 3; $i++) {
+                $rand[] = self::randString($length, $mode);
             }
             
-            return $suffix ? $slice . '...' : $slice;
+            return array_slice(array_unique($rand), 0, $number);
         }
         
         /**
          * 产生随机字串，可用来自动生成密码
          * 默认长度6位 字母和数字混合 支持中文
-         * @param int $len      长度
+         * @param int    $len      长度
          * @param string $type     字串类型
          *                         0 字母 1 数字 其它 混合
          * @param string $addChars 额外字符
@@ -140,8 +138,8 @@
                     $chars = 'ABCDEFGHIJKMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789' . $addChars;
                     break;
             }
-            //位数过长重复字符串一定次数
             if ($len > 10) {
+                //位数过长重复字符串一定次数
                 $chars = $type == 1 ? str_repeat($chars, $len) : str_repeat($chars, 5);
             }
             if ($type != 4) {
@@ -158,41 +156,40 @@
         }
         
         /**
-         * 生成一定数量的随机数，并且不重复
-         * @param int    $number  数量
-         * @param int $length     长度
-         * @param int $mode    字串类型
-         *                        0 字母 1 数字 其它 混合
+         * 字符串截取，支持中文和其他编码
+         * @static
+         * @access public
+         * @param string $str     需要转换的字符串
+         * @param int    $start   开始位置
+         * @param int    $length  截取长度
+         * @param string $charset 编码格式
+         * @param bool   $suffix  截断显示字符
          * @return string
          */
-        public static function buildCountRand($number, $length = 4, $mode = 1)
+        public static function msubstr($str, $start = 0, $length = 2147483647, $charset = 'utf-8', $suffix = true)
         {
-            if ($mode == 1 && $length < strlen($number)) {
-                //不足以生成一定数量的不重复数字
-                return false;
-            }
-            $rand = [];
-            for ($i = 0; $i < $number; $i++) {
-                $rand[] = self::randString($length, $mode);
-            }
-            $unqiue = array_unique($rand);
-            if (count($unqiue) == count($rand)) {
-                return $rand;
-            }
-            $count = count($rand) - count($unqiue);
-            for ($i = 0; $i < $count * 3; $i++) {
-                $rand[] = self::randString($length, $mode);
+            if (function_exists('mb_substr')) {
+                $slice = mb_substr($str, $start, $length, $charset);
+            } elseif (function_exists('iconv_substr')) {
+                $slice = iconv_substr($str, $start, $length, $charset);
+            } else {
+                $re['utf-8'] = "/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|[\xe0-\xef][\x80-\xbf]{2}|[\xf0-\xff][\x80-\xbf]{3}/";
+                $re['gb2312'] = "/[\x01-\x7f]|[\xb0-\xf7][\xa0-\xfe]/";
+                $re['gbk'] = "/[\x01-\x7f]|[\x81-\xfe][\x40-\xfe]/";
+                $re['big5'] = "/[\x01-\x7f]|[\x81-\xfe]([\x40-\x7e]|\xa1-\xfe])/";
+                preg_match_all($re[$charset], $str, $match);
+                $slice = join("", array_slice($match[0], $start, $length));
             }
             
-            return array_slice(array_unique($rand), 0, $number);
+            return $suffix ? $slice . '...' : $slice;
         }
         
         /**
          *  带格式生成随机字符 支持批量生成
          *  但可能存在重复
-         * @param string $format  字符格式
+         * @param string  $format 字符格式
          *                        # 表示数字 * 表示字母和数字 $ 表示字母
-         * @param int    $number  生成数量
+         * @param integer $number 生成数量
          * @return string | array
          */
         public static function buildFormatRand($format, $number = 1)
@@ -204,20 +201,20 @@
                 for ($i = 0; $i < $length; $i++) {
                     $char = substr($format, $i, 1);
                     switch ($char) {
-                        //字母和数字混合
-                        case "*":
-                            $strtemp .= self::randString(1);
+                        case '*':
+                            //字母和数字混合
+                            $strtemp .= Strings::randString(1);
                             break;
-                        //数字
-                        case "#":
-                            $strtemp .= self::randString(1, 1);
+                        case '#':
+                            //数字
+                            $strtemp .= Strings::randString(1, 1);
                             break;
-                        //大写字母
-                        case "$":
-                            $strtemp .= self::randString(1, 2);
+                        case '$':
+                            //大写字母
+                            $strtemp .= Strings::randString(1, 2);
                             break;
-                        //其他格式均不转换
                         default:
+                            //其他格式均不转换
                             $strtemp .= $char;
                             break;
                     }
@@ -230,8 +227,8 @@
         
         /**
          * 获取一定范围内的随机数字 位数不足补零
-         * @param int $min 最小值
-         * @param int $max 最大值
+         * @param integer $min 最小值
+         * @param integer $max 最大值
          * @return string
          */
         public static function randNumber($min, $max)
@@ -275,5 +272,117 @@
             } else {
                 return $string;
             }
+        }
+        
+        /**
+         * 字符串截取(中文按2个字符数计算)，支持中文和其他编码
+         * @static
+         * @access public
+         * @param string $str     需要转换的字符串
+         * @param int    $start   开始位置
+         * @param int    $length  截取长度
+         * @param string $charset 编码格式
+         * @param bool   $suffix  截断显示字符
+         * @return string
+         */
+        public static function cutStr($str, $start, $length, $charset = 'utf-8', $suffix = true)
+        {
+            $str = trim($str);
+            $length = $length * 2;
+            if ($length) {
+                //截断字符
+                $wordscut = '';
+                if (strtolower($charset) == 'utf-8') {
+                    //utf8编码
+                    $n = 0;
+                    $tn = 0;
+                    $noc = 0;
+                    while ($n < strlen($str)) {
+                        $t = ord($str[$n]);
+                        if ($t == 9 || $t == 10 || (32 <= $t && $t <= 126)) {
+                            $tn = 1;
+                            $n++;
+                            $noc++;
+                        } elseif (194 <= $t && $t <= 223) {
+                            $tn = 2;
+                            $n += 2;
+                            $noc += 2;
+                        } elseif (224 <= $t && $t < 239) {
+                            $tn = 3;
+                            $n += 3;
+                            $noc += 2;
+                        } elseif (240 <= $t && $t <= 247) {
+                            $tn = 4;
+                            $n += 4;
+                            $noc += 2;
+                        } elseif (248 <= $t && $t <= 251) {
+                            $tn = 5;
+                            $n += 5;
+                            $noc += 2;
+                        } elseif ($t == 252 || $t == 253) {
+                            $tn = 6;
+                            $n += 6;
+                            $noc += 2;
+                        } else {
+                            $n++;
+                        }
+                        if ($noc >= $length) {
+                            break;
+                        }
+                    }
+                    if ($noc > $length) {
+                        $n -= $tn;
+                    }
+                    $wordscut = substr($str, 0, $n);
+                } else {
+                    for ($i = 0; $i < $length - 1; $i++) {
+                        if (ord($str[$i]) > 127) {
+                            $wordscut .= $str[$i] . $str[$i + 1];
+                            $i++;
+                        } else {
+                            $wordscut .= $str[$i];
+                        }
+                    }
+                }
+                if ($wordscut == $str) {
+                    return $str;
+                }
+                
+                return $suffix ? trim($wordscut) . '...' : trim($wordscut);
+            } else {
+                return $str;
+            }
+        }
+        
+        /**
+         * 过滤标签，输出纯文本
+         * @param string $str 文本内容
+         * @return string 处理后内容
+         */
+        public static function html2text($str)
+        {
+            $str = preg_replace("/<sty(.*)\\/style>|<scr(.*)\\/script>|<!--(.*)-->/isU", "", $str);
+            $alltext = '';
+            $start = 1;
+            for ($i = 0; $i < strlen($str); $i++) {
+                if ($start == 0 && $str[$i] == ">") {
+                    $start = 1;
+                } else {
+                    if ($start == 1) {
+                        if ($str[$i] == "<") {
+                            $start = 0;
+                            $alltext .= " ";
+                        } else {
+                            if (ord($str[$i]) > 31) {
+                                $alltext .= $str[$i];
+                            }
+                        }
+                    }
+                }
+            }
+            $alltext = str_replace("　", " ", $alltext);
+            $alltext = preg_replace("/&([^;&]*)(;|&)/", "", $alltext);
+            
+            return preg_replace("/[ ]+/s", " ", $alltext);
         }
     }

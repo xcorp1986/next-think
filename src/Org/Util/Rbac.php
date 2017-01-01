@@ -116,10 +116,9 @@
             if (empty($module)) {
                 $module = CONTROLLER_NAME;
             }
-            //获取权限访问列表
-            $accessList = self::getModuleAccessList($authId, $module);
             
-            return $accessList;
+            //获取权限访问列表
+            return self::getModuleAccessList($authId, $module);
         }
         
         /**
@@ -174,9 +173,10 @@
                 if (!$_SESSION[C('USER_AUTH_KEY')]) {
                     if (C('GUEST_AUTH_ON')) {
                         // 开启游客授权访问
-                        if (!isset($_SESSION['_ACCESS_LIST']))
+                        if (!isset($_SESSION['_ACCESS_LIST'])) {
                             // 保存游客权限
                             self::saveAccessList(C('GUEST_AUTH_ID'));
+                        }
                     } else {
                         // 禁止游客访问跳转到认证网关
                         redirect(PHP_FILE . C('USER_AUTH_GATEWAY'));
@@ -227,7 +227,7 @@
             
             return true;
         }
-    
+        
         /**
          * 取得当前认证号的所有权限列表
          * @param int $authId 用户ID
