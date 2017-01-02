@@ -1,14 +1,14 @@
 <?php
     namespace Think\Upload\Driver\Qiniu;
-
+    
     class QiniuStorage
     {
-
+        
         public $QINIU_RSF_HOST = 'http://rsf.qbox.me';
         public $QINIU_RS_HOST = 'http://rs.qbox.me';
         public $QINIU_UP_HOST = 'http://up-z2.qiniu.com';
         public $timeout = '';
-
+        
         public function __construct($config)
         {
             $this->ak = $config['accessKey'];
@@ -17,7 +17,7 @@
             $this->bucket = $config['bucket'];
             $this->timeout = isset($config['timeout']) ? $config['timeout'] : 3600;
         }
-
+        
         /**
          * @param $ak
          * @param $sk
@@ -27,17 +27,17 @@
         protected static function sign($ak, $sk, $data)
         {
             $sign = hash_hmac('sha1', $data, $sk, true);
-
+            
             return $ak . ':' . static::Qiniu_Encode($sign);
         }
-
+        
         protected static function signWithData($ak, $sk, $data)
         {
             $data = static::Qiniu_Encode($data);
-
+            
             return static::sign($ak, $sk, $data) . ':' . $data;
         }
-
+        
         /**
          * @internal
          * @param        $url
@@ -53,14 +53,14 @@
                 $access .= "?" . $parsed_url['query'];
             }
             $access .= "\n";
-
+            
             if ($body) {
                 $access .= $body;
             }
-
+            
             return static::sign($this->ak, $this->sk, $access);
         }
-
+        
         /**
          * @param $ak
          * @param $sk
@@ -91,10 +91,10 @@
                 $data['endUser'] = $param['EndUser'];
             }
             $data = json_encode($data);
-
+            
             return static::SignWithData($ak, $sk, $data);
         }
-
+        
         /**
          * 上传文件
          * @param $config
@@ -104,28 +104,28 @@
         public function upload($config, $file)
         {
             $uploadToken = $this->UploadToken($this->ak, $this->sk, $config);
-
+            
             $url = "{$this->QINIU_UP_HOST}";
             $mimeBoundary = md5(microtime());
             $header = ['Content-Type' => 'multipart/form-data;boundary=' . $mimeBoundary];
             $data = [];
-
+            
             $fields = [
                 'token' => $uploadToken,
                 'key'   => $config['saveName'] ?: $file['fileName'],
             ];
-
+            
             if (is_array($config['custom_fields']) && $config['custom_fields'] !== []) {
                 $fields = array_merge($fields, $config['custom_fields']);
             }
-
+            
             foreach ($fields as $name => $val) {
                 array_push($data, '--' . $mimeBoundary);
                 array_push($data, "Content-Disposition: form-data; name=\"$name\"");
                 array_push($data, '');
                 array_push($data, $val);
             }
-
+            
             //文件
             array_push($data, '--' . $mimeBoundary);
             $name = $file['name'];
@@ -136,16 +136,15 @@
             array_push($data, 'Content-Type: application/octet-stream');
             array_push($data, '');
             array_push($data, $fileBody);
-
+            
             array_push($data, '--' . $mimeBoundary . '--');
             array_push($data, '');
-
+            
             $body = implode("\r\n", $data);
-            $response = $this->request($url, 'POST', $header, $body);
-
-            return $response;
+            
+            return $this->request($url, 'POST', $header, $body);
         }
-
+        
         /**
          * @param $key
          * @param $type
@@ -155,7 +154,7 @@
         {
             $param = $this->buildUrlParam();
             $url = '';
-
+            
             switch ($type) {
                 case 'img':
                     $url = $this->downLink($key);
@@ -179,17 +178,19 @@
                 case 'doc':
                     $url = $this->downLink($key);
                     $url .= '?md2html';
-                    if (isset($param['mode']))
+                    if (isset($param['mode'])) {
                         $url .= '/' . (int)$param['mode'];
-                    if ($param['cssurl'])
+                    }
+                    if ($param['cssurl']) {
                         $url .= '/' . static::Qiniu_Encode($param['cssurl']);
+                    }
                     break;
-
+                
             }
-
+            
             return $url;
         }
-
+        
         /**
          * @return mixed
          */
@@ -197,7 +198,7 @@
         {
             return $_REQUEST;
         }
-
+        
         /**
          * 获取某个路径下的文件列表
          * @param array  $query
@@ -209,11 +210,10 @@
             $query = array_merge(['bucket' => $this->bucket], $query);
             $url = "{$this->QINIU_RSF_HOST}/list?" . http_build_query($query);
             $accessToken = $this->accessToken($url);
-            $response = $this->request($url, 'POST', ['Authorization' => "QBox $accessToken"]);
-
-            return $response;
+            
+            return $this->request($url, 'POST', ['Authorization' => "QBox $accessToken"]);
         }
-
+        
         /**
          * 获取某个文件的信息
          * @param $key
@@ -224,13 +224,12 @@
             $key = trim($key);
             $url = "{$this->QINIU_RS_HOST}/stat/" . static::Qiniu_Encode("{$this->bucket}:{$key}");
             $accessToken = $this->accessToken($url);
-            $response = $this->request($url, 'POST', [
+            
+            return $this->request($url, 'POST', [
                 'Authorization' => "QBox $accessToken",
             ]);
-
-            return $response;
         }
-
+        
         /**
          * 获取文件下载资源链接
          * @param $key
@@ -240,10 +239,10 @@
         {
             $key = urlencode($key);
             $key = static::Qiniu_escapeQuotes($key);
-
+            
             return "http://{$this->domain}/{$key}";
         }
-
+        
         /**
          * 重命名单个文件
          * @param $file
@@ -256,10 +255,10 @@
             $url = "{$this->QINIU_RS_HOST}/move/" . static::Qiniu_Encode("{$this->bucket}:{$key}") . '/' . static::Qiniu_Encode("{$this->bucket}:{$new_file}");
             trace($url);
             $accessToken = $this->accessToken($url);
-
+            
             return $this->request($url, 'POST', ['Authorization' => "QBox $accessToken"]);
         }
-
+        
         /**
          * 删除单个文件
          * @param $file
@@ -270,10 +269,10 @@
             $key = trim($file);
             $url = "{$this->QINIU_RS_HOST}/delete/" . static::Qiniu_Encode("{$this->bucket}:{$key}");
             $accessToken = $this->accessToken($url);
-
+            
             return $this->request($url, 'POST', ['Authorization' => "QBox $accessToken"]);
         }
-
+        
         /**
          * 批量删除文件
          * @param $files
@@ -290,9 +289,10 @@
             $url .= '?' . $params;
             trace($url);
             $accessToken = $this->accessToken($url);
+            
             return $this->request($url, 'POST', ['Authorization' => "QBox $accessToken"]);
         }
-
+        
         /**
          * @param $str
          * @return mixed
@@ -302,10 +302,10 @@
             // URLSafeBase64Encode
             $find = ['+', '/'];
             $replace = ['-', '_'];
-
+            
             return str_replace($find, $replace, base64_encode($str));
         }
-
+        
         /**
          * @param $str
          * @return mixed
@@ -314,10 +314,10 @@
         {
             $find = ["\\", "\""];
             $replace = ["\\\\", "\\\""];
-
+            
             return str_replace($find, $replace, $str);
         }
-
+        
         /**
          * 请求云服务器
          * @param  string   $path    请求的PATH
@@ -329,23 +329,23 @@
         private function request($path, $method, $headers = null, $body = null)
         {
             $ch = curl_init($path);
-
+            
             $_headers = ['Expect:'];
             if (!is_null($headers) && is_array($headers)) {
                 foreach ($headers as $k => $v) {
                     array_push($_headers, "{$k}: {$v}");
                 }
             }
-
+            
             $length = 0;
             $date = gmdate('D, d M Y H:i:s \G\M\T');
-
+            
             if (!is_null($body)) {
                 if (is_resource($body)) {
                     fseek($body, 0, SEEK_END);
                     $length = ftell($body);
                     fseek($body, 0);
-
+                    
                     array_push($_headers, "Content-Length: {$length}");
                     curl_setopt($ch, CURLOPT_INFILE, $body);
                     curl_setopt($ch, CURLOPT_INFILESIZE, $length);
@@ -357,27 +357,27 @@
             } else {
                 array_push($_headers, "Content-Length: {$length}");
             }
-
+            
             // array_push($_headers, 'Authorization: ' . $this->sign($method, $uri, $date, $length));
             array_push($_headers, "Date: {$date}");
-
+            
             curl_setopt($ch, CURLOPT_HTTPHEADER, $_headers);
             curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
             curl_setopt($ch, CURLOPT_HEADER, 1);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-
+            
             if ($method == 'PUT' || $method == 'POST') {
                 curl_setopt($ch, CURLOPT_POST, 1);
             } else {
                 curl_setopt($ch, CURLOPT_POST, 0);
             }
-
+            
             if ($method == 'HEAD') {
                 curl_setopt($ch, CURLOPT_NOBODY, true);
             }
-
+            
             $response = curl_exec($ch);
             $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
@@ -390,11 +390,11 @@
                 }
             } else {
                 $this->error($header, $body);
-
+                
                 return false;
             }
         }
-
+        
         /**
          * 获取响应数据
          * @param  string $text 响应头字符串
@@ -411,10 +411,10 @@
                     break;
                 }
             }
-
+            
             return $items;
         }
-    
+        
         /**
          * 获取请求错误信息
          * @param  string $header 请求返回头信息

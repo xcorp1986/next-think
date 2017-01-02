@@ -177,9 +177,8 @@
                 }
                 $parseStr .= '<?php } ?>';
             }
-            $parseStr .= '</select>';
             
-            return $parseStr;
+            return $parseStr . '</select>';
         }
         
         /**
@@ -389,9 +388,8 @@
                 }
             }
             $parseStr .= '</tr></volist><tr><td height="5" colspan="' . $colNum . '" class="bottomTd"></td></tr></table>';
-            $parseStr .= "\n<!-- 系统列表组件结束 -->\n";
             
-            return $parseStr;
+            return $parseStr . "\n<!-- 系统列表组件结束 -->\n";
         }
         
         /**
@@ -575,8 +573,7 @@
                 }
             }
             $parseStr .= '</tr></volist><tr><td height="5" colspan="' . $colNum . '" class="bottomTd"></td></tr></table>';
-            $parseStr .= "\n<!-- 系统列表组件结束 -->\n";
             
-            return $parseStr;
+            return $parseStr . "\n<!-- 系统列表组件结束 -->\n";
         }
     }

@@ -22,7 +22,7 @@
          * @var string
          * @access protected
          */
-        static protected $handler;
+        protected static $handler;
         
         /**
          * 连接操作句柄

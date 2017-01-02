@@ -22,7 +22,6 @@
         public function open($savePath, $sessName)
         {
             $this->lifeTime = C('SESSION_EXPIRE') ? C('SESSION_EXPIRE') : $this->lifeTime;
-            // $this->sessionName  = $sessName;
             $options = [
                 'timeout'    => C('SESSION_TIMEOUT') ? C('SESSION_TIMEOUT') : 1,
                 'persistent' => C('SESSION_PERSISTENT') ? C('SESSION_PERSISTENT') : 0,

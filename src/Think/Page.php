@@ -151,7 +151,7 @@
             }
             
             //数字连接
-            $link_page = "";
+            $link_page = '';
             for ($i = 1; $i <= $this->rollPage; $i++) {
                 if (($this->nowPage - $now_cool_page) <= 0) {
                     $page = $i;
