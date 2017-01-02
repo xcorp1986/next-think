@@ -153,6 +153,5 @@
         'HTTP_CACHE_CONTROL' => 'private',  // 网页缓存控制
         'CHECK_APP_DIR'      => true,       // 是否检查应用目录是否创建
         'FILE_UPLOAD_TYPE'   => 'Local',    // 文件上传方式
-        'DATA_CRYPT_TYPE'    => 'Think',    // 数据加密方式
 
     ];
