@@ -158,7 +158,7 @@
             // 还原被替换的Literal标签
             $tmplContent = preg_replace_callback('/<!--###literal(\d+)###-->/is', [$this, 'restoreLiteral'], $tmplContent);
             // 添加安全代码
-            $tmplContent = '<?php !defined(\'APP_PATH\') || exit(-1);?>' . $tmplContent;
+            $tmplContent = '<?php defined(\'APP_PATH\') || exit(-1);?>' . $tmplContent;
             // 优化生成的php代码
             $tmplContent = str_replace('?><?php', '', $tmplContent);
             // 模版编译过滤标签
