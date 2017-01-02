@@ -42,8 +42,6 @@
             }
             
             // URL调度结束标签
-            //@todo check
-//            Hook::listen('url_dispatch');
             
             define('IS_AJAX', ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') || !empty($_POST[C('VAR_AJAX_SUBMIT')]) || !empty($_GET[C('VAR_AJAX_SUBMIT')])) ? true : false);
             
