@@ -44,7 +44,6 @@
     defined('COMMON_PATH') || define('COMMON_PATH', APP_PATH . 'Common/');
     // 系统运行时目录
     defined('RUNTIME_PATH') || define('RUNTIME_PATH', APP_PATH . 'Runtime/');
-    defined('ADDON_PATH') || define('ADDON_PATH', APP_PATH . 'Addon');
     // 应用静态目录
     defined('HTML_PATH') || define('HTML_PATH', APP_PATH . 'Html/');
     // 应用配置目录

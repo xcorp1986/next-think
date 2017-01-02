@@ -538,53 +538,6 @@
     }
     
     /**
-     * 导入所需的类库 同java的Import 本函数有缓存功能
-     * @deprecated
-     * @param string $class   类库命名空间字符串
-     * @param string $baseUrl 起始路径
-     * @param string $ext     导入的文件扩展名
-     * @return bool
-     */
-    function import($class, $baseUrl = '', $ext = EXT)
-    {
-        static $_file = [];
-        $class = str_replace(['.', '#'], ['/', '.'], $class);
-        if (isset($_file[$class . $baseUrl])) {
-            return true;
-        } else {
-            $_file[$class . $baseUrl] = true;
-        }
-        $class_strut = explode('/', $class);
-        if (empty($baseUrl)) {
-            if ('@' == $class_strut[0] || MODULE_NAME == $class_strut[0]) {
-                //加载当前模块的类库
-                $baseUrl = MODULE_PATH;
-                $class = substr_replace($class, '', 0, strlen($class_strut[0]) + 1);
-            } elseif ('Common' == $class_strut[0]) {
-                //加载公共模块的类库
-                $baseUrl = COMMON_PATH;
-                $class = substr($class, 7);
-            } elseif (in_array($class_strut[0], ['Think', 'Org', 'Behavior', 'Com', 'Vendor']) || is_dir(LIB_PATH . $class_strut[0])) {
-                // 系统类库包和第三方类库包
-                $baseUrl = LIB_PATH;
-                // 加载其他模块的类库
-            } else {
-                $baseUrl = APP_PATH;
-            }
-        }
-        if (substr($baseUrl, -1) != '/') {
-            $baseUrl .= '/';
-        }
-        $classfile = $baseUrl . $class . $ext;
-        if (!class_exists(basename($class), false)) {
-            // 如果类不存在 则导入类库文件
-            return require_cache($classfile);
-        }
-        
-        return null;
-    }
-    
-    /**
      * 实例化模型类 格式 [资源://][模块/]模型
      * @param string $name  资源地址
      * @param string $layer 模型层名称
@@ -687,7 +640,7 @@
     {
         $layer = C('DEFAULT_C_LAYER');
         
-        $class = ($path ? basename(ADDON_PATH) . '\\' . $path : MODULE_NAME) . '\\' . $layer;
+        $class = MODULE_NAME . '\\' . $layer;
         $array = explode('/', $name);
         foreach ($array as $name) {
             $class .= '\\' . parse_name($name, 1);
@@ -751,35 +704,6 @@
         } else {
             return false;
         }
-    }
-    
-    /**
-     * 处理标签扩展
-     * @deprecated
-     * @param string $tag    标签名称
-     * @param mixed  $params 传入参数
-     * @return void
-     */
-    function tag($tag, &$params = null)
-    {
-        \Think\Hook::listen($tag, $params);
-    }
-    
-    /**
-     * 执行某个行为
-     * @deprecated
-     * @param string $name   行为名称
-     * @param string $tag    标签名称（行为类无需传入）
-     * @param mixed  $params 传入的参数
-     * @return void
-     */
-    function B($name, $tag = '', &$params = null)
-    {
-        if ('' == $tag) {
-            $name .= 'Behavior';
-        }
-        
-        \Think\Hook::exec($name, $tag, $params);
     }
     
     /**
@@ -867,27 +791,6 @@
             return null;
         } else {
             return $output;
-        }
-    }
-    
-    /**
-     * 设置当前页面的布局
-     * @deprecated
-     * @param string|false $layout 布局名称 为false的时候表示关闭布局
-     * @return void
-     */
-    function layout($layout)
-    {
-        if (false !== $layout) {
-            // 开启布局
-            C('LAYOUT_ON', true);
-            // 设置新的布局模板
-            if (is_string($layout)) {
-                C('LAYOUT_NAME', $layout);
-            }
-        } else {
-            // 临时关闭布局
-            C('LAYOUT_ON', false);
         }
     }
     
