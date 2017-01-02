@@ -52,7 +52,7 @@ h1{ font-size: 32px; line-height: 48px; }
 </div>
 </div>
 <div class="copyright">
-<p><sup><?php echo THINK_VERSION ?></sup> [ WE CAN DO IT BETTER ]</p>
+<p>[ WE CAN DO IT BETTER ]</p>
 </div>
 </body>
 </html>
