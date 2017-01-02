@@ -166,7 +166,7 @@
          * @param bool   $suffix  截断显示字符
          * @return string
          */
-        public static function msubstr($str, $start = 0, $length = 2147483647, $charset = 'utf-8', $suffix = true)
+        public static function msubstr($str = '', $start = 0, $length = PHP_INT_MAX, $charset = 'utf-8', $suffix = true)
         {
             if (function_exists('mb_substr')) {
                 $slice = mb_substr($str, $start, $length, $charset);
@@ -233,7 +233,7 @@
          */
         public static function randNumber($min, $max)
         {
-            return sprintf("%0" . strlen($max) . "d", mt_rand($min, $max));
+            return sprintf('%0' . strlen($max) . 'd', mt_rand($min, $max));
         }
         
         /**
