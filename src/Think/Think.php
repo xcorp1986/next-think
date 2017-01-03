@@ -7,7 +7,7 @@
      */
     class Think
     {
-    
+        
         /**
          * @var string 版本号
          */
@@ -36,12 +36,12 @@
              */
             Storage::connect();
             
-            $runtimefile = RUNTIME_PATH . '__runtime.php';
-            if (!APP_DEBUG && Storage::has($runtimefile)) {
-                Storage::load($runtimefile);
+            $runtimeFile = RUNTIME_PATH . '__runtime.php';
+            if (!APP_DEBUG && Storage::has($runtimeFile)) {
+                Storage::load($runtimeFile);
             } else {
-                if (Storage::has($runtimefile)) {
-                    Storage::unlink($runtimefile);
+                if (Storage::has($runtimeFile)) {
+                    Storage::unlink($runtimeFile);
                 }
                 $content = '';
                 /**
@@ -79,7 +79,7 @@
                  */
                 $tags = include __DIR__ . '/../Conf/tags.php';
                 if (isset($tags)) {
-                    Hook::import(is_array($tags) ? $tags : include $tags);
+                    is_array($tags) && Hook::import($tags);
                 }
                 
                 /*
@@ -101,7 +101,7 @@
                     $content .= "\nL(" . var_export(L(), true) . ");
                     \nC(" . var_export(C(), true) . ');
                     \\Think\\Hook::import(' . var_export(Hook::get(), true) . ');}';
-                    Storage::put($runtimefile, strip_whitespace('<?php ' . $content));
+                    Storage::put($runtimeFile, strip_whitespace('<?php ' . $content));
                 } else {
                     // 调试模式加载系统默认的配置文件
                     C(include __DIR__ . '/../Conf/debug.php');
@@ -116,6 +116,7 @@
              * 读取当前应用状态对应的配置文件
              */
             if (APP_STATUS && is_file(CONF_PATH . APP_STATUS . '.php')) {
+                /** @noinspection PhpIncludeInspection */
                 C(include CONF_PATH . APP_STATUS . '.php');
             }
             
@@ -287,6 +288,7 @@
             }
             // 包含异常页面模板
             $exceptionFile = C('TMPL_EXCEPTION_FILE', null, C('TMPL_EXCEPTION_FILE'));
+            /** @noinspection PhpIncludeInspection */
             include $exceptionFile;
             exit;
         }

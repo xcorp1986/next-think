@@ -1,10 +1,22 @@
 <?php
-
+    
     namespace Think;
 
     /**
      * 文件上传类
      * Class Upload
+     * @property mixed    mimes
+     * @property mixed    exts
+     * @property callable callback
+     * @property mixed    removeTrash
+     * @property mixed    saveExt
+     * @property bool     replace
+     * @property array    driverConfig
+     * @property string   driver
+     * @property int      maxSize
+     * @property string   saveName
+     * @property string   subName
+     * @property bool    autoSub
      * @package Think
      */
     class Upload
@@ -43,33 +55,33 @@
             // 上传驱动配置
             'driverConfig' => [],
         ];
-
+        
         /**
          * 上传错误信息
          * @var string
          */
         private $error = '';
-
+        
         /**
          * 上传驱动实例
          * @var Object
          */
         private $uploader;
-    
+        
         /**
          * 构造方法，用于构造上传实例
-         * @param array  $config 配置
-         * @param string $driver 要使用的上传驱动 LOCAL-本地上传驱动，FTP-FTP上传驱动
+         * @param array  $config       配置
+         * @param string $driver       要使用的上传驱动 LOCAL-本地上传驱动，FTP-FTP上传驱动
          * @param null   $driverConfig 驱动配置
          */
         public function __construct(array $config = [], $driver = '', $driverConfig = null)
         {
             /* 获取配置 */
             $this->config = array_merge($this->config, $config);
-
+            
             /* 设置上传驱动 */
             $this->setDriver($driver, $driverConfig);
-
+            
             /* 调整配置，把字符串配置参数转换为数组 */
             if (!empty($this->config['mimes'])) {
                 if (is_string($this->mimes)) {
@@ -84,7 +96,7 @@
                 $this->config['exts'] = array_map('strtolower', $this->exts);
             }
         }
-
+        
         /**
          * 使用 $this->name 获取配置
          * @param  string $name 配置名称
@@ -94,7 +106,7 @@
         {
             return $this->config[$name];
         }
-    
+        
         /**
          * @param $name
          * @param $value
@@ -110,7 +122,7 @@
                 }
             }
         }
-    
+        
         /**
          * @param $name
          * @return bool
@@ -119,7 +131,7 @@
         {
             return isset($this->config[$name]);
         }
-
+        
         /**
          * 获取最后一次上传错误信息
          * @return string 错误信息
@@ -128,7 +140,7 @@
         {
             return $this->error;
         }
-
+        
         /**
          * 上传单个文件
          * @param  array $file 文件数组
@@ -137,10 +149,10 @@
         public function uploadOne($file)
         {
             $info = $this->upload([$file]);
-
+            
             return $info ? $info[0] : $info;
         }
-    
+        
         /**
          * 上传文件
          * @todo
@@ -154,24 +166,24 @@
             }
             if (empty($files)) {
                 $this->error = '没有上传的文件！';
-
+                
                 return false;
             }
-
+            
             /* 检测上传根目录 */
             if (!$this->uploader->checkRootPath($this->rootPath)) {
                 $this->error = $this->uploader->getError();
-
+                
                 return false;
             }
-
+            
             /* 检查上传目录 */
             if (!$this->uploader->checkSavePath($this->savePath)) {
                 $this->error = $this->uploader->getError();
-
+                
                 return false;
             }
-
+            
             /* 逐个检测并上传文件 */
             $info = [];
             if (function_exists('finfo_open')) {
@@ -188,21 +200,21 @@
                 if (isset($finfo)) {
                     $file['type'] = finfo_file($finfo, $file['tmp_name']);
                 }
-
+                
                 /* 获取上传文件后缀，允许上传无后缀文件 */
                 $file['ext'] = pathinfo($file['name'], PATHINFO_EXTENSION);
-
+                
                 /* 文件上传检测 */
                 if (!$this->check($file)) {
                     continue;
                 }
-
+                
                 /* 获取文件hash */
                 if ($this->hash) {
                     $file['md5'] = md5_file($file['tmp_name']);
                     $file['sha1'] = sha1_file($file['tmp_name']);
                 }
-
+                
                 /* 调用回调函数检测文件是否存在 */
                 $data = call_user_func($this->callback, $file);
                 if ($this->callback && $data) {
@@ -214,15 +226,15 @@
                         call_user_func($this->removeTrash, $data);
                     }
                 }
-
+                
                 /* 生成保存文件名 */
-                $savename = $this->getSaveName($file);
-                if (false == $savename) {
+                $saveName = $this->getSaveName($file);
+                if (false == $saveName) {
                     continue;
                 } else {
-                    $file['savename'] = $savename;
+                    $file['savename'] = $saveName;
                 }
-
+                
                 /* 检测并创建子目录 */
                 $subpath = $this->getSubPath($file['name']);
                 if (false === $subpath) {
@@ -230,7 +242,7 @@
                 } else {
                     $file['savepath'] = $this->savePath . $subpath;
                 }
-
+                
                 /* 对图像文件进行严格检测 */
                 $ext = strtolower($file['ext']);
                 if (in_array($ext, ['gif', 'jpg', 'jpeg', 'bmp', 'png', 'swf'])) {
@@ -240,7 +252,7 @@
                         continue;
                     }
                 }
-
+                
                 /* 保存文件 并记录保存成功的文件 */
                 if ($this->uploader->save($file, $this->replace)) {
                     unset($file['error'], $file['tmp_name']);
@@ -252,10 +264,10 @@
             if (isset($finfo)) {
                 finfo_close($finfo);
             }
-
+            
             return empty($info) ? false : $info;
         }
-
+        
         /**
          * 转换上传文件数组变量为正确的方式
          * @access private
@@ -282,10 +294,10 @@
                     break;
                 }
             }
-
+            
             return $fileArray;
         }
-
+        
         /**
          * 设置上传驱动
          * @param string $driver 驱动名称
@@ -301,7 +313,7 @@
                 E("不存在上传驱动：{$driver}");
             }
         }
-    
+        
         /**
          * 检查上传的文件
          * @param array $file 文件信息
@@ -312,50 +324,50 @@
             /* 文件上传失败，捕获错误代码 */
             if ($file['error']) {
                 $this->error($file['error']);
-
+                
                 return false;
             }
-
+            
             /* 无效上传 */
             if (empty($file['name'])) {
                 $this->error = '未知上传错误！';
             }
-
+            
             /* 检查是否合法上传 */
             if (!is_uploaded_file($file['tmp_name'])) {
                 $this->error = '非法上传文件！';
-
+                
                 return false;
             }
-
+            
             /* 检查文件大小 */
             if (!$this->checkSize($file['size'])) {
                 $this->error = '上传文件大小不符！';
-
+                
                 return false;
             }
-
+            
             /* 检查文件Mime类型 */
             //TODO:FLASH上传的文件获取到的mime类型都为application/octet-stream
             if (!$this->checkMime($file['type'])) {
                 $this->error = '上传文件MIME类型不允许！';
-
+                
                 return false;
             }
-
+            
             /* 检查文件后缀 */
             if (!$this->checkExt($file['ext'])) {
                 $this->error = '上传文件后缀不允许';
-
+                
                 return false;
             }
-
+            
             /* 通过检测 */
-
+            
             return true;
         }
-
-
+        
+        
         /**
          * 获取错误代码信息
          * @param string $errorNo 错误号
@@ -385,7 +397,7 @@
                     $this->error = '未知上传错误！';
             }
         }
-
+        
         /**
          * 检查文件大小是否合法
          * @param int $size 数据
@@ -395,7 +407,7 @@
         {
             return !($size > $this->maxSize) || (0 == $this->maxSize);
         }
-
+        
         /**
          * 检查上传的文件MIME类型是否合法
          * @param string $mime 数据
@@ -405,7 +417,7 @@
         {
             return empty($this->config['mimes']) ? true : in_array(strtolower($mime), $this->mimes);
         }
-
+        
         /**
          * 检查上传的文件后缀是否合法
          * @param string $ext 后缀
@@ -415,7 +427,7 @@
         {
             return empty($this->config['exts']) ? true : in_array(strtolower($ext), $this->exts);
         }
-
+        
         /**
          * 根据上传文件命名规则取得保存文件名
          * @param string $file 文件信息
@@ -424,25 +436,26 @@
         private function getSaveName($file)
         {
             $rule = $this->saveName;
-            if (empty($rule)) { //保持文件名不变
+            //保持文件名不变
+            if (empty($rule)) {
                 /* 解决pathinfo中文文件名BUG */
                 $filename = substr(pathinfo("_{$file['name']}", PATHINFO_FILENAME), 1);
-                $savename = $filename;
+                $saveName = $filename;
             } else {
-                $savename = $this->getName($rule, $file['name']);
-                if (empty($savename)) {
+                $saveName = $this->getName($rule, $file['name']);
+                if (empty($saveName)) {
                     $this->error = '文件命名规则错误！';
-
+                    
                     return false;
                 }
             }
-
+            
             /* 文件保存后缀，支持强制更改文件后缀 */
             $ext = empty($this->config['saveExt']) ? $file['ext'] : $this->saveExt;
-
-            return $savename . '.' . $ext;
+            
+            return $saveName . '.' . $ext;
         }
-
+        
         /**
          * 获取子目录的名称
          * @param array $filename 上传的文件信息
@@ -454,17 +467,17 @@
             $rule = $this->subName;
             if ($this->autoSub && !empty($rule)) {
                 $subpath = $this->getName($rule, $filename) . '/';
-
+                
                 if (!empty($subpath) && !$this->uploader->mkdir($this->savePath . $subpath)) {
                     $this->error = $this->uploader->getError();
-
+                    
                     return false;
                 }
             }
-
+            
             return $subpath;
         }
-
+        
         /**
          * 根据指定的规则获取文件或目录名称
          * @param  array  $rule     规则
@@ -490,8 +503,8 @@
                     $name = $rule;
                 }
             }
-
+            
             return $name;
         }
-
+        
     }

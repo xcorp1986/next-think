@@ -45,7 +45,8 @@
             } else {
                 E(L('_CACHE_TYPE_INVALID_') . ':' . $type);
             }
-            
+    
+            /** @noinspection PhpUndefinedVariableInspection */
             return $cache;
         }
     
@@ -153,17 +154,16 @@
         /**
          * @param $method
          * @param $args
-         * @return mixed|void
+         * @return mixed
          */
         public function __call($method, $args)
         {
-            //调用缓存类型自己的方法
             if (method_exists($this->handler, $method)) {
                 return call_user_func_array([$this->handler, $method], $args);
             } else {
                 E(__CLASS__ . ':' . $method . L('_METHOD_NOT_EXIST_'));
                 
-                return;
+                return false;
             }
         }
     }

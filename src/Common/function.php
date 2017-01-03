@@ -509,6 +509,7 @@
         static $_importFiles = [];
         if (!isset($_importFiles[$filename])) {
             if (file_exists_case($filename)) {
+                /** @noinspection PhpIncludeInspection */
                 require $filename;
                 $_importFiles[$filename] = true;
             } else {
@@ -1446,6 +1447,7 @@
             foreach ($files as $file) {
                 $file = $path . 'Common/' . $file . '.php';
                 if (is_file($file)) {
+                    /** @noinspection PhpIncludeInspection */
                     include $file;
                 }
             }

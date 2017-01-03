@@ -62,24 +62,28 @@
             // 读取框架语言包
             $file = __DIR__ . '/../Lang/' . LANG_SET . '.php';
             if (LANG_SET != C('DEFAULT_LANG') && is_file($file)) {
+                /** @noinspection PhpIncludeInspection */
                 L(include $file);
             }
 
             // 读取应用公共语言包
             $file = LANG_PATH . LANG_SET . '.php';
             if (is_file($file)) {
+                /** @noinspection PhpIncludeInspection */
                 L(include $file);
             }
 
             // 读取模块语言包
             $file = MODULE_PATH . 'Lang/' . LANG_SET . '.php';
             if (is_file($file)) {
+                /** @noinspection PhpIncludeInspection */
                 L(include $file);
             }
 
             // 读取当前控制器语言包
             $file = MODULE_PATH . 'Lang/' . LANG_SET . '/' . strtolower(CONTROLLER_NAME) . '.php';
             if (is_file($file)) {
+                /** @noinspection PhpIncludeInspection */
                 L(include $file);
             }
         }

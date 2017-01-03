@@ -95,6 +95,7 @@
             if (!$xml) {
                 E(L('_XML_TAG_ERROR_') . ' : ' . $attr);
             }
+            /** @noinspection PhpUndefinedFieldInspection */
             $xml = (array)($xml->tag->attributes());
             if (isset($xml['@attributes'])) {
                 $array = array_change_key_case($xml['@attributes']);

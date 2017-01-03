@@ -149,7 +149,7 @@
             $sql = (true === $replace ? 'REPLACE' : 'INSERT') . ' INTO ' . $this->parseTable($options['table']) . ' (' . implode(',', $fields) . ') VALUES ' . implode(',', $values) . $this->parseDuplicate($replace);
             $sql .= $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
 
-            return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
+            return $this->execute($sql, !empty($options['fetch_sql']));
         }
 
         /**

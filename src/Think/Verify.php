@@ -1,10 +1,25 @@
 <?php
     
     namespace Think;
-    
+
     /**
      * 验证码类
      * Class Verify
+     * @property string seKey
+     * @property int    expire
+     * @property int    imageW
+     * @property int    length
+     * @property int    fontSize
+     * @property int    imageH
+     * @property bool   useZh
+     * @property mixed  fontttf
+     * @property mixed  useImgBg
+     * @property mixed  bg
+     * @property string zhSet
+     * @property bool   reset
+     * @property bool   useNoise
+     * @property bool   useCurve
+     * @property string  codeSet
      * @package Think
      */
     class Verify
@@ -237,7 +252,7 @@
          */
         private function _writeCurve()
         {
-            $px = $py = 0;
+            $py = 0;
             
             // 曲线前部分
             // 振幅

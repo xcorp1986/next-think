@@ -98,6 +98,6 @@
          */
         protected function checkContentCache($tmplContent, $prefix = '')
         {
-            return Storage::has(C('CACHE_PATH') . $prefix . md5($tmplContent) . C('TMPL_CACHFILE_SUFFIX')) ? true : false;
+            return Storage::has(C('CACHE_PATH') . $prefix . md5($tmplContent) . C('TMPL_CACHFILE_SUFFIX'));
         }
     }

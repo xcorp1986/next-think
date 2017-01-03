@@ -257,7 +257,7 @@
             $name = !empty($tag['name']) ? $tag['name'] : 'vo';
             //是否显示功能操作
             $action = !empty($tag['action']) ? $tag['action'] : false;
-            $key = !empty($tag['key']) ? true : false;
+            $key = !empty($tag['key']);
             if (isset($tag['actionlist'])) {
                 //指定功能列表
                 $actionlist = explode(',', trim($tag['actionlist']));
@@ -412,8 +412,8 @@
             //Vo对象名
             $name = !empty($tag['name']) ? $tag['name'] : 'vo';
             //是否显示功能操作
-            $action = $tag['action'] == 'true' ? true : false;
-            $key = !empty($tag['key']) ? true : false;
+            $action = $tag['action'] == 'true';
+            $key = !empty($tag['key']);
             $sort = $tag['sort'] == 'false' ? false : true;
             //是否显示Checkbox
             $checkbox = $tag['checkbox'];

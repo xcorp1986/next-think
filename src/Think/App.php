@@ -26,10 +26,10 @@
             // 定义当前请求的系统常量
             define('NOW_TIME', $_SERVER['REQUEST_TIME']);
             define('REQUEST_METHOD', $_SERVER['REQUEST_METHOD']);
-            define('IS_GET', REQUEST_METHOD == 'GET' ? true : false);
-            define('IS_POST', REQUEST_METHOD == 'POST' ? true : false);
-            define('IS_PUT', REQUEST_METHOD == 'PUT' ? true : false);
-            define('IS_DELETE', REQUEST_METHOD == 'DELETE' ? true : false);
+            define('IS_GET', REQUEST_METHOD == 'GET');
+            define('IS_POST', REQUEST_METHOD == 'POST');
+            define('IS_PUT', REQUEST_METHOD == 'PUT');
+            define('IS_DELETE', REQUEST_METHOD == 'DELETE');
             
             // URL调度
             Dispatcher::dispatch();
@@ -43,7 +43,7 @@
             
             // URL调度结束标签
             
-            define('IS_AJAX', ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') || !empty($_POST[C('VAR_AJAX_SUBMIT')]) || !empty($_GET[C('VAR_AJAX_SUBMIT')])) ? true : false);
+            define('IS_AJAX', ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') || !empty($_POST[C('VAR_AJAX_SUBMIT')]) || !empty($_GET[C('VAR_AJAX_SUBMIT')])));
             
             // TMPL_EXCEPTION_FILE 改为绝对地址
             C('TMPL_EXCEPTION_FILE', realpath(C('TMPL_EXCEPTION_FILE')));
@@ -79,6 +79,7 @@
                 } else {
                     E(L('_ERROR_ACTION_') . ':' . ACTION_NAME);
                 }
+                /** @noinspection PhpUndefinedVariableInspection */
                 $module = new $class;
                 // 操作绑定到类后 固定执行run入口
                 $action = 'run';
@@ -114,7 +115,7 @@
             
             return;
         }
-    
+        
         /**
          * @param $module
          * @param $action
@@ -205,7 +206,7 @@
             
             return;
         }
-    
+        
         /**
          * @return string
          */

@@ -79,6 +79,7 @@
             if (!is_null($vars)) {
                 extract($vars, EXTR_OVERWRITE);
             }
+            /** @noinspection PhpIncludeInspection */
             include $_filename;
         }
         

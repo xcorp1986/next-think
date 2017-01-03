@@ -50,6 +50,6 @@
     defined('CACHE_PATH') || define('CACHE_PATH', RUNTIME_PATH . 'Cache/');
     // 配置文件解析方法
     defined('CONF_PARSE') || define('CONF_PARSE', '');
-    define('IS_CGI', (0 === strpos(PHP_SAPI, 'cgi') || false !== strpos(PHP_SAPI, 'fcgi')) ? 1 : 0);
-    define('IS_WIN', strpos(PHP_OS, 'WIN') ? 1 : 0);
-    define('IS_CLI', PHP_SAPI == 'cli' ? 1 : 0);
+    define('IS_CGI', (0 === strpos(PHP_SAPI, 'cgi') || false !== strpos(PHP_SAPI, 'fcgi')));
+    define('IS_WIN', strpos(PHP_OS, 'WIN'));
+    define('IS_CLI', PHP_SAPI == 'cli');

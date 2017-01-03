@@ -1,16 +1,16 @@
 <?php
-
-
+    
+    
     namespace Think\Db\Driver;
-
+    
     use Think\Db\Driver;
-
+    
     /**
      * Sqlite数据库驱动
      */
     class Sqlite extends Driver
     {
-
+        
         /**
          * 解析pdo连接的dsn信息
          * @access public
@@ -19,11 +19,9 @@
          */
         protected function parseDsn($config)
         {
-            $dsn = 'sqlite:' . $config['database'];
-
-            return $dsn;
+            return 'sqlite:' . $config['database'];
         }
-    
+        
         /**
          * 取得数据表的字段信息
          * @access public
@@ -47,10 +45,10 @@
                     ];
                 }
             }
-
+            
             return $info;
         }
-    
+        
         /**
          * 取得数据库的表信息
          * @access public
@@ -66,10 +64,10 @@
             foreach ($result as $key => $val) {
                 $info[$key] = current($val);
             }
-
+            
             return $info;
         }
-
+        
         /**
          * SQL指令安全过滤
          * @access public
@@ -80,7 +78,7 @@
         {
             return str_ireplace("'", "''", $str);
         }
-    
+        
         /**
          * limit
          * @access public
@@ -98,7 +96,7 @@
                     $limitStr .= ' LIMIT ' . $limit[0] . ' ';
                 }
             }
-
+            
             return $limitStr;
         }
     }

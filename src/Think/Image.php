@@ -59,6 +59,7 @@
             }
             
             /* 引入处理库，实例化图片处理对象 */
+            /** @noinspection PhpUndefinedVariableInspection */
             $class = "Think\\Image\\Driver\\{$class}";
             $this->img = new $class($imgName);
         }

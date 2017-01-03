@@ -156,7 +156,7 @@
                 . $this->parseLock(isset($options['lock']) ? $options['lock'] : false)
                 . $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
             
-            return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
+            return $this->execute($sql, !empty($options['fetch_sql']));
         }
         
         /**
@@ -175,7 +175,7 @@
                 . $this->parseLock(isset($options['lock']) ? $options['lock'] : false)
                 . $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
             
-            return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
+            return $this->execute($sql, !empty($options['fetch_sql']));
         }
         
     }

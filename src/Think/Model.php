@@ -465,13 +465,21 @@
             
             return $result;
         }
-        
-        // 插入数据前的回调方法
+    
+        /**
+         * 插入数据前的回调方法
+         * @param $data
+         * @param $options
+         */
         protected function _before_insert(&$data, $options)
         {
         }
-        
-        // 插入成功后的回调方法
+    
+        /**
+         * 插入成功后的回调方法
+         * @param $data
+         * @param $options
+         */
         protected function _after_insert($data, $options)
         {
         }

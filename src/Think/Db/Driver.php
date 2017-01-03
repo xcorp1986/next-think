@@ -102,7 +102,7 @@
                 }
             }
         }
-    
+        
         /**
          * 连接数据库方法
          * @access public
@@ -417,13 +417,14 @@
             }
             // 记录错误日志
             trace($this->error, '', 'ERR');
-            if ($this->config['debug']) {// 开启数据库调试模式
+            // 开启数据库调试模式
+            if ($this->config['debug']) {
                 E($this->error);
             } else {
                 return $this->error;
             }
         }
-    
+        
         /**
          * 设置锁机制
          * @access protected
@@ -538,7 +539,7 @@
             //TODO 如果是查询全部字段，并且是join的方式，那么就把要查的表加个别名，以免字段被覆盖
             return $fieldsStr;
         }
-    
+        
         /**
          * table分析
          * @access   protected
@@ -858,7 +859,9 @@
          */
         protected function parseUnion($union)
         {
-            if (empty($union)) return '';
+            if (empty($union)) {
+                return '';
+            }
             if (isset($union['_all'])) {
                 $str = 'UNION ALL ';
                 unset($union['_all']);
@@ -949,7 +952,7 @@
             $sql = (true === $replace ? 'REPLACE' : 'INSERT') . ' INTO ' . $this->parseTable($options['table']) . ' (' . implode(',', $fields) . ') VALUES (' . implode(',', $values) . ')' . $this->parseDuplicate($replace);
             $sql .= $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
             
-            return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
+            return $this->execute($sql, !empty($options['fetch_sql']));
         }
         
         
@@ -992,14 +995,14 @@
             $sql = 'INSERT INTO ' . $this->parseTable($options['table']) . ' (' . implode(',', $fields) . ') ' . implode(' UNION ALL ', $values);
             $sql .= $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
             
-            return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
+            return $this->execute($sql, !empty($options['fetch_sql']));
         }
-    
+        
         /**
          * 通过Select方式插入记录
          * @access   public
-         * @param string $fields 要插入的数据表字段名
-         * @param string $table  要插入的数据表名
+         * @param string $fields  要插入的数据表字段名
+         * @param string $table   要插入的数据表名
          * @param array  $options 查询数据参数
          * @return false|int
          */
@@ -1014,7 +1017,7 @@
             $sql = 'INSERT INTO ' . $this->parseTable($table) . ' (' . implode(',', $fields) . ') ';
             $sql .= $this->buildSelectSql($options);
             
-            return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
+            return $this->execute($sql, !empty($options['fetch_sql']));
         }
         
         /**
@@ -1042,7 +1045,7 @@
             }
             $sql .= $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
             
-            return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
+            return $this->execute($sql, !empty($options['fetch_sql']));
         }
         
         /**
@@ -1072,7 +1075,7 @@
             }
             $sql .= $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
             
-            return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
+            return $this->execute($sql, !empty($options['fetch_sql']));
         }
         
         /**
@@ -1087,7 +1090,7 @@
             $this->parseBind(!empty($options['bind']) ? $options['bind'] : []);
             $sql = $this->buildSelectSql($options);
             
-            return $this->query($sql, !empty($options['fetch_sql']) ? true : false);
+            return $this->query($sql, !empty($options['fetch_sql']));
         }
         
         /**
@@ -1218,7 +1221,6 @@
                     G('queryStartTime');
                 } else {
                     $this->modelSql[$this->model] = $this->queryStr;
-                    //$this->model  =   '_think_';
                     // 记录操作结束时间
                     G('queryEndTime');
                     trace($this->queryStr . ' [ RunTime:' . G('queryStartTime', 'queryEndTime') . 's ]', '', 'SQL');

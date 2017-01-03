@@ -57,6 +57,7 @@
             // 读取应用定义的Trace文件
             $traceFile = COMMON_PATH . 'Conf/trace.php';
             if (is_file($traceFile)) {
+                /** @noinspection PhpIncludeInspection */
                 $base = array_merge($base, include $traceFile);
             }
             $debug = trace();
@@ -90,7 +91,8 @@
             unset($files, $info, $base);
             // 调用Trace页面模板
             ob_start();
-            include C('TMPL_TRACE_FILE') ? C('TMPL_TRACE_FILE') : __DIR__ . '/../Tpl/page_trace.tpl';
+            /** @noinspection PhpIncludeInspection */
+            include C('TMPL_TRACE_FILE') ? C('TMPL_TRACE_FILE') : __DIR__ . '/../Resources/page_trace.tpl';
             
             return ob_get_clean();
         }

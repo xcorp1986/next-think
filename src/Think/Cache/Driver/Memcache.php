@@ -25,7 +25,7 @@
             $options = array_merge([
                 'host'       => C('MEMCACHE_HOST') ?: '127.0.0.1',
                 'port'       => C('MEMCACHE_PORT') ?: 11211,
-                'timeout'    => C('DATA_CACHE_TIMEOUT') ?: false,
+                'timeout'    => C('DATA_CACHE_TIMEOUT'),
                 'persistent' => false,
             ], $options);
 
