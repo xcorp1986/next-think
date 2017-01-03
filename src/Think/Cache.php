@@ -124,8 +124,6 @@
         {
             static $_handler = [
                 'file'   => ['F', 'F'],
-                'xcache' => ['xcache_get', 'xcache_set'],
-                'apc'    => ['apc_fetch', 'apc_store'],
             ];
             $queue = isset($this->options['queue']) ? $this->options['queue'] : 'file';
             $fun = isset($_handler[$queue]) ? $_handler[$queue] : $_handler['file'];
