@@ -1376,7 +1376,7 @@
             $config = array_merge($config, array_change_key_case($option));
         }
         if (!empty($config['httponly'])) {
-            ini_set("session.cookie_httponly", 1);
+            ini_set('session.cookie_httponly', 1);
         }
         // 清除指定前缀的所有cookie
         if (is_null($name)) {
