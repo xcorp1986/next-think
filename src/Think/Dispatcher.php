@@ -164,8 +164,8 @@
                 Hook::listen('module_check');
                 
                 // 加载模块配置文件
-                if (is_file(MODULE_PATH . 'Conf/config' . EXT)) {
-                    C(load_config(MODULE_PATH . 'Conf/config' . EXT));
+                if (is_file(MODULE_PATH . 'Conf/config.php')) {
+                    C(load_config(MODULE_PATH . 'Conf/config.php'));
                 }
                 
                 // 加载模块tags文件定义

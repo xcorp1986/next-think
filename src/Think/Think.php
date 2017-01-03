@@ -93,7 +93,7 @@
                 /*
                  * 加载框架底层语言包
                  */
-                $lang = include __DIR__ . '/../Lang/' . C('DEFAULT_LANG') . EXT;
+                $lang = include __DIR__ . '/../Lang/' . C('DEFAULT_LANG') . '.php';
                 L($lang);
                 
                 if (!APP_DEBUG) {
@@ -106,8 +106,8 @@
                     // 调试模式加载系统默认的配置文件
                     C(include __DIR__ . '/../Conf/debug.php');
                     // 读取应用调试配置文件
-                    if (is_file(CONF_PATH . 'debug' . EXT)) {
-                        C(include CONF_PATH . 'debug' . EXT);
+                    if (is_file(CONF_PATH . 'debug.php')) {
+                        C(include CONF_PATH . 'debug.php');
                     }
                 }
             }
@@ -115,8 +115,8 @@
             /*
              * 读取当前应用状态对应的配置文件
              */
-            if (APP_STATUS && is_file(CONF_PATH . APP_STATUS . EXT)) {
-                C(include CONF_PATH . APP_STATUS . EXT);
+            if (APP_STATUS && is_file(CONF_PATH . APP_STATUS . '.php')) {
+                C(include CONF_PATH . APP_STATUS . '.php');
             }
             
             /*

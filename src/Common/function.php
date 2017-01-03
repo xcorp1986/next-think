@@ -1081,7 +1081,7 @@
     function F($name, $value = '', $path = DATA_PATH)
     {
         static $_cache = [];
-        $filename = $path . $name . EXT;
+        $filename = $path . $name . '.php';
         if ('' !== $value) {
             if (is_null($value)) {
                 // 删除缓存
@@ -1444,7 +1444,7 @@
         if ($files = C('LOAD_EXT_FILE')) {
             $files = explode(',', $files);
             foreach ($files as $file) {
-                $file = $path . 'Common/' . $file . EXT;
+                $file = $path . 'Common/' . $file . '.php';
                 if (is_file($file)) {
                     include $file;
                 }
@@ -1456,7 +1456,7 @@
                 $configs = explode(',', $configs);
             }
             foreach ($configs as $key => $config) {
-                $file = is_file($config) ? $config : $path . 'Conf/' . $config . EXT;
+                $file = is_file($config) ? $config : $path . 'Conf/' . $config . '.php';
                 if (is_file($file)) {
                     is_numeric($key) ? C(load_config($file)) : C($key, load_config($file));
                 }

@@ -26,11 +26,6 @@
     const URL_REWRITE = 2;  //REWRITE模式
     const URL_COMPAT = 3;  // 兼容模式
     
-    /*
-     * 类文件后缀(统一都是这个后缀了) modified by Kwan 2016-9-12
-     */
-    const EXT = '.php';
-    
     // 应用状态 加载对应的配置文件
     defined('APP_STATUS') || define('APP_STATUS', null);
     // 是否调试模式

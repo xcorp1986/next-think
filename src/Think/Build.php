@@ -76,12 +76,12 @@ class [MODEL]Model extends Model {
                     }
                 }
                 // 写入应用配置文件
-                if (!is_file(CONF_PATH . 'config' . EXT)) {
-                    file_put_contents(CONF_PATH . 'config' . EXT, "<?php\nreturn [\n\t//'配置项'=>'配置值'\n];");
+                if (!is_file(CONF_PATH . 'config.php')) {
+                    file_put_contents(CONF_PATH . 'config.php', "<?php\nreturn [\n\t//'配置项'=>'配置值'\n];");
                 }
                 // 写入模块配置文件
-                if (!is_file(APP_PATH . $module . '/Conf/config' . EXT)) {
-                    file_put_contents(APP_PATH . $module . '/Conf/config' . EXT, "<?php\nreturn [\n\t//'配置项'=>'配置值'\n];");
+                if (!is_file(APP_PATH . $module . '/Conf/config.php')) {
+                    file_put_contents(APP_PATH . $module . '/Conf/config.php', "<?php\nreturn [\n\t//'配置项'=>'配置值'\n];");
                 }
                 // 生成模块的测试控制器
                 if (defined('BUILD_CONTROLLER_LIST')) {
@@ -145,7 +145,7 @@ class [MODEL]Model extends Model {
          */
         public static function buildController($module, $controller = 'Index')
         {
-            $file = APP_PATH . $module . '/Controller/' . $controller . 'Controller' . EXT;
+            $file = APP_PATH . $module . '/Controller/' . $controller . 'Controller.php';
             if (!is_file($file)) {
                 $content = str_replace(['[MODULE]', '[CONTROLLER]'], [$module, $controller], self::$controller);
                 $dir = dirname($file);
@@ -163,7 +163,7 @@ class [MODEL]Model extends Model {
          */
         public static function buildModel($module, $model)
         {
-            $file = APP_PATH . $module . '/Model/' . $model . 'Model' . EXT;
+            $file = APP_PATH . $module . '/Model/' . $model . 'Model.php';
             if (!is_file($file)) {
                 $content = str_replace(['[MODULE]', '[MODEL]'], [$module, $model], self::$model);
                 $dir = dirname($file);

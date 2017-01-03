@@ -7,5 +7,5 @@
         // 系统惯例配置
         __DIR__ . '/convention.php',
         // 应用公共配置
-        CONF_PATH . 'config' . EXT,
+        CONF_PATH . 'config.php',
     ];
