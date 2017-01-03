@@ -156,7 +156,7 @@
             // 验证码字体随机颜色
             $this->_color = imagecolorallocate($this->_image, mt_rand(1, 150), mt_rand(1, 150), mt_rand(1, 150));
             // 验证码使用随机字体
-            $ttfPath = dirname(__FILE__) . '/Verify/' . ($this->useZh ? 'zhttfs' : 'ttfs') . '/';
+            $ttfPath = __DIR__ . '/Verify/' . ($this->useZh ? 'zhttfs' : 'ttfs') . '/';
             
             if (empty($this->fontttf)) {
                 $dir = dir($ttfPath);
@@ -316,7 +316,7 @@
          */
         private function _background()
         {
-            $path = dirname(__FILE__) . '/Verify/bgs/';
+            $path = __DIR__ . '/Verify/bgs/';
             $dir = dir($path);
             
             $bgs = [];
