@@ -18,19 +18,11 @@
         protected $view = null;
         
         /**
-         * 控制器参数
-         * @var $config
-         * @access protected
-         */
-        protected $config = [];
-        
-        /**
          * 取得模板对象实例
          * @access public
          */
         public function __construct()
         {
-            Hook::listen('action_begin', $this->config);
             //实例化视图类
             $this->view = Think::instance(View::class);
             //控制器初始化
@@ -190,9 +182,6 @@
                 if (method_exists($this, '_empty')) {
                     // 如果定义了_empty操作 则调用
                     $this->_empty($method, $args);
-                } elseif (file_exists_case($this->view->parseTemplate())) {
-                    // 检查是否存在默认模版 如果有直接输出模版
-                    $this->display();
                 } else {
                     E(L('_ERROR_ACTION_') . ':' . ACTION_NAME);
                 }
@@ -354,7 +343,19 @@
          */
         public function __destruct()
         {
-            // 执行后续操作
-            Hook::listen('action_end');
         }
+        
+        public function __debugInfo()
+        {
+            return [
+                'ControllerName' => static::class,
+                'view'           => $this->view,
+            ];
+        }
+        
+        public function __toString()
+        {
+            return static::class;
+        }
+        
     }
