@@ -317,7 +317,7 @@
                 }
                 // 默认操作成功自动返回操作前页面
                 if (!isset($this->jumpUrl)) {
-                    $this->assign("jumpUrl", $_SERVER["HTTP_REFERER"]);
+                    $this->assign('jumpUrl', $_SERVER["HTTP_REFERER"]);
                 }
                 $this->display(C('TMPL_ACTION_SUCCESS'));
             } else {
