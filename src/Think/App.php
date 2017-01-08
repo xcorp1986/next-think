@@ -191,7 +191,7 @@
         {
             // 应用初始化标签
             Hook::listen('app_init');
-            self::init();
+            static::init();
             // 应用开始标签
             Hook::listen('app_begin');
             // Session初始化
@@ -200,7 +200,7 @@
             }
             // 记录应用初始化时间
             G('initTime');
-            self::exec();
+            static::exec();
             // 应用结束标签
             Hook::listen('app_end');
             
