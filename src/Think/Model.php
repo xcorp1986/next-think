@@ -168,22 +168,12 @@
             }
             // 获取模型名称
             if (!empty($name)) {
-                // 支持 数据库名.模型名的 定义
-                if (strpos($name, '.')) {
-                    list($this->dbName, $this->name) = explode('.', $name);
-                } else {
-                    $this->name = $name;
-                }
+                $this->name = $name;
             } elseif (empty($this->name)) {
                 $this->name = $this->getModelName();
             }
             // 设置表前缀
-            // 前缀为Null表示没有前缀
-            if (is_null($tablePrefix)) {
-                $this->tablePrefix = '';
-            } elseif ('' != $tablePrefix) {
-                $this->tablePrefix = $tablePrefix;
-            } elseif (!isset($this->tablePrefix)) {
+            if (!isset($this->tablePrefix)) {
                 $this->tablePrefix = C('DB_PREFIX');
             }
             
@@ -465,7 +455,7 @@
             
             return $result;
         }
-    
+        
         /**
          * 插入数据前的回调方法
          * @param $data
@@ -474,7 +464,7 @@
         protected function _before_insert(&$data, $options)
         {
         }
-    
+        
         /**
          * 插入成功后的回调方法
          * @param $data
@@ -908,7 +898,7 @@
         
         /**
          * 数据读取后的处理
-         * @todo check
+         * @todo   check
          * @access protected
          * @param array $data 当前数据
          * @return array

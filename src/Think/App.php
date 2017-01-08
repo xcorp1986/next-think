@@ -12,10 +12,10 @@
         
         /**
          * 应用程序初始化
-         * @access public
+         * @access protected
          * @return void
          */
-        public static function init()
+        protected static function init()
         {
             // 加载动态应用公共文件和配置
             load_ext_file(COMMON_PATH);
@@ -53,10 +53,10 @@
         
         /**
          * 执行应用程序
-         * @access public
+         * @access protected
          * @return void
          */
-        public static function exec()
+        protected static function exec()
         {
             // 安全检测
             if (!preg_match('/^[A-Za-z](\/|\w)*$/', CONTROLLER_NAME)) {
@@ -121,7 +121,7 @@
          * @param $action
          * @throws \ReflectionException
          */
-        public static function invokeAction($module, $action)
+        protected static function invokeAction($module, $action)
         {
             if (!preg_match('/^[A-Za-z](\w)*$/', $action)) {
                 // 非法操作
