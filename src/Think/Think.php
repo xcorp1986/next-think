@@ -113,14 +113,6 @@
             }
             
             /*
-             * 读取当前应用状态对应的配置文件
-             */
-            if (APP_STATUS && is_file(CONF_PATH . APP_STATUS . '.php')) {
-                /** @noinspection PhpIncludeInspection */
-                C(include CONF_PATH . APP_STATUS . '.php');
-            }
-            
-            /*
              * 设置系统时区
              */
             date_default_timezone_set(C('DEFAULT_TIMEZONE'));
