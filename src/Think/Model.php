@@ -1095,7 +1095,7 @@
                 }
             }
             
-            return $this->setField($field, ['exp', $field . '+' . $step]);
+            return $this->setField($field, ['exp', '`' . $field . '`+' . $step]);
         }
         
         /**
@@ -1121,7 +1121,7 @@
                 }
             }
             
-            return $this->setField($field, ['exp', $field . '-' . $step]);
+            return $this->setField($field, ['exp', '`' . $field . '`-' . $step]);
         }
         
         /**
