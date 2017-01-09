@@ -924,6 +924,7 @@
         
         // 普通模式URL转换
         if (C('URL_MODEL') == 0) {
+            /** @noinspection PhpUndefinedVariableInspection */
             $url = __APP__ . '?' . C('VAR_MODULE') . "={$module}&" . http_build_query(array_reverse($var));
             if ($urlCase) {
                 $url = strtolower($url);
@@ -937,7 +938,9 @@
             if (isset($route)) {
                 $url = __APP__ . '/' . rtrim($url, $depr);
             } else {
+                /** @noinspection PhpUndefinedVariableInspection */
                 $module = (defined('BIND_MODULE') && BIND_MODULE == $module) ? '' : $module;
+                /** @noinspection PhpUndefinedVariableInspection */
                 $url = __APP__ . '/' . ($module ? $module . MODULE_PATHINFO_DEPR : '') . implode($depr, array_reverse($var));
             }
             if ($urlCase) {

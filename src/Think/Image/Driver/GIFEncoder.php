@@ -166,8 +166,10 @@
             if (ord($this->BUF [$i]{10}) & 0x80 && $this->IMG > -1) {
                 if ($Global_len == $Locals_len) {
                     if ($this->GIFBlockCompare($Global_rgb, $Locals_rgb, $Global_len)) {
+                        /** @noinspection PhpUndefinedVariableInspection */
                         $this->GIF .= ($Locals_ext . $Locals_img . $Locals_tmp);
                     } else {
+                        /** @noinspection PhpUndefinedVariableInspection */
                         $byte = ord($Locals_img{9});
                         $byte |= 0x80;
                         $byte &= 0xF8;
@@ -176,6 +178,7 @@
                         $this->GIF .= ($Locals_ext . $Locals_img . $Locals_rgb . $Locals_tmp);
                     }
                 } else {
+                    /** @noinspection PhpUndefinedVariableInspection */
                     $byte = ord($Locals_img{9});
                     $byte |= 0x80;
                     $byte &= 0xF8;
@@ -184,6 +187,7 @@
                     $this->GIF .= ($Locals_ext . $Locals_img . $Locals_rgb . $Locals_tmp);
                 }
             } else {
+                /** @noinspection PhpUndefinedVariableInspection */
                 $this->GIF .= ($Locals_ext . $Locals_img . $Locals_tmp);
             }
             $this->IMG = 1;

@@ -145,8 +145,10 @@
         private function login()
         {
             extract($this->config);
+            /** @noinspection PhpUndefinedVariableInspection */
             $this->link = ftp_connect($host, $port, $timeout);
             if ($this->link) {
+                /** @noinspection PhpUndefinedVariableInspection */
                 if (ftp_login($this->link, $username, $password)) {
                     return true;
                 } else {

@@ -59,6 +59,7 @@
                 $mode = include __DIR__ . '/../Conf/core.php';
                 foreach ($mode as $file) {
                     if (is_file($file)) {
+                        /** @noinspection PhpIncludeInspection */
                         include $file;
                         if (!APP_DEBUG) {
                             $content .= compile($file);
