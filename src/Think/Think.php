@@ -102,7 +102,7 @@
                     $content .= "\nL(" . var_export(L(), true) . ");
                     \nC(" . var_export(C(), true) . ');
                     \\Think\\Hook::import(' . var_export(Hook::get(), true) . ');}';
-                    Storage::put($runtimeFile, strip_whitespace('<?php ' . $content));
+                    Storage::put($runtimeFile, '<?php ' . $content);
                 } else {
                     // 调试模式加载系统默认的配置文件
                     C(include __DIR__ . '/../Conf/debug.php');

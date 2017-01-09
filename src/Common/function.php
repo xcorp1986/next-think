@@ -1,4 +1,6 @@
 <?php
+    use Think\Cache;
+    use Think\Storage;
     
     /**
      * 获取和设置配置参数 支持批量定义
@@ -708,58 +710,6 @@
     }
     
     /**
-     * 去除代码中的空白和注释
-     * @param string $content 代码内容
-     * @return string
-     */
-    function strip_whitespace($content)
-    {
-        $stripStr = '';
-        //分析php源码
-        $tokens = token_get_all($content);
-        $last_space = false;
-        for ($i = 0, $j = count($tokens); $i < $j; $i++) {
-            if (is_string($tokens[$i])) {
-                $last_space = false;
-                $stripStr .= $tokens[$i];
-            } else {
-                switch ($tokens[$i][0]) {
-                    //过滤各种PHP注释
-                    case T_COMMENT:
-                    case T_DOC_COMMENT:
-                        break;
-                    //过滤空格
-                    case T_WHITESPACE:
-                        if (!$last_space) {
-                            $stripStr .= ' ';
-                            $last_space = true;
-                        }
-                        break;
-                    case T_START_HEREDOC:
-                        $stripStr .= "<<<THINK\n";
-                        break;
-                    case T_END_HEREDOC:
-                        $stripStr .= "THINK;\n";
-                        for ($k = $i + 1; $k < $j; $k++) {
-                            if (is_string($tokens[$k]) && $tokens[$k] == ';') {
-                                $i = $k;
-                                break;
-                            } elseif ($tokens[$k][0] == T_CLOSE_TAG) {
-                                break;
-                            }
-                        }
-                        break;
-                    default:
-                        $last_space = false;
-                        $stripStr .= $tokens[$i][1];
-                }
-            }
-        }
-        
-        return $stripStr;
-    }
-    
-    /**
      * 浏览器友好的变量输出
      * @param mixed  $var    变量
      * @param bool   $echo   是否输出 默认为True 如果为false 则返回输出字符串
@@ -1046,15 +996,15 @@
         if (is_array($options)) {
             // 缓存操作的同时初始化
             $type = isset($options['type']) ? $options['type'] : '';
-            $cache = \Think\Cache::getInstance($type, $options);
+            $cache = Cache::getInstance($type, $options);
         } elseif (is_array($name)) {
             // 缓存初始化
             $type = isset($name['type']) ? $name['type'] : '';
             
-            return \Think\Cache::getInstance($type, $name);
+            return Cache::getInstance($type, $name);
         } elseif (empty($cache)) {
             // 自动初始化
-            $cache = \Think\Cache::getInstance();
+            $cache = Cache::getInstance();
         }
         if ('' === $value) {
             // 获取缓存
@@ -1095,10 +1045,10 @@
                 } else {
                     unset($_cache[$name]);
                     
-                    return \Think\Storage::unlink($filename);
+                    return Storage::unlink($filename);
                 }
             } else {
-                \Think\Storage::put($filename, serialize($value));
+                Storage::put($filename, serialize($value));
                 // 缓存数据
                 $_cache[$name] = $value;
                 
@@ -1109,8 +1059,8 @@
         if (isset($_cache[$name])) {
             return $_cache[$name];
         }
-        if (\Think\Storage::has($filename)) {
-            $value = unserialize(\Think\Storage::read($filename));
+        if (Storage::has($filename)) {
+            $value = unserialize(Storage::read($filename));
             $_cache[$name] = $value;
         } else {
             $value = false;

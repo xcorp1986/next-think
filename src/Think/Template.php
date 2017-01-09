@@ -164,7 +164,7 @@
             // 模版编译过滤标签
             Hook::listen('template_filter', $tmplContent);
             
-            return strip_whitespace($tmplContent);
+            return $tmplContent;
         }
         
         /**
