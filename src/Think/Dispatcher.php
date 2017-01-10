@@ -251,11 +251,11 @@
             define('ACTION_NAME', defined('BIND_ACTION') ? BIND_ACTION : self::getAction($varAction, $urlCase));
             
             // 当前控制器的UR地址
-            $controllerName = defined('CONTROLLER_ALIAS') ? CONTROLLER_ALIAS : CONTROLLER_NAME;
+            $controllerName = CONTROLLER_NAME;
             define('__CONTROLLER__', __MODULE__ . $depr . (defined('BIND_CONTROLLER') ? '' : ($urlCase ? parse_name($controllerName) : $controllerName)));
             
             // 当前操作的URL地址
-            define('__ACTION__', __CONTROLLER__ . $depr . (defined('ACTION_ALIAS') ? ACTION_ALIAS : ACTION_NAME));
+            define('__ACTION__', __CONTROLLER__ . $depr . ACTION_NAME);
             
             //保证$_REQUEST正常取值
             $_REQUEST = array_merge($_POST, $_GET, $_COOKIE);
@@ -283,7 +283,7 @@
         /**
          * 获得实际的操作名称
          * @param $var
-         * @param $urlCase
+         * @param bool $urlCase
          * @return mixed|string
          */
         private static function getAction($var, $urlCase)
