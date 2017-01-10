@@ -28,8 +28,8 @@
       "Behavior\\": "src/Behavior"
     },
     "files": [
-      "src/Bootstrap.php",
-      "src/Common/function.php"
+      "src/Common/function.php",
+      "src/Bootstrap.php"
     ]
   },
   "autoload-dev": {
@@ -38,8 +38,8 @@
       "Behavior\\": "src/Behavior"
     },
     "files": [
-      "src/Bootstrap.php",
-      "src/Common/function.php"
+      "src/Common/function.php",
+      "src/Bootstrap.php"
     ]
   },
   "support": {

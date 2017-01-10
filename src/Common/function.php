@@ -1,5 +1,8 @@
 <?php
     use Think\Cache;
+    use Think\Exception;
+    use Think\Log;
+    use Think\Model;
     use Think\Storage;
     use Think\Think;
     
@@ -60,6 +63,7 @@
         $ext = pathinfo($file, PATHINFO_EXTENSION);
         switch ($ext) {
             case 'php':
+                /** @noinspection PhpIncludeInspection */
                 return include $file;
             case 'ini':
                 return parse_ini_file($file);
@@ -88,7 +92,7 @@
      */
     function E($msg, $code = 0)
     {
-        throw new \Think\Exception($msg, $code);
+        throw new Exception($msg, $code);
     }
     
     /**
@@ -496,7 +500,7 @@
     function D($name = '', $layer = '')
     {
         if (empty($name)) {
-            return new \Think\Model;
+            return new Model;
         }
         static $_model = [];
         $layer = $layer ?: C('DEFAULT_M_LAYER');
@@ -509,10 +513,10 @@
         } elseif (false === strpos($name, '/')) {
             // 自动加载公共模块下面的模型
             $class = '\\Common\\' . $layer . '\\' . $name . $layer;
-            $model = class_exists($class) ? new $class($name) : new \Think\Model($name);
+            $model = class_exists($class) ? new $class($name) : new Model($name);
         } else {
-            \Think\Log::record('D方法实例化没找到模型类' . $class, \Think\Log::NOTICE);
-            $model = new \Think\Model(basename($name));
+            Log::record('D方法实例化没找到模型类' . $class, Log::NOTICE);
+            $model = new Model(basename($name));
         }
         $_model[$name . $layer] = $model;
         
