@@ -124,7 +124,6 @@
                 $error['line'] = $e->getLine();
             }
             $error['trace'] = $e->getTraceAsString();
-            // 发送404信息
             if (!headers_sent()) {
                 header('HTTP/1.1 503 Service Unavailable');
             }
