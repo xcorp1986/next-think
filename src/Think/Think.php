@@ -141,31 +141,6 @@
         }
         
         /**
-         * 取得对象实例 支持调用类的静态方法
-         * @param string $class  对象类名
-         * @param string $method 类的静态方法名
-         * @return object
-         */
-        public static function instance($class, $method = '')
-        {
-            $identify = $class . $method;
-            if (!isset(self::$_instance[$identify])) {
-                if (class_exists($class)) {
-                    $o = new $class();
-                    if (!empty($method) && method_exists($o, $method)) {
-                        self::$_instance[$identify] = call_user_func([&$o, $method]);
-                    } else {
-                        self::$_instance[$identify] = $o;
-                    }
-                } else {
-                    self::halt(L('_CLASS_NOT_EXIST_') . ':' . $class);
-                }
-            }
-            
-            return self::$_instance[$identify];
-        }
-        
-        /**
          * 自定义异常处理
          * @access public
          * @param mixed $e 异常对象

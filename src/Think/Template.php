@@ -205,7 +205,7 @@
              * @var $tag \Think\Template\TagLib
              */
             foreach ($tagLibs as $tag) {
-                $this->parseTagLib(Think::instance($tag), $content);
+                $this->parseTagLib(new $tag, $content);
             }
             
             //解析普通模板标签 {$tagName}

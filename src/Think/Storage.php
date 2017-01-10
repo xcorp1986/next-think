@@ -33,7 +33,7 @@
         public static function connect($type = 'File')
         {
             $class = 'Think\\Storage\\Driver\\' . ucwords($type);
-            self::$handler = Think::instance($class);
+            self::$handler = new $class;
         }
         
         /**

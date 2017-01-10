@@ -24,7 +24,7 @@
         public function __construct()
         {
             //实例化视图类
-            $this->view = Think::instance(View::class);
+            $this->view = new View;
             //控制器初始化
             if (method_exists($this, '_init')) {
                 $this->_init();

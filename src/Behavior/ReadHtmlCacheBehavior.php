@@ -139,7 +139,7 @@
         {
             if (!is_file($cacheFile)) {
                 return false;
-            } elseif (filemtime(Think::instance(View::class)->parseTemplate()) > Storage::get($cacheFile, 'mtime', 'html')) {
+            } elseif (filemtime((new View)->parseTemplate()) > Storage::get($cacheFile, 'mtime', 'html')) {
                 // 模板文件如果更新静态文件需要更新
                 return false;
             } elseif (!is_numeric($cacheTime) && function_exists($cacheTime)) {

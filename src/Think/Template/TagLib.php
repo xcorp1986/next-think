@@ -62,7 +62,7 @@
          */
         public function __construct()
         {
-            $this->tpl = Think::instance(Template::class);
+            $this->tpl = new Template;
         }
         
         /**
