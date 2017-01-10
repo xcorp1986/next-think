@@ -11,7 +11,7 @@
         /**
          * @var string 版本号
          */
-        public static $version = '3.2.3';
+        const VERSION = '3.2.3';
         /**
          * @var array $_instance 实例化对象
          */
