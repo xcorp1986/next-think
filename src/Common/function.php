@@ -767,11 +767,6 @@
                         }
                     }
                 }
-                if ($maps = C('URL_CONTROLLER_MAP')) {
-                    if ($controller = array_search(strtolower($var[$varController]), $maps)) {
-                        $var[$varController] = $controller;
-                    }
-                }
                 if ($urlCase) {
                     $var[$varController] = parse_name($var[$varController]);
                 }
