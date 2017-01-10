@@ -7,7 +7,7 @@
     /**
      * 引导类
      */
-    class Think
+    final class Think
     {
         
         /**
@@ -104,10 +104,6 @@
              */
             G('loadTime');
             
-            /*
-             * 运行应用
-             */
-            App::run();
         }
         
         /**

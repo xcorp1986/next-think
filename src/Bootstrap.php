@@ -3,6 +3,7 @@
     /**
      * 框架入口文件
      */
+    use Think\Think;
     
     /**
      * 系统常量定义
@@ -67,6 +68,6 @@
         }
     }
     /*
-     * 加载引导类
+     * 应用程序初始化
      */
-    require __DIR__ . '/Think/Think.php';
+    Think::start();
