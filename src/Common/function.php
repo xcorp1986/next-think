@@ -786,11 +786,6 @@
                         }
                     }
                 }
-                if ($maps = C('URL_MODULE_MAP')) {
-                    if ($_module = array_search(strtolower($var[$varModule]), $maps)) {
-                        $var[$varModule] = $_module;
-                    }
-                }
                 if (isset($var[$varModule])) {
                     $module = $var[$varModule];
                     unset($var[$varModule]);

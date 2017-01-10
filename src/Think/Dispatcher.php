@@ -202,7 +202,7 @@
                 define('__APP__', strip_tags(PHP_FILE));
             }
             // 模块URL地址
-            $moduleName = defined('MODULE_ALIAS') ? MODULE_ALIAS : MODULE_NAME;
+            $moduleName = MODULE_NAME;
             define('__MODULE__', (defined('BIND_MODULE') || !C('MULTI_MODULE')) ? __APP__ : __APP__ . '/' . ($urlCase ? strtolower($moduleName) : $moduleName));
             
             if ('' != $_SERVER['PATH_INFO'] && (!C('URL_ROUTER_ON') || !Route::check())) {
@@ -339,18 +339,6 @@
         {
             $module = (!empty($_GET[$var]) ? $_GET[$var] : C('DEFAULT_MODULE'));
             unset($_GET[$var]);
-            if ($maps = C('URL_MODULE_MAP')) {
-                if (isset($maps[strtolower($module)])) {
-                    // 记录当前别名
-                    define('MODULE_ALIAS', strtolower($module));
-                    
-                    // 获取实际的模块名
-                    return ucfirst($maps[MODULE_ALIAS]);
-                } elseif (array_search(strtolower($module), $maps)) {
-                    // 禁止访问原始模块
-                    return '';
-                }
-            }
             
             return strip_tags(ucfirst($module));
         }
