@@ -13,21 +13,9 @@
     {
         
         /**
-         * 标签库定义XML文件
-         * @var string
-         * @access protected
-         */
-        protected $xml = '';
-        /**
          * @var array $tags 标签定义
          */
         protected $tags = [];
-        /**
-         * 标签库名称
-         * @var string
-         * @access protected
-         */
-        protected $tagLib = '';
         
         /**
          * 标签库标签列表
@@ -74,7 +62,6 @@
          */
         public function __construct()
         {
-            $this->tagLib = strtolower(substr(get_class($this), 6));
             $this->tpl = Think::instance(Template::class);
         }
         
