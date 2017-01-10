@@ -19,7 +19,6 @@
         public static function dispatch()
         {
             $varPath = C('VAR_PATHINFO');
-            $varAddon = C('VAR_ADDON');
             $varModule = C('VAR_MODULE');
             $varController = C('VAR_CONTROLLER');
             $varAction = C('VAR_ACTION');

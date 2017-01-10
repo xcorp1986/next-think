@@ -201,6 +201,7 @@
     
     /**
      * 获取模版文件 格式 资源://模块@主题/控制器/操作
+     * @todo check
      * @param string $template 模版资源地址
      * @param string $layer    视图层（目录）名称
      * @return string
