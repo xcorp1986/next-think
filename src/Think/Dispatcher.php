@@ -247,8 +247,6 @@
                 }
                 $_GET = array_merge($var, $_GET);
             }
-            // 获取控制器的命名空间（路径）
-            define('CONTROLLER_PATH', self::getSpace($varAddon));
             // 获取控制器和操作名
             define('CONTROLLER_NAME', defined('BIND_CONTROLLER') ? BIND_CONTROLLER : self::getController($varController, $urlCase));
             define('ACTION_NAME', defined('BIND_ACTION') ? BIND_ACTION : self::getAction($varAction, $urlCase));
@@ -262,19 +260,6 @@
             
             //保证$_REQUEST正常取值
             $_REQUEST = array_merge($_POST, $_GET, $_COOKIE);
-        }
-        
-        /**
-         * 获得控制器的命名空间路径 便于插件机制访问
-         * @param $var
-         * @return string
-         */
-        private static function getSpace($var)
-        {
-            $space = !empty($_GET[$var]) ? strip_tags($_GET[$var]) : '';
-            unset($_GET[$var]);
-            
-            return $space;
         }
         
         /**

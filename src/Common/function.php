@@ -583,10 +583,9 @@
     /**
      * 用于实例化访问控制器
      * @param string $name 控制器名
-     * @param string $path 控制器命名空间（路径）
      * @return \Think\Controller|false
      */
-    function controller($name, $path = '')
+    function controller($name)
     {
         $layer = C('DEFAULT_C_LAYER');
         

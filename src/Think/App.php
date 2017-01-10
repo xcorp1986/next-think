@@ -85,7 +85,7 @@
                 $action = 'run';
             } else {
                 //创建控制器实例
-                $module = controller(CONTROLLER_NAME, CONTROLLER_PATH);
+                $module = controller(CONTROLLER_NAME);
             }
             
             if (!$module) {
