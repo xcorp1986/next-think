@@ -41,5 +41,8 @@
       "src/Bootstrap.php",
       "src/Common/function.php"
     ]
+  },
+  "support": {
+    "issues": "https://github.com/xcorp1986/next-think/issues"
   }
 }
