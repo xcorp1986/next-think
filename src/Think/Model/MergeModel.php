@@ -37,7 +37,7 @@
                 $fields = [];
                 foreach ($this->modelList as $model) {
                     // 获取模型的字段信息
-                    $result = $this->db->getFields(M($model)->getTableName());
+                    $result = $this->db->getFields(D($model)->getTableName());
                     $_fields = array_keys($result);
                     // $this->mapFields  =   array_intersect($fields,$_fields);
                     $fields = array_merge($fields, $_fields);
@@ -50,7 +50,7 @@
                 $this->masterModel = $this->modelList[0];
             }
             // 主表的主键名
-            $this->pk = M($this->masterModel)->getPk();
+            $this->pk = D($this->masterModel)->getPk();
             
             // 设置默认外键名 仅支持单一外键
             if (empty($this->fk)) {
@@ -70,7 +70,7 @@
                 $tableName = [];
                 $models = $this->modelList;
                 foreach ($models as $model) {
-                    $tableName[] = M($model)->getTableName() . ' ' . $model;
+                    $tableName[] = D($model)->getTableName() . ' ' . $model;
                 }
                 $this->trueTableName = implode(',', $tableName);
             }
@@ -112,7 +112,7 @@
             // 启动事务
             $this->startTrans();
             // 写入主表数据
-            $result = M($this->masterModel)->strict(false)->add($data);
+            $result = D($this->masterModel)->strict(false)->add($data);
             if ($result) {
                 // 写入外键数据
                 $data[$this->fk] = $result;
@@ -120,7 +120,7 @@
                 array_shift($models);
                 // 写入附表数据
                 foreach ($models as $model) {
-                    $res = M($model)->strict(false)->add($data);
+                    $res = D($model)->strict(false)->add($data);
                     if (!$res) {
                         $this->rollback();
                         
@@ -306,10 +306,10 @@
                 $models = $this->modelList;
                 array_shift($models);
                 foreach ($models as $model) {
-                    $options['join'][] = $this->joinType . ' JOIN ' . M($model)->getTableName() . ' ' . $model . ' ON ' . $this->masterModel . '.' . $this->pk . ' = ' . $model . '.' . $this->fk;
+                    $options['join'][] = $this->joinType . ' JOIN ' . D($model)->getTableName() . ' ' . $model . ' ON ' . $this->masterModel . '.' . $this->pk . ' = ' . $model . '.' . $this->fk;
                 }
             }
-            $options['table'] = M($this->masterModel)->getTableName() . ' ' . $this->masterModel;
+            $options['table'] = D($this->masterModel)->getTableName() . ' ' . $this->masterModel;
             $options['field'] = $this->checkFields(isset($options['field']) ? $options['field'] : '');
             if (isset($options['group'])) {
                 $options['group'] = $this->checkGroup($options['group']);

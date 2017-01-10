@@ -42,7 +42,7 @@
                         }, $tableName);
                     } else {
                         $class = $key . 'Model';
-                        $Model = class_exists($class) ? new $class() : M($key);
+                        $Model = class_exists($class) ? new $class() : D($key);
                         $tableName .= $Model->getTableName();
                     }
                     // 表别名定义
@@ -96,7 +96,7 @@
         {
             // 定义所有字段
             if (false !== $pos = array_search('*', $fields)) {
-                $fields = array_merge($fields, M($name)->getDbFields());
+                $fields = array_merge($fields, D($name)->getDbFields());
                 unset($fields[$pos]);
             }
             

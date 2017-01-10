@@ -525,30 +525,6 @@
     }
     
     /**
-     * 实例化一个没有模型文件的Model
-     * @deprecated
-     * @param string $name        Model名称 支持指定基础模型 例如 MongoModel:User
-     * @param string $tablePrefix 表前缀
-     * @param mixed  $connection  数据库连接信息
-     * @return \Think\Model
-     */
-    function M($name = '', $tablePrefix = '', $connection = '')
-    {
-        static $_model = [];
-        if (strpos($name, ':')) {
-            list($class, $name) = explode(':', $name);
-        } else {
-            $class = 'Think\\Model';
-        }
-        $guid = (is_array($connection) ? implode('', $connection) : $connection) . $tablePrefix . $name . '_' . $class;
-        if (!isset($_model[$guid])) {
-            $_model[$guid] = new $class($name, $tablePrefix, $connection);
-        }
-        
-        return $_model[$guid];
-    }
-    
-    /**
      * 解析资源地址并导入类库文件
      * 例如 module/controller addon://module/behavior
      * @param string $name  资源地址 格式：[扩展://][模块/]资源名
