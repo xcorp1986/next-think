@@ -1,7 +1,10 @@
 <?php
     
     namespace Think;
-    
+    use ReflectionClass;
+    use ReflectionException;
+    use ReflectionMethod;
+
     /**
      * 应用程序类 执行应用过程管理
      * Class App
@@ -80,9 +83,9 @@
             }
             try {
                 self::invokeAction($module, $action);
-            } catch (\ReflectionException $e) {
+            } catch (ReflectionException $e) {
                 // 方法调用发生异常后 引导到__call方法处理
-                $method = new \ReflectionMethod($module, '__call');
+                $method = new ReflectionMethod($module, '__call');
                 $method->invokeArgs($module, [$action, '']);
             }
             
@@ -98,12 +101,12 @@
         {
             if (!preg_match('/^[A-Za-z](\w)*$/', $action)) {
                 // 非法操作
-                throw new \ReflectionException();
+                throw new ReflectionException();
             }
             //执行当前操作
-            $method = new \ReflectionMethod($module, $action);
+            $method = new ReflectionMethod($module, $action);
             if ($method->isPublic() && !$method->isStatic()) {
-                $class = new \ReflectionClass($module);
+                $class = new ReflectionClass($module);
                 // 前置操作
                 if ($class->hasMethod('_before_' . $action)) {
                     $before = $class->getMethod('_before_' . $action);
@@ -151,7 +154,7 @@
                 }
             } else {
                 // 操作方法不是Public 抛出异常
-                throw new \ReflectionException();
+                throw new ReflectionException();
             }
         }
         
