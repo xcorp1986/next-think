@@ -1,7 +1,10 @@
 <?php
-    
-    
     namespace Think\Upload\Driver;
+    
+    /**
+     * Class Ftp
+     * @package Think\Upload\Driver
+     */
     class Ftp
     {
         /**

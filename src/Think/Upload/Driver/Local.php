@@ -1,7 +1,9 @@
 <?php
-    
-    
     namespace Think\Upload\Driver;
+    /**
+     * Class Local
+     * @package Think\Upload\Driver
+     */
     class Local
     {
         /**

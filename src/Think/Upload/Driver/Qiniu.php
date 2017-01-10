@@ -1,10 +1,12 @@
 <?php
-    
-    
     namespace Think\Upload\Driver;
     
     use Think\Upload\Driver\Qiniu\QiniuStorage;
-    
+
+    /**
+     * Class Qiniu
+     * @package Think\Upload\Driver
+     */
     class Qiniu
     {
         /**

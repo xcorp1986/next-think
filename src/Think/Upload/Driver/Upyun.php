@@ -1,7 +1,10 @@
 <?php
-    
-    
     namespace Think\Upload\Driver;
+
+    /**
+     * Class Upyun
+     * @package Think\Upload\Driver
+     */
     class Upyun
     {
         /**
