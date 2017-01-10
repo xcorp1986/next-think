@@ -2,6 +2,8 @@
     
     namespace Think;
     
+    use Exception;
+    
     /**
      * 引导类
      */
@@ -12,10 +14,6 @@
          * @var string 版本号
          */
         const VERSION = '3.2.3';
-        /**
-         * @var array $_instance 实例化对象
-         */
-        private static $_instance = [];
         
         /**
          * 应用程序初始化
@@ -36,98 +34,70 @@
              */
             Storage::connect();
             
-            $runtimeFile = RUNTIME_PATH . '__runtime.php';
-            if (!APP_DEBUG && Storage::has($runtimeFile)) {
-                Storage::load($runtimeFile);
-            } else {
-                if (Storage::has($runtimeFile)) {
-                    Storage::unlink($runtimeFile);
+            /**
+             * 检查核心必须文件
+             */
+            if (!Storage::has(__DIR__ . '/../Conf/core.php') ||
+                !Storage::has(__DIR__ . '/../Conf/config.php') ||
+                !Storage::has(__DIR__ . '/../Conf/tags.php')
+            ) {
+                static::halt('系统核心文件缺失');
+            }
+            /*
+             * 加载核心文件
+             */
+            $mode = include __DIR__ . '/../Conf/core.php';
+            foreach ($mode as $file) {
+                if (is_file($file)) {
+                    /** @noinspection PhpIncludeInspection */
+                    include $file;
                 }
-                $content = '';
-                /**
-                 * 检查核心必须文件
-                 */
-                if (!Storage::has(__DIR__ . '/../Conf/core.php') ||
-                    !Storage::has(__DIR__ . '/../Conf/config.php') ||
-                    !Storage::has(__DIR__ . '/../Conf/tags.php')
-                ) {
-                    self::halt('系统核心文件缺失');
-                }
-                /*
-                 * 加载核心文件
-                 */
-                $mode = include __DIR__ . '/../Conf/core.php';
-                foreach ($mode as $file) {
-                    if (is_file($file)) {
-                        /** @noinspection PhpIncludeInspection */
-                        include $file;
-                        if (!APP_DEBUG) {
-                            $content .= compile($file);
-                        }
-                    }
-                }
-                
-                /*
-                 * 加载应用模式配置文件
-                 */
-                $config = include __DIR__ . '/../Conf/config.php';
-                foreach ($config as $key => $file) {
-                    is_numeric($key) ? C(load_config($file)) : C($key, load_config($file));
-                }
-                
-                /*
-                 * 加载模式行为定义
-                 */
-                $tags = include __DIR__ . '/../Conf/tags.php';
-                if (isset($tags)) {
-                    is_array($tags) && Hook::import($tags);
-                }
-                
-                /*
-                 * 加载应用行为
-                 */
-                if (is_file(CONF_PATH . 'tags.php')) {
-                    $appBehaviors = include CONF_PATH . 'tags.php';
-                    is_array($appBehaviors) && Hook::import($appBehaviors);
-                }
-                
-                /*
-                 * 加载框架底层语言包
-                 */
-                $lang = include __DIR__ . '/../Lang/' . C('DEFAULT_LANG') . '.php';
-                L($lang);
-                
-                if (!APP_DEBUG) {
-                    $content .= "\nnamespace { ";
-                    $content .= "\nL(" . var_export(L(), true) . ");
-                    \nC(" . var_export(C(), true) . ');
-                    \\Think\\Hook::import(' . var_export(Hook::get(), true) . ');}';
-                    Storage::put($runtimeFile, '<?php ' . $content);
-                } else {
-                    // 调试模式加载系统默认的配置文件
-                    C(include __DIR__ . '/../Conf/debug.php');
-                    // 读取应用调试配置文件
-                    if (is_file(CONF_PATH . 'debug.php')) {
-                        C(include CONF_PATH . 'debug.php');
-                    }
+            }
+            
+            /*
+             * 加载应用模式配置文件
+             */
+            $config = include __DIR__ . '/../Conf/config.php';
+            foreach ($config as $key => $file) {
+                is_numeric($key) ? C(load_config($file)) : C($key, load_config($file));
+            }
+            
+            /*
+             * 加载模式行为定义
+             */
+            $tags = include __DIR__ . '/../Conf/tags.php';
+            if (isset($tags)) {
+                is_array($tags) && Hook::import($tags);
+            }
+            
+            /*
+             * 加载应用行为
+             */
+            if (is_file(CONF_PATH . 'tags.php')) {
+                $appBehaviors = include CONF_PATH . 'tags.php';
+                is_array($appBehaviors) && Hook::import($appBehaviors);
+            }
+            
+            /*
+             * 加载框架底层语言包
+             */
+            $lang = include __DIR__ . '/../Lang/' . C('DEFAULT_LANG') . '.php';
+            L($lang);
+            
+            if (APP_DEBUG) {
+                // 调试模式加载系统默认的配置文件
+                C(include __DIR__ . '/../Conf/debug.php');
+                // 读取应用调试配置文件
+                if (is_file(CONF_PATH . 'debug.php')) {
+                    C(include CONF_PATH . 'debug.php');
                 }
             }
             
             /*
              * 设置系统时区
+             * @todo move to other place
              */
             date_default_timezone_set(C('DEFAULT_TIMEZONE'));
-            
-            /*
-             * 检查应用目录结构 如果不存在则自动创建
-             */
-            if (C('CHECK_APP_DIR')) {
-                $module = defined('BIND_MODULE') ? BIND_MODULE : C('DEFAULT_MODULE');
-                if (!is_dir(APP_PATH . $module) || !is_dir(LOG_PATH)) {
-                    // 检测应用目录结构
-                    Build::checkDir($module);
-                }
-            }
             
             /*
              * 记录加载文件时间
@@ -143,9 +113,9 @@
         /**
          * 自定义异常处理
          * @access public
-         * @param mixed $e 异常对象
+         * @param Exception $e 异常对象
          */
-        public static function appException($e)
+        public static function appException(Exception $e)
         {
             $error = [];
             $error['message'] = $e->getMessage();
@@ -158,13 +128,11 @@
                 $error['line'] = $e->getLine();
             }
             $error['trace'] = $e->getTraceAsString();
-            Log::record($error['message'], Log::ERR);
             // 发送404信息
             if (!headers_sent()) {
-                header('HTTP/1.1 404 Not Found');
-                header('Status:404 Not Found');
+                header('HTTP/1.1 503 Service Unavailable');
             }
-            self::halt($error);
+            static::halt($error);
         }
         
         /**
@@ -186,14 +154,11 @@
                 case E_USER_ERROR:
                     ob_end_clean();
                     $errorStr = "$errStr " . $errFile . " 第 $errLine 行.";
-                    if (C('LOG_RECORD')) {
-                        Log::write("[$errNo] " . $errorStr, Log::ERR);
-                    }
-                    self::halt($errorStr);
+                    static::halt($errorStr);
                     break;
                 default:
                     $errorStr = "[$errNo] $errStr " . $errFile . " 第 $errLine 行.";
-                    self::trace($errorStr, '', 'NOTIC');
+                    static::trace($errorStr, '', 'NOTIC');
                     break;
             }
         }
@@ -203,7 +168,6 @@
          */
         public static function fatalError()
         {
-            Log::save();
             if ($e = error_get_last()) {
                 switch ($e['type']) {
                     case E_ERROR:
@@ -212,7 +176,7 @@
                     case E_COMPILE_ERROR:
                     case E_USER_ERROR:
                         ob_end_clean();
-                        self::halt($e);
+                        static::halt($e);
                         break;
                     default:
                         break;
