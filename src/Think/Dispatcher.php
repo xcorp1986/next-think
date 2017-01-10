@@ -8,7 +8,7 @@
      * Class Dispatcher
      * @package Think
      */
-    class Dispatcher
+    final class Dispatcher
     {
         
         /**

@@ -7,7 +7,7 @@
      * Class Hook
      * @package Think
      */
-    class Hook
+    final class Hook
     {
         
         /**

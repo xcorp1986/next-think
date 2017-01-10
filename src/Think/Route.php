@@ -7,7 +7,7 @@
      * Class Route
      * @package Think
      */
-    class Route
+    final class Route
     {
         
         /**

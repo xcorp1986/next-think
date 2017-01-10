@@ -7,7 +7,7 @@
      * Class Build
      * @package Think
      */
-    class Build
+    final class Build
     {
         
         protected static $controller = '<?php
