@@ -82,7 +82,7 @@
             if (!is_file($filename)) {
                 return false;
             }
-            N('cache_read', 1);
+//            N('cache_read', 1);
             $content = file_get_contents($filename);
             if (false !== $content) {
                 $expire = (int)substr($content, 8, 12);
@@ -124,7 +124,7 @@
          */
         public function set($name, $value, $expire = null)
         {
-            N('cache_write', 1);
+//            N('cache_write', 1);
             if (is_null($expire)) {
                 $expire = $this->options['expire'];
             }

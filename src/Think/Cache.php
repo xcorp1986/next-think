@@ -6,9 +6,9 @@
      * 缓存管理类
      * Class Cache
      * @package Think
-     * @method get($name)
-     * @method set($name, $value)
-     * @method rm($name)
+     * @method mixed get($name) 读取缓存
+     * @method bool set($name, $value) 写入缓存
+     * @method bool rm($name) 删除缓存
      */
     class Cache
     {
@@ -144,7 +144,7 @@
                 $this->rm($key);
                 if (APP_DEBUG) {
                     //调试模式下，记录出列次数
-                    N($queue_name . '_out_times', 1);
+//                    N($queue_name . '_out_times', 1);
                 }
             }
             

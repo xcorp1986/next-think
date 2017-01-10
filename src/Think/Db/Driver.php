@@ -189,7 +189,7 @@
             }
             $this->queryTimes++;
             // 记录查询操作
-            N('db_query', 1);
+//            N('db_query', 1);
             // 调试开始
             $this->debug(true);
             $this->PDOStatement = $this->_linkID->prepare($str);
@@ -254,7 +254,7 @@
             }
             $this->executeTimes++;
             // 记录写入操作
-            N('db_write', 1);
+//            N('db_write', 1);
             // 记录开始执行时间
             $this->debug(true);
             $this->PDOStatement = $this->_linkID->prepare($str);

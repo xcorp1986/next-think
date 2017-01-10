@@ -233,7 +233,7 @@
             }
             $this->queryTimes++;
             // 记录数据库查询次数
-            N('db_query', 1);
+//            N('db_query', 1);
             // 调试开始
             $this->debug(true);
             $this->PDOStatement = $this->_linkID->prepare($str);

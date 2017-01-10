@@ -48,9 +48,9 @@
                 '运行时间' => $this->showTime(),
                 '吞吐率'  => number_format(1 / G('beginTime', 'viewEndTime'), 2) . 'req/s',
                 '内存开销' => MEMORY_LIMIT_ON ? number_format((memory_get_usage() - $GLOBALS['_startUseMems']) / 1024, 2) . ' kb' : '不支持',
-                '查询信息' => N('db_query') . ' queries ' . N('db_write') . ' writes ',
+//                '查询信息' => N('db_query') . ' queries ' . N('db_write') . ' writes ',
                 '文件加载' => count(get_included_files()),
-                '缓存信息' => N('cache_read') . ' gets ' . N('cache_write') . ' writes ',
+//                '缓存信息' => N('cache_read') . ' gets ' . N('cache_write') . ' writes ',
                 '配置加载' => count(C()),
                 '会话信息' => 'SESSION_ID=' . session_id(),
             ];

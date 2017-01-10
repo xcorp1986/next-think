@@ -50,11 +50,11 @@
             }
             if (C('SHOW_DB_TIMES')) {
                 // 显示数据库操作次数
-                $showTime .= ' | DB :' . N('db_query') . ' queries ' . N('db_write') . ' writes ';
+//                $showTime .= ' | DB :' . N('db_query') . ' queries ' . N('db_write') . ' writes ';
             }
             if (C('SHOW_CACHE_TIMES')) {
                 // 显示缓存读写次数
-                $showTime .= ' | Cache :' . N('cache_read') . ' gets ' . N('cache_write') . ' writes ';
+//                $showTime .= ' | Cache :' . N('cache_read') . ' gets ' . N('cache_write') . ' writes ';
             }
             if (MEMORY_LIMIT_ON && C('SHOW_USE_MEM')) {
                 // 显示内存开销
