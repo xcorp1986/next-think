@@ -5,7 +5,6 @@
 
     return [
         'app_init'        => [
-//                \Behavior\BuildLiteBehavior::class, // 生成运行Lite文件
         ],
         'app_begin'       => [
             // 读取静态缓存
