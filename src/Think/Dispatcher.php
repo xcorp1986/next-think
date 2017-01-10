@@ -292,28 +292,6 @@
                 $_POST[$var] :
                 (!empty($_GET[$var]) ? $_GET[$var] : C('DEFAULT_ACTION'));
             unset($_POST[$var], $_GET[$var]);
-            if ($maps = C('URL_ACTION_MAP')) {
-                if (isset($maps[strtolower(CONTROLLER_NAME)])) {
-                    $maps = $maps[strtolower(CONTROLLER_NAME)];
-                    if (isset($maps[strtolower($action)])) {
-                        // 记录当前别名
-                        define('ACTION_ALIAS', strtolower($action));
-                        // 获取实际的操作名
-                        if (is_array($maps[ACTION_ALIAS])) {
-                            parse_str($maps[ACTION_ALIAS][1], $vars);
-                            $_GET = array_merge($_GET, $vars);
-                            
-                            return $maps[ACTION_ALIAS][0];
-                        } else {
-                            return $maps[ACTION_ALIAS];
-                        }
-                        
-                    } elseif (array_search(strtolower($action), $maps)) {
-                        // 禁止访问原始操作
-                        return '';
-                    }
-                }
-            }
             
             return strip_tags($urlCase ? strtolower($action) : $action);
         }

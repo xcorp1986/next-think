@@ -759,14 +759,6 @@
                 $varAction = C('VAR_ACTION');
                 $var[$varAction] = !empty($path) ? array_pop($path) : ACTION_NAME;
                 $var[$varController] = !empty($path) ? array_pop($path) : CONTROLLER_NAME;
-                if ($maps = C('URL_ACTION_MAP')) {
-                    if (isset($maps[strtolower($var[$varController])])) {
-                        $maps = $maps[strtolower($var[$varController])];
-                        if ($action = array_search(strtolower($var[$varAction]), $maps)) {
-                            $var[$varAction] = $action;
-                        }
-                    }
-                }
                 if ($urlCase) {
                     $var[$varController] = parse_name($var[$varController]);
                 }
