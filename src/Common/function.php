@@ -1,6 +1,7 @@
 <?php
     use Think\Cache;
     use Think\Storage;
+    use Think\Think;
     
     /**
      * 获取和设置配置参数 支持批量定义
@@ -191,30 +192,7 @@
      */
     function trace($value = '[think]', $label = '', $level = 'DEBUG', $record = false)
     {
-        return \Think\Think::trace($value, $label, $level, $record);
-    }
-    
-    /**
-     * 编译文件
-     * @param string $filename 文件名
-     * @return string
-     */
-    function compile($filename)
-    {
-        $content = php_strip_whitespace($filename);
-        $content = trim(substr($content, 5));
-        // 替换预编译指令
-        $content = preg_replace('/\/\/\[RUNTIME\](.*?)\/\/\[\/RUNTIME\]/s', '', $content);
-        if (0 === strpos($content, 'namespace')) {
-            $content = preg_replace('/namespace\s(.*?);/', 'namespace \\1{', $content, 1);
-        } else {
-            $content = 'namespace {' . $content;
-        }
-        if ('?>' == substr($content, -2)) {
-            $content = substr($content, 0, -2);
-        }
-        
-        return $content . '}';
+        Think::trace($value, $label, $level, $record);
     }
     
     /**
@@ -452,6 +430,7 @@
     
     /**
      * 字符串命名风格转换
+     * @todo remove in future
      * type 0 将Java风格转换为C的风格 1 将C风格转换为Java的风格
      * @param string $name 字符串
      * @param int    $type 转换类型
@@ -470,6 +449,7 @@
     
     /**
      * 优化的require_once
+     * @deprecated
      * @param string $filename 文件地址
      * @return bool
      */
@@ -545,7 +525,7 @@
      * @param string $name        Model名称 支持指定基础模型 例如 MongoModel:User
      * @param string $tablePrefix 表前缀
      * @param mixed  $connection  数据库连接信息
-     * @return Think\Model
+     * @return \Think\Model
      */
     function M($name = '', $tablePrefix = '', $connection = '')
     {
