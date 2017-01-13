@@ -27,7 +27,6 @@
              */
             register_shutdown_function([__CLASS__, 'fatalError']);
             set_error_handler([__CLASS__, 'appError']);
-            set_exception_handler([__CLASS__, 'appException']);
             
             /*
              * 初始化文件存储方式
@@ -104,30 +103,6 @@
              */
             G('loadTime');
             
-        }
-        
-        /**
-         * 自定义异常处理
-         * @access public
-         * @param Exception $e 异常对象
-         */
-        public static function appException(Exception $e)
-        {
-            $error = [];
-            $error['message'] = $e->getMessage();
-            $trace = $e->getTrace();
-            if ('E' == $trace[0]['function']) {
-                $error['file'] = $trace[0]['file'];
-                $error['line'] = $trace[0]['line'];
-            } else {
-                $error['file'] = $e->getFile();
-                $error['line'] = $e->getLine();
-            }
-            $error['trace'] = $e->getTraceAsString();
-            if (!headers_sent()) {
-                header('HTTP/1.1 503 Service Unavailable');
-            }
-            static::halt($error);
         }
         
         /**
