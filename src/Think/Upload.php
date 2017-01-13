@@ -16,7 +16,8 @@
      * @property int      maxSize
      * @property string   saveName
      * @property string   subName
-     * @property bool    autoSub
+     * @property bool     autoSub
+     * @property mixed    savePath
      * @package Think
      */
     class Upload
