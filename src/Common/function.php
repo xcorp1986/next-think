@@ -70,10 +70,6 @@
             //@todo yaml_parse_file need pecl yaml extension
             case 'yaml':
                 return yaml_parse_file($file);
-            case 'xml':
-                return (array)simplexml_load_file($file);
-            case 'json':
-                return json_decode(file_get_contents($file), true);
             default:
                 if (function_exists($parse)) {
                     return $parse($file);
