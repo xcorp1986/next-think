@@ -41,20 +41,20 @@
         /**
          * @var mixed|string $p 分页参数名
          */
-        private $p = 'p';
+        protected $p = 'p';
         /**
          * @var string $url 当前链接URL
          */
-        private $url = '';
+        protected $url = '';
         /**
          * @var int $nowPage 当前页
          */
-        private $nowPage = 1;
+        protected $nowPage = 1;
         
         /**
          * @var array $config 分页显示定制
          */
-        private $config = [
+        protected $config = [
             'header' => '<span class="rows">共 %TOTAL_ROW% 条记录</span>',
             'prev'   => '<<',
             'next'   => '>>',
