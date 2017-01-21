@@ -2,6 +2,8 @@
     
     namespace Think;
     
+    use Think\Db\DbDriverNotFoundException;
+    
     /**
      * 数据库中间层实现类
      * Class Db
@@ -26,24 +28,27 @@
          * @static
          * @access public
          * @param mixed $config 连接配置
+         * @throws DbDriverNotFoundException
          * @return \Think\Db\Driver 返回数据库驱动类
          */
         public static function getInstance(array $config = [])
         {
             $md5 = md5(serialize($config));
             if (!isset(self::$instance[$md5])) {
-                // 解析连接参数 支持数组和字符串
-                $options = self::parseConfig($config);
+                // 获取数据库配置参数
+                $options = self::getConfig();
                 // 兼容mysqli
                 if ('mysqli' == $options['type']) {
                     $options['type'] = 'mysql';
                 }
                 $class = 'Think\\Db\\Driver\\' . ucwords(strtolower($options['type']));
-                if (class_exists($class)) {
+                try {
+                    if (!class_exists($class)) {
+                        throw new DbDriverNotFoundException();
+                    }
                     self::$instance[$md5] = new $class($options);
-                } else {
-                    // 类没有定义
-                    E(L('_NO_DB_DRIVER_') . ': ' . $class);
+                } catch (DbDriverNotFoundException $e) {
+                    E($e->getMessage() . '类名:' . $class);
                 }
             }
             self::$_instance = self::$instance[$md5];
@@ -55,30 +60,26 @@
          * 数据库连接参数解析
          * @static
          * @access private
-         * @param mixed $config
          * @return array
          */
-        private static function parseConfig(array $config = [])
+        private static function getConfig()
         {
-            $config = array_change_key_case($config);
-            $config = [
-                'type'        => $config['db_type'],
-                'username'    => $config['db_user'],
-                'password'    => $config['db_pwd'],
-                'hostname'    => $config['db_host'],
-                'hostport'    => $config['db_port'],
-                'database'    => $config['db_name'],
-                'dsn'         => $config['db_dsn'] ?: null,
-                'params'      => $config['db_params'] ?: null,
-                'charset'     => $config['db_charset'] ?: 'utf8',
-                'deploy'      => $config['db_deploy_type'] ?: 0,
-                'rw_separate' => $config['db_rw_separate'] ?: false,
-                'master_num'  => $config['db_master_num'] ?: 1,
-                'slave_no'    => $config['db_slave_no'] ?: '',
-                'debug'       => $config['db_debug'] ?: APP_DEBUG,
+            return [
+                'type'        => C('DB_TYPE'),
+                'username'    => C('DB_USER'),
+                'password'    => C('DB_PWD'),
+                'hostname'    => C('DB_HOST'),
+                'hostport'    => C('DB_PORT'),
+                'database'    => C('DB_NAME'),
+                'dsn'         => C('DB_DSN'),
+                'params'      => C('DB_PARAMS'),
+                'charset'     => C('DB_CHARSET'),
+                'deploy'      => C('DB_DEPLOY_TYPE'),
+                'rw_separate' => C('DB_RW_SEPARATE'),
+                'master_num'  => C('DB_MASTER_NUM'),
+                'slave_no'    => C('DB_SLAVE_NO'),
+                'debug'       => C('DB_DEBUG', null, APP_DEBUG),
             ];
-            
-            return $config;
         }
         
         /**
