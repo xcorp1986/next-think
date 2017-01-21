@@ -56,7 +56,7 @@
         const VALUE_VALIDATE = 2;
         
         /**
-         * @var \Think\Db|\Think\Db\Driver|\PDO $db 当前数据库操作对象
+         * @var \Think\Db|\Think\Db\Driver $db 当前数据库操作对象
          */
         protected $db = null;
         /**
@@ -656,7 +656,7 @@
             // 判断查询缓存
             if (isset($options['cache'])) {
                 $cache = $options['cache'];
-                $key = is_string($cache['key']) ? $cache['key'] : md5(serialize($options));
+                $key = is_string($cache['key']) ? $cache['key'] : to_guid_string($options);
                 $data = S($key, '', $cache);
                 if (false !== $data) {
                     $this->data = $data;
@@ -1134,7 +1134,7 @@
             // 判断查询缓存
             if (isset($options['cache'])) {
                 $cache = $options['cache'];
-                $key = is_string($cache['key']) ? $cache['key'] : md5(serialize($options));
+                $key = is_string($cache['key']) ? $cache['key'] : to_guid_string($options);
                 $data = S($key, '', $cache);
                 if (false !== $data) {
                     return $data;

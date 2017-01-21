@@ -1,7 +1,6 @@
 <?php
     
-    
-    namespace Think\Db;
+    namespace Think\Exception;
     
     
     use Think\Exception;

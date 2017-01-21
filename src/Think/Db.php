@@ -2,7 +2,7 @@
     
     namespace Think;
     
-    use Think\Db\DbDriverNotFoundException;
+    use Think\Exception\DbDriverNotFoundException;
     
     /**
      * 数据库中间层实现类
@@ -29,11 +29,11 @@
          * @access public
          * @param mixed $config 连接配置
          * @throws DbDriverNotFoundException
-         * @return \Think\Db\Driver 返回数据库驱动类
+         * @return $this 返回数据库驱动类
          */
         public static function getInstance(array $config = [])
         {
-            $md5 = md5(serialize($config));
+            $md5 = to_guid_string($config);
             if (!isset(self::$instance[$md5])) {
                 // 获取数据库配置参数
                 $options = self::getConfig();
