@@ -109,9 +109,6 @@
                                 $pk = $result[$mappingKey];
                                 $mappingCondition[$mappingFk] = $pk;
                                 $relationData = $model->where($mappingCondition)->field($mappingFields)->find();
-                                if (!empty($val['relation_deep'])) {
-                                    $model->getRelation($relationData, $val['relation_deep']);
-                                }
                                 break;
                             case self::BELONGS_TO:
                                 if (strtoupper($mappingClass) == strtoupper($this->name)) {
@@ -124,9 +121,6 @@
                                 $fk = $result[$mappingFk];
                                 $mappingCondition[$model->getPk()] = $fk;
                                 $relationData = $model->where($mappingCondition)->field($mappingFields)->find();
-                                if (!empty($val['relation_deep'])) {
-                                    $model->getRelation($relationData, $val['relation_deep']);
-                                }
                                 break;
                             case self::HAS_MANY:
                                 $pk = $result[$mappingKey];
@@ -139,12 +133,6 @@
                                     ->order($mappingOrder)
                                     ->limit($mappingLimit)
                                     ->select();
-                                if (!empty($val['relation_deep'])) {
-                                    foreach ($relationData as $key => $data) {
-                                        $model->getRelation($data, $val['relation_deep']);
-                                        $relationData[$key] = $data;
-                                    }
-                                }
                                 break;
                             case self::MANY_TO_MANY:
                                 $pk = $result[$mappingKey];
@@ -171,12 +159,6 @@
                                     $sql .= ' LIMIT ' . $mappingLimit;
                                 }
                                 $relationData = $this->query($sql);
-                                if (!empty($val['relation_deep'])) {
-                                    foreach ($relationData as $key => $data) {
-                                        $model->getRelation($data, $val['relation_deep']);
-                                        $relationData[$key] = $data;
-                                    }
-                                }
                                 break;
                         }
                         if (!$return) {
