@@ -156,12 +156,11 @@
         private $_db = [];
         
         /**
-         * 取得DB类的实例对象 字段检查
+         * 取得DB类的实例对象
          * @access public
-         * @param string $name        模型名称
-         * @param mixed  $connection  数据库连接信息
+         * @param string $name 模型名称
          */
-        public function __construct($name = '', $connection = '')
+        public function __construct($name = '')
         {
             if (method_exists($this, '_init')) {
                 $this->_init();
@@ -169,18 +168,13 @@
             // 获取模型名称
             if (!empty($name)) {
                 $this->name = $name;
-            } elseif (empty($this->name)) {
-                $this->name = $this->getModelName();
             }
             // 设置表前缀
             if (!isset($this->tablePrefix)) {
                 $this->tablePrefix = C('DB_PREFIX');
             }
-            
-            // 数据库初始化操作
-            // 获取数据库操作对象
-            // 当前模型有独立的数据库连接信息
-            $this->connect(0, empty($this->connection) ? $connection : $this->connection, true);
+            //连接数据库
+            $this->connect(0);
         }
         
         /**
@@ -189,56 +183,17 @@
         protected function _init()
         {
         }
-        
-        /**
-         * 得到当前的数据对象名称
-         * @access public
-         * @return string
-         */
-        public function getModelName()
-        {
-            if (empty($this->name)) {
-                $name = substr(get_class($this), 0, -strlen(C('DEFAULT_M_LAYER')));
-                if ($pos = strrpos($name, '\\')) {
-                    //有命名空间
-                    $this->name = substr($name, $pos + 1);
-                } else {
-                    $this->name = $name;
-                }
-            }
-            
-            return $this->name;
-        }
-        
+    
         /**
          * 切换当前的数据库连接
          * @access public
          * @param mixed   $linkNum 连接序号
          * @param mixed   $config  数据库连接信息
-         * @param boolean $force   强制重新连接
          * @return $this
          */
-        public function connect($linkNum = '', $config = '', $force = false)
+        public function connect($linkNum = '', $config = '')
         {
-            if ('' === $linkNum && $this->db) {
-                return $this->db;
-            }
-            
-            if (!isset($this->_db[$linkNum]) || $force) {
-                // 创建一个新的实例
-                if (!empty($config) && is_string($config) && false === strpos($config, '/')) {
-                    // 支持读取配置参数
-                    $config = C($config);
-                }
-                $this->_db[$linkNum] = Db::getInstance($config);
-            } elseif (null === $config) {
-                $this->_db[$linkNum]->close();
-                // 关闭数据库连接
-                unset($this->_db[$linkNum]);
-                
-                return;
-            }
-            
+            $this->_db[$linkNum] = Db::getInstance($config);
             // 切换数据库连接
             $this->db = $this->_db[$linkNum];
             $this->_after_db();
@@ -246,7 +201,7 @@
             if (!empty($this->name) && $this->autoCheckFields) {
                 $this->_checkTableInfo();
             }
-            
+        
             return $this;
         }
         
@@ -348,6 +303,26 @@
             }
             
             return ($this->dbName ? $this->dbName . '.' : '') . $this->trueTableName;
+        }
+        
+        /**
+         * 得到当前的数据对象名称
+         * @access public
+         * @return string
+         */
+        public function getModelName()
+        {
+            if (empty($this->name)) {
+                $name = substr(get_class($this), 0, -strlen(C('DEFAULT_M_LAYER')));
+                if ($pos = strrpos($name, '\\')) {
+                    //有命名空间
+                    $this->name = substr($name, $pos + 1);
+                } else {
+                    $this->name = $name;
+                }
+            }
+            
+            return $this->name;
         }
         
         /**

@@ -26,11 +26,10 @@
          * 取得DB类的实例对象 字段检查
          * @access public
          * @param string $name       模型名称
-         * @param mixed  $connection 数据库连接信息
          */
-        public function __construct($name = '', $connection = '')
+        public function __construct($name = '')
         {
-            parent::__construct($name, $connection);
+            parent::__construct($name);
             // 聚合模型的字段信息
             if (empty($this->fields) && !empty($this->modelList)) {
                 $fields = [];

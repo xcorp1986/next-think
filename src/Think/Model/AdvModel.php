@@ -19,7 +19,7 @@
         protected $_filter = [];
         protected $partition = [];
         
-        public function __construct($name = '', $connection = '')
+        public function __construct($name = '')
         {
             if ('' !== $name || is_subclass_of(static::class, $this)) {
                 // 如果是AdvModel子类或者有传入模型名称则获取字段缓存
@@ -27,7 +27,7 @@
                 // 空的模型 关闭字段缓存
                 $this->autoCheckFields = false;
             }
-            parent::__construct($name, $connection);
+            parent::__construct($name);
         }
         
         /**
