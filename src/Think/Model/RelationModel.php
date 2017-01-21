@@ -43,114 +43,31 @@
         }
         
         /**
-         * 得到关联的数据表名
+         * 进行关联查询
          * @access public
-         * @param $relation
-         * @return string
+         * @param mixed $name 关联名称
+         * @return Model
          */
-        public function getRelationTableName($relation)
+        public function relation($name)
         {
-            $relationTable = !empty($this->tablePrefix) ? $this->tablePrefix : '';
-            $relationTable .= $this->tableName ? $this->tableName : $this->name;
-            $relationTable .= '_' . $relation->getModelName();
+            $this->options['link'] = $name;
             
-            return strtolower($relationTable);
+            return $this;
         }
         
         /**
-         * 查询成功后的回调方法
-         * @param $result
-         * @param $options
+         * 关联数据获取 仅用于查询后
+         * @access public
+         * @param string $name 关联名称
+         * @return array|bool
          */
-        protected function _after_find(&$result, $options)
+        public function relationGet($name)
         {
-            // 获取关联数据 并附加到结果中
-            if (!empty($options['link'])) {
-                $this->getRelation($result, $options['link']);
-            }
-        }
-        
-        /**
-         * 查询数据集成功后的回调方法
-         * @param $result
-         * @param $options
-         */
-        protected function _after_select(&$result, $options)
-        {
-            // 获取关联数据 并附加到结果中
-            if (!empty($options['link'])) {
-                $this->getRelations($result, $options['link']);
-            }
-        }
-        
-        /**
-         * 写入成功后的回调方法
-         * @param $data
-         * @param $options
-         */
-        protected function _after_insert($data, $options)
-        {
-            // 关联写入
-            if (!empty($options['link'])) {
-                $this->opRelation('ADD', $data, $options['link']);
-            }
-        }
-        
-        /**
-         * 更新成功后的回调方法
-         * @param $data
-         * @param $options
-         */
-        protected function _after_update($data, $options)
-        {
-            // 关联更新
-            if (!empty($options['link'])) {
-                $this->opRelation('SAVE', $data, $options['link']);
-            }
-        }
-        
-        /**
-         * 删除成功后的回调方法
-         * @param $data
-         * @param $options
-         */
-        protected function _after_delete($data, $options)
-        {
-            // 关联删除
-            if (!empty($options['link'])) {
-                $this->opRelation('DEL', $data, $options['link']);
-            }
-        }
-        
-        /**
-         * 对保存到数据库的数据进行处理
-         * @access protected
-         * @param mixed $data 要操作的数据
-         * @return bool
-         */
-        protected function _facade($data)
-        {
-            $this->_before_write($data);
-            
-            return $data;
-        }
-        
-        /**
-         * 获取返回数据集的关联记录
-         * @access protected
-         * @param array        $resultSet 返回数据
-         * @param string|array $name      关联名称
-         * @return array
-         */
-        protected function getRelations(&$resultSet, $name = '')
-        {
-            // 获取记录集的主键列表
-            foreach ($resultSet as $key => $val) {
-                $val = $this->getRelation($val, $name);
-                $resultSet[$key] = $val;
+            if (empty($this->data)) {
+                return false;
             }
             
-            return $resultSet;
+            return $this->getRelation($this->data, $name, true);
         }
         
         /**
@@ -175,7 +92,7 @@
                         // 映射字段
                         $mappingFields = !empty($val['mapping_fields']) ? $val['mapping_fields'] : '*';
                         // 关联条件
-                        $mappingCondition = !empty($val['condition']) ? $val['condition'] : '1=1';
+                        $mappingCondition = !empty($val['condition']) ? $val['condition'] : ['_string' => '1=1'];
                         // 关联键名
                         $mappingKey = !empty($val['mapping_key']) ? $val['mapping_key'] : $this->getPk();
                         if (strtoupper($mappingClass) == strtoupper($this->name)) {
@@ -190,7 +107,7 @@
                         switch ($mappingType) {
                             case self::HAS_ONE:
                                 $pk = $result[$mappingKey];
-                                $mappingCondition .= " AND {$mappingFk}='{$pk}'";
+                                $mappingCondition[$mappingFk] = $pk;
                                 $relationData = $model->where($mappingCondition)->field($mappingFields)->find();
                                 if (!empty($val['relation_deep'])) {
                                     $model->getRelation($relationData, $val['relation_deep']);
@@ -205,7 +122,7 @@
                                     $mappingFk = !empty($val['foreign_key']) ? $val['foreign_key'] : strtolower($model->getModelName()) . '_id';
                                 }
                                 $fk = $result[$mappingFk];
-                                $mappingCondition .= " AND {$model->getPk()}='{$fk}'";
+                                $mappingCondition[$model->getPk()] = $fk;
                                 $relationData = $model->where($mappingCondition)->field($mappingFields)->find();
                                 if (!empty($val['relation_deep'])) {
                                     $model->getRelation($relationData, $val['relation_deep']);
@@ -213,7 +130,7 @@
                                 break;
                             case self::HAS_MANY:
                                 $pk = $result[$mappingKey];
-                                $mappingCondition .= " AND {$mappingFk}='{$pk}'";
+                                $mappingCondition[$mappingFk] = $pk;
                                 $mappingOrder = !empty($val['mapping_order']) ? $val['mapping_order'] : '';
                                 $mappingLimit = !empty($val['mapping_limit']) ? $val['mapping_limit'] : '';
                                 // 延时获取关联记录
@@ -232,7 +149,7 @@
                             case self::MANY_TO_MANY:
                                 $pk = $result[$mappingKey];
                                 $prefix = $this->tablePrefix;
-                                $mappingCondition = " {$mappingFk}='{$pk}'";
+                                $mappingCondition[$mappingFk] = $pk;
                                 $mappingOrder = $val['mapping_order'];
                                 $mappingLimit = $val['mapping_limit'];
                                 $mappingRelationFk = $val['relation_foreign_key'] ? $val['relation_foreign_key'] : $model->getModelName() . '_id';
@@ -287,6 +204,78 @@
             }
             
             return $result;
+        }
+        
+        /**
+         * 得到关联的数据表名
+         * @access public
+         * @param $relation
+         * @return string
+         */
+        public function getRelationTableName($relation)
+        {
+            $relationTable = !empty($this->tablePrefix) ? $this->tablePrefix : '';
+            $relationTable .= $this->tableName ? $this->tableName : $this->name;
+            $relationTable .= '_' . $relation->getModelName();
+            
+            return strtolower($relationTable);
+        }
+        
+        /**
+         * 查询成功后的回调方法
+         * @param $result
+         * @param $options
+         */
+        protected function _after_find(&$result, $options)
+        {
+            // 获取关联数据 并附加到结果中
+            if (!empty($options['link'])) {
+                $this->getRelation($result, $options['link']);
+            }
+        }
+        
+        /**
+         * 查询数据集成功后的回调方法
+         * @param $result
+         * @param $options
+         */
+        protected function _after_select(&$result, $options)
+        {
+            // 获取关联数据 并附加到结果中
+            if (!empty($options['link'])) {
+                $this->getRelations($result, $options['link']);
+            }
+        }
+        
+        /**
+         * 获取返回数据集的关联记录
+         * @access protected
+         * @param array        $resultSet 返回数据
+         * @param string|array $name      关联名称
+         * @return array
+         */
+        protected function getRelations(&$resultSet, $name = '')
+        {
+            // 获取记录集的主键列表
+            foreach ($resultSet as $key => $val) {
+                $val = $this->getRelation($val, $name);
+                $resultSet[$key] = $val;
+            }
+            
+            return $resultSet;
+        }
+        
+        /**
+         * 写入成功后的回调方法
+         * @param $data
+         * @param $options
+         */
+        protected function _after_insert($data, $options)
+        {
+            // 关联写入
+            if (!empty($options['link'])) {
+                $this->opRelation('ADD', $data, $options['link']);
+            }
         }
         
         /**
@@ -471,30 +460,41 @@
         }
         
         /**
-         * 进行关联查询
-         * @access public
-         * @param mixed $name 关联名称
-         * @return Model
+         * 更新成功后的回调方法
+         * @param $data
+         * @param $options
          */
-        public function relation($name)
+        protected function _after_update($data, $options)
         {
-            $this->options['link'] = $name;
-            
-            return $this;
+            // 关联更新
+            if (!empty($options['link'])) {
+                $this->opRelation('SAVE', $data, $options['link']);
+            }
         }
         
         /**
-         * 关联数据获取 仅用于查询后
-         * @access public
-         * @param string $name 关联名称
-         * @return array|bool
+         * 删除成功后的回调方法
+         * @param $data
+         * @param $options
          */
-        public function relationGet($name)
+        protected function _after_delete($data, $options)
         {
-            if (empty($this->data)) {
-                return false;
+            // 关联删除
+            if (!empty($options['link'])) {
+                $this->opRelation('DEL', $data, $options['link']);
             }
+        }
+        
+        /**
+         * 对保存到数据库的数据进行处理
+         * @access protected
+         * @param mixed $data 要操作的数据
+         * @return bool
+         */
+        protected function _facade($data)
+        {
+            $this->_before_write($data);
             
-            return $this->getRelation($this->data, $name, true);
+            return $data;
         }
     }
