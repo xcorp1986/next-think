@@ -148,7 +148,9 @@
                                 } else {
                                     $mappingRelationTable = $this->getRelationTableName($model);
                                 }
-                                $sql = "SELECT b.{$mappingFields} FROM {$mappingRelationTable} AS a, " . $model->getTableName() . " AS b WHERE a.{$mappingRelationFk} = b.{$model->getPk()} AND a.{$mappingCondition}";
+                                $sql = "SELECT b.{$mappingFields} FROM {$mappingRelationTable} AS a, "
+                                    . $model->getTableName() . " AS b WHERE a.{$mappingRelationFk} =" .
+                                    " b.{$model->getPk()} AND a.{$mappingCondition}";
                                 if (!empty($val['condition'])) {
                                     $sql .= ' AND ' . $val['condition'];
                                 }

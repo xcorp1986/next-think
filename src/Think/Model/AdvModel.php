@@ -352,7 +352,7 @@
             
             return $result;
         }
-    
+        
         /**
          * @param $resultSet
          * @return mixed
@@ -411,7 +411,7 @@
             
             return $resultSet;
         }
-    
+        
         /**
          * @param $data
          * @return mixed
@@ -552,7 +552,7 @@
             
             return $data;
         }
-    
+        
         /**
          * 检查返回数据的序列化字段
          * @param $result
@@ -575,7 +575,7 @@
             
             return $result;
         }
-    
+        
         /**
          * 检查数据集的序列化字段
          * @param $resultSet
