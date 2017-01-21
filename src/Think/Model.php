@@ -174,7 +174,7 @@
                 $this->tablePrefix = C('DB_PREFIX');
             }
             //连接数据库
-            $this->connect(0);
+            $this->connect();
         }
         
         /**
@@ -183,15 +183,15 @@
         protected function _init()
         {
         }
-    
+        
         /**
          * 切换当前的数据库连接
          * @access public
-         * @param mixed   $linkNum 连接序号
-         * @param mixed   $config  数据库连接信息
+         * @param mixed $linkNum 连接序号
+         * @param array $config  数据库连接信息
          * @return $this
          */
-        public function connect($linkNum = '', $config = '')
+        public function connect($linkNum = 0, array $config = [])
         {
             $this->_db[$linkNum] = Db::getInstance($config);
             // 切换数据库连接
@@ -201,7 +201,7 @@
             if (!empty($this->name) && $this->autoCheckFields) {
                 $this->_checkTableInfo();
             }
-        
+            
             return $this;
         }
         
