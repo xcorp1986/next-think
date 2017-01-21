@@ -375,7 +375,7 @@
         }
         
         // 写入数据前的回调方法 包括新增和更新
-
+        
         /**
          * 检测数据对象的值
          * @access public
@@ -1637,7 +1637,7 @@
         }
         
         // 数据库切换后回调方法
-
+        
         /**
          * 根据验证因子验证字段
          * @access protected
@@ -1931,17 +1931,12 @@
         /**
          * SQL查询
          * @access public
-         * @param string $sql   SQL指令
-         * @param mixed  $parse 是否需要解析SQL
+         * @param string $sql SQL指令
          * @return mixed
          */
-        public function query($sql, $parse = false)
+        public function query($sql)
         {
-            if (!is_bool($parse) && !is_array($parse)) {
-                $parse = func_get_args();
-                array_shift($parse);
-            }
-            $sql = $this->parseSql($sql, $parse);
+            $sql = $this->parseSql($sql);
             
             return $this->db->query($sql);
         }
@@ -1949,27 +1944,17 @@
         /**
          * 解析SQL语句
          * @access public
-         * @param string  $sql   SQL指令
-         * @param boolean $parse 是否需要解析SQL
+         * @param string $sql SQL指令
          * @return string
          */
-        protected function parseSql($sql, $parse)
+        protected function parseSql($sql)
         {
-            // 分析表达式
-            if (true === $parse) {
-                $options = $this->_parseOptions();
-                $sql = $this->db->parseSql($sql, $options);
-            } elseif (is_array($parse)) {
-                // SQL预处理
-                $parse = array_map([$this->db, 'escapeString'], $parse);
-                $sql = vsprintf($sql, $parse);
-            } else {
-                $sql = strtr($sql, ['__TABLE__' => $this->getTableName(), '__PREFIX__' => $this->tablePrefix]);
-                $prefix = $this->tablePrefix;
-                $sql = preg_replace_callback("/__([A-Z0-9_-]+)__/sU", function ($match) use ($prefix) {
-                    return $prefix . strtolower($match[1]);
-                }, $sql);
-            }
+            $sql = strtr($sql, ['__TABLE__' => $this->getTableName(), '__PREFIX__' => $this->tablePrefix]);
+            $prefix = $this->tablePrefix;
+            $sql = preg_replace_callback("/__([A-Z0-9_-]+)__/sU", function ($match) use ($prefix) {
+                return $prefix . strtolower($match[1]);
+            }, $sql);
+            
             $this->db->setModel($this->name);
             
             return $sql;
@@ -1978,17 +1963,12 @@
         /**
          * 执行SQL语句
          * @access public
-         * @param string $sql   SQL指令
-         * @param mixed  $parse 是否需要解析SQL
+         * @param string $sql SQL指令
          * @return false | integer
          */
-        public function execute($sql, $parse = false)
+        public function execute($sql)
         {
-            if (!is_bool($parse) && !is_array($parse)) {
-                $parse = func_get_args();
-                array_shift($parse);
-            }
-            $sql = $this->parseSql($sql, $parse);
+            $sql = $this->parseSql($sql);
             
             return $this->db->execute($sql);
         }
