@@ -621,7 +621,7 @@
          * @param mixed $options 表达式参数
          * @return mixed
          */
-        public function find($options)
+        public function find($options='')
         {
             if (is_numeric($options) || is_string($options)) {
                 $where[$this->getPk()] = $options;
