@@ -10,7 +10,9 @@
     /**
      * Class Driver
      * @package Think\Db
-     * @method getFields($tableName) 取得数据表的字段信息
+     * @method array getFields(string $tableName) 取得数据表的字段信息
+     * @method  array getTables(string $dbName = '') 取得数据库的表信息
+     * @method  mixed insertAll(array $dataSet, $options = [], $replace = false) 批量插入记录
      */
     abstract class Driver
     {
@@ -379,7 +381,7 @@
         /**
          * table分析
          * @access   protected
-         * @param $tables
+         * @param string|array $tables
          * @return string
          */
         protected function parseTable($tables)
@@ -525,48 +527,6 @@
         }
         
         /**
-         * 批量插入记录
-         * @access public
-         * @param mixed $dataSet 数据集
-         * @param array $options 参数表达式
-         * @param bool  $replace 是否replace
-         * @return false | int
-         */
-        public function insertAll($dataSet, $options = [], $replace = false)
-        {
-            $values = [];
-            $this->model = $options['model'];
-            if (!is_array($dataSet[0])) {
-                return false;
-            }
-            $this->parseBind(!empty($options['bind']) ? $options['bind'] : []);
-            $fields = array_map([$this, 'parseKey'], array_keys($dataSet[0]));
-            foreach ($dataSet as $data) {
-                $value = [];
-                foreach ($data as $val) {
-                    if (is_array($val) && 'exp' == $val[0]) {
-                        $value[] = $val[1];
-                    } elseif (is_null($val)) {
-                        $value[] = 'NULL';
-                    } elseif (is_scalar($val)) {
-                        if (0 === strpos($val, ':') && in_array($val, array_keys($this->bind))) {
-                            $value[] = $this->parseValue($val);
-                        } else {
-                            $name = count($this->bind);
-                            $value[] = ':' . $name;
-                            $this->bindParam($name, $val);
-                        }
-                    }
-                }
-                $values[] = 'SELECT ' . implode(',', $value);
-            }
-            $sql = 'INSERT INTO ' . $this->parseTable($options['table']) . ' (' . implode(',', $fields) . ') ' . implode(' UNION ALL ', $values);
-            $sql .= $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
-            
-            return $this->execute($sql, !empty($options['fetch_sql']));
-        }
-        
-        /**
          * 通过Select方式插入记录
          * @access   public
          * @param string $fields  要插入的数据表字段名
@@ -574,7 +534,7 @@
          * @param array  $options 查询数据参数
          * @return false|int
          */
-        public function selectInsert($fields, $table, $options = [])
+        public function selectInsert($fields, $table, array $options = [])
         {
             $this->model = $options['model'];
             $this->parseBind(!empty($options['bind']) ? $options['bind'] : []);
@@ -594,7 +554,7 @@
          * @param array $options 表达式
          * @return string
          */
-        public function buildSelectSql($options = [])
+        public function buildSelectSql(array $options = [])
         {
             if (isset($options['page'])) {
                 // 根据页数计算limit
@@ -615,7 +575,7 @@
          * @param array   $options 表达式
          * @return string
          */
-        public function parseSql($sql = '', $options = [])
+        public function parseSql($sql = '', array $options = [])
         {
             return str_replace(
                 [
@@ -711,10 +671,10 @@
         /**
          * where分析
          * @access protected
-         * @param mixed $where
+         * @param array $where
          * @return string
          */
-        protected function parseWhere($where)
+        protected function parseWhere(array $where = [])
         {
             $whereStr = '';
             if (is_string($where)) {

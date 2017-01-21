@@ -56,7 +56,7 @@
         const VALUE_VALIDATE = 2;
         
         /**
-         * @var \Think\Db|\Think\Db\Driver $db 当前数据库操作对象
+         * @var \Think\Db\Driver $db 当前数据库操作对象
          */
         protected $db = null;
         /**
@@ -505,7 +505,7 @@
          * @param array $options 表达式参数
          * @return array
          */
-        protected function _parseOptions($options = [])
+        protected function _parseOptions(array $options = [])
         {
             if (is_array($options)) {
                 $options = array_merge($this->options, $options);
@@ -621,7 +621,7 @@
          * @param mixed $options 表达式参数
          * @return mixed
          */
-        public function find($options = [])
+        public function find($options)
         {
             if (is_numeric($options) || is_string($options)) {
                 $where[$this->getPk()] = $options;
@@ -941,7 +941,7 @@
         {
         }
         
-        public function addAll($dataList, $options = [], $replace = false)
+        public function addAll(array $dataList = [], array $options = [], $replace = false)
         {
             if (empty($dataList)) {
                 $this->error = L('_DATA_TYPE_INVALID_');

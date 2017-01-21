@@ -15,10 +15,10 @@
         /**
          * 取得数据表的字段信息
          * @access public
-         * @param $tableName
+         * @param string $tableName
          * @return array
          */
-        public function getFields($tableName)
+        public function getFields($tableName = '')
         {
             $this->initConnect();
             list($tableName) = explode(' ', $tableName);
@@ -76,7 +76,7 @@
          * @param bool  $replace 是否replace
          * @return false | int
          */
-        public function insertAll($dataSet, $options = [], $replace = false)
+        public function insertAll(array $dataSet, $options = [], $replace = false)
         {
             $values = [];
             $this->model = $options['model'];
