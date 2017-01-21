@@ -671,10 +671,10 @@
         /**
          * where分析
          * @access protected
-         * @param array $where
+         * @param string|array $where
          * @return string
          */
-        protected function parseWhere(array $where = [])
+        protected function parseWhere($where)
         {
             $whereStr = '';
             if (is_string($where)) {
