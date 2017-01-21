@@ -197,10 +197,10 @@
         /**
          * 得到关联的数据表名
          * @access public
-         * @param $relation
+         * @param Model $relation
          * @return string
          */
-        public function getRelationTableName($relation)
+        public function getRelationTableName(Model $relation)
         {
             $relationTable = !empty($this->tablePrefix) ? $this->tablePrefix : '';
             $relationTable .= $this->tableName ? $this->tableName : $this->name;
@@ -356,7 +356,7 @@
                                             foreach ($mappingData as $vo) {
                                                 // 更新数据
                                                 if (isset($vo[$pk])) {
-                                                    $mappingCondition = "$pk ={$vo[$pk]}";
+                                                    $mappingCondition[$pk] = $vo[$pk];
                                                     $result = $model->where($mappingCondition)->save($vo);
                                                     // 新增数据
                                                 } else {
@@ -435,9 +435,6 @@
                                             break;
                                     }
                                     break;
-                            }
-                            if (!empty($val['relation_deep'])) {
-                                $model->opRelation($opType, $mappingData, $val['relation_deep']);
                             }
                         }
                     }
