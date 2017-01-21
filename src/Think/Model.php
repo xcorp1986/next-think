@@ -26,6 +26,7 @@
      * @method $this token(bool $token) 用于令牌验证
      * @method $this index(string $index) 用于数据集的强制索引
      * @method $this force($force)
+     * @property-read string $tableName 数据表名（不包含表前缀）
      */
     class Model
     {
@@ -158,10 +159,9 @@
          * 取得DB类的实例对象 字段检查
          * @access public
          * @param string $name        模型名称
-         * @param string $tablePrefix 表前缀
          * @param mixed  $connection  数据库连接信息
          */
-        public function __construct($name = '', $tablePrefix = '', $connection = '')
+        public function __construct($name = '', $connection = '')
         {
             if (method_exists($this, '_init')) {
                 $this->_init();
@@ -180,7 +180,7 @@
             // 数据库初始化操作
             // 获取数据库操作对象
             // 当前模型有独立的数据库连接信息
-            $this->db(0, empty($this->connection) ? $connection : $this->connection, true);
+            $this->connect(0, empty($this->connection) ? $connection : $this->connection, true);
         }
         
         /**
@@ -218,7 +218,7 @@
          * @param boolean $force   强制重新连接
          * @return $this
          */
-        public function db($linkNum = '', $config = '', $force = false)
+        public function connect($linkNum = '', $config = '', $force = false)
         {
             if ('' === $linkNum && $this->db) {
                 return $this->db;
@@ -338,7 +338,7 @@
         public function getTableName()
         {
             if (empty($this->trueTableName)) {
-                $tableName = !empty($this->tablePrefix) ? $this->tablePrefix : '';
+                $tableName = $this->tablePrefix ?: '';
                 if (!empty($this->tableName)) {
                     $tableName .= $this->tableName;
                 } else {
@@ -347,7 +347,7 @@
                 $this->trueTableName = strtolower($tableName);
             }
             
-            return (!empty($this->dbName) ? $this->dbName . '.' : '') . $this->trueTableName;
+            return ($this->dbName ? $this->dbName . '.' : '') . $this->trueTableName;
         }
         
         /**

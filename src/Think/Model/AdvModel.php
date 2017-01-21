@@ -19,15 +19,15 @@
         protected $_filter = [];
         protected $partition = [];
         
-        public function __construct($name = '', $tablePrefix = '', $connection = '')
+        public function __construct($name = '', $connection = '')
         {
-            if ('' !== $name || is_subclass_of($this, 'AdvModel')) {
+            if ('' !== $name || is_subclass_of(static::class, $this)) {
                 // 如果是AdvModel子类或者有传入模型名称则获取字段缓存
             } else {
                 // 空的模型 关闭字段缓存
                 $this->autoCheckFields = false;
             }
-            parent::__construct($name, $tablePrefix, $connection);
+            parent::__construct($name, $connection);
         }
         
         /**
