@@ -92,7 +92,7 @@
                         // 映射字段
                         $mappingFields = !empty($val['mapping_fields']) ? $val['mapping_fields'] : '*';
                         // 关联条件
-                        $mappingCondition = !empty($val['condition']) ? $val['condition'] : ['_string' => '1=1'];
+                        $mappingCondition = !empty($val['condition']) ? $val['condition'] : [];
                         // 关联键名
                         $mappingKey = !empty($val['mapping_key']) ? $val['mapping_key'] : $this->getPk();
                         if (strtoupper($mappingClass) == strtoupper($this->name)) {
