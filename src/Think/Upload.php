@@ -1,23 +1,24 @@
 <?php
     
     namespace Think;
-
+    
     /**
      * 文件上传类
      * Class Upload
-     * @property mixed    mimes
-     * @property mixed    exts
-     * @property callable callback
-     * @property mixed    removeTrash
-     * @property mixed    saveExt
-     * @property bool     replace
-     * @property array    driverConfig
-     * @property string   driver
-     * @property int      maxSize
-     * @property string   saveName
-     * @property string   subName
-     * @property bool     autoSub
-     * @property mixed    savePath
+     * @property mixed    mimes        允许上传的文件MiMe类型
+     * @property mixed    exts         允许上传的文件后缀
+     * @property callable callback     检测文件是否存在回调，如果存在返回文件信息数组
+     * @property mixed    removeTrash  删除垃圾数据
+     * @property mixed    saveExt      文件保存后缀，空则使用原后缀
+     * @property bool     replace      存在同名是否覆盖
+     * @property array    driverConfig 上传驱动配置
+     * @property string   driver       文件上传驱动
+     * @property int      maxSize      上传的文件大小限制 (0-不做限制)
+     * @property array    saveName     上传文件命名规则，[0]-函数名，[1]-参数，多个参数使用数组
+     * @property string   subName      子目录创建方式，[0]-函数名，[1]-参数，多个参数使用数组
+     * @property bool     autoSub      自动子目录保存文件
+     * @property mixed    savePath     保存路径
+     * @property mixed    rootPath     保存根路径
      * @package Think
      */
     class Upload
@@ -95,6 +96,22 @@
                     $this->config['exts'] = explode(',', $this->exts);
                 }
                 $this->config['exts'] = array_map('strtolower', $this->exts);
+            }
+        }
+        
+        /**
+         * 设置上传驱动
+         * @param string $driver 驱动名称
+         * @param array  $config 驱动配置
+         */
+        private function setDriver($driver = null, $config = null)
+        {
+            $driver = $driver ?: ($this->driver ?: C('FILE_UPLOAD_TYPE'));
+            $config = $config ?: ($this->driverConfig ?: C('UPLOAD_TYPE_CONFIG'));
+            $class = strpos($driver, '\\') ? $driver : 'Think\\Upload\\Driver\\' . ucfirst(strtolower($driver));
+            $this->uploader = new $class($config);
+            if (!$this->uploader) {
+                E("不存在上传驱动：{$driver}");
             }
         }
         
@@ -300,22 +317,6 @@
         }
         
         /**
-         * 设置上传驱动
-         * @param string $driver 驱动名称
-         * @param array  $config 驱动配置
-         */
-        private function setDriver($driver = null, $config = null)
-        {
-            $driver = $driver ?: ($this->driver ?: C('FILE_UPLOAD_TYPE'));
-            $config = $config ?: ($this->driverConfig ?: C('UPLOAD_TYPE_CONFIG'));
-            $class = strpos($driver, '\\') ? $driver : 'Think\\Upload\\Driver\\' . ucfirst(strtolower($driver));
-            $this->uploader = new $class($config);
-            if (!$this->uploader) {
-                E("不存在上传驱动：{$driver}");
-            }
-        }
-        
-        /**
          * 检查上传的文件
          * @param array $file 文件信息
          * @return bool
@@ -458,28 +459,6 @@
         }
         
         /**
-         * 获取子目录的名称
-         * @param array $filename 上传的文件信息
-         * @return mixed
-         */
-        private function getSubPath($filename)
-        {
-            $subpath = '';
-            $rule = $this->subName;
-            if ($this->autoSub && !empty($rule)) {
-                $subpath = $this->getName($rule, $filename) . '/';
-                
-                if (!empty($subpath) && !$this->uploader->mkdir($this->savePath . $subpath)) {
-                    $this->error = $this->uploader->getError();
-                    
-                    return false;
-                }
-            }
-            
-            return $subpath;
-        }
-        
-        /**
          * 根据指定的规则获取文件或目录名称
          * @param  array  $rule     规则
          * @param  string $filename 原文件名
@@ -506,6 +485,28 @@
             }
             
             return $name;
+        }
+        
+        /**
+         * 获取子目录的名称
+         * @param array $filename 上传的文件信息
+         * @return mixed
+         */
+        private function getSubPath($filename)
+        {
+            $subpath = '';
+            $rule = $this->subName;
+            if ($this->autoSub && !empty($rule)) {
+                $subpath = $this->getName($rule, $filename) . '/';
+                
+                if (!empty($subpath) && !$this->uploader->mkdir($this->savePath . $subpath)) {
+                    $this->error = $this->uploader->getError();
+                    
+                    return false;
+                }
+            }
+            
+            return $subpath;
         }
         
     }
