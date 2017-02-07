@@ -599,7 +599,7 @@
                 if (count($varArray) > 0) {
                     $name = $this->parseVarFunction($name, $varArray);
                 }
-                $parseStr = '<?php echo (' . $name . '); ?>';
+                $parseStr = '<?=' . $name . '; ?>';
             }
             $_varParseList[$varStr] = $parseStr;
             
