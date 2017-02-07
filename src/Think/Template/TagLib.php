@@ -1,13 +1,13 @@
 <?php
-    
-    
     namespace Think\Template;
     
     use Think\Template;
-    use Think\Think;
     
     /**
      * 标签库TagLib解析基类
+     * @property-write array $tags 标签定义
+     * @see \Think\Template\TagLib\Cx
+     * @see \Think\Template\TagLib\Html
      */
     class TagLib
     {
@@ -22,14 +22,14 @@
          * @var array $tagList
          * @access protected
          */
-        protected $tagList = [];
+//        protected $tagList = [];
         
         /**
          * 标签库分析数组
          * @var array $parse
          * @access protected
          */
-        protected $parse = [];
+//        protected $parse = [];
         
         /**
          * 标签库是否有效
@@ -37,7 +37,7 @@
          * @deprecated
          * @access protected
          */
-        protected $valid = false;
+//        protected $valid = false;
         
         /**
          * 当前模板对象
@@ -68,12 +68,11 @@
         /**
          * TagLib标签属性分析 返回标签属性数组
          * @access   public
-         * @param $attr
-         * @param $tag
+         * @param string $attr
+         * @param string $tag
          * @return array
-         * @internal param string $tagStr 标签内容
          */
-        public function parseXmlAttr($attr, $tag)
+        public function parseXmlAttr($attr = '', $tag = '')
         {
             //XML解析安全过滤
             $attr = str_replace('&', '___', $attr);
