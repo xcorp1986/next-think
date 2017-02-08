@@ -93,12 +93,9 @@
             $parseStr .= '++$' . $key . ';?>';
             $parseStr .= $this->tpl->parse($content);
             $parseStr .= '<?php endforeach; endif; else: echo "' . $empty . '" ;endif; ?>';
+            $parseStr .= '<?php unset('.$name.');?>';
             
-            if (!empty($parseStr)) {
-                return $parseStr;
-            }
-            
-            return '';
+            return $parseStr;
         }
         
         /**
