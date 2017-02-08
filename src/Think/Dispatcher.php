@@ -231,9 +231,7 @@
                     }
                 }
                 // 获取操作
-                if (!defined('BIND_ACTION')) {
-                    $_GET[$varAction] = array_shift($paths);
-                }
+                $_GET[$varAction] = array_shift($paths);
                 // 解析剩余的URL参数
                 $var = [];
                 if (C('URL_PARAMS_BIND') && 1 == C('URL_PARAMS_BIND_TYPE')) {
@@ -248,7 +246,7 @@
             }
             // 获取控制器和操作名
             define('CONTROLLER_NAME', defined('BIND_CONTROLLER') ? BIND_CONTROLLER : self::getController($varController, $urlCase));
-            define('ACTION_NAME', defined('BIND_ACTION') ? BIND_ACTION : self::getAction($varAction, $urlCase));
+            define('ACTION_NAME', self::getAction($varAction, $urlCase));
             
             // 当前控制器的UR地址
             $controllerName = CONTROLLER_NAME;
