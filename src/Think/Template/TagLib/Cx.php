@@ -114,6 +114,7 @@
             $parseStr = '<?php if(is_array(' . $name . ')): foreach(' . $name . ' as $' . $key . '=>$' . $item . '): ?>';
             $parseStr .= $this->tpl->parse($content);
             $parseStr .= '<?php endforeach; endif; ?>';
+            $parseStr .= '<?php unset('.$name.');?>';
             
             if (!empty($parseStr)) {
                 return $parseStr;
