@@ -12,9 +12,9 @@
         /**
          * @const SENSITIVITY 大小写敏感
          */
-        const SENSITIVITY = true;
+        const SENSITIVITY = false;
         /**
          * @const INSENSITIVITY 大小写不敏感
          */
-        const INSENSITIVITY = false;
+        const INSENSITIVITY = true;
     }
