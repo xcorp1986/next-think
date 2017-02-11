@@ -164,7 +164,7 @@
                 return '';
             }
             
-            return ' ON DUPLICATE KEY UPDATE ' . join(', ', $updates);
+            return ' ON DUPLICATE KEY UPDATE ' . implode(', ', $updates);
         }
         
         /**
