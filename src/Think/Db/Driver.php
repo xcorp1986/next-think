@@ -962,7 +962,7 @@
                 return '';
             }
             if (is_array($index)) {
-                $index = join(",", $index);
+                $index = implode(",", $index);
             }
             
             return sprintf(" FORCE INDEX ( %s ) ", $index);
