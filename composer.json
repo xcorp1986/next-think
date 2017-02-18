@@ -32,16 +32,6 @@
       "src/Bootstrap.php"
     ]
   },
-  "autoload-dev": {
-    "psr-4": {
-      "Think\\": "src/Think",
-      "Behavior\\": "src/Behavior"
-    },
-    "files": [
-      "src/Common/function.php",
-      "src/Bootstrap.php"
-    ]
-  },
   "support": {
     "issues": "https://github.com/xcorp1986/next-think/issues"
   }

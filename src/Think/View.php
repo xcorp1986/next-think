@@ -129,7 +129,8 @@
                 // 模板阵列变量分解成为独立变量
                 extract($this->tVar, EXTR_OVERWRITE);
                 // 直接载入PHP模板
-                empty($_content) ? include $templateFile : eval('?>' . $_content);
+                /** @noinspection PhpIncludeInspection */
+                empty($_content) ? include $templateFile : eval('?>'.$_content);
             } else {
                 // 视图解析标签
                 $params = ['var' => $this->tVar, 'file' => $templateFile, 'content' => $content, 'prefix' => $prefix];
