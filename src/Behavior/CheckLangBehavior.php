@@ -4,7 +4,7 @@
     namespace Behavior;
     
     use Think\Behavior;
-
+    
     /**
      * 语言检测 并自动加载语言包
      */
@@ -38,19 +38,20 @@
             $langList = C('LANG_LIST', null, 'zh-cn');
             // 启用了语言包功能
             // 根据是否启用自动侦测设置获取语言选择
+            $_identity = md5('think_language');
             if (C('LANG_AUTO_DETECT', null, true)) {
                 if (isset($_GET[$varLang])) {
                     // url中设置了语言变量
                     $langSet = $_GET[$varLang];
-                    cookie('think_language', $langSet, 3600);
-                } elseif (cookie('think_language')) {
+                    cookie($_identity, $langSet, 3600);
+                } elseif (cookie($_identity)) {
                     // 获取上次用户的选择
-                    $langSet = cookie('think_language');
+                    $langSet = cookie($_identity);
                 } elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
                     // 自动侦测浏览器语言
                     preg_match('/^([a-z\d\-]+)/i', $_SERVER['HTTP_ACCEPT_LANGUAGE'], $matches);
                     $langSet = $matches[1];
-                    cookie('think_language', $langSet, 3600);
+                    cookie($_identity, $langSet, 3600);
                 }
                 if (false === stripos($langList, $langSet)) {
                     // 非法语言参数
