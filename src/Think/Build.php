@@ -6,6 +6,7 @@
      * 自动生成类
      * Class Build
      * @package Think
+     * @deprecated
      */
     final class Build
     {
