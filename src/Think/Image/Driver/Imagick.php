@@ -4,7 +4,7 @@
     namespace Think\Image\Driver;
     
     use Think\Image;
-    
+
     class Imagick
     {
         /**
@@ -21,6 +21,7 @@
         
         /**
          * 构造方法，可用于打开一张图像
+         *
          * @param string $imgname 图像路径
          */
         public function __construct($imgname = null)
@@ -30,12 +31,13 @@
         
         /**
          * 打开一张图像
+         *
          * @param  string $imgname 图像路径
          */
         public function open($imgname)
         {
             //检测图像文件
-            if (!is_file($imgname)) {
+            if ( ! is_file($imgname)) {
                 E('不存在的图像文件');
             }
             
@@ -56,6 +58,7 @@
         
         /**
          * 保存图像
+         *
          * @param  string $imgname   图像保存名称
          * @param  string $type      图像类型
          * @param  int    $quality   JPEG图像质量
@@ -87,7 +90,7 @@
             $this->img->stripImage();
             
             //保存图像
-            $imgname = realpath(dirname($imgname)) . '/' . basename($imgname); //强制绝对路径
+            $imgname = realpath(dirname($imgname)).'/'.basename($imgname); //强制绝对路径
             if ('gif' == $type) {
                 $this->img->writeImages($imgname, true);
             } else {
@@ -162,6 +165,7 @@
         
         /**
          * 裁剪图像
+         *
          * @param  int $w      裁剪区域宽度
          * @param  int $h      裁剪区域高度
          * @param  int $x      裁剪区域x坐标
@@ -199,6 +203,7 @@
         
         /**
          * 裁剪图片，内部调用
+         *
          * @param      $w
          * @param      $h
          * @param      $x
@@ -224,12 +229,13 @@
             }
             
             //设置缓存尺寸
-            $this->info['width'] = $width;
+            $this->info['width']  = $width;
             $this->info['height'] = $height;
         }
         
         /**
          * 生成缩略图
+         *
          * @param  int $width  缩略图最大宽度
          * @param  int $height 缩略图最大高度
          * @param  int $type   缩略图裁剪类型
@@ -257,8 +263,8 @@
                     $scale = min($width / $w, $height / $h);
                     
                     //设置缩略图的坐标及宽度和高度
-                    $x = $y = 0;
-                    $width = $w * $scale;
+                    $x      = $y = 0;
+                    $width  = $w * $scale;
                     $height = $h * $scale;
                     break;
                 
@@ -350,7 +356,7 @@
                     }
                     
                     //设置新图像属性
-                    $this->info['width'] = $width;
+                    $this->info['width']  = $width;
                     $this->info['height'] = $height;
                     
                     return;
@@ -370,12 +376,14 @@
         
         /**
          * 填充指定图像，内部使用
+         *
          * @param  \Imagick $newimg
          * @param           $posx
          * @param           $posy
          * @param           $neww
          * @param           $newh
          * @param null      $img
+         *
          * @return mixed
          */
         private function _fill(\Imagick $newimg, $posx, $posy, $neww, $newh, $img = null)
@@ -394,6 +402,7 @@
         
         /**
          * 添加水印
+         *
          * @param  string $source 水印图片路径
          * @param  int    $locate 水印位置
          * @param  int    $alpha  水印透明度
@@ -404,7 +413,7 @@
             if (empty($this->img)) {
                 E('没有可以被添加水印的图像资源');
             }
-            if (!is_file($source)) {
+            if ( ! is_file($source)) {
                 E('水印图像不存在');
             }
             
@@ -505,6 +514,7 @@
         
         /**
          * 图像添加文字
+         *
          * @param  string $text   添加的文字
          * @param  string $font   字体路径
          * @param  int    $size   字号
@@ -513,14 +523,20 @@
          * @param  int    $offset 文字相对当前位置的偏移量
          * @param  int    $angle  文字倾斜角度
          */
-        public function text($text, $font, $size, $color = '#00000000',
-                             $locate = Image::IMAGE_WATER_SOUTHEAST, $offset = 0, $angle = 0)
-        {
+        public function text(
+            $text,
+            $font,
+            $size,
+            $color = '#00000000',
+            $locate = Image::IMAGE_WATER_SOUTHEAST,
+            $offset = 0,
+            $angle = 0
+        ) {
             //资源检测
             if (empty($this->img)) {
                 E('没有可以被写入文字的图像资源');
             }
-            if (!is_file($font)) {
+            if ( ! is_file($font)) {
                 E("不存在的字体文件：{$font}");
             }
             
@@ -530,8 +546,8 @@
                 foreach ($color as &$value) {
                     $value = str_pad($value, 2, '0', STR_PAD_LEFT);
                 }
-                $color = '#' . implode('', $color);
-            } elseif (!is_string($color) || 0 !== strpos($color, '#')) {
+                $color = '#'.implode('', $color);
+            } elseif ( ! is_string($color) || 0 !== strpos($color, '#')) {
                 E('错误的颜色值');
             }
             $col = substr($color, 0, 7);
@@ -623,7 +639,7 @@
                 list($ox, $oy) = $offset;
             } else {
                 $offset = intval($offset);
-                $ox = $oy = $offset;
+                $ox     = $oy = $offset;
             }
             
             /* 写入文字 */

@@ -27,18 +27,21 @@
         /**
          * 连接操作句柄
          * @access   public
+         *
          * @param string $type 文件类型
+         *
          * @return void
          */
         public static function connect($type = 'File')
         {
-            $class = 'Think\\Storage\\Driver\\' . ucwords($type);
+            $class         = 'Think\\Storage\\Driver\\'.ucwords($type);
             self::$handler = new $class;
         }
         
         /**
          * @param $method
          * @param $args
+         *
          * @return mixed
          */
         public static function __callStatic($method, $args)

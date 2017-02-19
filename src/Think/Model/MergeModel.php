@@ -4,7 +4,7 @@
     namespace Think\Model;
     
     use Think\Model;
-    
+
     /**
      * 聚合模型
      */
@@ -25,17 +25,18 @@
         /**
          * 取得DB类的实例对象 字段检查
          * @access public
-         * @param string $name       模型名称
+         *
+         * @param string $name 模型名称
          */
         public function __construct($name = '')
         {
             parent::__construct($name);
             // 聚合模型的字段信息
-            if (empty($this->fields) && !empty($this->modelList)) {
+            if (empty($this->fields) && ! empty($this->modelList)) {
                 $fields = [];
                 foreach ($this->modelList as $model) {
                     // 获取模型的字段信息
-                    $result = $this->db->getFields(D($model)->getTableName());
+                    $result  = $this->db->getFields(D($model)->getTableName());
                     $_fields = array_keys($result);
                     // $this->mapFields  =   array_intersect($fields,$_fields);
                     $fields = array_merge($fields, $_fields);
@@ -44,7 +45,7 @@
             }
             
             // 设置第一个模型为主表模型
-            if (empty($this->masterModel) && !empty($this->modelList)) {
+            if (empty($this->masterModel) && ! empty($this->modelList)) {
                 $this->masterModel = $this->modelList[0];
             }
             // 主表的主键名
@@ -52,7 +53,7 @@
             
             // 设置默认外键名 仅支持单一外键
             if (empty($this->fk)) {
-                $this->fk = strtolower($this->masterModel) . '_id';
+                $this->fk = strtolower($this->masterModel).'_id';
             }
             
         }
@@ -66,9 +67,9 @@
         {
             if (empty($this->trueTableName)) {
                 $tableName = [];
-                $models = $this->modelList;
+                $models    = $this->modelList;
                 foreach ($models as $model) {
-                    $tableName[] = D($model)->getTableName() . ' ' . $model;
+                    $tableName[] = D($model)->getTableName().' '.$model;
                 }
                 $this->trueTableName = implode(',', $tableName);
             }
@@ -88,16 +89,18 @@
         /**
          * 新增聚合数据
          * @access public
+         *
          * @param mixed $data    数据
          * @param array $options 表达式
          * @param bool  $replace 是否replace
+         *
          * @return mixed
          */
         public function add($data = '', $options = [], $replace = false)
         {
             if (empty($data)) {
                 // 没有传递数据，获取当前数据对象的值
-                if (!empty($this->data)) {
+                if ( ! empty($this->data)) {
                     $data = $this->data;
                     // 重置数据
                     $this->data = [];
@@ -114,12 +117,12 @@
             if ($result) {
                 // 写入外键数据
                 $data[$this->fk] = $result;
-                $models = $this->modelList;
+                $models          = $this->modelList;
                 array_shift($models);
                 // 写入附表数据
                 foreach ($models as $model) {
                     $res = D($model)->strict(false)->add($data);
-                    if (!$res) {
+                    if ( ! $res) {
                         $this->rollback();
                         
                         return false;
@@ -139,15 +142,17 @@
         /**
          * 对保存到数据库的数据进行处理
          * @access protected
+         *
          * @param mixed $data 要操作的数据
+         *
          * @return bool
          */
         protected function _facade($data)
         {
             
             // 检查数据字段合法性
-            if (!empty($this->fields)) {
-                if (!empty($this->options['field'])) {
+            if ( ! empty($this->fields)) {
+                if ( ! empty($this->options['field'])) {
                     $fields = $this->options['field'];
                     unset($this->options['field']);
                     if (is_string($fields)) {
@@ -157,7 +162,7 @@
                     $fields = $this->fields;
                 }
                 foreach ($data as $key => $val) {
-                    if (!in_array($key, $fields, true)) {
+                    if ( ! in_array($key, $fields, true)) {
                         unset($data[$key]);
                     } elseif (array_key_exists($key, $this->mapFields)) {
                         // 需要处理映射字段
@@ -168,7 +173,7 @@
             }
             
             // 安全过滤
-            if (!empty($this->options['filter'])) {
+            if ( ! empty($this->options['filter'])) {
                 $data = array_map($this->options['filter'], $data);
                 unset($this->options['filter']);
             }
@@ -180,8 +185,10 @@
         /**
          * 保存聚合模型数据
          * @access public
+         *
          * @param mixed $data    数据
          * @param array $options 表达式
+         *
          * @return bool
          */
         public function save($data = '', $options = [])
@@ -189,7 +196,7 @@
             // 根据主表的主键更新
             if (empty($data)) {
                 // 没有传递数据，获取当前数据对象的值
-                if (!empty($this->data)) {
+                if ( ! empty($this->data)) {
                     $data = $this->data;
                     // 重置数据
                     $this->data = [];
@@ -208,12 +215,12 @@
             // 如果存在主键数据 则自动作为更新条件
             $pk = $this->pk;
             if (isset($data[$pk])) {
-                $where[$pk] = $data[$pk];
+                $where[$pk]       = $data[$pk];
                 $options['where'] = $where;
                 unset($data[$pk]);
             }
             $options['join'] = '';
-            $options = $this->_parseOptions($options);
+            $options         = $this->_parseOptions($options);
             // 更新操作不使用JOIN
             $options['table'] = $this->getTableName();
             
@@ -238,7 +245,9 @@
          * 删除聚合模型数据
          * @access       public
          * @noinspection PhpSignatureMismatchDuringInheritanceInspection
+         *
          * @param mixed $options 表达式
+         *
          * @return mixed
          */
         public function delete($options)
@@ -246,7 +255,7 @@
             $pk = $this->pk;
             if (empty($options) && empty($this->options['where'])) {
                 // 如果删除条件为空 则删除当前数据对象所对应的记录
-                if (!empty($this->data) && isset($this->data[$pk])) {
+                if ( ! empty($this->data) && isset($this->data[$pk])) {
                     return $this->delete($this->data[$pk]);
                 } else {
                     return false;
@@ -260,12 +269,12 @@
                 } else {
                     $where[$pk] = $options;
                 }
-                $options = [];
+                $options          = [];
                 $options['where'] = $where;
             }
             // 分析表达式
             $options['join'] = '';
-            $options = $this->_parseOptions($options);
+            $options         = $this->_parseOptions($options);
             if (empty($options['where'])) {
                 // 如果条件为空 不进行删除操作 除非设置 1=1
                 return false;
@@ -295,19 +304,22 @@
         /**
          * 表达式过滤方法
          * @access protected
+         *
          * @param string $options 表达式
+         *
          * @return void
          */
         protected function _options_filter(&$options)
         {
-            if (!isset($options['join'])) {
+            if ( ! isset($options['join'])) {
                 $models = $this->modelList;
                 array_shift($models);
                 foreach ($models as $model) {
-                    $options['join'][] = $this->joinType . ' JOIN ' . D($model)->getTableName() . ' ' . $model . ' ON ' . $this->masterModel . '.' . $this->pk . ' = ' . $model . '.' . $this->fk;
+                    $options['join'][] = $this->joinType.' JOIN '.D($model)->getTableName(
+                        ).' '.$model.' ON '.$this->masterModel.'.'.$this->pk.' = '.$model.'.'.$this->fk;
                 }
             }
-            $options['table'] = D($this->masterModel)->getTableName() . ' ' . $this->masterModel;
+            $options['table'] = D($this->masterModel)->getTableName().' '.$this->masterModel;
             $options['field'] = $this->checkFields(isset($options['field']) ? $options['field'] : '');
             if (isset($options['group'])) {
                 $options['group'] = $this->checkGroup($options['group']);
@@ -323,7 +335,9 @@
         /**
          * 检查条件中的聚合字段
          * @access   protected
+         *
          * @param array $where
+         *
          * @return array
          * @internal param mixed $data 条件表达式
          */
@@ -347,23 +361,25 @@
         /**
          * 检查Order表达式中的聚合字段
          * @access protected
+         *
          * @param string $order 字段
+         *
          * @return string
          */
         protected function checkOrder($order = '')
         {
-            if (is_string($order) && !empty($order)) {
+            if (is_string($order) && ! empty($order)) {
                 $orders = explode(',', $order);
                 $_order = [];
                 foreach ($orders as $order) {
                     $array = explode(' ', trim($order));
                     $field = $array[0];
-                    $sort = isset($array[1]) ? $array[1] : 'ASC';
+                    $sort  = isset($array[1]) ? $array[1] : 'ASC';
                     if (array_key_exists($field, $this->mapFields)) {
                         // 需要处理映射字段
                         $field = $this->mapFields[$field];
                     }
-                    $_order[] = $field . ' ' . $sort;
+                    $_order[] = $field.' '.$sort;
                 }
                 $order = implode(',', $_order);
             }
@@ -374,12 +390,14 @@
         /**
          * 检查Group表达式中的聚合字段
          * @access protected
+         *
          * @param string $group 字段
+         *
          * @return string
          */
         protected function checkGroup($group = '')
         {
-            if (!empty($group)) {
+            if ( ! empty($group)) {
                 $groups = explode(',', $group);
                 $_group = [];
                 foreach ($groups as $field) {
@@ -399,7 +417,9 @@
         /**
          * 检查fields表达式中的聚合字段
          * @access protected
+         *
          * @param string $fields 字段
+         *
          * @return string
          */
         protected function checkFields($fields = '')
@@ -408,7 +428,7 @@
                 // 获取全部聚合字段
                 $fields = $this->fields;
             }
-            if (!is_array($fields)) {
+            if ( ! is_array($fields)) {
                 $fields = explode(',', $fields);
             }
             
@@ -417,7 +437,7 @@
             foreach ($fields as $field) {
                 if (array_key_exists($field, $this->mapFields)) {
                     // 需要处理映射字段
-                    $array[] = $this->mapFields[$field] . ' AS ' . $field;
+                    $array[] = $this->mapFields[$field].' AS '.$field;
                 } else {
                     $array[] = $field;
                 }

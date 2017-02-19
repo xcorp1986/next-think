@@ -83,29 +83,31 @@
         
         public function __construct()
         {
-            $prefix = C('DB_PREFIX');
-            $this->_config['AUTH_GROUP'] = $prefix . $this->_config['AUTH_GROUP'];
-            $this->_config['AUTH_RULE'] = $prefix . $this->_config['AUTH_RULE'];
-            $this->_config['AUTH_USER'] = $prefix . $this->_config['AUTH_USER'];
-            $this->_config['AUTH_GROUP_ACCESS'] = $prefix . $this->_config['AUTH_GROUP_ACCESS'];
+            $prefix                             = C('DB_PREFIX');
+            $this->_config['AUTH_GROUP']        = $prefix.$this->_config['AUTH_GROUP'];
+            $this->_config['AUTH_RULE']         = $prefix.$this->_config['AUTH_RULE'];
+            $this->_config['AUTH_USER']         = $prefix.$this->_config['AUTH_USER'];
+            $this->_config['AUTH_GROUP_ACCESS'] = $prefix.$this->_config['AUTH_GROUP_ACCESS'];
             if (C('AUTH_CONFIG')) {
                 //可设置配置项 AUTH_CONFIG, 此配置项为数组。
                 $this->_config = array_merge($this->_config, C('AUTH_CONFIG'));
             }
         }
-    
+        
         /**
          * 检查权限
+         *
          * @param string|array $name     需要验证的规则列表,支持逗号分隔的权限规则或索引数组
          * @param       int    $uid      认证用户的id
          * @param int          $type
          * @param string       $mode     执行check的模式
          * @param  string      $relation 如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
+         *
          * @return bool 通过验证返回true;失败返回false
          */
         public function check($name, $uid, $type = 1, $mode = 'url', $relation = 'or')
         {
-            if (!$this->_config['AUTH_ON']) {
+            if ( ! $this->_config['AUTH_ON']) {
                 return true;
             }
             //获取用户需要验证的所有有效规则列表
@@ -129,7 +131,7 @@
                     //解析规则中的param
                     parse_str($query, $param);
                     $intersect = array_intersect_assoc($request, $param);
-                    $auth = preg_replace('/\?.*$/U', '', $auth);
+                    $auth      = preg_replace('/\?.*$/U', '', $auth);
                     //如果节点相符且url参数满足
                     if (in_array($auth, $name) && $intersect == $param) {
                         $list[] = $auth;
@@ -138,7 +140,7 @@
                     $list[] = $auth;
                 }
             }
-            if ($relation == 'or' && !empty($list)) {
+            if ($relation == 'or' && ! empty($list)) {
                 return true;
             }
             $diff = array_diff($name, $list);
@@ -151,7 +153,9 @@
         
         /**
          * 根据用户id获取用户组,返回值为数组
+         *
          * @param   int $uid 用户id
+         *
          * @return array       用户所属的用户组 array(
          *                   array('uid'=>'用户id','group_id'=>'用户组id','title'=>'用户组名称','rules'=>'用户组拥有的规则id,多个,号隔开'),
          *                   ...)
@@ -162,20 +166,22 @@
             if (isset($groups[$uid])) {
                 return $groups[$uid];
             }
-            $user_groups = D()
-                ->table($this->_config['AUTH_GROUP_ACCESS'] . ' a')
+            $user_groups  = D()
+                ->table($this->_config['AUTH_GROUP_ACCESS'].' a')
                 ->where("a.uid='$uid' and g.status='1'")
-                ->join($this->_config['AUTH_GROUP'] . " g on a.group_id=g.id")
+                ->join($this->_config['AUTH_GROUP']." g on a.group_id=g.id")
                 ->field('uid,group_id,title,rules')->select();
             $groups[$uid] = $user_groups ?: [];
             
             return $groups[$uid];
         }
-    
+        
         /**
          * 获得权限列表
+         *
          * @param int $uid 用户id
          * @param int $type
+         *
          * @return array
          */
         protected function getAuthList($uid, $type)
@@ -183,11 +189,11 @@
             //保存用户验证通过的权限列表
             static $_authList = [];
             $t = implode(',', (array)$type);
-            if (isset($_authList[$uid . $t])) {
-                return $_authList[$uid . $t];
+            if (isset($_authList[$uid.$t])) {
+                return $_authList[$uid.$t];
             }
-            if ($this->_config['AUTH_TYPE'] == 2 && isset($_SESSION['_AUTH_LIST_' . $uid . $t])) {
-                return $_SESSION['_AUTH_LIST_' . $uid . $t];
+            if ($this->_config['AUTH_TYPE'] == 2 && isset($_SESSION['_AUTH_LIST_'.$uid.$t])) {
+                return $_SESSION['_AUTH_LIST_'.$uid.$t];
             }
             
             //读取用户所属用户组
@@ -199,7 +205,7 @@
             }
             $ids = array_unique($ids);
             if (empty($ids)) {
-                $_authList[$uid . $t] = [];
+                $_authList[$uid.$t] = [];
                 
                 return [];
             }
@@ -216,12 +222,12 @@
             $authList = [];
             foreach ($rules as $rule) {
                 //根据condition进行验证
-                if (!empty($rule['condition'])) {
+                if ( ! empty($rule['condition'])) {
                     //获取用户信息,一维数组
                     $user = $this->getUserInfo($uid);
                     
                     $command = preg_replace('/\{(\w*?)\}/', '$user[\'\\1\']', $rule['condition']);
-                    @(eval('$condition=(' . $command . ');'));
+                    @(eval('$condition=('.$command.');'));
                     if ($condition) {
                         $authList[] = strtolower($rule['name']);
                     }
@@ -230,24 +236,26 @@
                     $authList[] = strtolower($rule['name']);
                 }
             }
-            $_authList[$uid . $t] = $authList;
+            $_authList[$uid.$t] = $authList;
             if ($this->_config['AUTH_TYPE'] == 2) {
                 //规则列表结果保存到session
-                $_SESSION['_AUTH_LIST_' . $uid . $t] = $authList;
+                $_SESSION['_AUTH_LIST_'.$uid.$t] = $authList;
             }
             
             return array_unique($authList);
         }
-    
+        
         /**
          * 获得用户资料,根据自己的情况读取数据库
+         *
          * @param $uid
+         *
          * @return mixed
          */
         protected function getUserInfo($uid)
         {
             static $userinfo = [];
-            if (!isset($userinfo[$uid])) {
+            if ( ! isset($userinfo[$uid])) {
                 $userinfo[$uid] = D()->where(['uid' => $uid])->table($this->_config['AUTH_USER'])->find();
             }
             

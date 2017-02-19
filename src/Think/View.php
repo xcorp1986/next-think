@@ -26,6 +26,7 @@
         /**
          * 模板变量赋值
          * @access public
+         *
          * @param mixed $name
          * @param mixed $value
          */
@@ -41,7 +42,9 @@
         /**
          * 取得模板变量的值
          * @access public
+         *
          * @param string $name
+         *
          * @return mixed
          */
         public function get($name = '')
@@ -56,11 +59,13 @@
         /**
          * 加载模板和页面输出 可以返回输出内容
          * @access public
+         *
          * @param string $templateFile 模板文件名
          * @param string $charset      模板输出字符集
          * @param string $contentType  输出类型
          * @param string $content      模板输出内容
          * @param string $prefix       模板缓存前缀
+         *
          * @return void
          */
         public function display($templateFile = '', $charset = '', $contentType = '', $content = '', $prefix = '')
@@ -79,9 +84,11 @@
         /**
          * 输出内容文本可以包括Html
          * @access private
+         *
          * @param string $content     输出内容
          * @param string $charset     模板输出字符集
          * @param string $contentType 输出类型
+         *
          * @return void
          */
         private function render($content, $charset = '', $contentType = '')
@@ -93,9 +100,9 @@
                 $contentType = C('TMPL_CONTENT_TYPE');
             }
             // 网页字符编码
-            header('Content-Type:' . $contentType . '; charset=' . $charset);
+            header('Content-Type:'.$contentType.'; charset='.$charset);
             // 页面缓存控制
-            header('Cache-control: ' . C('HTTP_CACHE_CONTROL'));
+            header('Cache-control: '.C('HTTP_CACHE_CONTROL'));
             header('X-Powered-By:CheukPang');
             // 输出模板文件
             echo $content;
@@ -104,9 +111,11 @@
         /**
          * 解析和获取模板内容 用于输出
          * @access public
+         *
          * @param string $templateFile 模板文件名
          * @param string $content      模板输出内容
          * @param string $prefix       模板缓存前缀
+         *
          * @return string
          */
         public function fetch($templateFile = '', $content = '', $prefix = '')
@@ -114,8 +123,8 @@
             if (empty($content)) {
                 $templateFile = $this->parseTemplate($templateFile);
                 // 模板文件不存在直接返回
-                if (!is_file($templateFile)) {
-                    E(L('_TEMPLATE_NOT_EXIST_') . ':' . $templateFile);
+                if ( ! is_file($templateFile)) {
+                    E(L('_TEMPLATE_NOT_EXIST_').':'.$templateFile);
                 }
             } else {
                 defined('THEME_PATH') || define('THEME_PATH', $this->getThemePath());
@@ -148,7 +157,9 @@
         /**
          * 自动定位模板文件
          * @access protected
+         *
          * @param string $template 模板文件规则
+         *
          * @return string
          */
         public function parseTemplate($template = '')
@@ -156,7 +167,7 @@
             if (is_file($template)) {
                 return $template;
             }
-            $depr = C('TMPL_FILE_DEPR');
+            $depr     = C('TMPL_FILE_DEPR');
             $template = str_replace(':', $depr, $template);
             
             // 获取当前模块
@@ -171,14 +182,14 @@
             // 分析模板文件规则
             if ('' == $template) {
                 // 如果模板文件名为空 按照默认规则定位
-                $template = CONTROLLER_NAME . $depr . ACTION_NAME;
+                $template = CONTROLLER_NAME.$depr.ACTION_NAME;
             } elseif (false === strpos($template, $depr)) {
-                $template = CONTROLLER_NAME . $depr . $template;
+                $template = CONTROLLER_NAME.$depr.$template;
             }
-            $file = THEME_PATH . $template . C('TMPL_TEMPLATE_SUFFIX');
-            if (C('TMPL_LOAD_DEFAULTTHEME') && THEME_NAME != C('DEFAULT_THEME') && !is_file($file)) {
+            $file = THEME_PATH.$template.C('TMPL_TEMPLATE_SUFFIX');
+            if (C('TMPL_LOAD_DEFAULTTHEME') && THEME_NAME != C('DEFAULT_THEME') && ! is_file($file)) {
                 // 找不到当前主题模板的时候定位默认主题中的模板
-                $file = dirname(THEME_PATH) . '/' . C('DEFAULT_THEME') . '/' . $template . C('TMPL_TEMPLATE_SUFFIX');
+                $file = dirname(THEME_PATH).'/'.C('DEFAULT_THEME').'/'.$template.C('TMPL_TEMPLATE_SUFFIX');
             }
             
             return $file;
@@ -187,7 +198,9 @@
         /**
          * 获取当前的模板路径
          * @access protected
+         *
          * @param mixed|string $module 模块名
+         *
          * @return string
          */
         protected function getThemePath($module = MODULE_NAME)
@@ -197,18 +210,22 @@
             // 获取当前主题的模版路径
             // 模块设置独立的视图目录
             $tmplPath = C('VIEW_PATH');
-            if (!$tmplPath) {
+            if ( ! $tmplPath) {
                 // 定义TMPL_PATH 则改变全局的视图目录到模块之外
-                $tmplPath = defined('TMPL_PATH') ? TMPL_PATH . $module . '/' : APP_PATH . $module . '/' . C('DEFAULT_V_LAYER') . '/';
+                $tmplPath = defined('TMPL_PATH') ? TMPL_PATH.$module.'/' : APP_PATH.$module.'/'.C(
+                        'DEFAULT_V_LAYER'
+                    ).'/';
             }
             
-            return $tmplPath . $_theme;
+            return $tmplPath.$_theme;
         }
         
         /**
          * 设置当前输出的模板主题
          * @access public
+         *
          * @param  mixed $theme 主题名称
+         *
          * @return $this
          */
         public function theme($theme)
@@ -239,7 +256,7 @@
                     } elseif (cookie('think_template')) {
                         $_theme = cookie('think_template');
                     }
-                    if (!in_array($_theme, explode(',', C('THEME_LIST')))) {
+                    if ( ! in_array($_theme, explode(',', C('THEME_LIST')))) {
                         $_theme = C('DEFAULT_THEME');
                     }
                     cookie('think_template', $_theme, 864000);
@@ -248,7 +265,7 @@
             // 当前模板主题名称
             defined('THEME_NAME') || define('THEME_NAME', $_theme);
             
-            return $_theme ? $_theme . '/' : '';
+            return $_theme ? $_theme.'/' : '';
         }
         
     }

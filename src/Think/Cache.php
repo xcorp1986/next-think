@@ -30,8 +30,10 @@
         /**
          * 连接缓存
          * @access public
+         *
          * @param string $type    缓存类型
          * @param array  $options 配置数组
+         *
          * @return object
          */
         public function connect($type = '', array $options = [])
@@ -39,56 +41,60 @@
             if (empty($type)) {
                 $type = C('DATA_CACHE_TYPE');
             }
-            $class = strpos($type, '\\') ? $type : 'Think\\Cache\\Driver\\' . ucwords(strtolower($type));
+            $class = strpos($type, '\\') ? $type : 'Think\\Cache\\Driver\\'.ucwords(strtolower($type));
             if (class_exists($class)) {
                 $cache = new $class($options);
             } else {
-                E(L('_CACHE_TYPE_INVALID_') . ':' . $type);
+                E(L('_CACHE_TYPE_INVALID_').':'.$type);
             }
-    
+            
             /** @noinspection PhpUndefinedVariableInspection */
             return $cache;
         }
-    
+        
         /**
          * 取得缓存类实例
          * @static
          * @access public
+         *
          * @param string $type
          * @param array  $options
+         *
          * @return mixed
          */
         public static function getInstance($type = '', $options = [])
         {
             static $_instance = [];
-            $guid = $type . to_guid_string($options);
-            if (!isset($_instance[$guid])) {
-                $obj = new Cache();
+            $guid = $type.to_guid_string($options);
+            if ( ! isset($_instance[$guid])) {
+                $obj              = new Cache();
                 $_instance[$guid] = $obj->connect($type, $options);
             }
             
             return $_instance[$guid];
         }
-    
+        
         /**
          * @param $name
+         *
          * @return mixed
          */
         public function __get($name)
         {
             return $this->get($name);
         }
-    
+        
         /**
          * @param $name
          * @param $value
+         *
          * @return mixed
          */
         public function __set($name, $value)
         {
             return $this->set($name, $value);
         }
-    
+        
         /**
          * @param $name
          */
@@ -96,7 +102,7 @@
         {
             $this->rm($name);
         }
-    
+        
         /**
          * @param $name
          * @param $value
@@ -105,9 +111,10 @@
         {
             $this->options[$name] = $value;
         }
-    
+        
         /**
          * @param $name
+         *
          * @return mixed
          */
         public function getOptions($name)
@@ -118,19 +125,21 @@
         /**
          * 队列缓存
          * @access protected
+         *
          * @param string $key 队列名
+         *
          * @return mixed
          */
         protected function queue($key)
         {
             static $_handler = [
-                'file'   => ['F', 'F'],
+                'file' => ['F', 'F'],
             ];
-            $queue = isset($this->options['queue']) ? $this->options['queue'] : 'file';
-            $fun = isset($_handler[$queue]) ? $_handler[$queue] : $_handler['file'];
+            $queue      = isset($this->options['queue']) ? $this->options['queue'] : 'file';
+            $fun        = isset($_handler[$queue]) ? $_handler[$queue] : $_handler['file'];
             $queue_name = isset($this->options['queue_name']) ? $this->options['queue_name'] : 'think_queue';
-            $value = $fun[0]($queue_name);
-            if (!$value) {
+            $value      = $fun[0]($queue_name);
+            if ( ! $value) {
                 $value = [];
             }
             // 进列
@@ -154,6 +163,7 @@
         /**
          * @param $method
          * @param $args
+         *
          * @return mixed
          */
         public function __call($method, $args)
@@ -161,7 +171,7 @@
             if (method_exists($this->handler, $method)) {
                 return call_user_func_array([$this->handler, $method], $args);
             } else {
-                E(__CLASS__ . ':' . $method . L('_METHOD_NOT_EXIST_'));
+                E(__CLASS__.':'.$method.L('_METHOD_NOT_EXIST_'));
                 
                 return false;
             }

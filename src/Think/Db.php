@@ -3,7 +3,7 @@
     namespace Think;
     
     use Think\Exception\DbDriverNotFoundException;
-    
+
     /**
      * 数据库中间层实现类
      * Class Db
@@ -27,28 +27,30 @@
          * 取得数据库类实例
          * @static
          * @access public
+         *
          * @param mixed $config 连接配置
+         *
          * @throws DbDriverNotFoundException
          * @return $this 返回数据库驱动类
          */
         public static function getInstance(array $config = [])
         {
             $md5 = to_guid_string($config);
-            if (!isset(self::$instance[$md5])) {
+            if ( ! isset(self::$instance[$md5])) {
                 // 获取数据库配置参数
                 $options = self::getConfig();
                 // 兼容mysqli
                 if ('mysqli' == $options['type']) {
                     $options['type'] = 'mysql';
                 }
-                $class = 'Think\\Db\\Driver\\' . ucwords(strtolower($options['type']));
+                $class = 'Think\\Db\\Driver\\'.ucwords(strtolower($options['type']));
                 try {
-                    if (!class_exists($class)) {
+                    if ( ! class_exists($class)) {
                         throw new DbDriverNotFoundException();
                     }
                     self::$instance[$md5] = new $class($options);
                 } catch (DbDriverNotFoundException $e) {
-                    E($e->getMessage() . '类名:' . $class);
+                    E($e->getMessage().'类名:'.$class);
                 }
             }
             self::$_instance = self::$instance[$md5];
@@ -84,8 +86,10 @@
         
         /**
          * 静态调用驱动类的方法
+         *
          * @param $method
          * @param $params
+         *
          * @return mixed
          */
         public static function __callStatic($method, $params)

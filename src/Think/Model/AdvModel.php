@@ -4,7 +4,7 @@
     
     use Think\BaseException;
     use Think\Model;
-    
+
     /**
      * 高级模型扩展
      */
@@ -33,8 +33,10 @@
         /**
          * 利用__call方法重载 实现一些特殊的Model方法 （魔术方法）
          * @access public
+         *
          * @param string $method 方法名称
          * @param mixed  $args   调用参数
+         *
          * @return mixed
          */
         public function __call($method, $args)
@@ -53,7 +55,9 @@
         /**
          * 对保存到数据库的数据进行处理
          * @access protected
+         *
          * @param mixed $data 要操作的数据
+         *
          * @return bool
          */
         protected function _facade($data)
@@ -66,6 +70,7 @@
         
         /**
          * 查询成功后的回调方法
+         *
          * @param        $result
          * @param string $options
          */
@@ -83,6 +88,7 @@
         
         /**
          * 查询数据集成功后的回调方法
+         *
          * @param        $resultSet
          * @param string $options
          */
@@ -98,6 +104,7 @@
         
         /**
          * 写入前的回调方法
+         *
          * @param        $data
          * @param string $options
          */
@@ -113,6 +120,7 @@
         
         /**
          * 写入后的回调方法
+         *
          * @param $data
          * @param $options
          */
@@ -124,8 +132,10 @@
         
         /**
          * 更新前的回调方法
+         *
          * @param        $data
          * @param string $options
+         *
          * @return bool
          */
         protected function _before_update(&$data, $options = '')
@@ -134,7 +144,7 @@
             $pk = $this->getPk();
             if (isset($options['where'][$pk])) {
                 $id = $options['where'][$pk];
-                if (!$this->checkLockVersion($id, $data)) {
+                if ( ! $this->checkLockVersion($id, $data)) {
                     return false;
                 }
             }
@@ -148,6 +158,7 @@
         
         /**
          * 更新后的回调方法
+         *
          * @param $data
          * @param $options
          */
@@ -159,6 +170,7 @@
         
         /**
          * 删除后的回调方法
+         *
          * @param $data
          * @param $options
          */
@@ -171,13 +183,15 @@
         /**
          * 记录乐观锁
          * @access protected
+         *
          * @param array $data 数据对象
+         *
          * @return array
          */
         protected function recordLockVersion($data)
         {
             // 记录乐观锁
-            if ($this->optimLock && !isset($data[$this->optimLock])) {
+            if ($this->optimLock && ! isset($data[$this->optimLock])) {
                 if (in_array($this->optimLock, $this->fields, true)) {
                     $data[$this->optimLock] = 0;
                 }
@@ -189,7 +203,9 @@
         /**
          * 缓存乐观锁
          * @access protected
+         *
          * @param array $data 数据对象
+         *
          * @return void
          */
         protected function cacheLockVersion($data)
@@ -197,7 +213,7 @@
             if ($this->optimLock) {
                 if (isset($data[$this->optimLock]) && isset($data[$this->getPk()])) {
                     // 只有当存在乐观锁字段和主键有值的时候才记录乐观锁
-                    $_SESSION[$this->name . '_' . $data[$this->getPk()] . '_lock_version'] = $data[$this->optimLock];
+                    $_SESSION[$this->name.'_'.$data[$this->getPk()].'_lock_version'] = $data[$this->optimLock];
                 }
             }
         }
@@ -205,19 +221,21 @@
         /**
          * 检查乐观锁
          * @access protected
+         *
          * @param int   $id   当前主键
          * @param array $data 当前数据
+         *
          * @return mixed
          */
         protected function checkLockVersion($id, &$data)
         {
             // 检查乐观锁
-            $identify = $this->name . '_' . $id . '_lock_version';
+            $identify = $this->name.'_'.$id.'_lock_version';
             if ($this->optimLock && isset($_SESSION[$identify])) {
-                $lock_version = $_SESSION[$identify];
-                $vo = $this->field($this->optimLock)->find($id);
+                $lock_version        = $_SESSION[$identify];
+                $vo                  = $this->field($this->optimLock)->find($id);
                 $_SESSION[$identify] = $lock_version;
-                $curr_version = $vo[$this->optimLock];
+                $curr_version        = $vo[$this->optimLock];
                 if (isset($curr_version)) {
                     if ($curr_version > 0 && $lock_version != $curr_version) {
                         // 记录已经更新
@@ -241,8 +259,10 @@
         /**
          * 查找前N个记录
          * @access public
+         *
          * @param int   $count   记录个数
          * @param array $options 查询表达式
+         *
          * @return array
          */
         public function topN($count, $options = [])
@@ -256,16 +276,18 @@
          * 查询符合条件的第N条记录
          * 0 表示第一条记录 -1 表示最后一条记录
          * @access public
+         *
          * @param int   $position 记录位置
          * @param array $options  查询表达式
+         *
          * @return mixed
          */
         public function getN($position = 0, $options = [])
         {
             // 正向查找
             if ($position >= 0) {
-                $options['limit'] = $position . ',1';
-                $list = $this->select($options);
+                $options['limit'] = $position.',1';
+                $list             = $this->select($options);
                 
                 return $list ? $list[0] : false;
                 // 逆序查找
@@ -279,7 +301,9 @@
         /**
          * 获取满足条件的第一条记录
          * @access public
+         *
          * @param array $options 查询表达式
+         *
          * @return mixed
          */
         public function first($options = [])
@@ -290,7 +314,9 @@
         /**
          * 获取满足条件的最后一条记录
          * @access public
+         *
          * @param array $options 查询表达式
+         *
          * @return mixed
          */
         public function last($options = [])
@@ -301,8 +327,10 @@
         /**
          * 返回数据
          * @access public
+         *
          * @param array  $data 数据
          * @param string $type 返回类型 默认为数组
+         *
          * @return mixed
          */
         public function returnResult($data, $type = '')
@@ -320,7 +348,7 @@
                     if (class_exists($type)) {
                         return new $type($data);
                     } else {
-                        E(L('_CLASS_NOT_EXIST_') . ':' . $type);
+                        E(L('_CLASS_NOT_EXIST_').':'.$type);
                     }
             }
         }
@@ -328,16 +356,18 @@
         /**
          * 获取数据的时候过滤数据字段
          * @access protected
+         *
          * @param mixed $result 查询的数据
+         *
          * @return array
          */
         protected function getFilterFields(&$result)
         {
-            if (!empty($this->_filter)) {
+            if ( ! empty($this->_filter)) {
                 foreach ($this->_filter as $field => $filter) {
                     if (isset($result[$field])) {
                         $fun = $filter[1];
-                        if (!empty($fun)) {
+                        if ( ! empty($fun)) {
                             if (isset($filter[2]) && $filter[2]) {
                                 // 传递整个数据对象作为参数
                                 $result[$field] = call_user_func($fun, $result);
@@ -355,11 +385,12 @@
         
         /**
          * @param $resultSet
+         *
          * @return mixed
          */
         protected function getFilterListFields(&$resultSet)
         {
-            if (!empty($this->_filter)) {
+            if ( ! empty($this->_filter)) {
                 foreach ($resultSet as $key => $result) {
                     $resultSet[$key] = $this->getFilterFields($result);
                 }
@@ -371,16 +402,18 @@
         /**
          * 写入数据的时候过滤数据字段
          * @access protected
+         *
          * @param mixed $data 查询的数据
+         *
          * @return array
          */
         protected function setFilterFields($data)
         {
-            if (!empty($this->_filter)) {
+            if ( ! empty($this->_filter)) {
                 foreach ($this->_filter as $field => $filter) {
                     if (isset($data[$field])) {
                         $fun = $filter[0];
-                        if (!empty($fun)) {
+                        if ( ! empty($fun)) {
                             if (isset($filter[2]) && $filter[2]) {
                                 // 传递整个数据对象作为参数
                                 $data[$field] = call_user_func($fun, $data);
@@ -399,8 +432,10 @@
         /**
          * 返回数据列表
          * @access protected
+         *
          * @param array  $resultSet 数据
          * @param string $type      返回类型 默认为数组
+         *
          * @return array|mixed
          */
         protected function returnResultSet(&$resultSet, $type = '')
@@ -414,18 +449,19 @@
         
         /**
          * @param $data
+         *
          * @return mixed
          */
         protected function checkBlobFields(&$data)
         {
             // 检查Blob文件保存字段
-            if (!empty($this->blobFields)) {
+            if ( ! empty($this->blobFields)) {
                 foreach ($this->blobFields as $field) {
                     if (isset($data[$field])) {
                         if (isset($data[$this->getPk()])) {
-                            $this->blobValues[$this->name . '/' . $data[$this->getPk()] . '_' . $field] = $data[$field];
+                            $this->blobValues[$this->name.'/'.$data[$this->getPk()].'_'.$field] = $data[$field];
                         } else {
-                            $this->blobValues[$this->name . '/@?id@_' . $field] = $data[$field];
+                            $this->blobValues[$this->name.'/@?id@_'.$field] = $data[$field];
                         }
                         unset($data[$field]);
                     }
@@ -438,15 +474,17 @@
         /**
          * 获取数据集的文本字段
          * @access protected
+         *
          * @param mixed  $resultSet 查询的数据
          * @param string $field     查询的字段
+         *
          * @return array|mixed
          */
         protected function getListBlobFields(&$resultSet, $field = '')
         {
-            if (!empty($this->blobFields)) {
+            if ( ! empty($this->blobFields)) {
                 foreach ($resultSet as $key => $result) {
-                    $result = $this->getBlobFields($result, $field);
+                    $result          = $this->getBlobFields($result, $field);
                     $resultSet[$key] = $result;
                 }
             }
@@ -457,24 +495,26 @@
         /**
          * 获取数据的文本字段
          * @access protected
+         *
          * @param mixed  $data  查询的数据
          * @param string $field 查询的字段
+         *
          * @return array|mixed
          */
         protected function getBlobFields(&$data, $field = '')
         {
-            if (!empty($this->blobFields)) {
+            if ( ! empty($this->blobFields)) {
                 $pk = $this->getPk();
                 $id = $data[$pk];
                 if (empty($field)) {
                     foreach ($this->blobFields as $field) {
-                        $identify = $this->name . '/' . $id . '_' . $field;
+                        $identify     = $this->name.'/'.$id.'_'.$field;
                         $data[$field] = F($identify);
                     }
                     
                     return $data;
                 } else {
-                    $identify = $this->name . '/' . $id . '_' . $field;
+                    $identify = $this->name.'/'.$id.'_'.$field;
                     
                     return F($identify);
                 }
@@ -484,12 +524,14 @@
         /**
          * 保存File方式的字段
          * @access protected
+         *
          * @param mixed $data 保存的数据
+         *
          * @return void
          */
         protected function saveBlobFields(&$data)
         {
-            if (!empty($this->blobFields)) {
+            if ( ! empty($this->blobFields)) {
                 foreach ($this->blobValues as $key => $val) {
                     if (strpos($key, '@?id@')) {
                         $key = str_replace('@?id@', $data[$this->getPk()], $key);
@@ -502,22 +544,24 @@
         /**
          * 删除File方式的字段
          * @access protected
+         *
          * @param mixed  $data  保存的数据
          * @param string $field 查询的字段
+         *
          * @return void
          */
         protected function delBlobFields(&$data, $field = '')
         {
-            if (!empty($this->blobFields)) {
+            if ( ! empty($this->blobFields)) {
                 $pk = $this->getPk();
                 $id = $data[$pk];
                 if (empty($field)) {
                     foreach ($this->blobFields as $field) {
-                        $identify = $this->name . '/' . $id . '_' . $field;
+                        $identify = $this->name.'/'.$id.'_'.$field;
                         F($identify, null);
                     }
                 } else {
-                    $identify = $this->name . '/' . $id . '_' . $field;
+                    $identify = $this->name.'/'.$id.'_'.$field;
                     F($identify, null);
                 }
             }
@@ -526,13 +570,15 @@
         /**
          * 检查序列化数据字段
          * @access protected
+         *
          * @param array $data 数据
+         *
          * @return array
          */
         protected function serializeField(&$data)
         {
             // 检查序列化字段
-            if (!empty($this->serializeField)) {
+            if ( ! empty($this->serializeField)) {
                 // 定义方式  $this->serializeField = array('ser'=>array('name','email'));
                 foreach ($this->serializeField as $key => $val) {
                     if (empty($data[$key])) {
@@ -543,7 +589,7 @@
                                 unset($data[$name]);
                             }
                         }
-                        if (!empty($serialize)) {
+                        if ( ! empty($serialize)) {
                             $data[$key] = serialize($serialize);
                         }
                     }
@@ -555,13 +601,15 @@
         
         /**
          * 检查返回数据的序列化字段
+         *
          * @param $result
+         *
          * @return mixed
          */
         protected function checkSerializeField(&$result)
         {
             // 检查序列化字段
-            if (!empty($this->serializeField)) {
+            if ( ! empty($this->serializeField)) {
                 foreach ($this->serializeField as $key => $val) {
                     if (isset($result[$key])) {
                         $serialize = unserialize($result[$key]);
@@ -578,13 +626,15 @@
         
         /**
          * 检查数据集的序列化字段
+         *
          * @param $resultSet
+         *
          * @return mixed
          */
         protected function checkListSerializeField(&$resultSet)
         {
             // 检查序列化字段
-            if (!empty($this->serializeField)) {
+            if ( ! empty($this->serializeField)) {
                 foreach ($this->serializeField as $key => $val) {
                     foreach ($resultSet as $k => $result) {
                         if (isset($result[$key])) {
@@ -605,12 +655,14 @@
         /**
          * 检查只读字段
          * @access protected
+         *
          * @param array $data 数据
+         *
          * @return array
          */
         protected function checkReadonlyField(&$data)
         {
-            if (!empty($this->readonlyField)) {
+            if ( ! empty($this->readonlyField)) {
                 foreach ($this->readonlyField as $field) {
                     if (isset($data[$field])) {
                         unset($data[$field]);
@@ -626,14 +678,14 @@
          * 批处理的指令都认为是execute操作
          * @access public
          *
-*@param array $sql SQL批处理指令
+         * @param array $sql SQL批处理指令
          *
-*@return bool
+         * @return bool
          * @throws BaseException
          */
         public function patchQuery($sql = [])
         {
-            if (!is_array($sql)) {
+            if ( ! is_array($sql)) {
                 return false;
             }
             // 自动启动事务支持
@@ -660,7 +712,9 @@
         /**
          * 得到分表的的数据表名
          * @access public
+         *
          * @param array $data 操作的数据
+         *
          * @return string
          */
         public function getPartitionTableName($data = [])
@@ -672,11 +726,11 @@
                     case 'id':
                         // 按照id范围分表
                         $step = $this->partition['expr'];
-                        $seq = floor($field / $step) + 1;
+                        $seq  = floor($field / $step) + 1;
                         break;
                     case 'year':
                         // 按照年份分表
-                        if (!is_numeric($field)) {
+                        if ( ! is_numeric($field)) {
                             $field = strtotime($field);
                         }
                         $seq = date('Y', $field) - $this->partition['expr'] + 1;
@@ -700,16 +754,16 @@
                         }
                 }
                 
-                return $this->getTableName() . '_' . $seq;
+                return $this->getTableName().'_'.$seq;
             } else {
                 // 当设置的分表字段不在查询条件或者数据中
                 // 进行联合查询，必须设定 partition['num']
                 $tableName = [];
                 for ($i = 0; $i < $this->partition['num']; $i++) {
-                    $tableName[] = 'SELECT * FROM ' . $this->getTableName() . '_' . ($i + 1);
+                    $tableName[] = 'SELECT * FROM '.$this->getTableName().'_'.($i + 1);
                 }
                 
-                return '( ' . implode(" UNION ", $tableName) . ') AS ' . $this->name;
+                return '( '.implode(" UNION ", $tableName).') AS '.$this->name;
 
 //                return $tableName;
             }

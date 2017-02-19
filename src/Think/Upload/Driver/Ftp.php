@@ -35,6 +35,7 @@
         
         /**
          * 构造函数，用于设置上传根路径
+         *
          * @param array $config FTP配置
          */
         public function __construct($config)
@@ -43,22 +44,24 @@
             $this->config = array_merge($this->config, $config);
             
             /* 登录FTP服务器 */
-            if (!$this->login()) {
+            if ( ! $this->login()) {
                 E($this->error);
             }
         }
         
         /**
          * 检测上传根目录
+         *
          * @param string $rootpath 根目录
+         *
          * @return bool true-检测通过，false-检测失败
          */
         public function checkRootPath($rootpath)
         {
             /* 设置根目录 */
-            $this->rootPath = ftp_pwd($this->link) . '/' . ltrim($rootpath, '/');
+            $this->rootPath = ftp_pwd($this->link).'/'.ltrim($rootpath, '/');
             
-            if (!@ftp_chdir($this->link, $this->rootPath)) {
+            if ( ! @ftp_chdir($this->link, $this->rootPath)) {
                 $this->error = '上传根目录不存在！';
                 
                 return false;
@@ -69,13 +72,15 @@
         
         /**
          * 检测上传目录
+         *
          * @param  string $savepath 上传目录
+         *
          * @return bool          检测结果，true-通过，false-失败
          */
         public function checkSavePath($savepath)
         {
             /* 检测并创建目录 */
-            if (!$this->mkdir($savepath)) {
+            if ( ! $this->mkdir($savepath)) {
                 return false;
             } else {
                 //TODO:检测目录是否可写
@@ -85,13 +90,15 @@
         
         /**
          * 保存指定文件
+         *
          * @param  array $file    保存的文件信息
          * @param  bool  $replace 同名文件是否覆盖
+         *
          * @return bool          保存状态，true-成功，false-失败
          */
         public function save($file, $replace = true)
         {
-            $filename = $this->rootPath . $file['savepath'] . $file['savename'];
+            $filename = $this->rootPath.$file['savepath'].$file['savename'];
             
             /* 不覆盖同名文件 */
             // if (!$replace && is_file($filename)) {
@@ -100,7 +107,7 @@
             // }
             
             /* 移动文件 */
-            if (!ftp_put($this->link, $filename, $file['tmp_name'], FTP_BINARY)) {
+            if ( ! ftp_put($this->link, $filename, $file['tmp_name'], FTP_BINARY)) {
                 $this->error = '文件上传保存错误！';
                 
                 return false;
@@ -111,12 +118,14 @@
         
         /**
          * 创建目录
+         *
          * @param  string $savepath 要创建的目录
+         *
          * @return bool          创建状态，true-成功，false-失败
          */
         public function mkdir($savepath)
         {
-            $dir = $this->rootPath . $savepath;
+            $dir = $this->rootPath.$savepath;
             if (ftp_chdir($this->link, $dir)) {
                 return true;
             }

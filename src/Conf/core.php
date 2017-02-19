@@ -3,5 +3,5 @@
      *核心文件
      */
     return [
-        COMMON_PATH . 'Common/function.php',
+        COMMON_PATH.'Common/function.php',
     ];

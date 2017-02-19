@@ -1,6 +1,6 @@
 <?php
     namespace Think\Url;
-
+    
     /**
      * Class UrlSchema
      * definition of url schema

@@ -17,7 +17,7 @@
         public static function check()
         {
             $depr = C('URL_PATHINFO_DEPR');
-            $regx = preg_replace('/\.' . __EXT__ . '$/i', '', trim($_SERVER['PATH_INFO'], $depr));
+            $regx = preg_replace('/\.'.__EXT__.'$/i', '', trim($_SERVER['PATH_INFO'], $depr));
             // 分隔符替换 确保路由定义使用统一的分隔符
             if ('/' != $depr) {
                 $regx = str_replace($depr, '/', $regx);
@@ -25,14 +25,14 @@
             // URL映射定义（静态路由）
             $maps = C('URL_MAP_RULES');
             if (isset($maps[$regx])) {
-                $var = self::parseUrl($maps[$regx]);
+                $var  = self::parseUrl($maps[$regx]);
                 $_GET = array_merge($var, $_GET);
                 
                 return true;
             }
             // 动态路由处理
             $routes = C('URL_ROUTE_RULES');
-            if (!empty($routes)) {
+            if ( ! empty($routes)) {
                 foreach ($routes as $rule => $route) {
                     if (is_numeric($rule)) {
                         // 支持 array('rule','adddress',...) 定义路由
@@ -50,7 +50,7 @@
                             continue;
                         }
                         // 自定义检测
-                        if (!empty($options['callback']) && is_callable($options['callback'])) {
+                        if ( ! empty($options['callback']) && is_callable($options['callback'])) {
                             if (false === call_user_func($options['callback'])) {
                                 continue;
                             }
@@ -102,14 +102,16 @@
         
         /**
          * 检测URL和规则路由是否匹配
+         *
          * @param $regx
          * @param $rule
+         *
          * @return array|bool
          */
         private static function checkUrlMatch($regx, $rule)
         {
-            $m1 = explode('/', $regx);
-            $m2 = explode('/', $rule);
+            $m1  = explode('/', $regx);
+            $m2  = explode('/', $rule);
             $var = [];
             foreach ($m2 as $key => $val) {
                 if (0 === strpos($val, '[:')) {
@@ -125,7 +127,7 @@
                     if (strpos($val, '\\')) {
                         $type = substr($val, -1);
                         if ('d' == $type) {
-                            if (isset($m1[$key]) && !is_numeric($m1[$key])) {
+                            if (isset($m1[$key]) && ! is_numeric($m1[$key])) {
                                 return false;
                             }
                         }
@@ -152,7 +154,9 @@
         /**
          * 解析规范的路由地址
          * 地址格式 [控制器/操作?]参数1=值1&参数2=值2...
+         *
          * @param $url
+         *
          * @return array
          */
         private static function parseUrl($url)
@@ -172,10 +176,10 @@
             }
             if (isset($path)) {
                 $var[C('VAR_ACTION')] = array_pop($path);
-                if (!empty($path)) {
+                if ( ! empty($path)) {
                     $var[C('VAR_CONTROLLER')] = array_pop($path);
                 }
-                if (!empty($path)) {
+                if ( ! empty($path)) {
                     $var[C('VAR_MODULE')] = array_pop($path);
                 }
             }
@@ -193,9 +197,11 @@
          * 外部地址中可以用动态变量 采用 :1 :2 的方式
          * 'news/:month/:day/:id'=>array('News/read?cate=1','status=1'),
          * 'new/:id'=>array('/new.php?id=:1',301), 重定向
+         *
          * @param $rule
          * @param $route
          * @param $regx
+         *
          * @return bool
          */
         private static function parseRule($rule, $route, $regx)
@@ -206,7 +212,7 @@
             $paths = explode('/', $regx);
             // 解析路由规则
             $matches = [];
-            $rule = explode('/', $rule);
+            $rule    = explode('/', $rule);
             foreach ($rule as $item) {
                 $fun = '';
                 if (0 === strpos($item, '[:')) {
@@ -216,7 +222,7 @@
                     // 动态变量获取
                     if ($pos = strpos($item, '|')) {
                         // 支持函数过滤
-                        $fun = substr($item, $pos + 1);
+                        $fun  = substr($item, $pos + 1);
                         $item = substr($item, 0, $pos);
                     }
                     if ($pos = strpos($item, '^')) {
@@ -226,7 +232,7 @@
                     } else {
                         $var = substr($item, 1);
                     }
-                    $matches[$var] = !empty($fun) ? $fun(array_shift($paths)) : array_shift($paths);
+                    $matches[$var] = ! empty($fun) ? $fun(array_shift($paths)) : array_shift($paths);
                 } else {
                     // 过滤URL中的静态变量
                     array_shift($paths);
@@ -238,9 +244,13 @@
                 if (strpos($url, ':')) {
                     // 传递动态参数
                     $values = array_values($matches);
-                    $url = preg_replace_callback('/:(\d+)/', function ($match) use ($values) {
-                        return $values[$match[1] - 1];
-                    }, $url);
+                    $url    = preg_replace_callback(
+                        '/:(\d+)/',
+                        function ($match) use ($values) {
+                            return $values[$match[1] - 1];
+                        },
+                        $url
+                    );
                 }
                 header("Location: $url", true, (is_array($route) && isset($route[1])) ? $route[1] : 301);
                 exit;
@@ -256,10 +266,14 @@
                 }
                 $var = array_merge($matches, $var);
                 // 解析剩余的URL参数
-                if (!empty($paths)) {
-                    preg_replace_callback('/(\w+)\/([^\/]+)/', function ($match) use (&$var) {
-                        $var[strtolower($match[1])] = strip_tags($match[2]);
-                    }, implode('/', $paths));
+                if ( ! empty($paths)) {
+                    preg_replace_callback(
+                        '/(\w+)\/([^\/]+)/',
+                        function ($match) use (&$var) {
+                            $var[strtolower($match[1])] = strip_tags($match[2]);
+                        },
+                        implode('/', $paths)
+                    );
                 }
                 // 解析路由自动传入参数
                 if (is_array($route) && isset($route[1])) {
@@ -286,18 +300,24 @@
          * 参数值和外部地址中可以用动态变量 采用 :1 :2 的方式
          * '/new\/(\d+)\/(\d+)/'=>array('News/read?id=:1&page=:2&cate=1','status=1'),
          * '/new\/(\d+)/'=>array('/new.php?id=:1&page=:2&status=1','301'), 重定向
+         *
          * @param $matches
          * @param $route
          * @param $regx
+         *
          * @return bool
          */
         private static function parseRegex($matches, $route, $regx)
         {
             // 获取路由地址规则
             $url = is_array($route) ? $route[0] : $route;
-            $url = preg_replace_callback('/:(\d+)/', function ($match) use ($matches) {
-                return $matches[$match[1]];
-            }, $url);
+            $url = preg_replace_callback(
+                '/:(\d+)/',
+                function ($match) use ($matches) {
+                    return $matches[$match[1]];
+                },
+                $url
+            );
             if (0 === strpos($url, '/') || 0 === strpos($url, 'http')) {
                 // 路由重定向跳转
                 header("Location: $url", true, (is_array($route) && isset($route[1])) ? $route[1] : 301);
@@ -315,9 +335,13 @@
                 // 解析剩余的URL参数
                 $regx = substr_replace($regx, '', 0, strlen($matches[0]));
                 if ($regx) {
-                    preg_replace_callback('/(\w+)\/([^\/]+)/', function ($match) use (&$var) {
-                        $var[strtolower($match[1])] = strip_tags($match[2]);
-                    }, $regx);
+                    preg_replace_callback(
+                        '/(\w+)\/([^\/]+)/',
+                        function ($match) use (&$var) {
+                            $var[strtolower($match[1])] = strip_tags($match[2]);
+                        },
+                        $regx
+                    );
                 }
                 // 解析路由自动传入参数
                 if (is_array($route) && isset($route[1])) {
@@ -336,18 +360,20 @@
         
         /**
          * 执行正则匹配下的闭包方法 支持参数调用
+         *
          * @param   \Closure $closure
          * @param array      $var
+         *
          * @return mixed
          */
         private static function invokeRegx(\Closure $closure, $var = [])
         {
             $reflect = new \ReflectionFunction($closure);
-            $params = $reflect->getParameters();
-            $args = [];
+            $params  = $reflect->getParameters();
+            $args    = [];
             array_shift($var);
             foreach ($params as $param) {
-                if (!empty($var)) {
+                if ( ! empty($var)) {
                     $args[] = array_shift($var);
                 } elseif ($param->isDefaultValueAvailable()) {
                     $args[] = $param->getDefaultValue();
@@ -359,15 +385,17 @@
         
         /**
          * 执行规则匹配下的闭包方法 支持参数调用
+         *
          * @param  \Closure $closure
          * @param array     $var
+         *
          * @return mixed
          */
         private static function invokeRule(\Closure $closure, $var = [])
         {
             $reflect = new \ReflectionFunction($closure);
-            $params = $reflect->getParameters();
-            $args = [];
+            $params  = $reflect->getParameters();
+            $args    = [];
             foreach ($params as $param) {
                 $name = $param->getName();
                 if (isset($var[$name])) {

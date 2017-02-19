@@ -2,7 +2,7 @@
     namespace Think\Template;
     
     use Think\Template;
-    
+
     /**
      * 标签库TagLib解析基类
      * @property-write array $tags 标签定义
@@ -68,18 +68,20 @@
         /**
          * TagLib标签属性分析 返回标签属性数组
          * @access   public
+         *
          * @param string $attr
          * @param string $tag
+         *
          * @return array
          */
         public function parseXmlAttr($attr = '', $tag = '')
         {
             //XML解析安全过滤
             $attr = str_replace('&', '___', $attr);
-            $xml = '<tpl><tag ' . $attr . ' /></tpl>';
-            $xml = \simplexml_load_string($xml);
-            if (!$xml) {
-                E(L('_XML_TAG_ERROR_') . ' : ' . $attr);
+            $xml  = '<tpl><tag '.$attr.' /></tpl>';
+            $xml  = \simplexml_load_string($xml);
+            if ( ! $xml) {
+                E(L('_XML_TAG_ERROR_').' : '.$attr);
             }
             /** @noinspection PhpUndefinedFieldInspection */
             $xml = (array)($xml->tag->attributes());
@@ -87,7 +89,7 @@
                 $array = array_change_key_case($xml['@attributes']);
                 if ($array) {
                     $tag = strtolower($tag);
-                    if (!isset($this->tags[$tag])) {
+                    if ( ! isset($this->tags[$tag])) {
                         // 检测是否存在别名定义
                         foreach ($this->tags as $val) {
                             if (isset($val['alias']) && in_array($tag, explode(',', $val['alias']))) {
@@ -108,7 +110,7 @@
                         if (isset($array[$name])) {
                             $array[$name] = str_replace('___', '&', $array[$name]);
                         } elseif (false !== array_search($name, $must)) {
-                            E(L('_PARAM_ERROR_') . ':' . $name);
+                            E(L('_PARAM_ERROR_').':'.$name);
                         }
                     }
                     
@@ -122,7 +124,9 @@
         /**
          * 解析条件表达式
          * @access public
+         *
          * @param string $condition 表达式标签内容
+         *
          * @return array
          */
         public function parseCondition($condition)
@@ -140,7 +144,11 @@
                     break;
                 // 自动判断数组或对象 只支持二维
                 default:
-                    $condition = preg_replace('/\$(\w+)\.(\w+)\s/is', '(is_array($\\1)?$\\1["\\2"]:$\\1->\\2) ', $condition);
+                    $condition = preg_replace(
+                        '/\$(\w+)\.(\w+)\s/is',
+                        '(is_array($\\1)?$\\1["\\2"]:$\\1->\\2) ',
+                        $condition
+                    );
             }
             
             return $condition;
@@ -149,39 +157,41 @@
         /**
          * 自动识别构建变量
          * @access public
+         *
          * @param string $name 变量描述
+         *
          * @return string
          */
         public function autoBuildVar($name)
         {
             if (strpos($name, '.')) {
                 $vars = explode('.', $name);
-                $var = array_shift($vars);
+                $var  = array_shift($vars);
                 switch (strtolower(C('TMPL_VAR_IDENTIFY'))) {
                     // 识别为数组
                     case 'array':
-                        $name = '$' . $var;
+                        $name = '$'.$var;
                         foreach ($vars as $key => $val) {
                             if (0 === strpos($val, '$')) {
-                                $name .= '["{' . $val . '}"]';
+                                $name .= '["{'.$val.'}"]';
                             } else {
-                                $name .= '["' . $val . '"]';
+                                $name .= '["'.$val.'"]';
                             }
                         }
                         break;
                     // 识别为对象
                     case 'obj':
-                        $name = '$' . $var;
+                        $name = '$'.$var;
                         foreach ($vars as $key => $val) {
-                            $name .= '->' . $val;
+                            $name .= '->'.$val;
                         }
                         break;
                     // 自动判断数组或对象 只支持二维
                     default:
-                        $name = 'is_array($' . $var . ')?$' . $var . '["' . $vars[0] . '"]:$' . $var . '->' . $vars[0];
+                        $name = 'is_array($'.$var.')?$'.$var.'["'.$vars[0].'"]:$'.$var.'->'.$vars[0];
                 }
-            } elseif (!defined($name)) {
-                $name = '$' . $name;
+            } elseif ( ! defined($name)) {
+                $name = '$'.$name;
             }
             
             return $name;

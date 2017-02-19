@@ -4,7 +4,7 @@
     namespace Behavior;
     
     use Think\Behavior;
-    
+
     /**
      * 模板内容输出替换
      */
@@ -13,6 +13,7 @@
         
         /**
          * 执行入口
+         *
          * @param mixed $content
          */
         public function run(&$content)
@@ -23,7 +24,9 @@
         /**
          * 模板内容替换
          * @access protected
+         *
          * @param string $content 模板内容
+         *
          * @return string
          */
         protected function templateContentReplace($content)

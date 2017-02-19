@@ -1,6 +1,6 @@
 <?php
     namespace Think\Upload\Driver\Qiniu;
-
+    
     /**
      * Class QiniuStorage
      * @package Think\Upload\Driver\Qiniu
@@ -15,10 +15,10 @@
         
         public function __construct($config)
         {
-            $this->ak = $config['accessKey'];
-            $this->sk = $config['secrectKey'];
-            $this->domain = $config['domain'];
-            $this->bucket = $config['bucket'];
+            $this->ak      = $config['accessKey'];
+            $this->sk      = $config['secrectKey'];
+            $this->domain  = $config['domain'];
+            $this->bucket  = $config['bucket'];
             $this->timeout = isset($config['timeout']) ? $config['timeout'] : 3600;
         }
         
@@ -26,35 +26,38 @@
          * @param $ak
          * @param $sk
          * @param $data
+         *
          * @return string
          */
         protected static function sign($ak, $sk, $data)
         {
             $sign = hash_hmac('sha1', $data, $sk, true);
             
-            return $ak . ':' . static::Qiniu_Encode($sign);
+            return $ak.':'.static::Qiniu_Encode($sign);
         }
         
         protected static function signWithData($ak, $sk, $data)
         {
             $data = static::Qiniu_Encode($data);
             
-            return static::sign($ak, $sk, $data) . ':' . $data;
+            return static::sign($ak, $sk, $data).':'.$data;
         }
         
         /**
          * @internal
+         *
          * @param        $url
          * @param string $body
+         *
          * @return string
          */
         public function accessToken($url, $body = '')
         {
             $parsed_url = parse_url($url);
-            $path = $parsed_url['path'];
-            $access = $path;
+            $path       = $parsed_url['path'];
+            $access     = $path;
             if (isset($parsed_url['query'])) {
-                $access .= "?" . $parsed_url['query'];
+                $access .= "?".$parsed_url['query'];
             }
             $access .= "\n";
             
@@ -69,6 +72,7 @@
          * @param $ak
          * @param $sk
          * @param $param
+         *
          * @return string
          */
         public function UploadToken($ak, $sk, $param)
@@ -76,22 +80,22 @@
             $param['deadline'] = $param['Expires'] == 0 ? 3600 : $param['Expires'];
             $param['deadline'] += time();
             $data = ['scope' => $this->bucket, 'deadline' => $param['deadline']];
-            if (!empty($param['CallbackUrl'])) {
+            if ( ! empty($param['CallbackUrl'])) {
                 $data['callbackUrl'] = $param['CallbackUrl'];
             }
-            if (!empty($param['CallbackBody'])) {
+            if ( ! empty($param['CallbackBody'])) {
                 $data['callbackBody'] = $param['CallbackBody'];
             }
-            if (!empty($param['ReturnUrl'])) {
+            if ( ! empty($param['ReturnUrl'])) {
                 $data['returnUrl'] = $param['ReturnUrl'];
             }
-            if (!empty($param['ReturnBody'])) {
+            if ( ! empty($param['ReturnBody'])) {
                 $data['returnBody'] = $param['ReturnBody'];
             }
-            if (!empty($param['AsyncOps'])) {
+            if ( ! empty($param['AsyncOps'])) {
                 $data['asyncOps'] = $param['AsyncOps'];
             }
-            if (!empty($param['EndUser'])) {
+            if ( ! empty($param['EndUser'])) {
                 $data['endUser'] = $param['EndUser'];
             }
             $data = json_encode($data);
@@ -101,18 +105,20 @@
         
         /**
          * 上传文件
+         *
          * @param $config
          * @param $file
+         *
          * @return bool
          */
         public function upload($config, $file)
         {
             $uploadToken = $this->UploadToken($this->ak, $this->sk, $config);
             
-            $url = "{$this->QINIU_UP_HOST}";
+            $url          = "{$this->QINIU_UP_HOST}";
             $mimeBoundary = md5(microtime());
-            $header = ['Content-Type' => 'multipart/form-data;boundary=' . $mimeBoundary];
-            $data = [];
+            $header       = ['Content-Type' => 'multipart/form-data;boundary='.$mimeBoundary];
+            $data         = [];
             
             $fields = [
                 'token' => $uploadToken,
@@ -124,15 +130,15 @@
             }
             
             foreach ($fields as $name => $val) {
-                array_push($data, '--' . $mimeBoundary);
+                array_push($data, '--'.$mimeBoundary);
                 array_push($data, "Content-Disposition: form-data; name=\"$name\"");
                 array_push($data, '');
                 array_push($data, $val);
             }
             
             //文件
-            array_push($data, '--' . $mimeBoundary);
-            $name = $file['name'];
+            array_push($data, '--'.$mimeBoundary);
+            $name     = $file['name'];
             $fileName = $file['fileName'];
             $fileBody = $file['fileBody'];
             $fileName = static::Qiniu_escapeQuotes($fileName);
@@ -141,7 +147,7 @@
             array_push($data, '');
             array_push($data, $fileBody);
             
-            array_push($data, '--' . $mimeBoundary . '--');
+            array_push($data, '--'.$mimeBoundary.'--');
             array_push($data, '');
             
             $body = implode("\r\n", $data);
@@ -152,12 +158,13 @@
         /**
          * @param $key
          * @param $type
+         *
          * @return string
          */
         public function dealWithType($key, $type)
         {
             $param = $this->buildUrlParam();
-            $url = '';
+            $url   = '';
             
             switch ($type) {
                 case 'img':
@@ -167,15 +174,19 @@
                     } elseif ($param['exif']) {
                         $url .= '?exif';
                     } elseif ($param['imageView']) {
-                        $url .= '?imageView/' . $param['mode'];
-                        if ($param['w'])
+                        $url .= '?imageView/'.$param['mode'];
+                        if ($param['w']) {
                             $url .= "/w/{$param['w']}";
-                        if ($param['h'])
+                        }
+                        if ($param['h']) {
                             $url .= "/h/{$param['h']}";
-                        if ($param['q'])
+                        }
+                        if ($param['q']) {
                             $url .= "/q/{$param['q']}";
-                        if ($param['format'])
+                        }
+                        if ($param['format']) {
                             $url .= "/format/{$param['format']}";
+                        }
                     }
                     break;
                 case 'video': //TODO 视频处理
@@ -183,10 +194,10 @@
                     $url = $this->downLink($key);
                     $url .= '?md2html';
                     if (isset($param['mode'])) {
-                        $url .= '/' . (int)$param['mode'];
+                        $url .= '/'.(int)$param['mode'];
                     }
                     if ($param['cssurl']) {
-                        $url .= '/' . static::Qiniu_Encode($param['cssurl']);
+                        $url .= '/'.static::Qiniu_Encode($param['cssurl']);
                     }
                     break;
                 
@@ -205,14 +216,16 @@
         
         /**
          * 获取某个路径下的文件列表
+         *
          * @param array  $query
          * @param string $path
+         *
          * @return bool
          */
         public function getList($query = [], $path = '')
         {
-            $query = array_merge(['bucket' => $this->bucket], $query);
-            $url = "{$this->QINIU_RSF_HOST}/list?" . http_build_query($query);
+            $query       = array_merge(['bucket' => $this->bucket], $query);
+            $url         = "{$this->QINIU_RSF_HOST}/list?".http_build_query($query);
             $accessToken = $this->accessToken($url);
             
             return $this->request($url, 'POST', ['Authorization' => "QBox $accessToken"]);
@@ -220,23 +233,31 @@
         
         /**
          * 获取某个文件的信息
+         *
          * @param $key
+         *
          * @return bool
          */
         public function info($key)
         {
-            $key = trim($key);
-            $url = "{$this->QINIU_RS_HOST}/stat/" . static::Qiniu_Encode("{$this->bucket}:{$key}");
+            $key         = trim($key);
+            $url         = "{$this->QINIU_RS_HOST}/stat/".static::Qiniu_Encode("{$this->bucket}:{$key}");
             $accessToken = $this->accessToken($url);
             
-            return $this->request($url, 'POST', [
-                'Authorization' => "QBox $accessToken",
-            ]);
+            return $this->request(
+                $url,
+                'POST',
+                [
+                    'Authorization' => "QBox $accessToken",
+                ]
+            );
         }
         
         /**
          * 获取文件下载资源链接
+         *
          * @param $key
+         *
          * @return string
          */
         public function downLink($key)
@@ -249,14 +270,18 @@
         
         /**
          * 重命名单个文件
+         *
          * @param $file
          * @param $new_file
+         *
          * @return bool
          */
         public function rename($file, $new_file)
         {
             $key = trim($file);
-            $url = "{$this->QINIU_RS_HOST}/move/" . static::Qiniu_Encode("{$this->bucket}:{$key}") . '/' . static::Qiniu_Encode("{$this->bucket}:{$new_file}");
+            $url = "{$this->QINIU_RS_HOST}/move/".static::Qiniu_Encode(
+                    "{$this->bucket}:{$key}"
+                ).'/'.static::Qiniu_Encode("{$this->bucket}:{$new_file}");
             trace($url);
             $accessToken = $this->accessToken($url);
             
@@ -265,13 +290,15 @@
         
         /**
          * 删除单个文件
+         *
          * @param $file
+         *
          * @return bool
          */
         public function del($file)
         {
-            $key = trim($file);
-            $url = "{$this->QINIU_RS_HOST}/delete/" . static::Qiniu_Encode("{$this->bucket}:{$key}");
+            $key         = trim($file);
+            $url         = "{$this->QINIU_RS_HOST}/delete/".static::Qiniu_Encode("{$this->bucket}:{$key}");
             $accessToken = $this->accessToken($url);
             
             return $this->request($url, 'POST', ['Authorization' => "QBox $accessToken"]);
@@ -279,18 +306,20 @@
         
         /**
          * 批量删除文件
+         *
          * @param $files
+         *
          * @return bool
          */
         public function delBatch($files)
         {
-            $url = $this->QINIU_RS_HOST . '/batch';
+            $url = $this->QINIU_RS_HOST.'/batch';
             $ops = [];
             foreach ($files as $file) {
-                $ops[] = "/delete/" . static::Qiniu_Encode("{$this->bucket}:{$file}");
+                $ops[] = "/delete/".static::Qiniu_Encode("{$this->bucket}:{$file}");
             }
-            $params = 'op=' . implode('&op=', $ops);
-            $url .= '?' . $params;
+            $params = 'op='.implode('&op=', $ops);
+            $url .= '?'.$params;
             trace($url);
             $accessToken = $this->accessToken($url);
             
@@ -299,12 +328,13 @@
         
         /**
          * @param $str
+         *
          * @return mixed
          */
         protected static function Qiniu_Encode($str)
         {
             // URLSafeBase64Encode
-            $find = ['+', '/'];
+            $find    = ['+', '/'];
             $replace = ['-', '_'];
             
             return str_replace($find, $replace, base64_encode($str));
@@ -312,11 +342,12 @@
         
         /**
          * @param $str
+         *
          * @return mixed
          */
         protected static function Qiniu_escapeQuotes($str)
         {
-            $find = ["\\", "\""];
+            $find    = ["\\", "\""];
             $replace = ["\\\\", "\\\""];
             
             return str_replace($find, $replace, $str);
@@ -324,10 +355,12 @@
         
         /**
          * 请求云服务器
+         *
          * @param  string   $path    请求的PATH
          * @param  string   $method  请求方法
          * @param  array    $headers 请求header
          * @param  resource $body    上传文件资源
+         *
          * @return bool
          */
         private function request($path, $method, $headers = null, $body = null)
@@ -335,16 +368,16 @@
             $ch = curl_init($path);
             
             $_headers = ['Expect:'];
-            if (!is_null($headers) && is_array($headers)) {
+            if ( ! is_null($headers) && is_array($headers)) {
                 foreach ($headers as $k => $v) {
                     array_push($_headers, "{$k}: {$v}");
                 }
             }
             
             $length = 0;
-            $date = gmdate('D, d M Y H:i:s \G\M\T');
+            $date   = gmdate('D, d M Y H:i:s \G\M\T');
             
-            if (!is_null($body)) {
+            if ( ! is_null($body)) {
                 if (is_resource($body)) {
                     fseek($body, 0, SEEK_END);
                     $length = ftell($body);
@@ -383,7 +416,7 @@
             }
             
             $response = curl_exec($ch);
-            $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $status   = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
             list($header, $body) = explode("\r\n\r\n", $response, 2);
             if ($status == 200) {
@@ -401,13 +434,15 @@
         
         /**
          * 获取响应数据
+         *
          * @param  string $text 响应头字符串
+         *
          * @return array        响应数据列表
          */
         private function response($text)
         {
             $headers = explode(PHP_EOL, $text);
-            $items = [];
+            $items   = [];
             foreach ($headers as $header) {
                 $header = trim($header);
                 if (strpos($header, '{') !== false) {
@@ -421,6 +456,7 @@
         
         /**
          * 获取请求错误信息
+         *
          * @param  string $header 请求返回头信息
          * @param         $body
          */
@@ -428,8 +464,8 @@
         {
             list($status, $stash) = explode("\r\n", $header, 2);
             list($v, $code, $message) = explode(" ", $status, 3);
-            $message = is_null($message) ? 'File Not Found' : "[{$status}]:{$message}]";
-            $this->error = $message;
+            $message        = is_null($message) ? 'File Not Found' : "[{$status}]:{$message}]";
+            $this->error    = $message;
             $this->errorStr = json_decode($body, 1);
             $this->errorStr = $this->errorStr['error'];
         }

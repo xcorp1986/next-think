@@ -1,6 +1,7 @@
 <?php
     
     namespace Think;
+    
     use ReflectionClass;
     use ReflectionException;
     use ReflectionMethod;
@@ -24,7 +25,7 @@
             load_ext_file(COMMON_PATH);
             
             // 日志目录转换为绝对路径 默认情况下存储到公共模块下面
-            C('LOG_PATH', realpath(LOG_PATH) . '/Common/');
+            C('LOG_PATH', realpath(LOG_PATH).'/Common/');
             
             // 定义当前请求的系统常量
             define('NOW_TIME', $_SERVER['REQUEST_TIME']);
@@ -46,7 +47,16 @@
             
             // URL调度结束标签
             
-            define('IS_AJAX', ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') || !empty($_POST[C('VAR_AJAX_SUBMIT')]) || !empty($_GET[C('VAR_AJAX_SUBMIT')])));
+            define(
+                'IS_AJAX',
+                ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower(
+                                                                  $_SERVER['HTTP_X_REQUESTED_WITH']
+                                                              ) == 'xmlhttprequest') || ! empty(
+                    $_POST[C(
+                        'VAR_AJAX_SUBMIT'
+                    )]
+                    ) || ! empty($_GET[C('VAR_AJAX_SUBMIT')]))
+            );
             
             // TMPL_EXCEPTION_FILE 改为绝对地址
             C('TMPL_EXCEPTION_FILE', realpath(C('TMPL_EXCEPTION_FILE')));
@@ -62,24 +72,24 @@
         protected static function exec()
         {
             // 安全检测
-            if (!preg_match('/^[A-Za-z](\/|\w)*$/', CONTROLLER_NAME)) {
+            if ( ! preg_match('/^[A-Za-z](\/|\w)*$/', CONTROLLER_NAME)) {
                 $module = false;
             } else {
                 //创建控制器实例
                 $module = controller(CONTROLLER_NAME);
             }
             
-            if (!$module) {
+            if ( ! $module) {
                 // 是否定义Empty控制器
                 $module = A('Empty');
-                if (!$module) {
-                    E(L('_CONTROLLER_NOT_EXIST_') . ':' . CONTROLLER_NAME);
+                if ( ! $module) {
+                    E(L('_CONTROLLER_NOT_EXIST_').':'.CONTROLLER_NAME);
                 }
             }
             
             // 获取当前操作名 支持动态路由
-            if (!isset($action)) {
-                $action = ACTION_NAME . C('ACTION_SUFFIX');
+            if ( ! isset($action)) {
+                $action = ACTION_NAME.C('ACTION_SUFFIX');
             }
             try {
                 self::invokeAction($module, $action);
@@ -95,21 +105,22 @@
         /**
          * @param $module
          * @param $action
+         *
          * @throws \ReflectionException
          */
         protected static function invokeAction($module, $action)
         {
-            if (!preg_match('/^[A-Za-z](\w)*$/', $action)) {
+            if ( ! preg_match('/^[A-Za-z](\w)*$/', $action)) {
                 // 非法操作
                 throw new ReflectionException();
             }
             //执行当前操作
             $method = new ReflectionMethod($module, $action);
-            if ($method->isPublic() && !$method->isStatic()) {
+            if ($method->isPublic() && ! $method->isStatic()) {
                 $class = new ReflectionClass($module);
                 // 前置操作
-                if ($class->hasMethod('_before_' . $action)) {
-                    $before = $class->getMethod('_before_' . $action);
+                if ($class->hasMethod('_before_'.$action)) {
+                    $before = $class->getMethod('_before_'.$action);
                     if ($before->isPublic()) {
                         $before->invoke($module);
                     }
@@ -130,14 +141,14 @@
                     $paramsBindType = C('URL_PARAMS_BIND_TYPE');
                     foreach ($params as $param) {
                         $name = $param->getName();
-                        if (1 == $paramsBindType && !empty($vars)) {
+                        if (1 == $paramsBindType && ! empty($vars)) {
                             $args[] = array_shift($vars);
                         } elseif (0 == $paramsBindType && isset($vars[$name])) {
                             $args[] = $vars[$name];
                         } elseif ($param->isDefaultValueAvailable()) {
                             $args[] = $param->getDefaultValue();
                         } else {
-                            E(L('_PARAM_ERROR_') . ':' . $name);
+                            E(L('_PARAM_ERROR_').':'.$name);
                         }
                     }
                     array_walk_recursive($args, 'think_filter');
@@ -146,8 +157,8 @@
                     $method->invoke($module);
                 }
                 // 后置操作
-                if ($class->hasMethod('_after_' . $action)) {
-                    $after = $class->getMethod('_after_' . $action);
+                if ($class->hasMethod('_after_'.$action)) {
+                    $after = $class->getMethod('_after_'.$action);
                     if ($after->isPublic()) {
                         $after->invoke($module);
                     }
@@ -171,7 +182,7 @@
             // 应用开始标签
             Hook::listen('app_begin');
             // Session初始化
-            if (!IS_CLI) {
+            if ( ! IS_CLI) {
                 session(C('SESSION_OPTIONS'));
             }
             // 记录应用初始化时间

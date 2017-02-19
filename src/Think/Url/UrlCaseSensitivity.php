@@ -2,7 +2,7 @@
     
     
     namespace Think\Url;
-
+    
     /**
      * Class UrlCaseSensitivity
      * @package Think\Url
