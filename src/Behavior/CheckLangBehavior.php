@@ -38,7 +38,7 @@
             $langList = C('LANG_LIST', null, 'zh-cn');
             // 启用了语言包功能
             // 根据是否启用自动侦测设置获取语言选择
-            $_identity = md5('think_language');
+            $_identity = md5('__language__');
             if (C('LANG_AUTO_DETECT', null, true)) {
                 if (isset($_GET[$varLang])) {
                     // url中设置了语言变量
