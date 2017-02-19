@@ -17,8 +17,7 @@
     }
   ],
   "require": {
-    "php": ">=5.5.9",
-    "psr/simple-cache": "*"
+    "php": ">=5.5.9"
   },
   "require-dev": {
     "phpunit/phpunit": "5.5.*"
