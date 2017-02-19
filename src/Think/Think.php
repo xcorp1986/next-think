@@ -20,7 +20,7 @@
          * @access public
          * @return void
          */
-        public static function start()
+        public static function init()
         {
             /*
              * 设定错误和异常处理

@@ -70,4 +70,4 @@
     /*
      * 应用程序初始化
      */
-    Think::start();
+    Think::init();

@@ -1,6 +1,6 @@
 <?php
+    use Think\BaseException;
     use Think\Cache;
-    use Think\Exception;
     use Think\Log;
     use Think\Model;
     use Think\Storage;
@@ -8,9 +8,11 @@
     
     /**
      * 获取和设置配置参数 支持批量定义
+     *
      * @param string|array $name    配置变量
      * @param mixed        $value   配置值
      * @param mixed        $default 默认值
+     *
      * @return mixed
      */
     function C($name = null, $value = null, $default = null)
@@ -22,7 +24,7 @@
         }
         // 优先执行设置获取或赋值
         if (is_string($name)) {
-            if (!strpos($name, '.')) {
+            if ( ! strpos($name, '.')) {
                 $name = strtoupper($name);
                 if (is_null($value)) {
                     return isset($_config[$name]) ? $_config[$name] : $default;
@@ -32,7 +34,7 @@
                 return null;
             }
             // 二维数组设置和获取支持
-            $name = explode('.', $name);
+            $name    = explode('.', $name);
             $name[0] = strtoupper($name[0]);
             if (is_null($value)) {
                 return isset($_config[$name[0]][$name[1]]) ? $_config[$name[0]][$name[1]] : $default;
@@ -54,8 +56,10 @@
     
     /**
      * 加载配置文件 支持格式转换 仅支持一级配置
+     *
      * @param string $file  配置文件名
      * @param string $parse 配置解析方法 有些格式需要用户自己解析
+     *
      * @return array
      */
     function load_config($file, $parse = CONF_PARSE)
@@ -74,21 +78,23 @@
                 if (function_exists($parse)) {
                     return $parse($file);
                 } else {
-                    E(L('_NOT_SUPPORT_') . ':' . $ext);
+                    E(L('_NOT_SUPPORT_').':'.$ext);
                 }
         }
     }
     
     /**
      * 抛出异常处理
+     *
      * @param string $msg  异常消息
      * @param int    $code 异常代码 默认为0
-     * @throws \Think\Exception
+     *
+     * @throws \Think\BaseException
      * @return void
      */
     function E($msg, $code = 0)
     {
-        throw new Exception($msg, $code);
+        throw new BaseException($msg, $code);
     }
     
     /**
@@ -103,9 +109,11 @@
      * 如果end标记位没有定义，则会自动以当前作为标记位
      * 其中统计内存使用需要 MEMORY_LIMIT_ON 常量为true才有效
      * </code>
+     *
      * @param string     $start 开始标签
      * @param string     $end   结束标签
      * @param int|string $dec   小数位或者m
+     *
      * @return mixed
      */
     function G($start, $end = '', $dec = 4)
@@ -115,13 +123,13 @@
         if (is_float($end)) {
             // 记录时间
             $_info[$start] = $end;
-        } elseif (!empty($end)) {
+        } elseif ( ! empty($end)) {
             // 统计时间和内存使用
-            if (!isset($_info[$end])) {
+            if ( ! isset($_info[$end])) {
                 $_info[$end] = microtime(true);
             }
             if (MEMORY_LIMIT_ON && $dec == 'm') {
-                if (!isset($_mem[$end])) {
+                if ( ! isset($_mem[$end])) {
                     $_mem[$end] = memory_get_usage();
                 }
                 
@@ -143,8 +151,10 @@
     
     /**
      * 获取和设置语言定义(不区分大小写)
+     *
      * @param string|array $name  语言变量
      * @param mixed        $value 语言值或者变量
+     *
      * @return mixed
      */
     function L($name = null, $value = null)
@@ -164,7 +174,7 @@
                 // 支持变量
                 $replace = array_keys($value);
                 foreach ($replace as &$v) {
-                    $v = '{$' . $v . '}';
+                    $v = '{$'.$v.'}';
                 }
                 
                 return str_replace($replace, $value, isset($_lang[$name]) ? $_lang[$name] : $name);
@@ -184,10 +194,12 @@
     
     /**
      * 添加和获取页面Trace记录
+     *
      * @param string $value  变量
      * @param string $label  标签
      * @param string $level  日志级别
      * @param bool   $record 是否记录日志
+     *
      * @return void
      */
     function trace($value = '[think]', $label = '', $level = 'DEBUG', $record = false)
@@ -198,8 +210,10 @@
     /**
      * 获取模版文件 格式 资源://模块@主题/控制器/操作
      * @todo check
+     *
      * @param string $template 模版资源地址
      * @param string $layer    视图层（目录）名称
+     *
      * @return string
      */
     function T($template = '', $layer = '')
@@ -207,27 +221,27 @@
         
         // 解析模版资源地址
         if (false === strpos($template, '://')) {
-            $template = 'http://' . str_replace(':', '/', $template);
+            $template = 'http://'.str_replace(':', '/', $template);
         }
-        $info = parse_url($template);
-        $file = $info['host'] . (isset($info['path']) ? $info['path'] : '');
-        $module = isset($info['user']) ? $info['user'] . '/' : MODULE_NAME . '/';
+        $info   = parse_url($template);
+        $file   = $info['host'].(isset($info['path']) ? $info['path'] : '');
+        $module = isset($info['user']) ? $info['user'].'/' : MODULE_NAME.'/';
         $extend = $info['scheme'];
-        $layer = $layer ? $layer : C('DEFAULT_V_LAYER');
+        $layer  = $layer ? $layer : C('DEFAULT_V_LAYER');
         
         // 获取当前主题的模版路径
         $auto = C('AUTOLOAD_NAMESPACE');
         // 扩展资源
         if ($auto && isset($auto[$extend])) {
-            $baseUrl = $auto[$extend] . $module . $layer . '/';
+            $baseUrl = $auto[$extend].$module.$layer.'/';
         } elseif (C('VIEW_PATH')) {
             // 改变模块视图目录
             $baseUrl = C('VIEW_PATH');
         } elseif (defined('TMPL_PATH')) {
             // 指定全局视图目录
-            $baseUrl = TMPL_PATH . $module;
+            $baseUrl = TMPL_PATH.$module;
         } else {
-            $baseUrl = APP_PATH . $module . $layer . '/';
+            $baseUrl = APP_PATH.$module.$layer.'/';
         }
         
         // 获取主题
@@ -237,14 +251,18 @@
         $depr = C('TMPL_FILE_DEPR');
         if ('' == $file) {
             // 如果模板文件名为空 按照默认规则定位
-            $file = CONTROLLER_NAME . $depr . ACTION_NAME;
+            $file = CONTROLLER_NAME.$depr.ACTION_NAME;
         } elseif (false === strpos($file, '/')) {
-            $file = CONTROLLER_NAME . $depr . $file;
+            $file = CONTROLLER_NAME.$depr.$file;
         } elseif ('/' != $depr) {
-            $file = substr_count($file, '/') > 1 ? substr_replace($file, $depr, strrpos($file, '/'), 1) : str_replace('/', $depr, $file);
+            $file = substr_count($file, '/') > 1 ? substr_replace($file, $depr, strrpos($file, '/'), 1) : str_replace(
+                '/',
+                $depr,
+                $file
+            );
         }
         
-        return $baseUrl . ($theme ? $theme . '/' : '') . $file . C('TMPL_TEMPLATE_SUFFIX');
+        return $baseUrl.($theme ? $theme.'/' : '').$file.C('TMPL_TEMPLATE_SUFFIX');
     }
     
     /**
@@ -255,10 +273,12 @@
      * I('post.name','','htmlspecialchars'); 获取$_POST['name']
      * I('get.'); 获取$_GET
      * </code>
+     *
      * @param string $name    变量的名称 支持指定类型
      * @param mixed  $default 不存在的时候默认值
      * @param mixed  $filter  参数过滤方法
      * @param mixed  $datas   要获取的额外数据源
+     *
      * @return mixed
      */
     function I($name, $default = '', $filter = null, $datas = null)
@@ -308,8 +328,8 @@
                 break;
             case 'path':
                 $input = [];
-                if (!empty($_SERVER['PATH_INFO'])) {
-                    $depr = C('URL_PATHINFO_DEPR');
+                if ( ! empty($_SERVER['PATH_INFO'])) {
+                    $depr  = C('URL_PATHINFO_DEPR');
                     $input = explode($depr, trim($_SERVER['PATH_INFO'], $depr));
                 }
                 break;
@@ -336,7 +356,7 @@
         }
         // 获取全部变量
         if ('' == $name) {
-            $data = $input;
+            $data    = $input;
             $filters = isset($filter) ? $filter : C('DEFAULT_FILTER');
             if ($filters) {
                 if (is_string($filters)) {
@@ -349,7 +369,7 @@
             }
             // 取值操作
         } elseif (isset($input[$name])) {
-            $data = $input[$name];
+            $data    = $input[$name];
             $filters = isset($filter) ? $filter : C('DEFAULT_FILTER');
             if ($filters) {
                 if (is_string($filters)) {
@@ -379,7 +399,7 @@
                     }
                 }
             }
-            if (!empty($type)) {
+            if ( ! empty($type)) {
                 switch (strtolower($type)) {
                     // 数组
                     case 'a':
@@ -415,6 +435,7 @@
     /**
      * @param $filter
      * @param $data
+     *
      * @return array
      */
     function array_map_recursive($filter, $data)
@@ -433,16 +454,24 @@
      * 字符串命名风格转换
      * @todo remove in future
      * type 0 将Java风格转换为C的风格 1 将C风格转换为Java的风格
+     *
      * @param string $name 字符串
      * @param int    $type 转换类型
+     *
      * @return string
      */
     function parse_name($name, $type = 0)
     {
         if ($type) {
-            return ucfirst(preg_replace_callback('/_([a-zA-Z])/', function ($match) {
-                return strtoupper($match[1]);
-            }, $name));
+            return ucfirst(
+                preg_replace_callback(
+                    '/_([a-zA-Z])/',
+                    function ($match) {
+                        return strtoupper($match[1]);
+                    },
+                    $name
+                )
+            );
         } else {
             return strtolower(trim(preg_replace('/[A-Z]/', "_\\0", $name), "_"));
         }
@@ -451,13 +480,15 @@
     /**
      * 优化的require_once
      * @deprecated
+     *
      * @param string $filename 文件地址
+     *
      * @return bool
      */
     function require_cache($filename)
     {
         static $_importFiles = [];
-        if (!isset($_importFiles[$filename])) {
+        if ( ! isset($_importFiles[$filename])) {
             if (file_exists_case($filename)) {
                 /** @noinspection PhpIncludeInspection */
                 require $filename;
@@ -472,7 +503,9 @@
     
     /**
      * 区分大小写的文件存在判断
+     *
      * @param string $filename 文件地址
+     *
      * @return bool
      */
     function file_exists_case($filename)
@@ -490,8 +523,10 @@
     
     /**
      * 实例化模型类 格式 [资源://][模块/]模型
+     *
      * @param string $name  资源地址
      * @param string $layer 模型层名称
+     *
      * @return \Think\Model
      */
     function D($name = '', $layer = '')
@@ -501,21 +536,21 @@
         }
         static $_model = [];
         $layer = $layer ?: C('DEFAULT_M_LAYER');
-        if (isset($_model[$name . $layer])) {
-            return $_model[$name . $layer];
+        if (isset($_model[$name.$layer])) {
+            return $_model[$name.$layer];
         }
         $class = parse_res_name($name, $layer);
         if (class_exists($class)) {
             $model = new $class(basename($name));
         } elseif (false === strpos($name, '/')) {
             // 自动加载公共模块下面的模型
-            $class = '\\Common\\' . $layer . '\\' . $name . $layer;
+            $class = '\\Common\\'.$layer.'\\'.$name.$layer;
             $model = class_exists($class) ? new $class($name) : new Model($name);
         } else {
-            Log::record('D方法实例化没找到模型类' . $class, Log::NOTICE);
+            Log::record('D方法实例化没找到模型类'.$class, Log::NOTICE);
             $model = new Model(basename($name));
         }
-        $_model[$name . $layer] = $model;
+        $_model[$name.$layer] = $model;
         
         return $model;
     }
@@ -523,9 +558,11 @@
     /**
      * 解析资源地址并导入类库文件
      * 例如 module/controller addon://module/behavior
+     *
      * @param string $name  资源地址 格式：[扩展://][模块/]资源名
      * @param string $layer 分层名称
      * @param int    $level 控制器层次
+     *
      * @return string
      */
     function parse_res_name($name, $layer, $level = 1)
@@ -543,33 +580,35 @@
             $module = defined('MODULE_NAME') ? MODULE_NAME : '';
         }
         $array = explode('/', $name);
-        $class = $module . '\\' . $layer;
+        $class = $module.'\\'.$layer;
         foreach ($array as $name) {
-            $class .= '\\' . parse_name($name, 1);
+            $class .= '\\'.parse_name($name, 1);
         }
         // 导入资源类库
         // 扩展资源
         if ($extend) {
-            $class = $extend . '\\' . $class;
+            $class = $extend.'\\'.$class;
         }
         
         
-        return $class . $layer;
+        return $class.$layer;
     }
     
     /**
      * 用于实例化访问控制器
+     *
      * @param string $name 控制器名
+     *
      * @return \Think\Controller|false
      */
     function controller($name)
     {
         $layer = C('DEFAULT_C_LAYER');
         
-        $class = MODULE_NAME . '\\' . $layer;
+        $class = MODULE_NAME.'\\'.$layer;
         $array = explode('/', $name);
         foreach ($array as $name) {
-            $class .= '\\' . parse_name($name, 1);
+            $class .= '\\'.parse_name($name, 1);
         }
         $class .= $layer;
         
@@ -582,9 +621,11 @@
     
     /**
      * 实例化多层控制器 格式：[资源://][模块/]控制器
+     *
      * @param string $name  资源地址
      * @param string $layer 控制层名称
      * @param int    $level 控制器层次
+     *
      * @return \Think\Controller|false
      */
     function A($name, $layer = '', $level = 0)
@@ -592,14 +633,14 @@
         static $_action = [];
         $layer = $layer ?: C('DEFAULT_C_LAYER');
         $level = $level ?: ($layer == C('DEFAULT_C_LAYER') ? C('CONTROLLER_LEVEL') : 1);
-        if (isset($_action[$name . $layer])) {
-            return $_action[$name . $layer];
+        if (isset($_action[$name.$layer])) {
+            return $_action[$name.$layer];
         }
         
         $class = parse_res_name($name, $layer, $level);
         if (class_exists($class)) {
-            $action = new $class();
-            $_action[$name . $layer] = $action;
+            $action                = new $class();
+            $_action[$name.$layer] = $action;
             
             return $action;
         } else {
@@ -610,23 +651,25 @@
     
     /**
      * 远程调用控制器的操作方法 URL 参数格式 [资源://][模块/]控制器/操作
+     *
      * @param string       $url   调用地址
      * @param string|array $vars  调用参数 支持字符串和数组
      * @param string       $layer 要调用的控制层名称
+     *
      * @return mixed
      */
     function R($url, $vars = [], $layer = '')
     {
-        $info = pathinfo($url);
+        $info   = pathinfo($url);
         $action = $info['basename'];
         $module = $info['dirname'];
-        $class = A($module, $layer);
+        $class  = A($module, $layer);
         if ($class) {
             if (is_string($vars)) {
                 parse_str($vars, $vars);
             }
             
-            return call_user_func_array([&$class, $action . C('ACTION_SUFFIX')], $vars);
+            return call_user_func_array([&$class, $action.C('ACTION_SUFFIX')], $vars);
         } else {
             return false;
         }
@@ -634,29 +677,31 @@
     
     /**
      * 浏览器友好的变量输出
+     *
      * @param mixed  $var    变量
      * @param bool   $echo   是否输出 默认为True 如果为false 则返回输出字符串
      * @param string $label  标签 默认为空
      * @param bool   $strict 是否严谨 默认为true
+     *
      * @return mixed
      */
     function dump($var, $echo = true, $label = null, $strict = true)
     {
-        $label = ($label === null) ? '' : rtrim($label) . ' ';
-        if (!$strict) {
+        $label = ($label === null) ? '' : rtrim($label).' ';
+        if ( ! $strict) {
             if (ini_get('html_errors')) {
                 $output = print_r($var, true);
-                $output = '<pre>' . $label . htmlspecialchars($output, ENT_QUOTES) . '</pre>';
+                $output = '<pre>'.$label.htmlspecialchars($output, ENT_QUOTES).'</pre>';
             } else {
-                $output = $label . print_r($var, true);
+                $output = $label.print_r($var, true);
             }
         } else {
             ob_start();
             var_dump($var);
             $output = ob_get_clean();
-            if (!extension_loaded('xdebug')) {
+            if ( ! extension_loaded('xdebug')) {
                 $output = preg_replace('/\]\=\>\n(\s+)/m', '] => ', $output);
-                $output = '<pre>' . $label . htmlspecialchars($output, ENT_QUOTES) . '</pre>';
+                $output = '<pre>'.$label.htmlspecialchars($output, ENT_QUOTES).'</pre>';
             }
         }
         if ($echo) {
@@ -670,17 +715,19 @@
     
     /**
      * URL组装 支持不同URL模式
+     *
      * @param string       $url    URL表达式，格式：'[模块/控制器/操作#锚点@域名]?参数1=值1&参数2=值2...'
      * @param string|array $vars   传入的参数，支持数组和字符串
      * @param string|bool  $suffix 伪静态后缀，默认为true表示获取配置值
      * @param bool         $domain 是否显示域名
+     *
      * @return string
      */
     function U($url = '', $vars = '', $suffix = true, $domain = false)
     {
         // 解析URL
         $info = parse_url($url);
-        $url = !empty($info['path']) ? $info['path'] : ACTION_NAME;
+        $url  = ! empty($info['path']) ? $info['path'] : ACTION_NAME;
         // 解析锚点
         if (isset($info['fragment'])) {
             $anchor = $info['fragment'];
@@ -698,19 +745,19 @@
         }
         // 解析子域名
         if (isset($host)) {
-            $domain = $host . (strpos($host, '.') ? '' : strstr($_SERVER['HTTP_HOST'], '.'));
+            $domain = $host.(strpos($host, '.') ? '' : strstr($_SERVER['HTTP_HOST'], '.'));
         } elseif ($domain === true) {
             $domain = $_SERVER['HTTP_HOST'];
             // 开启子域名部署
             if (C('APP_SUB_DOMAIN_DEPLOY')) {
-                $domain = $domain == 'localhost' ? 'localhost' : 'www' . strstr($_SERVER['HTTP_HOST'], '.');
+                $domain = $domain == 'localhost' ? 'localhost' : 'www'.strstr($_SERVER['HTTP_HOST'], '.');
                 // '子域名'=>array('模块[/控制器]');
                 foreach (C('APP_SUB_DOMAIN_RULES') as $key => $rule) {
                     $rule = is_array($rule) ? $rule[0] : $rule;
                     if (false === strpos($key, '*') && 0 === strpos($url, $rule)) {
                         // 生成对应子域名
-                        $domain = $key . strstr($domain, '.');
-                        $url = substr_replace($url, '', 0, strlen($rule));
+                        $domain = $key.strstr($domain, '.');
+                        $url    = substr_replace($url, '', 0, strlen($rule));
                         break;
                     }
                 }
@@ -721,7 +768,7 @@
         // aaa=1&bbb=2 转换成数组
         if (is_string($vars)) {
             parse_str($vars, $vars);
-        } elseif (!is_array($vars)) {
+        } elseif ( ! is_array($vars)) {
             $vars = [];
         }
         // 解析地址里面参数 合并到vars
@@ -731,13 +778,13 @@
         }
         
         // URL组装
-        $depr = C('URL_PATHINFO_DEPR');
+        $depr    = C('URL_PATHINFO_DEPR');
         $urlCase = C('URL_CASE_INSENSITIVE');
         if ($url) {
             // 定义路由
             if (0 === strpos($url, '/')) {
                 $route = true;
-                $url = substr($url, 1);
+                $url   = substr($url, 1);
                 if ('/' != $depr) {
                     $url = str_replace('/', $depr, $url);
                 }
@@ -747,24 +794,24 @@
                     $url = str_replace('/', $depr, $url);
                 }
                 // 解析模块、控制器和操作
-                $url = trim($url, $depr);
-                $path = explode($depr, $url);
-                $var = [];
-                $varModule = C('VAR_MODULE');
-                $varController = C('VAR_CONTROLLER');
-                $varAction = C('VAR_ACTION');
-                $var[$varAction] = !empty($path) ? array_pop($path) : ACTION_NAME;
-                $var[$varController] = !empty($path) ? array_pop($path) : CONTROLLER_NAME;
+                $url                 = trim($url, $depr);
+                $path                = explode($depr, $url);
+                $var                 = [];
+                $varModule           = C('VAR_MODULE');
+                $varController       = C('VAR_CONTROLLER');
+                $varAction           = C('VAR_ACTION');
+                $var[$varAction]     = ! empty($path) ? array_pop($path) : ACTION_NAME;
+                $var[$varController] = ! empty($path) ? array_pop($path) : CONTROLLER_NAME;
                 if ($urlCase) {
                     $var[$varController] = parse_name($var[$varController]);
                 }
                 $module = '';
                 
-                if (!empty($path)) {
+                if ( ! empty($path)) {
                     $var[$varModule] = implode($depr, $path);
                 } else {
                     if (C('MULTI_MODULE')) {
-                        if (MODULE_NAME != C('DEFAULT_MODULE') || !C('MODULE_ALLOW_LIST')) {
+                        if (MODULE_NAME != C('DEFAULT_MODULE') || ! C('MODULE_ALLOW_LIST')) {
                             $var[$varModule] = MODULE_NAME;
                         }
                     }
@@ -780,32 +827,32 @@
         // 普通模式URL转换
         if (C('URL_MODEL') == 0) {
             /** @noinspection PhpUndefinedVariableInspection */
-            $url = __APP__ . '?' . C('VAR_MODULE') . "={$module}&" . http_build_query(array_reverse($var));
+            $url = __APP__.'?'.C('VAR_MODULE')."={$module}&".http_build_query(array_reverse($var));
             if ($urlCase) {
                 $url = strtolower($url);
             }
-            if (!empty($vars)) {
+            if ( ! empty($vars)) {
                 $vars = http_build_query($vars);
-                $url .= '&' . $vars;
+                $url .= '&'.$vars;
             }
         } else {
             // PATHINFO模式或者兼容URL模式
             if (isset($route)) {
-                $url = __APP__ . '/' . rtrim($url, $depr);
+                $url = __APP__.'/'.rtrim($url, $depr);
             } else {
                 /** @noinspection PhpUndefinedVariableInspection */
                 $module = (defined('BIND_MODULE') && BIND_MODULE == $module) ? '' : $module;
                 /** @noinspection PhpUndefinedVariableInspection */
-                $url = __APP__ . '/' . ($module ? $module . MODULE_PATHINFO_DEPR : '') . implode($depr, array_reverse($var));
+                $url = __APP__.'/'.($module ? $module.MODULE_PATHINFO_DEPR : '').implode($depr, array_reverse($var));
             }
             if ($urlCase) {
                 $url = strtolower($url);
             }
             // 添加参数
-            if (!empty($vars)) {
+            if ( ! empty($vars)) {
                 foreach ($vars as $var => $val) {
                     if ('' !== trim($val)) {
-                        $url .= $depr . $var . $depr . urlencode($val);
+                        $url .= $depr.$var.$depr.urlencode($val);
                     }
                 }
             }
@@ -815,15 +862,15 @@
                     $suffix = substr($suffix, 0, $pos);
                 }
                 if ($suffix && '/' != substr($url, -1)) {
-                    $url .= '.' . ltrim($suffix, '.');
+                    $url .= '.'.ltrim($suffix, '.');
                 }
             }
         }
         if (isset($anchor)) {
-            $url .= '#' . $anchor;
+            $url .= '#'.$anchor;
         }
         if ($domain) {
-            $url = (is_ssl() ? 'https://' : 'http://') . $domain . $url;
+            $url = (is_ssl() ? 'https://' : 'http://').$domain.$url;
         }
         
         return $url;
@@ -832,8 +879,10 @@
     /**
      * 渲染输出Widget
      * @deprecated
+     *
      * @param string $name Widget名称
      * @param array  $data 传入的参数
+     *
      * @return mixed
      */
     function W($name, $data = [])
@@ -858,9 +907,11 @@
     
     /**
      * URL重定向
+     *
      * @param string $url  重定向的URL地址
      * @param int    $time 重定向的等待时间（秒）
      * @param string $msg  重定向前的提示信息
+     *
      * @return void
      */
     function redirect($url, $time = 0, $msg = '')
@@ -870,10 +921,10 @@
         if (empty($msg)) {
             $msg = "系统将在{$time}秒之后自动跳转到{$url}！";
         }
-        if (!headers_sent()) {
+        if ( ! headers_sent()) {
             // redirect
             if (0 === $time) {
-                header('Location: ' . $url);
+                header('Location: '.$url);
             } else {
                 header("refresh:{$time};url={$url}");
                 echo $msg;
@@ -890,9 +941,11 @@
     
     /**
      * 缓存管理
+     *
      * @param mixed $name    缓存名称，如果为数组表示进行缓存设置
      * @param mixed $value   缓存值
      * @param mixed $options 缓存参数
+     *
      * @return mixed
      */
     function S($name, $value = '', $options = null)
@@ -900,7 +953,7 @@
         static $cache = '';
         if (is_array($options)) {
             // 缓存操作的同时初始化
-            $type = isset($options['type']) ? $options['type'] : '';
+            $type  = isset($options['type']) ? $options['type'] : '';
             $cache = Cache::getInstance($type, $options);
         } elseif (is_array($name)) {
             // 缓存初始化
@@ -932,15 +985,17 @@
     /**
      * 快速文件数据读取和保存 针对简单类型数据 字符串、数组
      * @deprecated
+     *
      * @param string $name  缓存名称
      * @param mixed  $value 缓存值
      * @param string $path  缓存路径
+     *
      * @return mixed
      */
     function F($name, $value = '', $path = DATA_PATH)
     {
         static $_cache = [];
-        $filename = $path . $name . '.php';
+        $filename = $path.$name.'.php';
         if ('' !== $value) {
             if (is_null($value)) {
                 // 删除缓存
@@ -965,7 +1020,7 @@
             return $_cache[$name];
         }
         if (Storage::has($filename)) {
-            $value = unserialize(Storage::read($filename));
+            $value         = unserialize(Storage::read($filename));
             $_cache[$name] = $value;
         } else {
             $value = false;
@@ -976,7 +1031,9 @@
     
     /**
      * 根据PHP各种类型变量生成唯一标识号
+     *
      * @param mixed $mix 变量
+     *
      * @return string
      */
     function to_guid_string($mix)
@@ -984,7 +1041,7 @@
         if (is_object($mix)) {
             return spl_object_hash($mix);
         } elseif (is_resource($mix)) {
-            $mix = get_resource_type($mix) . strval($mix);
+            $mix = get_resource_type($mix).strval($mix);
         } else {
             $mix = serialize($mix);
         }
@@ -994,12 +1051,14 @@
     
     /**
      * XML编码
+     *
      * @param mixed  $data     数据
      * @param string $root     根节点名
      * @param string $item     数字索引的子节点名
      * @param string $attr     根节点属性
      * @param string $id       数字索引子节点key转换的属性名
      * @param string $encoding 数据编码
+     *
      * @return string
      */
     function xml_encode($data, $root = 'think', $item = 'item', $attr = '', $id = 'id', $encoding = 'utf-8')
@@ -1013,18 +1072,20 @@
         }
         $attr = trim($attr);
         $attr = empty($attr) ? '' : " {$attr}";
-        $xml = "<?xml version=\"1.0\" encoding=\"{$encoding}\"?>";
+        $xml  = "<?xml version=\"1.0\" encoding=\"{$encoding}\"?>";
         $xml .= "<{$root}{$attr}>";
         $xml .= data_to_xml($data, $item, $id);
         
-        return $xml . "</{$root}>";
+        return $xml."</{$root}>";
     }
     
     /**
      * 数据XML编码
+     *
      * @param mixed  $data 数据
      * @param string $item 数字索引时的节点名称
      * @param string $id   数字索引key转换为的属性名
+     *
      * @return string
      */
     function data_to_xml($data, $item = 'item', $id = 'id')
@@ -1045,8 +1106,10 @@
     
     /**
      * session管理函数
+     *
      * @param string|array $name  session名称 如果为数组则表示进行session设置
      * @param mixed        $value session值
+     *
      * @return mixed
      */
     function session($name = '', $value = '')
@@ -1092,8 +1155,8 @@
             }
             if (C('SESSION_TYPE')) {
                 // 读取session驱动
-                $type = C('SESSION_TYPE');
-                $class = strpos($type, '\\') ? $type : '\\Think\\Session\\Driver\\' . ucwords(strtolower($type));
+                $type   = C('SESSION_TYPE');
+                $class  = strpos($type, '\\') ? $type : '\\Think\\Session\\Driver\\'.ucwords(strtolower($type));
                 $hander = new $class();
                 session_set_save_handler(
                     [&$hander, 'open'],
@@ -1101,7 +1164,8 @@
                     [&$hander, 'read'],
                     [&$hander, 'write'],
                     [&$hander, 'destroy'],
-                    [&$hander, 'gc']);
+                    [&$hander, 'gc']
+                );
             }
             // 启动session
             if (C('SESSION_AUTO_START')) {
@@ -1203,9 +1267,11 @@
     
     /**
      * Cookie 设置、获取、删除
+     *
      * @param string $name   cookie名称
      * @param mixed  $value  cookie值
      * @param mixed  $option cookie参数
+     *
      * @return mixed
      */
     function cookie($name = '', $value = '', $option = null)
@@ -1226,7 +1292,7 @@
             'httponly' => C('COOKIE_HTTPONLY'),
         ];
         // 参数设置(会覆盖黙认设置)
-        if (!is_null($option)) {
+        if ( ! is_null($option)) {
             if (is_numeric($option)) {
                 $option = ['expire' => $option];
             } elseif (is_string($option)) {
@@ -1234,7 +1300,7 @@
             }
             $config = array_merge($config, array_change_key_case($option));
         }
-        if (!empty($config['httponly'])) {
+        if ( ! empty($config['httponly'])) {
             ini_set('session.cookie_httponly', 1);
         }
         // 清除指定前缀的所有cookie
@@ -1244,11 +1310,19 @@
             }
             // 要删除的cookie前缀，不指定则删除config设置的指定前缀
             $prefix = empty($value) ? $config['prefix'] : $value;
-            if (!empty($prefix)) {
+            if ( ! empty($prefix)) {
                 // 如果前缀为空字符串将不作处理直接返回
                 foreach ($_COOKIE as $key => $val) {
                     if (0 === stripos($key, $prefix)) {
-                        setcookie($key, '', time() - 3600, $config['path'], $config['domain'], $config['secure'], $config['httponly']);
+                        setcookie(
+                            $key,
+                            '',
+                            time() - 3600,
+                            $config['path'],
+                            $config['domain'],
+                            $config['secure'],
+                            $config['httponly']
+                        );
                         unset($_COOKIE[$key]);
                     }
                 }
@@ -1259,7 +1333,7 @@
             // 获取全部的cookie
             return $_COOKIE;
         }
-        $name = $config['prefix'] . str_replace('.', '_', $name);
+        $name = $config['prefix'].str_replace('.', '_', $name);
         if ('' === $value) {
             if (isset($_COOKIE[$name])) {
                 $value = $_COOKIE[$name];
@@ -1275,16 +1349,32 @@
             }
         } else {
             if (is_null($value)) {
-                setcookie($name, '', time() - 3600, $config['path'], $config['domain'], $config['secure'], $config['httponly']);
+                setcookie(
+                    $name,
+                    '',
+                    time() - 3600,
+                    $config['path'],
+                    $config['domain'],
+                    $config['secure'],
+                    $config['httponly']
+                );
                 // 删除指定cookie
                 unset($_COOKIE[$name]);
             } else {
                 // 设置cookie
                 if (is_array($value)) {
-                    $value = 'think:' . json_encode(array_map('urlencode', $value));
+                    $value = 'think:'.json_encode(array_map('urlencode', $value));
                 }
-                $expire = !empty($config['expire']) ? time() + intval($config['expire']) : 0;
-                setcookie($name, $value, $expire, $config['path'], $config['domain'], $config['secure'], $config['httponly']);
+                $expire = ! empty($config['expire']) ? time() + intval($config['expire']) : 0;
+                setcookie(
+                    $name,
+                    $value,
+                    $expire,
+                    $config['path'],
+                    $config['domain'],
+                    $config['secure'],
+                    $config['httponly']
+                );
                 $_COOKIE[$name] = $value;
             }
         }
@@ -1303,7 +1393,7 @@
         if ($files = C('LOAD_EXT_FILE')) {
             $files = explode(',', $files);
             foreach ($files as $file) {
-                $file = $path . 'Common/' . $file . '.php';
+                $file = $path.'Common/'.$file.'.php';
                 if (is_file($file)) {
                     /** @noinspection PhpIncludeInspection */
                     include $file;
@@ -1316,7 +1406,7 @@
                 $configs = explode(',', $configs);
             }
             foreach ($configs as $key => $config) {
-                $file = is_file($config) ? $config : $path . 'Conf/' . $config . '.php';
+                $file = is_file($config) ? $config : $path.'Conf/'.$config.'.php';
                 if (is_file($file)) {
                     is_numeric($key) ? C(load_config($file)) : C($key, load_config($file));
                 }
@@ -1326,8 +1416,10 @@
     
     /**
      * 获取客户端IP地址
+     *
      * @param int  $type 返回类型 0 返回IP地址 1 返回IPV4地址数字
      * @param bool $adv  是否进行高级模式获取（有可能被伪装）
+     *
      * @return mixed
      */
     function get_client_ip($type = 0, $adv = false)
@@ -1355,14 +1447,16 @@
         }
         // IP地址合法验证
         $long = sprintf('%u', ip2long($ip));
-        $ip = $long ? [$ip, $long] : ['0.0.0.0', 0];
+        $ip   = $long ? [$ip, $long] : ['0.0.0.0', 0];
         
         return $ip[$type];
     }
     
     /**
      * 发送HTTP状态
+     *
      * @param int $code 状态码
+     *
      * @return void
      */
     function send_http_status($code)
@@ -1417,14 +1511,15 @@
             509 => 'Bandwidth Limit Exceeded',
         ];
         if (isset($_status[$code])) {
-            header('HTTP/1.1 ' . $code . ' ' . $_status[$code]);
+            header('HTTP/1.1 '.$code.' '.$_status[$code]);
             // 确保FastCGI模式下正常
-            header('Status:' . $code . ' ' . $_status[$code]);
+            header('Status:'.$code.' '.$_status[$code]);
         }
     }
     
     /**
      * 安全过滤
+     *
      * @param $value
      */
     function think_filter(&$value)
@@ -1432,15 +1527,20 @@
         // TODO 其他安全过滤
         
         // 过滤查询特殊字符
-        if (preg_match('/^(EXP|NEQ|GT|EGT|LT|ELT|OR|XOR|LIKE|NOTLIKE|NOT BETWEEN|NOTBETWEEN|BETWEEN|NOTIN|NOT IN|IN)$/i', $value)) {
+        if (preg_match(
+            '/^(EXP|NEQ|GT|EGT|LT|ELT|OR|XOR|LIKE|NOTLIKE|NOT BETWEEN|NOTBETWEEN|BETWEEN|NOTIN|NOT IN|IN)$/i',
+            $value
+        )) {
             $value .= ' ';
         }
     }
     
     /**
      * 不区分大小写的in_array实现
+     *
      * @param $value
      * @param $array
+     *
      * @return bool
      */
     function in_array_case($value, $array)

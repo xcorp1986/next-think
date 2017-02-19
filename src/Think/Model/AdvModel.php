@@ -2,7 +2,7 @@
     
     namespace Think\Model;
     
-    use Think\Exception;
+    use Think\BaseException;
     use Think\Model;
     
     /**
@@ -625,9 +625,11 @@
          * 批处理执行SQL语句
          * 批处理的指令都认为是execute操作
          * @access public
-         * @param array $sql SQL批处理指令
-         * @return bool
-         * @throws Exception
+         *
+*@param array $sql SQL批处理指令
+         *
+*@return bool
+         * @throws BaseException
          */
         public function patchQuery($sql = [])
         {
@@ -648,7 +650,7 @@
                 }
                 // 提交事务
                 $this->commit();
-            } catch (Exception $e) {
+            } catch (BaseException $e) {
                 $this->rollback();
             }
             

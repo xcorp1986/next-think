@@ -1,11 +1,11 @@
 <?php
     
-    namespace Think;
+    namespace Think\Auth;
     
     /**
      * 权限认证类
      * Class Auth
-     * @package Think
+     * @package Think\Auth
      *
      * 功能特性：
      * 1，是对规则进行认证，不是对节点进行认证。用户可以把节点当作规则名称实现对节点进行认证。
