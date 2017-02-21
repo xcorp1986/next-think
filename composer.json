@@ -24,21 +24,15 @@
   },
   "autoload": {
     "files": [
-      "src/Common/function.php",
-      "src/Bootstrap.php"
+      "Common/function.php",
+      "Bootstrap.php"
     ],
     "psr-4": {
-      "Think\\": "src/Think",
-      "Behavior\\": "src/Behavior"
+      "Think\\": "Think",
+      "Behavior\\": "Behavior"
     }
   },
   "support": {
     "issues": "https://github.com/xcorp1986/next-think/issues"
-  },
-  "repositories": {
-    "packagist": {
-      "type": "composer",
-      "url": "https://packagist.phpcomposer.com"
-    }
   }
 }
