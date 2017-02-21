@@ -26,14 +26,14 @@
     "phpunit/phpunit": "5.5.*"
   },
   "autoload": {
-    "psr-4": {
-      "Think\\": "src/Think",
-      "Behavior\\": "src/Behavior"
-    },
     "files": [
       "src/Common/function.php",
       "src/Bootstrap.php"
-    ]
+    ],
+    "psr-4": {
+      "Think\\": "src/Think",
+      "Behavior\\": "src/Behavior"
+    }
   },
   "support": {
     "issues": "https://github.com/xcorp1986/next-think/issues"
