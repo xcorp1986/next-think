@@ -89,7 +89,7 @@
             
             // 获取当前操作名 支持动态路由
             if ( ! isset($action)) {
-                $action = ACTION_NAME.C('ACTION_SUFFIX');
+                $action = ACTION_NAME;
             }
             try {
                 self::invokeAction($module, $action);

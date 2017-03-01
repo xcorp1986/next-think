@@ -12,16 +12,14 @@
     
     return [
         /* 应用设定 */
-        'APP_SUB_DOMAIN_DEPLOY' => false,
         // 是否开启子域名部署
-        'APP_SUB_DOMAIN_RULES'  => [],
+        'APP_SUB_DOMAIN_DEPLOY' => false,
         // 子域名部署规则
-        'APP_DOMAIN_SUFFIX'     => '',
+        'APP_SUB_DOMAIN_RULES'  => [],
         // 域名后缀 如果是com.cn net.cn 之类的后缀必须设置
-        'ACTION_SUFFIX'         => '',
-        // 操作方法后缀
-        'MULTI_MODULE'          => true,
+        'APP_DOMAIN_SUFFIX'     => '',
         // 是否允许多模块 如果为false 则必须设置 DEFAULT_MODULE
+        'MULTI_MODULE'          => true,
         'MODULE_DENY_LIST'      => ['Common', 'Runtime'],
         'CONTROLLER_LEVEL'      => 1,
         
@@ -142,123 +140,124 @@
         // 是否记录异常信息日志
         
         /* SESSION设置 */
-        'SESSION_AUTO_START'    => true,
         // 是否自动开启Session
-        'SESSION_OPTIONS'       => [],
+        'SESSION_AUTO_START'    => true,
         // session 配置数组 支持type name id path expire domain 等参数
-        'SESSION_TYPE'          => '',
+        'SESSION_OPTIONS'       => [],
         // session hander类型 默认无需设置 除非扩展了session hander驱动
-        'SESSION_PREFIX'        => '',
+        'SESSION_TYPE'          => '',
         // session 前缀
-        //'VAR_SESSION_ID'      =>  'session_id',     //sessionID的提交变量
-        
+        'SESSION_PREFIX'        => '',
+        //sessionID的提交变量
+        //'VAR_SESSION_ID'      =>  'session_id',
+
         /* 模板引擎设置 */
-        'TMPL_CONTENT_TYPE'     => 'text/html',
         // 默认模板输出类型
-        'TMPL_ACTION_ERROR'     => __DIR__.'/../Resources/dispatch_jump.tpl',
+        'TMPL_CONTENT_TYPE'     => 'text/html',
         // 默认错误跳转对应的模板文件
-        'TMPL_ACTION_SUCCESS'   => __DIR__.'/../Resources/dispatch_jump.tpl',
+        'TMPL_ACTION_ERROR'     => __DIR__.'/../Resources/dispatch_jump.tpl',
         // 默认成功跳转对应的模板文件
-        'TMPL_EXCEPTION_FILE'   => __DIR__.'/../Resources/think_exception.tpl',
+        'TMPL_ACTION_SUCCESS'   => __DIR__.'/../Resources/dispatch_jump.tpl',
         // 异常页面的模板文件
-        'TMPL_DETECT_THEME'     => false,
+        'TMPL_EXCEPTION_FILE'   => __DIR__.'/../Resources/think_exception.tpl',
         // 自动侦测模板主题
-        'TMPL_TEMPLATE_SUFFIX'  => '.html',
+        'TMPL_DETECT_THEME'     => false,
         // 默认模板文件后缀
-        'TMPL_FILE_DEPR'        => '/',
+        'TMPL_TEMPLATE_SUFFIX'  => '.html',
         //模板文件CONTROLLER_NAME与ACTION_NAME之间的分割符
+        'TMPL_FILE_DEPR'        => '/',
         // 布局设置
-        'TMPL_ENGINE_TYPE'      => 'Think',
         // 默认模板引擎 以下设置仅对使用Think模板引擎有效
-        'TMPL_CACHFILE_SUFFIX'  => '.php',
+        'TMPL_ENGINE_TYPE'      => 'Think',
         // 默认模板缓存后缀
-        'TMPL_DENY_FUNC_LIST'   => 'echo,exit',
+        'TMPL_CACHFILE_SUFFIX'  => '.php',
         // 模板引擎禁用函数
-        'TMPL_DENY_PHP'         => false,
+        'TMPL_DENY_FUNC_LIST'   => 'echo,exit',
         // 默认模板引擎是否禁用PHP原生代码
-        'TMPL_L_DELIM'          => '{',
+        'TMPL_DENY_PHP'         => false,
         // 模板引擎普通标签开始标记
-        'TMPL_R_DELIM'          => '}',
+        'TMPL_L_DELIM'          => '{',
         // 模板引擎普通标签结束标记
+        'TMPL_R_DELIM'          => '}',
         //@todo 统一标识为数组，模板统一一下语法，记住多种语法累不？
-        'TMPL_VAR_IDENTIFY'     => 'array',
         // 模板变量识别。留空自动判断,参数为'obj'则表示对象
-        'TMPL_STRIP_SPACE'      => true,
+        'TMPL_VAR_IDENTIFY'     => 'array',
         // 是否去除模板文件里面的html空格与换行
-        'TMPL_CACHE_ON'         => true,
+        'TMPL_STRIP_SPACE'      => true,
         // 是否开启模板编译缓存,设为false则每次都会重新编译
-        'TMPL_CACHE_PREFIX'     => '',
+        'TMPL_CACHE_ON'         => true,
         // 模板缓存前缀标识，可以动态改变
-        'TMPL_CACHE_TIME'       => 0,
+        'TMPL_CACHE_PREFIX'     => '',
         // 模板缓存有效期 0 为永久，(以数字为值，单位:秒)
-        'TMPL_LAYOUT_ITEM'      => '{__CONTENT__}',
+        'TMPL_CACHE_TIME'       => 0,
         // 布局模板的内容替换标识
-        'LAYOUT_ON'             => false,
+        'TMPL_LAYOUT_ITEM'      => '{__CONTENT__}',
         // 是否启用布局
-        'LAYOUT_NAME'           => 'layout',
+        'LAYOUT_ON'             => false,
         // 当前布局名称 默认为layout
+        'LAYOUT_NAME'           => 'layout',
         //特殊字符串替换
         'TMPL_PARSE_STRING'     => [],
         
         // Think模板引擎标签库相关设定
-        'TAGLIB_BEGIN'          => '<',
         // 标签库标签开始标记
-        'TAGLIB_END'            => '>',
+        'TAGLIB_BEGIN'          => '<',
         // 标签库标签结束标记
+        'TAGLIB_END'            => '>',
         // 内置标签库名称(标签使用不必指定标签库名称)
         'TAGLIB_BUILD_IN'       => [
             Cx::class,
         ],
         
         /* URL设置 */
-        'URL_CASE_INSENSITIVE'  => UrlCaseSensitivity::SENSITIVITY,
         // 默认false 表示URL区分大小写 true则表示不区分大小写
-        'URL_MODEL'             => UrlSchema::PATHINFO,
+        'URL_CASE_INSENSITIVE'  => UrlCaseSensitivity::SENSITIVITY,
         // URL访问模式,可选参数0、1、2、3,代表以下四种模式：
         // 0 (普通模式); 1 (PATHINFO 模式); 2 (REWRITE  模式); 3 (兼容模式)  默认为PATHINFO 模式
-        'URL_PATHINFO_DEPR'     => '/',
+        'URL_MODEL'             => UrlSchema::PATHINFO,
         // PATHINFO模式下，各参数之间的分割符号
-        'URL_PATHINFO_FETCH'    => 'ORIG_PATH_INFO,REDIRECT_PATH_INFO,REDIRECT_URL',
+        'URL_PATHINFO_DEPR'     => '/',
         // 用于兼容判断PATH_INFO 参数的SERVER替代变量列表
-        'URL_REQUEST_URI'       => 'REQUEST_URI',
+        'URL_PATHINFO_FETCH'    => 'ORIG_PATH_INFO,REDIRECT_PATH_INFO,REDIRECT_URL',
         // 获取当前页面地址的系统变量 默认为REQUEST_URI
-        'URL_HTML_SUFFIX'       => 'html',
+        'URL_REQUEST_URI'       => 'REQUEST_URI',
         // URL伪静态后缀设置
-        'URL_DENY_SUFFIX'       => 'ico|png|gif|jpg',
+        'URL_HTML_SUFFIX'       => 'html',
         // URL禁止访问的后缀设置
-        'URL_PARAMS_BIND'       => true,
+        'URL_DENY_SUFFIX'       => 'ico|png|gif|jpg',
         // URL变量绑定到Action方法参数
-        'URL_PARAMS_BIND_TYPE'  => 0,
+        'URL_PARAMS_BIND'       => true,
         // URL变量绑定的类型 0 按变量名绑定 1 按变量顺序绑定
-        'URL_ROUTER_ON'         => false,
+        'URL_PARAMS_BIND_TYPE'  => 0,
         // 是否开启URL路由
-        'URL_ROUTE_RULES'       => [],
+        'URL_ROUTER_ON'         => false,
         // 默认路由规则 针对模块
-        'URL_MAP_RULES'         => [],
+        'URL_ROUTE_RULES'       => [],
         // URL映射定义规则
-        
+        'URL_MAP_RULES'         => [],
+
         /* 系统变量名称设置 */
-        'VAR_MODULE'            => 'm',
         // 默认模块获取变量
-        'VAR_CONTROLLER'        => 'c',
+        'VAR_MODULE'            => 'm',
         // 默认控制器获取变量
-        'VAR_ACTION'            => 'a',
+        'VAR_CONTROLLER'        => 'c',
         // 默认操作获取变量
-        'VAR_AJAX_SUBMIT'       => 'ajax',
+        'VAR_ACTION'            => 'a',
         // 默认的AJAX提交变量
-        'VAR_JSONP_HANDLER'     => 'callback',
-        'VAR_PATHINFO'          => 's',
+        'VAR_AJAX_SUBMIT'       => 'ajax',
         // 兼容模式PATHINFO获取变量例如 ?s=/module/action/id/1 后面的参数取决于URL_PATHINFO_DEPR
+        'VAR_PATHINFO'          => 's',
+        'VAR_JSONP_HANDLER'     => 'callback',
         'VAR_TEMPLATE'          => 't',
         // 默认模板切换变量
-        'VAR_AUTO_STRING'       => false,
         // 输入变量是否自动强制转换为字符串 如果开启则数组变量需要手动传入变量修饰符获取变量
-        
-        'HTTP_CACHE_CONTROL' => 'private',
+        'VAR_AUTO_STRING'       => false,
+
         // 网页缓存控制
-        'CHECK_APP_DIR'      => true,
+        'HTTP_CACHE_CONTROL' => 'private',
         // 是否检查应用目录是否创建
-        'FILE_UPLOAD_TYPE'   => 'Local',
+        'CHECK_APP_DIR'      => true,
         // 文件上传方式
-    
+        'FILE_UPLOAD_TYPE'   => 'Local',
+
     ];
