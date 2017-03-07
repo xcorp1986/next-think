@@ -158,20 +158,20 @@
          *
          * @return mixed
          */
-        public function get($name = '')
-        {
-            return $this->view->get($name);
-        }
+//        public function get($name = '')
+//        {
+//            return $this->view->get($name);
+//        }
         
         /**
          * @param $name
          *
          * @return mixed
          */
-        public function __get($name)
-        {
-            return $this->get($name);
-        }
+//        public function __get($name)
+//        {
+//            return $this->get($name);
+//        }
         
         /**
          * 检测模板变量的值
@@ -181,10 +181,10 @@
          *
          * @return bool
          */
-        public function __isset($name)
-        {
-            return $this->get($name);
-        }
+//        public function __isset($name)
+//        {
+//            return $this->get($name);
+//        }
         
         /**
          * 魔术方法 有不存在的操作的时候执行
@@ -332,9 +332,9 @@
             // 提示标题
             $this->assign('msgTitle', $status ? L('_OPERATION_SUCCESS_') : L('_OPERATION_FAIL_'));
             //如果设置了关闭窗口，则提示完毕后自动关闭窗口
-            if ($this->get('closeWin')) {
-                $this->assign('jumpUrl', 'javascript:window.close();');
-            }
+//            if ($this->get('closeWin')) {
+//                $this->assign('jumpUrl', 'javascript:window.close();');
+//            }
             // 状态
             $this->assign('status', $status);
             //保证输出不受静态缓存影响
