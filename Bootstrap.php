@@ -8,7 +8,9 @@
     /**
      * 系统常量定义
      */
-    defined('APP_PATH') || die('请在入口文件中定义常量APP_PATH');
+    if ( ! defined('APP_PATH')) {
+        @trigger_error('Please define APP_PATH', E_USER_WARNING);
+    }
     
     /*
      * 记录开始运行时间
@@ -32,10 +34,13 @@
     // 是否调试模式
     defined('APP_DEBUG') || define('APP_DEBUG', false);
     // 应用公共目录
+    /** @noinspection PhpUndefinedConstantInspection */
     defined('COMMON_PATH') || define('COMMON_PATH', APP_PATH.'Common/');
     // 系统运行时目录
+    /** @noinspection PhpUndefinedConstantInspection */
     defined('RUNTIME_PATH') || define('RUNTIME_PATH', APP_PATH.'Runtime/');
     // 应用静态目录
+    /** @noinspection PhpUndefinedConstantInspection */
     defined('HTML_PATH') || define('HTML_PATH', APP_PATH.'Html/');
     // 应用配置目录
     defined('CONF_PATH') || define('CONF_PATH', COMMON_PATH.'Conf/');
