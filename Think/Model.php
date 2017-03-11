@@ -405,22 +405,24 @@
                 $field = isset($args[0]) ? $args[0] : '*';
                 
                 return $this->getField(strtoupper($method).'('.$field.') AS tp_'.$method);
-            } elseif (strtolower(substr($method, 0, 5)) == 'getby') {
-                // 根据某个字段获取记录
-                $field         = parse_name(substr($method, 5));
-                $where[$field] = $args[0];
-                
-                return $this->where($where)->find();
-            } elseif (strtolower(substr($method, 0, 10)) == 'getfieldby') {
-                // 根据某个字段获取记录的某个值
-                $name         = parse_name(substr($method, 10));
-                $where[$name] = $args[0];
-                
-                return $this->where($where)->getField($args[1]);
-            } elseif (isset($this->_scope[$method])) {
-                // 命名范围的单独调用支持
-                return $this->scope($method, $args[0]);
-            } else {
+            }
+//            elseif (strtolower(substr($method, 0, 5)) == 'getby') {
+//                // 根据某个字段获取记录
+//                $field         = parse_name(substr($method, 5));
+//                $where[$field] = $args[0];
+//
+//                return $this->where($where)->find();
+//            } elseif (strtolower(substr($method, 0, 10)) == 'getfieldby') {
+//                // 根据某个字段获取记录的某个值
+//                $name         = parse_name(substr($method, 10));
+//                $where[$name] = $args[0];
+//
+//                return $this->where($where)->getField($args[1]);
+//            } elseif (isset($this->_scope[$method])) {
+//                // 命名范围的单独调用支持
+//                return $this->scope($method, $args[0]);
+//            }
+            else {
                 E(__CLASS__.':'.$method.L('_METHOD_NOT_EXIST_'));
                 
                 return;
