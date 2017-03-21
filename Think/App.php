@@ -116,7 +116,7 @@
             }
             //执行当前操作
             $method = new ReflectionMethod($module, $action);
-            if ($method->isPublic() && ! $method->isStatic()) {
+            if ($method->isUserDefined() && ! $method->isStatic()) {
                 $class = new ReflectionClass($module);
                 // 前置操作
                 if ($class->hasMethod('_before_'.$action)) {
@@ -159,7 +159,7 @@
                 // 后置操作
                 if ($class->hasMethod('_after_'.$action)) {
                     $after = $class->getMethod('_after_'.$action);
-                    if ($after->isPublic()) {
+                    if ($after->isUserDefined()) {
                         $after->invoke($module);
                     }
                 }
