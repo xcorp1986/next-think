@@ -158,20 +158,20 @@
          *
          * @return mixed
          */
-//        public function get($name = '')
-//        {
-//            return $this->view->get($name);
-//        }
+        public function get($name = '')
+        {
+            return $this->view->get($name);
+        }
         
         /**
          * @param $name
          *
          * @return mixed
          */
-//        public function __get($name)
-//        {
-//            return $this->get($name);
-//        }
+        public function __get($name)
+        {
+            return $this->get($name);
+        }
         
         /**
          * 检测模板变量的值
@@ -181,10 +181,10 @@
          *
          * @return bool
          */
-//        public function __isset($name)
-//        {
-//            return $this->get($name);
-//        }
+        public function __isset($name)
+        {
+            return $this->get($name);
+        }
         
         /**
          * 魔术方法 有不存在的操作的时候执行
