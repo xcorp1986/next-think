@@ -121,7 +121,7 @@
                 // 前置操作
                 if ($class->hasMethod('_before_'.$action)) {
                     $before = $class->getMethod('_before_'.$action);
-                    if ($before->isPublic()) {
+                    if ($before->isUserDefined()) {
                         $before->invoke($module);
                     }
                 }
