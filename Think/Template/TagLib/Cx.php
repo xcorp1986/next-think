@@ -101,7 +101,6 @@
             $parseStr .= '++$'.$key.';?>';
             $parseStr .= $this->tpl->parse($content);
             $parseStr .= '<?php endforeach; endif; else: echo "'.$empty.'" ;endif; ?>';
-            $parseStr .= '<?php unset('.$name.');?>';
             
             return $parseStr;
         }
@@ -124,7 +123,6 @@
             $parseStr = '<?php if(is_array('.$name.')): foreach('.$name.' as $'.$key.'=>$'.$item.'): ?>';
             $parseStr .= $this->tpl->parse($content);
             $parseStr .= '<?php endforeach; endif; ?>';
-            $parseStr .= '<?php unset('.$name.');?>';
             
             if ( ! empty($parseStr)) {
                 return $parseStr;
