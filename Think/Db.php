@@ -38,12 +38,12 @@
             $md5 = to_guid_string($config);
             if ( ! isset(self::$instance[$md5])) {
                 // 获取数据库配置参数
-                $options = self::getConfig();
+                $options = $config ?? self::getConfig();
                 // 兼容mysqli
                 if ('mysqli' == $options['type']) {
                     $options['type'] = 'mysql';
                 }
-                $class = 'Think\\Db\\Driver\\'.ucwords(strtolower($options['type']));
+                $class = __NAMESPACE__.'\\Db\\Driver\\'.ucwords(strtolower($options['type']));
                 try {
                     if ( ! class_exists($class)) {
                         throw new DbDriverNotFoundException();
