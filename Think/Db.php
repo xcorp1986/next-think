@@ -34,20 +34,19 @@ class Db
      */
     public static function getInstance(array $config = [])
     {
+        !$config && $config = static::getConfig();
         $md5 = to_guid_string($config);
         if (!isset(self::$instance[$md5])) {
-            // 获取数据库配置参数
-            $options = $config ?? self::getConfig();
             // 兼容mysqli
-            if ('mysqli' == $options['type']) {
-                $options['type'] = 'mysql';
+            if ('mysqli' == $config['type']) {
+                $config['type'] = 'mysql';
             }
-            $class = __NAMESPACE__.'\\Db\\Driver\\'.ucwords(strtolower($options['type']));
+            $class = __NAMESPACE__.'\\Db\\Driver\\'.ucwords(strtolower($config['type']));
             try {
                 if (!class_exists($class)) {
                     throw new DbDriverNotFoundException();
                 }
-                self::$instance[$md5] = new $class($options);
+                self::$instance[$md5] = new $class($config);
             } catch (DbDriverNotFoundException $e) {
                 throw new BaseException($e->getMessage().'类名:'.$class);
             }
