@@ -29,9 +29,8 @@ class Db
      * @access public
      *
      * @param mixed $config 连接配置
-     *
-     * @throws DbDriverNotFoundException
-     * @return $this 返回数据库驱动类
+     * @return $this
+     * @throws BaseException
      */
     public static function getInstance(array $config = [])
     {
@@ -50,7 +49,7 @@ class Db
                 }
                 self::$instance[$md5] = new $class($options);
             } catch (DbDriverNotFoundException $e) {
-                E($e->getMessage().'类名:'.$class);
+                throw new BaseException($e->getMessage().'类名:'.$class);
             }
         }
         self::$_instance = self::$instance[$md5];

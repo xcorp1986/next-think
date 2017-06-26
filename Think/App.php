@@ -68,6 +68,7 @@ class App
      * 执行应用程序
      * @access protected
      * @return void
+     * @throws BaseException
      */
     protected static function exec()
     {
@@ -83,7 +84,7 @@ class App
             // 是否定义Empty控制器
             $module = A('Empty');
             if (!$module) {
-                E(L('_CONTROLLER_NOT_EXIST_').':'.CONTROLLER_NAME);
+                throw new BaseException(L('_CONTROLLER_NOT_EXIST_').':'.CONTROLLER_NAME);
             }
         }
 
@@ -106,7 +107,8 @@ class App
      * @param $module
      * @param $action
      *
-     * @throws \ReflectionException
+     * @throws BaseException
+     * @throws ReflectionException
      */
     protected static function invokeAction($module, $action)
     {
@@ -148,7 +150,7 @@ class App
                     } elseif ($param->isDefaultValueAvailable()) {
                         $args[] = $param->getDefaultValue();
                     } else {
-                        E(L('_PARAM_ERROR_').':'.$name);
+                        throw new BaseException(L('_PARAM_ERROR_').':'.$name);
                     }
                 }
                 array_walk_recursive($args, 'think_filter');

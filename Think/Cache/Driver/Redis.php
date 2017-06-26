@@ -3,6 +3,7 @@
 
 namespace Think\Cache\Driver;
 
+use Think\BaseException;
 use Think\Cache;
 
 
@@ -15,12 +16,13 @@ class Redis extends Cache
     /**
      * @param array $options 缓存参数
      *
+     * @throws BaseException
      * @access public
      */
     public function __construct(array $options = [])
     {
         if (!extension_loaded('redis')) {
-            E(L('_NOT_SUPPORT_').':redis');
+            throw new BaseException(L('_NOT_SUPPORT_').':redis');
         }
         $options = array_merge(
             [

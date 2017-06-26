@@ -117,8 +117,8 @@ class  Template
      *
      * @param string $templateFile 模板文件
      * @param string $prefix 模板标识前缀
-     *
      * @return string
+     * @throws BaseException
      */
     public function loadTemplate($templateFile, $prefix = '')
     {
@@ -142,7 +142,7 @@ class  Template
                 $layoutFile = THEME_PATH.C('LAYOUT_NAME').$this->config['template_suffix'];
                 // 检查布局文件
                 if (!is_file($layoutFile)) {
-                    E(L('_TEMPLATE_NOT_EXIST_').':'.$layoutFile);
+                    throw new BaseException(L('_TEMPLATE_NOT_EXIST_').':'.$layoutFile);
                 }
                 $tmplContent = str_replace(
                     $this->config['layout_item'],
@@ -245,8 +245,8 @@ class  Template
      * @access protected
      *
      * @param $content
-     *
      * @return mixed
+     * @throws BaseException
      */
     protected function parsePhp($content)
     {
@@ -256,7 +256,7 @@ class  Template
         }
         // PHP标签检查
         if (C('TMPL_DENY_PHP') && false !== strpos($content, '<?php')) {
-            E(L('_NOT_ALLOW_PHP_'));
+            throw new BaseException(L('_NOT_ALLOW_PHP_'));
         }
 
         return $content;
@@ -381,8 +381,8 @@ class  Template
      * @access private
      *
      * @param string $attr XML属性字符串
-     *
      * @return array
+     * @throws BaseException
      */
     private function parseXmlAttrs($attr)
     {
@@ -392,7 +392,7 @@ class  Template
          */
         $xml = \simplexml_load_string($xml);
         if (!$xml) {
-            E(L('_XML_TAG_ERROR_'));
+            throw new BaseException(L('_XML_TAG_ERROR_'));
         }
         $xml = (array)($xml->tag->attributes());
 

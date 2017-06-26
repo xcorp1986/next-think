@@ -3,6 +3,7 @@
 namespace Think;
 
 use Exception;
+use Throwable;
 
 /**
  * 系统异常基类

@@ -59,8 +59,8 @@ function C($name = null, $value = null, $default = null)
  *
  * @param string $file 配置文件名
  * @param string $parse 配置解析方法 有些格式需要用户自己解析
- *
  * @return array
+ * @throws BaseException
  */
 function load_config($file, $parse = CONF_PARSE)
 {
@@ -78,7 +78,7 @@ function load_config($file, $parse = CONF_PARSE)
             if (function_exists($parse)) {
                 return $parse($file);
             } else {
-                E(L('_NOT_SUPPORT_').':'.$ext);
+                throw new BaseException(L('_NOT_SUPPORT_').':'.$ext);
             }
     }
 }

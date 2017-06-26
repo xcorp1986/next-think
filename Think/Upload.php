@@ -105,6 +105,7 @@ class Upload
      *
      * @param string $driver 驱动名称
      * @param array $config 驱动配置
+     * @throws BaseException
      */
     private function setDriver($driver = null, $config = null)
     {
@@ -113,7 +114,7 @@ class Upload
         $class = strpos($driver, '\\') ? $driver : 'Think\\Upload\\Driver\\'.ucfirst(strtolower($driver));
         $this->uploader = new $class($config);
         if (!$this->uploader) {
-            E("不存在上传驱动：{$driver}");
+            throw new BaseException("不存在上传驱动：{$driver}");
         }
     }
 

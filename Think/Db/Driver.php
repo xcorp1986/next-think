@@ -5,6 +5,7 @@ namespace Think\Db;
 
 use PDO;
 use PDOException;
+use Think\BaseException;
 
 
 /**
@@ -147,9 +148,8 @@ abstract class Driver
      * @param string $config
      * @param int $linkNum
      * @param bool $autoConnection
-     *
-     * @throws PDOException
-     * @return mixed|\PDO
+     * @return mixed|PDO
+     * @throws BaseException
      */
     public function connect($config = '', $linkNum = 0, $autoConnection = false)
     {
@@ -173,7 +173,7 @@ abstract class Driver
 
                     return $this->connect($autoConnection, $linkNum);
                 } elseif ($config['debug']) {
-                    E($e->getMessage());
+                    throw new BaseException($e->getMessage());
                 }
             }
         }
@@ -218,6 +218,7 @@ abstract class Driver
      * 并显示当前的SQL语句
      * @access public
      * @return string
+     * @throws BaseException
      */
     public function error()
     {
@@ -234,7 +235,7 @@ abstract class Driver
         trace($this->error, '', 'ERR');
         // 开启数据库调试模式
         if ($this->config['debug']) {
-            E($this->error);
+            throw new BaseException($this->error);
         } else {
             return $this->error;
         }
@@ -842,8 +843,8 @@ abstract class Driver
      *
      * @param $key
      * @param $val
-     *
      * @return string
+     * @throws BaseException
      */
     protected function parseWhereItem($key, $val)
     {
@@ -892,7 +893,7 @@ abstract class Driver
                             $data[0]
                         ).' AND '.$this->parseValue($data[1]);
                 } else {
-                    E(L('_EXPRESS_ERROR_').':'.$val[0]);
+                    throw new BaseException(L('_EXPRESS_ERROR_').':'.$val[0]);
                 }
             } else {
                 $count = count($val);

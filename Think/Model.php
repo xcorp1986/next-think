@@ -390,8 +390,8 @@ class Model
      *
      * @param string $method 方法名称
      * @param array $args 调用参数
-     *
      * @return mixed
+     * @throws BaseException
      */
     public function __call($method, $args)
     {
@@ -423,7 +423,7 @@ class Model
 //                return $this->scope($method, $args[0]);
 //            }
         else {
-            E(__CLASS__.':'.$method.L('_METHOD_NOT_EXIST_'));
+            throw new BaseException(__CLASS__.':'.$method.L('_METHOD_NOT_EXIST_'));
 
             return;
         }
@@ -521,8 +521,8 @@ class Model
      * @access protected
      *
      * @param array $options 表达式参数
-     *
      * @return array
+     * @throws BaseException
      */
     protected function _parseOptions(array $options = [])
     {
@@ -564,7 +564,7 @@ class Model
                     ) && false === strpos($key, '(') && false === strpos($key, '|') && false === strpos($key, '&')
                 ) {
                     if (!empty($this->options['strict'])) {
-                        E(L('_ERROR_QUERY_EXPRESS_').':['.$key.'=>'.$val.']');
+                        throw new BaseException(L('_ERROR_QUERY_EXPRESS_').':['.$key.'=>'.$val.']');
                     }
                     unset($options['where'][$key]);
                 }
@@ -913,8 +913,8 @@ class Model
      * @access protected
      *
      * @param mixed $data 要操作的数据
-     *
      * @return bool
+     * @throws BaseException
      */
     protected function _facade($data)
     {
@@ -933,7 +933,7 @@ class Model
             foreach ($data as $key => $val) {
                 if (!in_array($key, $fields, true)) {
                     if (!empty($this->options['strict'])) {
-                        E(L('_DATA_TYPE_INVALID_').':['.$key.'=>'.$val.']');
+                        throw new BaseException(L('_DATA_TYPE_INVALID_').':['.$key.'=>'.$val.']');
                     }
                     unset($data[$key]);
                 } elseif (is_scalar($val)) {
@@ -2129,8 +2129,8 @@ class Model
      * @access public
      *
      * @param mixed $data 数据
-     *
      * @return $this
+     * @throws BaseException
      */
     public function data($data = '')
     {
@@ -2142,7 +2142,7 @@ class Model
         } elseif (is_string($data)) {
             parse_str($data, $data);
         } elseif (!is_array($data)) {
-            E(L('_DATA_TYPE_INVALID_'));
+            throw new BaseException(L('_DATA_TYPE_INVALID_'));
         }
         $this->data = $data;
 
@@ -2250,8 +2250,8 @@ class Model
      *
      * @param mixed $union
      * @param boolean $all
-     *
      * @return $this
+     * @throws BaseException
      */
     public function union($union, $all = false)
     {
@@ -2284,7 +2284,7 @@ class Model
                 $options = $union;
             }
         } else {
-            E(L('_DATA_TYPE_INVALID_'));
+            throw new BaseException(L('_DATA_TYPE_INVALID_'));
         }
         $this->options['union'][] = $options;
 

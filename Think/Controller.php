@@ -192,8 +192,8 @@ abstract class Controller
      *
      * @param string $method 方法名
      * @param array $args 参数
-     *
      * @return void
+     * @throws BaseException
      */
     public function __call($method, $args)
     {
@@ -202,10 +202,10 @@ abstract class Controller
                 // 如果定义了_empty操作 则调用
                 $this->_empty($method, $args);
             } else {
-                E(L('_ERROR_ACTION_').':'.ACTION_NAME);
+                throw new BaseException(L('_ERROR_ACTION_').':'.ACTION_NAME);
             }
         } else {
-            E(__CLASS__.':'.$method.L('_METHOD_NOT_EXIST_'));
+            throw new BaseException(__CLASS__.':'.$method.L('_METHOD_NOT_EXIST_'));
 
             return;
         }

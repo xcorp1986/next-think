@@ -3,9 +3,11 @@
 
 namespace Think\Image\Driver;
 
+use Think\BaseException;
 use Think\Image;
+use Think\Image\IImage;
 
-class Imagick
+class Imagick implements IImage
 {
     /**
      * 图像资源对象
@@ -33,12 +35,13 @@ class Imagick
      * 打开一张图像
      *
      * @param  string $imgname 图像路径
+     * @throws BaseException
      */
     public function open($imgname)
     {
         //检测图像文件
         if (!is_file($imgname)) {
-            E('不存在的图像文件');
+            throw new BaseException('不存在的图像文件');
         }
 
         //销毁已存在的图像
@@ -63,11 +66,12 @@ class Imagick
      * @param  string $type 图像类型
      * @param  int $quality JPEG图像质量
      * @param  bool $interlace 是否对JPEG类型图像设置隔行扫描
+     * @throws BaseException
      */
     public function save($imgname, $type = null, $quality = 80, $interlace = true)
     {
         if (empty($this->img)) {
-            E('没有可以被保存的图像资源');
+            throw new BaseException('没有可以被保存的图像资源');
         }
 
         //设置图片类型
@@ -101,11 +105,12 @@ class Imagick
     /**
      * 返回图像宽度
      * @return int 图像宽度
+     * @throws BaseException
      */
     public function width()
     {
         if (empty($this->img)) {
-            E('没有指定图像资源');
+            throw new BaseException('没有指定图像资源');
         }
 
         return $this->info['width'];
@@ -114,11 +119,12 @@ class Imagick
     /**
      * 返回图像高度
      * @return int 图像高度
+     * @throws BaseException
      */
     public function height()
     {
         if (empty($this->img)) {
-            E('没有指定图像资源');
+            throw new BaseException('没有指定图像资源');
         }
 
         return $this->info['height'];
@@ -127,11 +133,12 @@ class Imagick
     /**
      * 返回图像类型
      * @return string 图像类型
+     * @throws BaseException
      */
     public function type()
     {
         if (empty($this->img)) {
-            E('没有指定图像资源');
+            throw new BaseException('没有指定图像资源');
         }
 
         return $this->info['type'];
@@ -140,11 +147,12 @@ class Imagick
     /**
      * 返回图像MIME类型
      * @return string 图像MIME类型
+     * @throws BaseException
      */
     public function mime()
     {
         if (empty($this->img)) {
-            E('没有指定图像资源');
+            throw new BaseException('没有指定图像资源');
         }
 
         return $this->info['mime'];
@@ -153,11 +161,12 @@ class Imagick
     /**
      * 返回图像尺寸数组 0 - 图像宽度，1 - 图像高度
      * @return array 图像尺寸
+     * @throws BaseException
      */
     public function size()
     {
         if (empty($this->img)) {
-            E('没有指定图像资源');
+            throw new BaseException('没有指定图像资源');
         }
 
         return [$this->info['width'], $this->info['height']];
@@ -172,11 +181,12 @@ class Imagick
      * @param  int $y 裁剪区域y坐标
      * @param  int $width 图像保存宽度
      * @param  int $height 图像保存高度
+     * @throws BaseException
      */
     public function crop($w, $h, $x = 0, $y = 0, $width = null, $height = null)
     {
         if (empty($this->img)) {
-            E('没有可以被裁剪的图像资源');
+            throw new BaseException('没有可以被裁剪的图像资源');
         }
 
         //设置保存尺寸
@@ -238,12 +248,13 @@ class Imagick
      *
      * @param  int $width 缩略图最大宽度
      * @param  int $height 缩略图最大高度
-     * @param  int $type 缩略图裁剪类型
+     * @param int $type 缩略图裁剪类型
+     * @throws BaseException
      */
     public function thumb($width, $height, $type = Image::IMAGE_THUMB_SCALE)
     {
         if (empty($this->img)) {
-            E('没有可以被缩略的图像资源');
+            throw new BaseException('没有可以被缩略的图像资源');
         }
 
         //原图宽度和高度
@@ -367,7 +378,7 @@ class Imagick
                 break;
 
             default:
-                E('不支持的缩略图裁剪类型');
+                throw new BaseException('不支持的缩略图裁剪类型');
         }
 
         /* 裁剪图像 */
@@ -404,17 +415,18 @@ class Imagick
      * 添加水印
      *
      * @param  string $source 水印图片路径
-     * @param  int $locate 水印位置
+     * @param int $locate 水印位置
      * @param  int $alpha 水印透明度
+     * @throws BaseException
      */
     public function water($source, $locate = Image::IMAGE_WATER_SOUTHEAST, $alpha = 80)
     {
         //资源检测
         if (empty($this->img)) {
-            E('没有可以被添加水印的图像资源');
+            throw new BaseException('没有可以被添加水印的图像资源');
         }
         if (!is_file($source)) {
-            E('水印图像不存在');
+            throw new BaseException('水印图像不存在');
         }
 
         //创建水印图像资源
@@ -481,7 +493,7 @@ class Imagick
                 if (is_array($locate)) {
                     list($x, $y) = $locate;
                 } else {
-                    E('不支持的水印位置类型');
+                    throw new BaseException('不支持的水印位置类型');
                 }
         }
 
@@ -519,9 +531,10 @@ class Imagick
      * @param  string $font 字体路径
      * @param  int $size 字号
      * @param  string $color 文字颜色
-     * @param  int $locate 文字写入位置
+     * @param int $locate 文字写入位置
      * @param  int $offset 文字相对当前位置的偏移量
      * @param  int $angle 文字倾斜角度
+     * @throws BaseException
      */
     public function text(
         $text,
@@ -534,10 +547,10 @@ class Imagick
     ) {
         //资源检测
         if (empty($this->img)) {
-            E('没有可以被写入文字的图像资源');
+            throw new BaseException('没有可以被写入文字的图像资源');
         }
         if (!is_file($font)) {
-            E("不存在的字体文件：{$font}");
+            throw new BaseException("不存在的字体文件：{$font}");
         }
 
         //获取颜色和透明度
@@ -548,7 +561,7 @@ class Imagick
             }
             $color = '#'.implode('', $color);
         } elseif (!is_string($color) || 0 !== strpos($color, '#')) {
-            E('错误的颜色值');
+            throw new BaseException('错误的颜色值');
         }
         $col = substr($color, 0, 7);
         $alp = strlen($color) == 9 ? substr($color, -2) : 0;
@@ -629,7 +642,7 @@ class Imagick
                     $x += $posx;
                     $y += $posy;
                 } else {
-                    E('不支持的文字位置类型');
+                    throw new BaseException('不支持的文字位置类型');
                 }
         }
 

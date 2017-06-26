@@ -2,6 +2,7 @@
 
 namespace Think\Template;
 
+use Think\BaseException;
 use Think\Template;
 
 /**
@@ -72,8 +73,8 @@ class TagLib
      *
      * @param string $attr
      * @param string $tag
-     *
      * @return array
+     * @throws BaseException
      */
     public function parseXmlAttr($attr = '', $tag = '')
     {
@@ -82,7 +83,7 @@ class TagLib
         $xml = '<tpl><tag '.$attr.' /></tpl>';
         $xml = \simplexml_load_string($xml);
         if (!$xml) {
-            E(L('_XML_TAG_ERROR_').' : '.$attr);
+            throw new BaseException(L('_XML_TAG_ERROR_').' : '.$attr);
         }
         /** @noinspection PhpUndefinedFieldInspection */
         $xml = (array)($xml->tag->attributes());
@@ -111,7 +112,7 @@ class TagLib
                     if (isset($array[$name])) {
                         $array[$name] = str_replace('___', '&', $array[$name]);
                     } elseif (false !== array_search($name, $must)) {
-                        E(L('_PARAM_ERROR_').':'.$name);
+                        throw new BaseException(L('_PARAM_ERROR_').':'.$name);
                     }
                 }
 

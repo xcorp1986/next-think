@@ -3,9 +3,16 @@
 
 namespace Think\Image\Driver;
 
+use Think\BaseException;
 use Think\Image;
+use Think\Image\IImage;
 
-class Gd
+/**
+ * Class Gd
+ * @package Think\Image\Driver
+ * @todo gif
+ */
+class Gd implements IImage
 {
     /**
      * 图像资源对象
@@ -33,12 +40,13 @@ class Gd
      * 打开一张图像
      *
      * @param  string $imgname 图像路径
+     * @throws BaseException
      */
     public function open($imgname)
     {
         //检测图像文件
         if (!is_file($imgname)) {
-            E('不存在的图像文件');
+            throw new BaseException('不存在的图像文件');
         }
 
         //获取图像信息
@@ -46,7 +54,7 @@ class Gd
 
         //检测图像合法性
         if (false === $_info || (IMAGETYPE_GIF === $_info[2] && empty($_info['bits']))) {
-            E('非法图像文件');
+            throw new BaseException('非法图像文件');
         }
 
         //设置图像信息
@@ -61,6 +69,7 @@ class Gd
         empty($this->img) || imagedestroy($this->img);
 
         //打开图像
+        //@todo gif支持
         if ('gif' == $this->info['type']) {
             $class = 'Think\\Image\\Driver\\GIF';
             $this->gif = new $class($imgname);
@@ -78,11 +87,12 @@ class Gd
      * @param  string $type 图像类型
      * @param  int $quality 图像质量
      * @param  bool $interlace 是否对JPEG类型图像设置隔行扫描
+     * @throws BaseException
      */
     public function save($imgname, $type = null, $quality = 80, $interlace = true)
     {
         if (empty($this->img)) {
-            E('没有可以被保存的图像资源');
+            throw new BaseException('没有可以被保存的图像资源');
         }
 
         //自动获取图像类型
@@ -107,11 +117,12 @@ class Gd
     /**
      * 返回图像宽度
      * @return int 图像宽度
+     * @throws BaseException
      */
     public function width()
     {
         if (empty($this->img)) {
-            E('没有指定图像资源');
+            throw new BaseException('没有指定图像资源');
         }
 
         return $this->info['width'];
@@ -120,11 +131,12 @@ class Gd
     /**
      * 返回图像高度
      * @return int 图像高度
+     * @throws BaseException
      */
     public function height()
     {
         if (empty($this->img)) {
-            E('没有指定图像资源');
+            throw new BaseException('没有指定图像资源');
         }
 
         return $this->info['height'];
@@ -133,11 +145,12 @@ class Gd
     /**
      * 返回图像类型
      * @return string 图像类型
+     * @throws BaseException
      */
     public function type()
     {
         if (empty($this->img)) {
-            E('没有指定图像资源');
+            throw new BaseException('没有指定图像资源');
         }
 
         return $this->info['type'];
@@ -146,11 +159,12 @@ class Gd
     /**
      * 返回图像MIME类型
      * @return string 图像MIME类型
+     * @throws BaseException
      */
     public function mime()
     {
         if (empty($this->img)) {
-            E('没有指定图像资源');
+            throw new BaseException('没有指定图像资源');
         }
 
         return $this->info['mime'];
@@ -159,11 +173,12 @@ class Gd
     /**
      * 返回图像尺寸数组 0 - 图像宽度，1 - 图像高度
      * @return array 图像尺寸
+     * @throws BaseException
      */
     public function size()
     {
         if (empty($this->img)) {
-            E('没有指定图像资源');
+            throw new BaseException('没有指定图像资源');
         }
 
         return [$this->info['width'], $this->info['height']];
@@ -178,11 +193,12 @@ class Gd
      * @param  int $y 裁剪区域y坐标
      * @param  int $width 图像保存宽度
      * @param  int $height 图像保存高度
+     * @throws BaseException
      */
     public function crop($w, $h, $x = 0, $y = 0, $width = null, $height = null)
     {
         if (empty($this->img)) {
-            E('没有可以被裁剪的图像资源');
+            throw new BaseException('没有可以被裁剪的图像资源');
         }
 
         //设置保存尺寸
@@ -213,12 +229,13 @@ class Gd
      *
      * @param  int $width 缩略图最大宽度
      * @param  int $height 缩略图最大高度
-     * @param  int $type 缩略图裁剪类型
+     * @param int $type 缩略图裁剪类型
+     * @throws BaseException
      */
     public function thumb($width, $height, $type = Image::IMAGE_THUMB_SCALE)
     {
         if (empty($this->img)) {
-            E('没有可以被缩略的图像资源');
+            throw new BaseException('没有可以被缩略的图像资源');
         }
 
         //原图宽度和高度
@@ -317,7 +334,7 @@ class Gd
                 break;
 
             default:
-                E('不支持的缩略图裁剪类型');
+                throw new BaseException('不支持的缩略图裁剪类型');
         }
 
         /* 裁剪图像 */
@@ -328,23 +345,24 @@ class Gd
      * 添加水印
      *
      * @param  string $source 水印图片路径
-     * @param  int $locate 水印位置
+     * @param int $locate 水印位置
      * @param  int $alpha 水印透明度
+     * @throws BaseException
      */
     public function water($source, $locate = Image::IMAGE_WATER_SOUTHEAST, $alpha = 80)
     {
         //资源检测
         if (empty($this->img)) {
-            E('没有可以被添加水印的图像资源');
+            throw new BaseException('没有可以被添加水印的图像资源');
         }
         if (!is_file($source)) {
-            E('水印图像不存在');
+            throw new BaseException('水印图像不存在');
         }
 
         //获取水印图像信息
         $_info = getimagesize($source);
         if (false === $_info || (IMAGETYPE_GIF === $_info[2] && empty($_info['bits']))) {
-            E('非法水印文件');
+            throw new BaseException('非法水印文件');
         }
 
         //创建水印图像资源
@@ -414,7 +432,7 @@ class Gd
                 if (is_array($locate)) {
                     list($x, $y) = $locate;
                 } else {
-                    E('不支持的水印位置类型');
+                    throw new BaseException('不支持的水印位置类型');
                 }
         }
 
@@ -444,9 +462,10 @@ class Gd
      * @param  string $font 字体路径
      * @param  int $size 字号
      * @param  string $color 文字颜色
-     * @param  int $locate 文字写入位置
+     * @param int $locate 文字写入位置
      * @param  int $offset 文字相对当前位置的偏移量
      * @param  int $angle 文字倾斜角度
+     * @throws BaseException
      */
     public function text(
         $text,
@@ -459,10 +478,10 @@ class Gd
     ) {
         //资源检测
         if (empty($this->img)) {
-            E('没有可以被写入文字的图像资源');
+            throw new BaseException('没有可以被写入文字的图像资源');
         }
         if (!is_file($font)) {
-            E("不存在的字体文件：{$font}");
+            throw new BaseException("不存在的字体文件：{$font}");
         }
 
         //获取文字信息
@@ -536,7 +555,7 @@ class Gd
                     $x += $posx;
                     $y += $posy;
                 } else {
-                    E('不支持的文字位置类型');
+                    throw new BaseException('不支持的文字位置类型');
                 }
         }
 
@@ -557,7 +576,7 @@ class Gd
                 $color[3] = 0;
             }
         } elseif (!is_array($color)) {
-            E('错误的颜色值');
+            throw new BaseException('错误的颜色值');
         }
 
         do {

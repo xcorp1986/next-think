@@ -3,6 +3,7 @@
 
 namespace Behavior;
 
+use Think\BaseException;
 use Think\Behavior;
 use Think\Storage;
 use Think\Template;
@@ -17,6 +18,7 @@ final class ParseTemplateBehavior extends Behavior
      * 执行入口
      *
      * @param mixed $_data
+     * @throws BaseException
      */
     public function run(&$_data)
     {
@@ -50,7 +52,7 @@ final class ParseTemplateBehavior extends Behavior
                 $tpl->fetch($_content, $_data['var']);
             } else {
                 // 类没有定义
-                E(L('_NOT_SUPPORT_').': '.$class);
+                throw new BaseException(L('_NOT_SUPPORT_').': '.$class);
             }
         }
     }

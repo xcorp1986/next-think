@@ -2,6 +2,8 @@
 
 namespace Think;
 
+use Think\Url\UrlSchema;
+
 /**
  * 内置的Dispatcher类
  * 完成URL解析、路由和调度
@@ -15,6 +17,7 @@ final class Dispatcher
      * URL映射到控制器
      * @access public
      * @return void
+     * @throws BaseException
      */
     public static function dispatch()
     {
@@ -185,15 +188,15 @@ final class Dispatcher
             // 加载模块的扩展配置文件
             load_ext_file(MODULE_PATH);
         } else {
-            E(L('_MODULE_NOT_EXIST_').':'.MODULE_NAME);
+            throw new BaseException(L('_MODULE_NOT_EXIST_').':'.MODULE_NAME);
         }
 
         if (!defined('__APP__')) {
             $urlMode = C('URL_MODEL');
             // 兼容模式判断
-            if ($urlMode == URL_COMPAT) {
+            if ($urlMode == UrlSchema::COMPAT) {
                 define('PHP_FILE', _PHP_FILE_.'?'.$varPath.'=');
-            } elseif ($urlMode == URL_REWRITE) {
+            } elseif ($urlMode == UrlSchema::REWRITE) {
                 $url = dirname(_PHP_FILE_);
                 if ($url == '/' || $url == '\\') {
                     $url = '';

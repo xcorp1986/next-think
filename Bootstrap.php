@@ -9,7 +9,7 @@ use Think\Think;
  * 系统常量定义
  */
 if (!defined('APP_PATH')) {
-    @trigger_error('Please define APP_PATH', E_USER_WARNING);
+    @trigger_error('Please define APP_PATH', E_USER_ERROR);
 }
 
 /*
@@ -28,8 +28,8 @@ if (MEMORY_LIMIT_ON) {
 /*
  * URL 模式定义
  */
-const URL_REWRITE = 2;  //REWRITE模式
-const URL_COMPAT = 3;  // 兼容模式
+//const URL_REWRITE = 2;  //REWRITE模式
+//const URL_COMPAT = 3;  // 兼容模式
 
 // 是否调试模式
 defined('APP_DEBUG') || define('APP_DEBUG', false);

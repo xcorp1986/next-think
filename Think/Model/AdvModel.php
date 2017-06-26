@@ -330,8 +330,8 @@ class AdvModel extends Model
      *
      * @param array $data 数据
      * @param string $type 返回类型 默认为数组
-     *
      * @return mixed
+     * @throws BaseException
      */
     public function returnResult($data, $type = '')
     {
@@ -348,7 +348,7 @@ class AdvModel extends Model
                 if (class_exists($type)) {
                     return new $type($data);
                 } else {
-                    E(L('_CLASS_NOT_EXIST_').':'.$type);
+                    throw new BaseException(L('_CLASS_NOT_EXIST_').':'.$type);
                 }
         }
     }

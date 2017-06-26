@@ -3,6 +3,7 @@
 
 namespace Think\Cache\Driver;
 
+use Think\BaseException;
 use Think\Cache;
 
 
@@ -15,12 +16,13 @@ class Memcache extends Cache
     /**
      * @param array $options 缓存参数
      *
+     * @throws BaseException
      * @access public
      */
     function __construct(array $options = [])
     {
         if (!extension_loaded('memcache')) {
-            E(L('_NOT_SUPPORT_').':memcache');
+            throw new BaseException(L('_NOT_SUPPORT_').':memcache');
         }
 
         $options = array_merge(

@@ -3,6 +3,7 @@
 
 namespace Think\Storage\Driver;
 
+use Think\BaseException;
 use Think\Storage;
 
 /**
@@ -37,8 +38,8 @@ class File extends Storage
      *
      * @param string $filename 文件名
      * @param string $content 文件内容
-     *
      * @return bool
+     * @throws BaseException
      */
     public static function put($filename, $content)
     {
@@ -47,7 +48,7 @@ class File extends Storage
             mkdir($dir, 0777, true);
         }
         if (false === file_put_contents($filename, $content)) {
-            E(L('_STORAGE_WRITE_ERROR_').':'.$filename);
+            throw new BaseException(L('_STORAGE_WRITE_ERROR_').':'.$filename);
         } else {
             self::$contents[$filename] = $content;
 

@@ -35,7 +35,7 @@ class Image
 
     /**
      * 图片资源
-     * @var resource
+     * @var \Think\Image\IImage
      */
     private $img;
 
@@ -44,6 +44,7 @@ class Image
      *
      * @param int|string $type 要使用的类库，默认使用GD库
      * @param null $imgName
+     * @throws BaseException
      */
     public function __construct($type = self::IMAGE_GD, $imgName = null)
     {
@@ -56,12 +57,12 @@ class Image
                 $class = 'Imagick';
                 break;
             default:
-                E('不支持的图片处理库类型');
+                throw new BaseException('不支持的图片处理库类型');
         }
 
         /* 引入处理库，实例化图片处理对象 */
         /** @noinspection PhpUndefinedVariableInspection */
-        $class = "Think\\Image\\Driver\\{$class}";
+        $class = __NAMESPACE__."\\Image\\Driver\\{$class}";
         $this->img = new $class($imgName);
     }
 

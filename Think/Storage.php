@@ -34,7 +34,7 @@ class Storage
      */
     public static function connect($type = 'File')
     {
-        $class = 'Think\\Storage\\Driver\\'.ucwords($type);
+        $class = __NAMESPACE__.'\\Storage\\Driver\\'.ucwords($type);
         self::$handler = new $class;
     }
 

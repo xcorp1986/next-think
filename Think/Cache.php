@@ -33,8 +33,8 @@ class Cache
      *
      * @param string $type 缓存类型
      * @param array $options 配置数组
-     *
      * @return object
+     * @throws BaseException
      */
     public function connect($type = '', array $options = [])
     {
@@ -45,7 +45,7 @@ class Cache
         if (class_exists($class)) {
             $cache = new $class($options);
         } else {
-            E(L('_CACHE_TYPE_INVALID_').':'.$type);
+            throw new BaseException(L('_CACHE_TYPE_INVALID_').':'.$type);
         }
 
         /** @noinspection PhpUndefinedVariableInspection */
@@ -163,15 +163,15 @@ class Cache
     /**
      * @param $method
      * @param $args
-     *
      * @return mixed
+     * @throws BaseException
      */
     public function __call($method, $args)
     {
         if (method_exists($this->handler, $method)) {
             return call_user_func_array([$this->handler, $method], $args);
         } else {
-            E(__CLASS__.':'.$method.L('_METHOD_NOT_EXIST_'));
+            throw new BaseException(__CLASS__.':'.$method.L('_METHOD_NOT_EXIST_'));
 
             return false;
         }

@@ -2,6 +2,8 @@
 
 namespace Think\Upload\Driver;
 
+use Think\BaseException;
+
 /**
  * Class Ftp
  * @package Think\Upload\Driver
@@ -38,6 +40,7 @@ class Ftp
      * 构造函数，用于设置上传根路径
      *
      * @param array $config FTP配置
+     * @throws BaseException
      */
     public function __construct($config)
     {
@@ -46,7 +49,7 @@ class Ftp
 
         /* 登录FTP服务器 */
         if (!$this->login()) {
-            E($this->error);
+            throw new BaseException($this->error);
         }
     }
 

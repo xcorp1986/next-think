@@ -4,6 +4,7 @@
 namespace Think\Cache\Driver;
 
 use Memcached as MemcachedResource;
+use Think\BaseException;
 use Think\Cache;
 
 /**
@@ -15,11 +16,12 @@ class Memcached extends Cache
     /**
      *
      * @param array $options
+     * @throws BaseException
      */
     public function __construct(array $options = [])
     {
         if (!extension_loaded('memcached')) {
-            E(L('_NOT_SUPPORT_').':memcached');
+            throw new BaseException(L('_NOT_SUPPORT_').':memcached');
         }
 
         $options = array_merge(

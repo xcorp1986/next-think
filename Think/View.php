@@ -115,8 +115,8 @@ class View
      * @param string $templateFile 模板文件名
      * @param string $content 模板输出内容
      * @param string $prefix 模板缓存前缀
-     *
      * @return string
+     * @throws BaseException
      */
     public function fetch($templateFile = '', $content = '', $prefix = '')
     {
@@ -124,7 +124,7 @@ class View
             $templateFile = $this->parseTemplate($templateFile);
             // 模板文件不存在直接返回
             if (!is_file($templateFile)) {
-                E(L('_TEMPLATE_NOT_EXIST_').':'.$templateFile);
+                throw new BaseException(L('_TEMPLATE_NOT_EXIST_').':'.$templateFile);
             }
         } else {
             defined('THEME_PATH') || define('THEME_PATH', $this->getThemePath());
