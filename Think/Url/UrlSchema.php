@@ -8,7 +8,7 @@ namespace Think\Url;
  * 原url模式
  * @package Think\Url
  */
-class UrlSchema
+final class UrlSchema
 {
     /**
      * @const COMMON 普通模式

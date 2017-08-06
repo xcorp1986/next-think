@@ -12,7 +12,7 @@ use Think\Template\TagLib\Cx;
  * Class Template
  * @package Think
  */
-class  Template
+final class Template
 {
 
     /**

@@ -22,7 +22,7 @@ namespace Think;
  * @property string codeSet
  * @package Think
  */
-class Verify
+final class Verify
 {
     /**
      * 配置

@@ -7,7 +7,7 @@ namespace Think;
  * Class View
  * @package Think
  */
-class View
+final class View
 {
     /**
      * 模板输出变量

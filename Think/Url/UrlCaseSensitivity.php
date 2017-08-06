@@ -7,7 +7,7 @@ namespace Think\Url;
  * Class UrlCaseSensitivity
  * @package Think\Url
  */
-class UrlCaseSensitivity
+final class UrlCaseSensitivity
 {
     /**
      * @const SENSITIVITY 大小写敏感

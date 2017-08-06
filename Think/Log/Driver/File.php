@@ -3,7 +3,7 @@
 
 namespace Think\Log\Driver;
 
-class File
+final class File
 {
     /**
      * 配置

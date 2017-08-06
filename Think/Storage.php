@@ -5,6 +5,7 @@ namespace Think;
 /**
  * 文件存储类
  * Class Storage
+ * @deprecated
  * @package Think
  * @method static load($_filename, $vars = null) 加载文件
  * @method static put($filename, $content) 文件写入

@@ -11,7 +11,7 @@ use ReflectionMethod;
  * Class App
  * @package Think
  */
-class App
+final class App
 {
 
     /**

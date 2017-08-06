@@ -8,7 +8,7 @@ use Think\Template\TagLib;
 /**
  * CX标签库解析类
  */
-class Cx extends TagLib
+final class Cx extends TagLib
 {
 
     /**

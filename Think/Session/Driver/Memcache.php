@@ -4,7 +4,7 @@ namespace Think\Session\Driver;
 
 use SessionHandlerInterface;
 
-class Memcache implements SessionHandlerInterface
+final class Memcache implements SessionHandlerInterface
 {
     protected $lifeTime = 3600;
     protected $sessionName = '';

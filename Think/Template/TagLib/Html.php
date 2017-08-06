@@ -8,7 +8,7 @@ use Think\Template\TagLib;
 /**
  * Html标签库驱动
  */
-class Html extends TagLib
+final class Html extends TagLib
 {
     // 标签定义
     protected $tags = [
