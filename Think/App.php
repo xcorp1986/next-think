@@ -93,7 +93,7 @@ final class App
             $action = ACTION_NAME;
         }
         try {
-            self::invokeAction($module, $action);
+            static::invokeAction($module, $action);
         } catch (ReflectionException $e) {
             // 方法调用发生异常后 引导到__call方法处理
             $method = new ReflectionMethod($module, '__call');

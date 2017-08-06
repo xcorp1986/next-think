@@ -151,7 +151,7 @@ final class Dispatcher
         define('__SELF__', strip_tags($_SERVER[C('URL_REQUEST_URI')]));
 
         // 获取模块名称
-        define('MODULE_NAME', defined('BIND_MODULE') ? BIND_MODULE : self::getModule($varModule));
+        define('MODULE_NAME', defined('BIND_MODULE') ? BIND_MODULE : static::getModule($varModule));
 
         // 检测模块是否存在
         if (MODULE_NAME && (defined('BIND_MODULE') || !in_array_case(
@@ -271,9 +271,9 @@ final class Dispatcher
         // 获取控制器和操作名
         define(
             'CONTROLLER_NAME',
-            defined('BIND_CONTROLLER') ? BIND_CONTROLLER : self::getController($varController, $urlCase)
+            defined('BIND_CONTROLLER') ? BIND_CONTROLLER : static::getController($varController, $urlCase)
         );
-        define('ACTION_NAME', self::getAction($varAction, $urlCase));
+        define('ACTION_NAME', static::getAction($varAction, $urlCase));
 
         // 当前控制器的UR地址
         $controllerName = CONTROLLER_NAME;

@@ -29,7 +29,7 @@ class File extends Storage
      */
     public static function read($filename)
     {
-        return self::get($filename, 'content');
+        return static::get($filename, 'content');
     }
 
     /**
@@ -50,7 +50,7 @@ class File extends Storage
         if (false === file_put_contents($filename, $content)) {
             throw new BaseException(L('_STORAGE_WRITE_ERROR_').':'.$filename);
         } else {
-            self::$contents[$filename] = $content;
+            static::$contents[$filename] = $content;
 
             return true;
         }
@@ -68,10 +68,10 @@ class File extends Storage
     public static function append($filename, $content)
     {
         if (is_file($filename)) {
-            $content = self::read($filename).$content;
+            $content = static::read($filename).$content;
         }
 
-        return self::put($filename, $content);
+        return static::put($filename, $content);
     }
 
     /**
@@ -115,7 +115,7 @@ class File extends Storage
      */
     public static function unlink($filename)
     {
-        unset(self::$contents[$filename]);
+        unset(static::$contents[$filename]);
 
         return is_file($filename) ? unlink($filename) : false;
     }
@@ -131,13 +131,13 @@ class File extends Storage
      */
     public static function get($filename, $name)
     {
-        if (!isset(self::$contents[$filename])) {
+        if (!isset(static::$contents[$filename])) {
             if (!is_file($filename)) {
                 return false;
             }
-            self::$contents[$filename] = file_get_contents($filename);
+            static::$contents[$filename] = file_get_contents($filename);
         }
-        $content = self::$contents[$filename];
+        $content = static::$contents[$filename];
         $info = [
             'mtime'   => filemtime($filename),
             'content' => $content,

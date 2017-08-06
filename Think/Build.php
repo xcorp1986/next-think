@@ -36,10 +36,10 @@ class [MODEL]Model extends Model {
     {
         if (!is_dir(APP_PATH.$module)) {
             // 创建模块的目录结构
-            self::buildAppDir($module);
+            static::buildAppDir($module);
         } elseif (!is_dir(LOG_PATH)) {
             // 检查缓存目录
-            self::buildRuntime();
+            static::buildRuntime();
         }
     }
 
@@ -91,18 +91,18 @@ class [MODEL]Model extends Model {
                 // 自动生成的控制器列表（注意大小写）
                 $list = explode(',', BUILD_CONTROLLER_LIST);
                 foreach ($list as $controller) {
-                    self::buildController($module, $controller);
+                    static::buildController($module, $controller);
                 }
             } else {
                 // 生成默认的控制器
-                self::buildController($module);
+                static::buildController($module);
             }
             // 生成模块的模型
             if (defined('BUILD_MODEL_LIST')) {
                 // 自动生成的控制器列表（注意大小写）
                 $list = explode(',', BUILD_MODEL_LIST);
                 foreach ($list as $model) {
-                    self::buildModel($module, $model);
+                    static::buildModel($module, $model);
                 }
             }
         } else {
@@ -151,7 +151,7 @@ class [MODEL]Model extends Model {
     {
         $file = APP_PATH.$module.'/Controller/'.$controller.'Controller.php';
         if (!is_file($file)) {
-            $content = str_replace(['[MODULE]', '[CONTROLLER]'], [$module, $controller], self::$controller);
+            $content = str_replace(['[MODULE]', '[CONTROLLER]'], [$module, $controller], static::$controller);
             $dir = dirname($file);
             if (!is_dir($dir)) {
                 mkdir($dir, 0755, true);
@@ -170,7 +170,7 @@ class [MODEL]Model extends Model {
     {
         $file = APP_PATH.$module.'/Model/'.$model.'Model.php';
         if (!is_file($file)) {
-            $content = str_replace(['[MODULE]', '[MODEL]'], [$module, $model], self::$model);
+            $content = str_replace(['[MODULE]', '[MODEL]'], [$module, $model], static::$model);
             $dir = dirname($file);
             if (!is_dir($dir)) {
                 mkdir($dir, 0755, true);

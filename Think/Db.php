@@ -36,7 +36,7 @@ class Db
     {
         !$config && $config = static::getConfig();
         $md5 = to_guid_string($config);
-        if (!isset(self::$instance[$md5])) {
+        if (!isset(static::$instance[$md5])) {
             // 兼容mysqli
             if ('mysqli' == $config['type']) {
                 $config['type'] = 'mysql';
@@ -46,14 +46,14 @@ class Db
                 if (!class_exists($class)) {
                     throw new DbDriverNotFoundException();
                 }
-                self::$instance[$md5] = new $class($config);
+                static::$instance[$md5] = new $class($config);
             } catch (DbDriverNotFoundException $e) {
                 throw new BaseException($e->getMessage().'类名:'.$class);
             }
         }
-        self::$_instance = self::$instance[$md5];
+        static::$_instance = static::$instance[$md5];
 
-        return self::$_instance;
+        return static::$_instance;
     }
 
     /**
@@ -92,7 +92,7 @@ class Db
      */
     public static function __callStatic($method, $params)
     {
-        return call_user_func_array([self::$_instance, $method], $params);
+        return call_user_func_array([static::$_instance, $method], $params);
     }
 
 }

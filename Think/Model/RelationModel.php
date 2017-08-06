@@ -119,14 +119,14 @@ class RelationModel extends Model
                     // 获取关联模型对象
                     $model = D($mappingClass);
                     switch ($mappingType) {
-                        case self::HAS_ONE:
+                        case static::HAS_ONE:
                             $pk = $result[$mappingKey];
                             $mappingCondition[$mappingFk] = $pk;
                             $relationData = $model->where($mappingCondition)->field(
                                 $mappingFields
                             )->find();
                             break;
-                        case self::BELONGS_TO:
+                        case static::BELONGS_TO:
                             if (strtoupper($mappingClass) == strtoupper($this->name)) {
                                 // 自引用关联 获取父键名
                                 $mappingFk = !empty($val['parent_key']) ? $val['parent_key'] : 'parent_id';
@@ -142,7 +142,7 @@ class RelationModel extends Model
                                 $mappingFields
                             )->find();
                             break;
-                        case self::HAS_MANY:
+                        case static::HAS_MANY:
                             $pk = $result[$mappingKey];
                             $mappingCondition[$mappingFk] = $pk;
                             $mappingOrder = !empty($val['mapping_order']) ? $val['mapping_order'] : '';
@@ -154,7 +154,7 @@ class RelationModel extends Model
                                 ->limit($mappingLimit)
                                 ->select();
                             break;
-                        case self::MANY_TO_MANY:
+                        case static::MANY_TO_MANY:
                             $pk = $result[$mappingKey];
                             $prefix = $this->tablePrefix;
                             $mappingCondition[$mappingFk] = $pk;
@@ -193,7 +193,7 @@ class RelationModel extends Model
                             break;
                     }
                     if (!$return) {
-                        if (isset($val['as_fields']) && in_array($mappingType, [self::HAS_ONE, self::BELONGS_TO])) {
+                        if (isset($val['as_fields']) && in_array($mappingType, [static::HAS_ONE, static::BELONGS_TO])) {
                             // 支持直接把关联的字段值映射成数据对象中的某个字段
                             // 仅仅支持HAS_ONE BELONGS_TO
                             $fields = explode(',', $val['as_fields']);
@@ -357,7 +357,7 @@ class RelationModel extends Model
                     $mappingData = isset($data[$mappingName]) ? $data[$mappingName] : false;
                     if (!empty($mappingData) || $opType == 'DEL') {
                         switch ($mappingType) {
-                            case self::HAS_ONE:
+                            case static::HAS_ONE:
                                 switch (strtoupper($opType)) {
                                     // 增加关联数据
                                     case 'ADD':
@@ -376,9 +376,9 @@ class RelationModel extends Model
                                         break;
                                 }
                                 break;
-                            case self::BELONGS_TO:
+                            case static::BELONGS_TO:
                                 break;
-                            case self::HAS_MANY:
+                            case static::HAS_MANY:
                                 switch (strtoupper($opType)) {
                                     // 增加关联数据
                                     case 'ADD'   :
@@ -416,7 +416,7 @@ class RelationModel extends Model
                                         break;
                                 }
                                 break;
-                            case self::MANY_TO_MANY:
+                            case static::MANY_TO_MANY:
                                 // 关联
                                 $mappingRelationFk = $val['relation_foreign_key'] ? $val['relation_foreign_key'] : $model->getModelName(
                                     ).'_id';

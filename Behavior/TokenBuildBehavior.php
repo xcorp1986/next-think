@@ -19,7 +19,7 @@ final class TokenBuildBehavior extends Behavior
     public function run(&$content)
     {
         if (C('TOKEN_ON')) {
-            list($tokenName, $tokenKey, $tokenValue) = self::_getToken();
+            list($tokenName, $tokenKey, $tokenValue) = static::_getToken();
             $input_token = '<input type="hidden" name="'.$tokenName.'" value="'.$tokenKey.'_'.$tokenValue.'" />';
             $meta_token = '<meta name="'.$tokenName.'" content="'.$tokenKey.'_'.$tokenValue.'" />';
             if (strpos($content, '{__TOKEN__}')) {

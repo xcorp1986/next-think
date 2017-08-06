@@ -50,10 +50,10 @@ class Image
     {
         /* 判断调用库的类型 */
         switch ($type) {
-            case self::IMAGE_GD:
+            case static::IMAGE_GD:
                 $class = 'Gd';
                 break;
-            case self::IMAGE_IMAGICK:
+            case static::IMAGE_IMAGICK:
                 $class = 'Imagick';
                 break;
             default:

@@ -36,7 +36,7 @@ class Storage
     public static function connect($type = 'File')
     {
         $class = __NAMESPACE__.'\\Storage\\Driver\\'.ucwords($type);
-        self::$handler = new $class;
+        static::$handler = new $class;
     }
 
     /**
@@ -48,8 +48,8 @@ class Storage
     public static function __callStatic($method, $args)
     {
         //静态调用驱动的方法
-        if (method_exists(self::$handler, $method)) {
-            return call_user_func_array([self::$handler, $method], $args);
+        if (method_exists(static::$handler, $method)) {
+            return call_user_func_array([static::$handler, $method], $args);
         }
     }
 }

@@ -1497,7 +1497,7 @@ class Model
         }
 
         // 状态
-        $type = $type ?: (!empty($data[$this->getPk()]) ? self::MODEL_UPDATE : self::MODEL_INSERT);
+        $type = $type ?: (!empty($data[$this->getPk()]) ? static::MODEL_UPDATE : static::MODEL_INSERT);
 
         // 检查字段映射
         $data = $this->parseFieldsMap($data, 0);
@@ -1507,9 +1507,9 @@ class Model
             // $this->field('field1,field2...')->create()
             $fields = $this->options['field'];
             unset($this->options['field']);
-        } elseif ($type == self::MODEL_INSERT && isset($this->insertFields)) {
+        } elseif ($type == static::MODEL_INSERT && isset($this->insertFields)) {
             $fields = $this->insertFields;
-        } elseif ($type == self::MODEL_UPDATE && isset($this->updateFields)) {
+        } elseif ($type == static::MODEL_UPDATE && isset($this->updateFields)) {
             $fields = $this->updateFields;
         }
         if (isset($fields)) {
@@ -1622,23 +1622,23 @@ class Model
                 // 验证因子定义格式
                 // array(field,rule,message,condition,type,when,params)
                 // 判断是否需要执行验证
-                if (empty($val[5]) || ($val[5] == self::MODEL_BOTH && $type < 3) || $val[5] == $type) {
+                if (empty($val[5]) || ($val[5] == static::MODEL_BOTH && $type < 3) || $val[5] == $type) {
                     if (0 == strpos($val[2], '{%') && strpos($val[2], '}')) {
                         // 支持提示信息的多语言 使用 {%语言定义} 方式
                         $val[2] = L(substr($val[2], 2, -1));
                     }
-                    $val[3] = isset($val[3]) ? $val[3] : self::EXISTS_VALIDATE;
+                    $val[3] = isset($val[3]) ? $val[3] : static::EXISTS_VALIDATE;
                     $val[4] = isset($val[4]) ? $val[4] : 'regex';
                     // 判断验证条件
                     switch ($val[3]) {
                         // 必须验证 不管表单是否有设置该字段
-                        case self::MUST_VALIDATE:
+                        case static::MUST_VALIDATE:
                             if (false === $this->_validationField($data, $val)) {
                                 return false;
                             }
                             break;
                         // 值不为空的时候才验证
-                        case self::VALUE_VALIDATE:
+                        case static::VALUE_VALIDATE:
                             if ('' != trim($data[$val[0]])) {
                                 if (false === $this->_validationField($data, $val)) {
                                     return false;
@@ -1936,9 +1936,9 @@ class Model
                 // array('field','填充内容','填充条件','附加规则',[额外参数])
                 // 默认为新增的时候自动填充
                 if (empty($auto[2])) {
-                    $auto[2] = self::MODEL_INSERT;
+                    $auto[2] = static::MODEL_INSERT;
                 }
-                if ($type == $auto[2] || $auto[2] == self::MODEL_BOTH) {
+                if ($type == $auto[2] || $auto[2] == static::MODEL_BOTH) {
                     if (empty($auto[3])) {
                         $auto[3] = 'string';
                     }

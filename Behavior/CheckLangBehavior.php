@@ -18,7 +18,7 @@ final class CheckLangBehavior extends Behavior
      */
     public function run(&$params)
     {
-        self::_checkLanguage();
+        static::_checkLanguage();
     }
 
     /**

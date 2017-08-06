@@ -25,7 +25,7 @@ final class Route
         // URL映射定义（静态路由）
         $maps = C('URL_MAP_RULES');
         if (isset($maps[$regx])) {
-            $var = self::parseUrl($maps[$regx]);
+            $var = static::parseUrl($maps[$regx]);
             $_GET = array_merge($var, $_GET);
 
             return true;
@@ -60,12 +60,12 @@ final class Route
                 if (0 === strpos($rule, '/') && preg_match($rule, $regx, $matches)) {
                     if ($route instanceof \Closure) {
                         // 执行闭包
-                        $result = self::invokeRegx($route, $matches);
+                        $result = static::invokeRegx($route, $matches);
 
                         // 如果返回布尔值 则继续执行
                         return is_bool($result) ? $result : exit;
                     } else {
-                        return self::parseRegex($matches, $route, $regx);
+                        return static::parseRegex($matches, $route, $regx);
                     }
                 } else {
                     // 规则路由
@@ -80,16 +80,16 @@ final class Route
                                 $rule = substr($rule, 0, -1);
                             }
                         }
-                        $match = self::checkUrlMatch($regx, $rule);
+                        $match = static::checkUrlMatch($regx, $rule);
                         if (false !== $match) {
                             if ($route instanceof \Closure) {
                                 // 执行闭包
-                                $result = self::invokeRule($route, $match);
+                                $result = static::invokeRule($route, $match);
 
                                 // 如果返回布尔值 则继续执行
                                 return is_bool($result) ? $result : exit;
                             } else {
-                                return self::parseRule($rule, $route, $regx);
+                                return static::parseRule($rule, $route, $regx);
                             }
                         }
                     }
@@ -256,7 +256,7 @@ final class Route
             exit;
         } else {
             // 解析路由地址
-            $var = self::parseUrl($url);
+            $var = static::parseUrl($url);
             // 解析路由地址里面的动态参数
             $values = array_values($matches);
             foreach ($var as $key => $val) {
@@ -324,7 +324,7 @@ final class Route
             exit;
         } else {
             // 解析路由地址
-            $var = self::parseUrl($url);
+            $var = static::parseUrl($url);
             // 处理函数
             foreach ($var as $key => $val) {
                 if (strpos($val, '|')) {
