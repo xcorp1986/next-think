@@ -227,7 +227,7 @@ final class Dispatcher
                 )
             ) {
                 send_http_status(404);
-                exit;
+                return;
             }
 
             // 去除URL后缀

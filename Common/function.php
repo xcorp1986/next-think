@@ -929,13 +929,14 @@ function redirect($url, $time = 0, $msg = '')
             header("refresh:{$time};url={$url}");
             echo $msg;
         }
-        exit();
+        return;
     } else {
         $str = "<meta http-equiv='Refresh' content='{$time};URL={$url}'>";
         if ($time != 0) {
             $str .= $msg;
         }
-        exit($str);
+        echo $str;
+        return;
     }
 }
 

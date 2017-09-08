@@ -177,13 +177,13 @@ final class Think
                 $e = $error;
             }
             if (IS_CLI) {
-                exit(
-                    iconv(
+                echo iconv(
                         'UTF-8',
                         'gbk',
                         $e['message']
-                    ).PHP_EOL.'FILE: '.$e['file'].'('.$e['line'].')'.PHP_EOL.$e['trace']
-                );
+                    ).PHP_EOL.'FILE: '.$e['file'].'('.$e['line'].')'.PHP_EOL.$e['trace'];
+
+                return;
             }
         } else {
             //否则定向到错误页面
@@ -199,7 +199,7 @@ final class Think
         $exceptionFile = C('TMPL_EXCEPTION_FILE', null, C('TMPL_EXCEPTION_FILE'));
         /** @noinspection PhpIncludeInspection */
         include $exceptionFile;
-        exit;
+        return;
     }
 
     /**

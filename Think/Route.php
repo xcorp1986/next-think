@@ -2,6 +2,8 @@
 
 namespace Think;
 
+use Closure;
+
 /**
  * 路由解析类
  * Class Route
@@ -58,7 +60,7 @@ final class Route
                 }
                 // 正则路由
                 if (0 === strpos($rule, '/') && preg_match($rule, $regx, $matches)) {
-                    if ($route instanceof \Closure) {
+                    if ($route instanceof Closure) {
                         // 执行闭包
                         $result = static::invokeRegx($route, $matches);
 
@@ -82,7 +84,7 @@ final class Route
                         }
                         $match = static::checkUrlMatch($regx, $rule);
                         if (false !== $match) {
-                            if ($route instanceof \Closure) {
+                            if ($route instanceof Closure) {
                                 // 执行闭包
                                 $result = static::invokeRule($route, $match);
 
@@ -253,7 +255,7 @@ final class Route
                 );
             }
             header("Location: $url", true, (is_array($route) && isset($route[1])) ? $route[1] : 301);
-            exit;
+            return;
         } else {
             // 解析路由地址
             $var = static::parseUrl($url);
@@ -321,7 +323,7 @@ final class Route
         if (0 === strpos($url, '/') || 0 === strpos($url, 'http')) {
             // 路由重定向跳转
             header("Location: $url", true, (is_array($route) && isset($route[1])) ? $route[1] : 301);
-            exit;
+            return;
         } else {
             // 解析路由地址
             $var = static::parseUrl($url);
@@ -361,12 +363,12 @@ final class Route
     /**
      * 执行正则匹配下的闭包方法 支持参数调用
      *
-     * @param   \Closure $closure
+     * @param   Closure $closure
      * @param array $var
      *
      * @return mixed
      */
-    private static function invokeRegx(\Closure $closure, $var = [])
+    private static function invokeRegx(Closure $closure, $var = [])
     {
         $reflect = new \ReflectionFunction($closure);
         $params = $reflect->getParameters();
@@ -386,12 +388,12 @@ final class Route
     /**
      * 执行规则匹配下的闭包方法 支持参数调用
      *
-     * @param  \Closure $closure
+     * @param  Closure $closure
      * @param array $var
      *
      * @return mixed
      */
-    private static function invokeRule(\Closure $closure, $var = [])
+    private static function invokeRule(Closure $closure, $var = [])
     {
         $reflect = new \ReflectionFunction($closure);
         $params = $reflect->getParameters();

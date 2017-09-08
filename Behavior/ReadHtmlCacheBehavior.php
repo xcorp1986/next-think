@@ -26,7 +26,7 @@ final class ReadHtmlCacheBehavior extends Behavior
             if (false !== $cacheTime && $this->checkHTMLCache(HTML_FILE_NAME, $cacheTime)) {
                 // 读取静态页面输出
                 echo Storage::read(HTML_FILE_NAME);
-                exit();
+                return;
             }
         }
     }
