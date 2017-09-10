@@ -328,6 +328,7 @@ abstract class Controller
             $data['status'] = $status;
             $data['url'] = $jumpUrl;
             $this->ajaxReturn($data);
+            return;
         }
         if (is_int($ajax)) {
             $this->assign('waitSecond', $ajax);
