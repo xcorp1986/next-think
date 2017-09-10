@@ -263,12 +263,12 @@ abstract class Controller
                 // 返回JSON数据格式到客户端 包含状态信息
                 header('Content-Type:application/json; charset=utf-8');
                 echo json_encode($data, $json_option);
-                return;
+                break;
             case 'XML'  :
                 // 返回xml格式数据
                 header('Content-Type:text/xml; charset=utf-8');
                 echo xml_encode($data);
-                return;
+                break;
             case 'JSONP':
                 // 返回JSON数据格式到客户端 包含状态信息
                 header('Content-Type:text/javascript; charset=utf-8');
@@ -276,12 +276,12 @@ abstract class Controller
                     'DEFAULT_JSONP_HANDLER'
                 );
                 echo $handler.'('.json_encode($data, $json_option).');';
-                return;
+                break;
             case 'EVAL' :
                 // 返回可执行的js脚本
                 header('Content-Type:text/javascript; charset=utf-8');
                 echo $data;
-                return;
+                break;
             default     :
                 break;
             // 用于扩展其他返回格式数据
