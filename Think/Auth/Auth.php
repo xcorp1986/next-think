@@ -59,7 +59,7 @@ namespace Think\Auth;
  * ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
  */
 
-final class Auth
+class Auth
 {
 
     /**
