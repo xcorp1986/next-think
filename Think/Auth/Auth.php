@@ -168,7 +168,7 @@ class Auth
         }
         $user_groups = D()
             ->table($this->_config['AUTH_GROUP_ACCESS'].' a')
-            ->where("a.uid='$uid' and g.status='1'")
+            ->where(['a.uid' => $uid, 'g.status' => 1])
             ->join($this->_config['AUTH_GROUP']." g on a.group_id=g.id")
             ->field('uid,group_id,title,rules')->select();
         $groups[$uid] = $user_groups ?: [];
@@ -217,7 +217,10 @@ class Auth
             'status' => 1,
         ];
         //读取用户组所有权限规则
-        $rules = D()->table($this->_config['AUTH_RULE'])->where($map)->field('condition,name')->select();
+        $rules = D()->table($this->_config['AUTH_RULE'])
+            ->where($map)
+            ->field('condition,name')
+            ->select();
 
         //循环规则，判断结果。
         $authList = [];
@@ -257,7 +260,9 @@ class Auth
     {
         static $userinfo = [];
         if (!isset($userinfo[$uid])) {
-            $userinfo[$uid] = D()->where(['uid' => $uid])->table($this->_config['AUTH_USER'])->find();
+            $userinfo[$uid] = D()->where(['uid' => $uid])
+                ->table($this->_config['AUTH_USER'])
+                ->find();
         }
 
         return $userinfo[$uid];
