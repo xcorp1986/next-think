@@ -157,8 +157,6 @@ class Model
 
     /**
      * 取得DB类的实例对象
-     * @access public
-     *
      * @param string $name 模型名称
      */
     public function __construct($name = '')
@@ -187,8 +185,6 @@ class Model
 
     /**
      * 切换当前的数据库连接
-     * @access public
-     *
      * @param mixed $linkNum 连接序号
      * @param array $config 数据库连接信息
      *
@@ -214,8 +210,6 @@ class Model
 
     /**
      * 自动检测数据表信息
-     * @access protected
-     * @return void
      */
     protected function _checkTableInfo()
     {
@@ -242,8 +236,6 @@ class Model
 
     /**
      * 获取字段信息并缓存
-     * @access public
-     * @return void
      */
     public function flush()
     {
@@ -290,7 +282,6 @@ class Model
 
     /**
      * 得到完整的数据表名
-     * @access public
      * @return string
      */
     public function getTableName()
@@ -310,7 +301,6 @@ class Model
 
     /**
      * 得到当前的数据对象名称
-     * @access public
      * @return string
      */
     public function getModelName()
@@ -330,8 +320,6 @@ class Model
 
     /**
      * 获取数据对象的值
-     * @access public
-     *
      * @param string $name 名称
      *
      * @return mixed
@@ -343,12 +331,8 @@ class Model
 
     /**
      * 设置数据对象的值
-     * @access public
-     *
      * @param string $name 名称
      * @param mixed $value 值
-     *
-     * @return void
      */
     public function __set($name, $value)
     {
@@ -360,10 +344,7 @@ class Model
 
     /**
      * 检测数据对象的值
-     * @access public
-     *
      * @param string $name 名称
-     *
      * @return bool
      */
     public function __isset($name)
@@ -373,11 +354,7 @@ class Model
 
     /**
      * 销毁数据对象的值
-     * @access public
-     *
      * @param string $name 名称
-     *
-     * @return void
      */
     public function __unset($name)
     {
@@ -386,8 +363,6 @@ class Model
 
     /**
      * 利用__call方法实现一些特殊的Model方法
-     * @access public
-     *
      * @param string $method 方法名称
      * @param array $args 调用参数
      * @return mixed
@@ -405,24 +380,7 @@ class Model
             $field = isset($args[0]) ? $args[0] : '*';
 
             return $this->getField(strtoupper($method).'('.$field.') AS tp_'.$method);
-        }
-//            elseif (strtolower(substr($method, 0, 5)) == 'getby') {
-//                // 根据某个字段获取记录
-//                $field         = parse_name(substr($method, 5));
-//                $where[$field] = $args[0];
-//
-//                return $this->where($where)->find();
-//            } elseif (strtolower(substr($method, 0, 10)) == 'getfieldby') {
-//                // 根据某个字段获取记录的某个值
-//                $name         = parse_name(substr($method, 10));
-//                $where[$name] = $args[0];
-//
-//                return $this->where($where)->getField($args[1]);
-//            } elseif (isset($this->_scope[$method])) {
-//                // 命名范围的单独调用支持
-//                return $this->scope($method, $args[0]);
-//            }
-        else {
+        } else {
             throw new BaseException(__CLASS__.':'.$method.L('_METHOD_NOT_EXIST_'));
 
             return;
@@ -431,8 +389,6 @@ class Model
 
     /**
      * 获取一条记录的某个字段值
-     * @access   public
-     *
      * @param string $field 字段名
      * @param null $sepa 字段数据间隔符号 NULL返回数组
      *
@@ -518,8 +474,6 @@ class Model
 
     /**
      * 分析表达式
-     * @access protected
-     *
      * @param array $options 表达式参数
      * @return array
      * @throws BaseException
@@ -580,7 +534,6 @@ class Model
 
     /**
      * 获取数据表字段信息
-     * @access public
      * @return array
      */
     public function getDbFields()
@@ -612,12 +565,8 @@ class Model
 
     /**
      * 数据类型检测
-     * @access protected
-     *
      * @param mixed $data 数据
      * @param string $key 字段名
-     *
-     * @return void
      */
     protected function _parseType(&$data, $key)
     {
@@ -637,7 +586,6 @@ class Model
 
     /**
      * 表达式过滤回调方法
-     *
      * @param $options
      */
     protected function _options_filter(&$options)
@@ -646,10 +594,7 @@ class Model
 
     /**
      * 查询数据
-     * @access public
-     *
      * @param mixed $options 表达式参数
-     *
      * @return mixed
      */
     public function find($options = null)
@@ -722,7 +667,6 @@ class Model
 
     /**
      * 获取主键名称
-     * @access public
      * @return string
      */
     public function getPk()
@@ -733,8 +677,6 @@ class Model
     /**
      * 数据读取后的处理
      * @todo   check
-     * @access protected
-     *
      * @param array $data 当前数据
      *
      * @return array
@@ -791,8 +733,6 @@ class Model
 
     /**
      * 指定查询条件 支持安全过滤
-     * @access public
-     *
      * @param array $where 条件表达式
      *
      * @return $this
@@ -810,8 +750,6 @@ class Model
 
     /**
      * 调用命名范围
-     * @access public
-     *
      * @param mixed $scope 命名范围名称 支持多个 和直接定义
      * @param array $args 参数
      *
@@ -853,8 +791,6 @@ class Model
 
     /**
      * 新增数据
-     * @access public
-     *
      * @param mixed $data 数据
      * @param array $options 表达式
      * @param boolean $replace 是否replace
@@ -910,8 +846,6 @@ class Model
 
     /**
      * 对保存到数据库的数据进行处理
-     * @access protected
-     *
      * @param mixed $data 要操作的数据
      * @return bool
      * @throws BaseException
@@ -959,7 +893,6 @@ class Model
 
     /**
      * 插入数据前的回调方法
-     *
      * @param $data
      * @param $options
      */
@@ -969,7 +902,6 @@ class Model
 
     /**
      * 返回最后插入的ID
-     * @access public
      * @return string
      */
     public function getLastInsID()
@@ -979,7 +911,6 @@ class Model
 
     /**
      * 插入成功后的回调方法
-     *
      * @param $data
      * @param $options
      */
@@ -1014,12 +945,9 @@ class Model
 
     /**
      * 通过Select方式添加记录
-     * @access public
-     *
      * @param string $fields 要插入的数据表字段名
      * @param string $table 要插入的数据表名
      * @param array $options 表达式
-     *
      * @return bool
      */
     public function selectAdd($fields = '', $table = '', $options = [])
@@ -1045,8 +973,6 @@ class Model
 
     /**
      * 删除数据
-     * @access public
-     *
      * @param mixed $options 表达式
      *
      * @return mixed
@@ -1119,7 +1045,6 @@ class Model
 
     /**
      * 删除数据前的回调方法
-     *
      * @param $options
      */
     protected function _before_delete($options)
@@ -1128,7 +1053,6 @@ class Model
 
     /**
      * 删除成功后的回调方法
-     *
      * @param $data
      * @param $options
      */
@@ -1138,7 +1062,6 @@ class Model
 
     /**
      * 生成查询SQL 可用于子查询
-     * @access public
      * @return string
      */
     public function buildSql()
@@ -1148,10 +1071,7 @@ class Model
 
     /**
      * 查询数据集
-     * @access public
-     *
      * @param array $options 表达式参数
-     *
      * @return mixed
      */
     public function select($options = [])
@@ -1235,7 +1155,6 @@ class Model
 
     /**
      * 查询成功后的回调方法
-     *
      * @param $resultSet
      * @param $options
      */
@@ -1245,9 +1164,7 @@ class Model
 
     /**
      * 获取执行的SQL语句
-     * @access public
-     *
-     * @param boolean $fetch 是否返回sql
+     * @param bool $fetch 是否返回sql
      *
      * @return $this
      */
@@ -1260,8 +1177,6 @@ class Model
 
     /**
      * 字段值增长
-     * @access public
-     *
      * @param string $field 字段名
      * @param int $step 增长值
      * @param int $lazyTime 延时时间(s)
@@ -1289,8 +1204,7 @@ class Model
     /**
      * 延时更新检查 返回false表示需要延时
      * 否则返回实际写入的数值
-     * @access public
-     *
+     * @deprecated
      * @param string $guid 写入标识
      * @param int $step 写入步进值
      * @param int $lazyTime 延时时间(s)
@@ -1326,8 +1240,6 @@ class Model
     /**
      * 设置记录的某个字段值
      * 支持使用数据库字段和方法
-     * @access public
-     *
      * @param string|array $field 字段名
      * @param string $value 字段值
      *
@@ -1346,11 +1258,8 @@ class Model
 
     /**
      * 保存数据
-     * @access public
-     *
      * @param mixed $data 数据
      * @param array $options 表达式
-     *
      * @return bool
      */
     public function save($data = '', $options = [])
@@ -1426,7 +1335,6 @@ class Model
 
     /**
      * 更新数据前的回调方法
-     *
      * @param $data
      * @param $options
      */
@@ -1446,8 +1354,6 @@ class Model
 
     /**
      * 字段值减少
-     * @access public
-     *
      * @param string $field 字段名
      * @param int $step 减少值
      * @param int $lazyTime 延时时间(s)
@@ -1474,11 +1380,8 @@ class Model
 
     /**
      * 创建数据对象 但不保存到数据库
-     * @access public
-     *
      * @param mixed $data 创建数据
      * @param string $type 状态
-     *
      * @return mixed
      */
     public function create($data = '', $type = '')
@@ -1561,11 +1464,8 @@ class Model
 
     /**
      * 处理字段映射
-     * @access public
-     *
      * @param array $data 当前数据
      * @param int $type 类型 0 写入 1 读取
-     *
      * @return array
      */
     public function parseFieldsMap($data, $type = 1)
@@ -1592,11 +1492,8 @@ class Model
 
     /**
      * 自动表单验证
-     * @access protected
-     *
      * @param array $data 创建数据
      * @param string $type 创建类型
-     *
      * @return bool
      */
     protected function autoValidation($data, $type)
@@ -1667,11 +1564,8 @@ class Model
     /**
      * 验证表单字段 支持批量验证
      * 如果批量验证返回错误的数组信息
-     * @access protected
-     *
      * @param array $data 创建数据
      * @param array $val 验证因子
-     *
      * @return bool
      */
     protected function _validationField($data, $val)
@@ -1693,15 +1587,10 @@ class Model
         return;
     }
 
-    // 数据库切换后回调方法
-
     /**
      * 根据验证因子验证字段
-     * @access protected
-     *
      * @param array $data 创建数据
      * @param array $val 验证因子
-     *
      * @return bool
      */
     protected function _validationFieldItem($data, $val)
@@ -1764,12 +1653,9 @@ class Model
 
     /**
      * 验证数据 支持 in between equal length regex expire ip_allow ip_deny
-     * @access public
-     *
      * @param string $value 验证数据
      * @param mixed $rule 验证表达式
      * @param string $type 验证方式 默认为正则验证
-     *
      * @return bool
      */
     public function check($value, $rule, $type = 'regex')
@@ -1839,11 +1725,8 @@ class Model
 
     /**
      * 使用正则验证数据
-     * @access public
-     *
      * @param string $value 要验证的数据
      * @param string $rule 验证规则
-     *
      * @return bool
      */
     public function regex($value, $rule)
@@ -1870,9 +1753,7 @@ class Model
     /**
      * 自动表单令牌验证
      * @todo ajax无刷新多次提交暂不能满足
-     *
      * @param $data
-     *
      * @return bool
      */
     public function autoCheckToken($data)
@@ -1910,11 +1791,8 @@ class Model
 
     /**
      * 自动表单处理
-     * @access public
-     *
      * @param array $data 创建数据
      * @param string $type 创建类型
-     *
      * @return mixed
      */
     private function autoOperation(&$data, $type)
@@ -1985,11 +1863,8 @@ class Model
     /**
      * 存储过程返回多数据集
      * @todo   check
-     * @access public
-     *
      * @param string $sql SQL指令
      * @param mixed $parse 是否需要解析SQL
-     *
      * @return array
      */
     public function procedure($sql, $parse = false)
@@ -1999,10 +1874,7 @@ class Model
 
     /**
      * SQL查询
-     * @access public
-     *
      * @param string $sql SQL指令
-     *
      * @return mixed
      */
     public function query($sql)
@@ -2014,10 +1886,7 @@ class Model
 
     /**
      * 解析SQL语句
-     * @access public
-     *
      * @param string $sql SQL指令
-     *
      * @return string
      */
     protected function parseSql($sql)
@@ -2039,11 +1908,9 @@ class Model
 
     /**
      * 执行SQL语句
-     * @access public
-     *
      * @param string $sql SQL指令
      *
-     * @return false | integer
+     * @return false|int
      */
     public function execute($sql)
     {
@@ -2054,8 +1921,6 @@ class Model
 
     /**
      * 启动事务
-     * @access public
-     * @return void
      */
     public function startTrans()
     {
@@ -2067,7 +1932,6 @@ class Model
 
     /**
      * 提交事务
-     * @access public
      * @return bool
      */
     public function commit()
@@ -2077,7 +1941,6 @@ class Model
 
     /**
      * 事务回滚
-     * @access public
      * @return bool
      */
     public function rollback()
@@ -2087,7 +1950,6 @@ class Model
 
     /**
      * 返回模型的错误信息
-     * @access public
      * @return string
      */
     public function getError()
@@ -2097,7 +1959,6 @@ class Model
 
     /**
      * 返回数据库的错误信息
-     * @access public
      * @return string
      */
     public function getDbError()
@@ -2116,7 +1977,6 @@ class Model
 
     /**
      * 返回最后执行的sql语句
-     * @access public
      * @return string
      */
     public function getLastSql()
@@ -2126,8 +1986,6 @@ class Model
 
     /**
      * 设置数据对象值
-     * @access public
-     *
      * @param mixed $data 数据
      * @return $this
      * @throws BaseException
@@ -2151,10 +2009,7 @@ class Model
 
     /**
      * 指定当前的数据表
-     * @access public
-     *
      * @param mixed $table
-     *
      * @return $this
      */
     public function table($table)
@@ -2179,10 +2034,7 @@ class Model
 
     /**
      * USING支持 用于多表删除
-     * @access public
-     *
      * @param mixed $using
-     *
      * @return $this
      */
     public function using($using)
@@ -2207,11 +2059,8 @@ class Model
 
     /**
      * 查询SQL组装 join
-     * @access public
-     *
      * @param mixed $join
      * @param string $type JOIN类型
-     *
      * @return $this
      */
     public function join($join, $type = 'INNER')
@@ -2246,8 +2095,6 @@ class Model
 
     /**
      * 查询SQL组装 union
-     * @access public
-     *
      * @param mixed $union
      * @param boolean $all
      * @return $this
@@ -2293,12 +2140,9 @@ class Model
 
     /**
      * 查询缓存
-     * @access public
-     *
      * @param mixed $key
      * @param int $expire
      * @param string $type
-     *
      * @return $this
      */
     public function cache($key = true, $expire = null, $type = '')
@@ -2317,11 +2161,8 @@ class Model
 
     /**
      * 指定查询字段 支持字段排除
-     * @access public
-     *
      * @param mixed $field
-     * @param boolean $except 是否排除
-     *
+     * @param bool $except 是否排除
      * @return $this
      */
     public function field($field, $except = false)
@@ -2345,11 +2186,8 @@ class Model
 
     /**
      * 指定查询数量
-     * @access public
-     *
      * @param mixed $offset 起始位置
      * @param mixed $length 查询数量
-     *
      * @return $this
      */
     public function limit($offset, $length = null)
@@ -2364,11 +2202,8 @@ class Model
 
     /**
      * 指定分页
-     * @access public
-     *
      * @param mixed $page 页数
      * @param mixed $listRows 每页数量
-     *
      * @return $this
      */
     public function page($page, $listRows = null)
@@ -2383,10 +2218,7 @@ class Model
 
     /**
      * 查询注释
-     * @access public
-     *
      * @param string $comment 注释
-     *
      * @return $this
      */
     public function comment($comment)
@@ -2398,11 +2230,8 @@ class Model
 
     /**
      * 参数绑定
-     * @access public
-     *
      * @param string $key 参数名
      * @param mixed $value 绑定的变量及绑定参数
-     *
      * @return $this
      */
     public function bind($key, $value = false)
