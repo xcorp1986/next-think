@@ -11,7 +11,7 @@ final class Think
     /**
      * @var string 版本号
      */
-    const VERSION = '3.2.3';
+    const VERSION = '3.2.3-CheungPang';
 
     /**
      * 应用程序初始化
@@ -23,8 +23,8 @@ final class Think
         /*
          * 设定错误和异常处理
          */
-        register_shutdown_function([__CLASS__, 'fatalError']);
-        set_error_handler([__CLASS__, 'appError']);
+//        register_shutdown_function([__CLASS__, 'fatalError']);
+//        set_error_handler([__CLASS__, 'appError']);
 
         /*
          * 初始化文件存储方式
@@ -104,7 +104,7 @@ final class Think
 
     /**
      * 自定义错误处理
-     * @access public
+     * @deprecated
      *
      * @param int $errNo 错误类型
      * @param string $errStr 错误信息
@@ -113,45 +113,46 @@ final class Think
      *
      * @return void
      */
-    public static function appError($errNo, $errStr, $errFile, $errLine)
-    {
-        switch ($errNo) {
-            case E_ERROR:
-            case E_PARSE:
-            case E_CORE_ERROR:
-            case E_COMPILE_ERROR:
-            case E_USER_ERROR:
-                ob_end_clean();
-                $errorStr = "$errStr ".$errFile." 第 $errLine 行.";
-                static::halt($errorStr);
-                break;
-            default:
-                $errorStr = "[$errNo] $errStr ".$errFile." 第 $errLine 行.";
-                static::trace($errorStr, '', 'NOTIC');
-                break;
-        }
-    }
+//    public static function appError($errNo, $errStr, $errFile, $errLine)
+//    {
+//        switch ($errNo) {
+//            case E_ERROR:
+//            case E_PARSE:
+//            case E_CORE_ERROR:
+//            case E_COMPILE_ERROR:
+//            case E_USER_ERROR:
+//                ob_end_clean();
+//                $errorStr = "$errStr ".$errFile." 第 $errLine 行.";
+//                static::halt($errorStr);
+//                break;
+//            default:
+//                $errorStr = "[$errNo] $errStr ".$errFile." 第 $errLine 行.";
+//                static::trace($errorStr, '', 'NOTIC');
+//                break;
+//        }
+//    }
 
     /**
      * 致命错误捕获
+     * @deprecated
      */
-    public static function fatalError()
-    {
-        if ($e = error_get_last()) {
-            switch ($e['type']) {
-                case E_ERROR:
-                case E_PARSE:
-                case E_CORE_ERROR:
-                case E_COMPILE_ERROR:
-                case E_USER_ERROR:
-                    ob_end_clean();
-                    static::halt($e);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
+//    public static function fatalError()
+//    {
+//        if ($e = error_get_last()) {
+//            switch ($e['type']) {
+//                case E_ERROR:
+//                case E_PARSE:
+//                case E_CORE_ERROR:
+//                case E_COMPILE_ERROR:
+//                case E_USER_ERROR:
+//                    ob_end_clean();
+//                    static::halt($e);
+//                    break;
+//                default:
+//                    break;
+//            }
+//        }
+//    }
 
     /**
      * 错误输出
