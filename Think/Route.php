@@ -3,6 +3,7 @@
 namespace Think;
 
 use Closure;
+use ReflectionFunction;
 
 /**
  * 路由解析类
@@ -370,7 +371,7 @@ final class Route
      */
     private static function invokeRegx(Closure $closure, $var = [])
     {
-        $reflect = new \ReflectionFunction($closure);
+        $reflect = new ReflectionFunction($closure);
         $params = $reflect->getParameters();
         $args = [];
         array_shift($var);
@@ -395,7 +396,7 @@ final class Route
      */
     private static function invokeRule(Closure $closure, $var = [])
     {
-        $reflect = new \ReflectionFunction($closure);
+        $reflect = new ReflectionFunction($closure);
         $params = $reflect->getParameters();
         $args = [];
         foreach ($params as $param) {
