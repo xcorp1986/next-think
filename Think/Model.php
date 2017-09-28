@@ -13,7 +13,7 @@ namespace Think;
  * @method string max(string $max) 获取最大值，参数是要统计的字段名（必须）
  * @method string avg(string $avg) 获取平均值，参数是要统计的字段名（必须）
  * @method \Think\Model strict(bool $strict) 用于数据入库的严格检测
- * @method \Think\Model order(string | array $order) 用于对结果排序
+ * @method \Think\Model order(mixed $order) 用于对结果排序
  * @method \Think\Model alias(string $alias) 用于给当前数据表定义别名
  * @method \Think\Model having(string $having) 用于对查询的having支持
  * @method \Think\Model group(string $group) 用于对查询的group支持
