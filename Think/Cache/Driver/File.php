@@ -93,7 +93,7 @@ class File extends Cache
             $expire = (int)substr($content, 8, 12);
             if ($expire != 0 && time() > filemtime($filename) + $expire) {
                 //缓存过期删除缓存文件
-                unlink($filename);
+                @unlink($filename);
 
                 return false;
             }
@@ -172,7 +172,7 @@ class File extends Cache
      */
     public function rm($name)
     {
-        return unlink($this->filename($name));
+        return @unlink($this->filename($name));
     }
 
     /**
@@ -189,7 +189,7 @@ class File extends Cache
                 if ($file != '.' && $file != '..' && is_dir($path.$file)) {
                     array_map('unlink', glob($path.$file.'/*.*'));
                 } elseif (is_file($path.$file)) {
-                    unlink($path.$file);
+                    @unlink($path.$file);
                 }
             }
 
