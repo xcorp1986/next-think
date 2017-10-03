@@ -8,7 +8,7 @@ use Think\Model;
 /**
  * 聚合模型
  */
-class MergeModel extends Model
+abstract class MergeModel extends Model
 {
 
     //  包含的模型列表 第一个必须是主表模型

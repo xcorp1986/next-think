@@ -3,6 +3,11 @@
 
 namespace Think\Log\Driver;
 
+/**
+ * Class File
+ * @package Think\Log\Driver
+ * @deprecated
+ */
 final class File
 {
     /**

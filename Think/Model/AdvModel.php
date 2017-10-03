@@ -8,7 +8,7 @@ use Think\Model;
 /**
  * 高级模型扩展
  */
-class AdvModel extends Model
+abstract class AdvModel extends Model
 {
     protected $optimLock = 'lock_version';
     protected $returnType = 'array';
@@ -133,12 +133,12 @@ class AdvModel extends Model
     /**
      * 更新前的回调方法
      *
-     * @param        $data
-     * @param string $options
+     * @param  array $data
+     * @param array $options
      *
      * @return bool
      */
-    protected function _before_update(&$data, $options = '')
+    protected function _before_update(&$data, array $options = [])
     {
         // 检查乐观锁
         $pk = $this->getPk();
@@ -448,7 +448,7 @@ class AdvModel extends Model
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return mixed
      */
@@ -475,7 +475,7 @@ class AdvModel extends Model
      * 获取数据集的文本字段
      * @access protected
      *
-     * @param mixed $resultSet 查询的数据
+     * @param array $resultSet 查询的数据
      * @param string $field 查询的字段
      *
      * @return array|mixed
@@ -496,7 +496,7 @@ class AdvModel extends Model
      * 获取数据的文本字段
      * @access protected
      *
-     * @param mixed $data 查询的数据
+     * @param array $data 查询的数据
      * @param string $field 查询的字段
      *
      * @return array|mixed
@@ -525,7 +525,7 @@ class AdvModel extends Model
      * 保存File方式的字段
      * @access protected
      *
-     * @param mixed $data 保存的数据
+     * @param array $data 保存的数据
      *
      * @return void
      */
@@ -545,7 +545,7 @@ class AdvModel extends Model
      * 删除File方式的字段
      * @access protected
      *
-     * @param mixed $data 保存的数据
+     * @param array $data 保存的数据
      * @param string $field 查询的字段
      *
      * @return void
@@ -602,7 +602,7 @@ class AdvModel extends Model
     /**
      * 检查返回数据的序列化字段
      *
-     * @param $result
+     * @param array $result
      *
      * @return mixed
      */
@@ -627,7 +627,7 @@ class AdvModel extends Model
     /**
      * 检查数据集的序列化字段
      *
-     * @param $resultSet
+     * @param array $resultSet
      *
      * @return mixed
      */

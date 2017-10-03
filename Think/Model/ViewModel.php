@@ -8,7 +8,7 @@ use Think\Model;
 /**
  * 视图模型
  */
-class ViewModel extends Model
+abstract class ViewModel extends Model
 {
 
     protected $viewFields = [];
@@ -69,7 +69,7 @@ class ViewModel extends Model
      * 表达式过滤方法
      * @access protected
      *
-     * @param string $options 表达式
+     * @param array $options 表达式
      *
      * @return void
      */

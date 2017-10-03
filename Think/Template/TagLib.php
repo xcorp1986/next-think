@@ -135,25 +135,7 @@ class TagLib
     {
         $condition = str_ireplace(array_keys($this->comparison), array_values($this->comparison), $condition);
         $condition = preg_replace('/\$(\w+):(\w+)\s/is', '$\\1->\\2 ', $condition);
-        switch (strtolower(C('TMPL_VAR_IDENTIFY'))) {
-            // 识别为数组
-            case 'array':
-                $condition = preg_replace('/\$(\w+)\.(\w+)\s/is', '$\\1["\\2"] ', $condition);
-                break;
-            // 识别为对象
-            case 'obj':
-                $condition = preg_replace('/\$(\w+)\.(\w+)\s/is', '$\\1->\\2 ', $condition);
-                break;
-            // 自动判断数组或对象 只支持二维
-            default:
-                $condition = preg_replace(
-                    '/\$(\w+)\.(\w+)\s/is',
-                    '(is_array($\\1)?$\\1["\\2"]:$\\1->\\2) ',
-                    $condition
-                );
-        }
-
-        return $condition;
+        return preg_replace('/\$(\w+)\.(\w+)\s/is', '$\\1["\\2"] ', $condition);
     }
 
     /**
@@ -169,28 +151,13 @@ class TagLib
         if (strpos($name, '.')) {
             $vars = explode('.', $name);
             $var = array_shift($vars);
-            switch (strtolower(C('TMPL_VAR_IDENTIFY'))) {
-                // 识别为数组
-                case 'array':
-                    $name = '$'.$var;
-                    foreach ($vars as $key => $val) {
-                        if (0 === strpos($val, '$')) {
-                            $name .= '["{'.$val.'}"]';
-                        } else {
-                            $name .= '["'.$val.'"]';
-                        }
-                    }
-                    break;
-                // 识别为对象
-                case 'obj':
-                    $name = '$'.$var;
-                    foreach ($vars as $key => $val) {
-                        $name .= '->'.$val;
-                    }
-                    break;
-                // 自动判断数组或对象 只支持二维
-                default:
-                    $name = 'is_array($'.$var.')?$'.$var.'["'.$vars[0].'"]:$'.$var.'->'.$vars[0];
+            $name = '$'.$var;
+            foreach ($vars as $key => $val) {
+                if (0 === strpos($val, '$')) {
+                    $name .= '["{'.$val.'}"]';
+                } else {
+                    $name .= '["'.$val.'"]';
+                }
             }
         } elseif (!defined($name)) {
             $name = '$'.$name;

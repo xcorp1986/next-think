@@ -8,7 +8,7 @@ use Think\Model;
 /**
  * 关联模型
  */
-class RelationModel extends Model
+abstract class RelationModel extends Model
 {
 
     const   HAS_ONE = 1;
