@@ -11,8 +11,6 @@ use Think\BaseException;
 /**
  * Class Driver
  * @package Think\Db
- * @method array getFields(string $tableName) 取得数据表的字段信息
- * @method  array getTables(string $dbName = '') 取得数据库的表信息
  * @method  mixed insertAll(array $dataSet, $options = [], $replace = false) 批量插入记录
  */
 abstract class Driver
@@ -678,7 +676,6 @@ abstract class Driver
 
     /**
      * field分析
-     * @access protected
      *
      * @param mixed $fields
      *
@@ -1150,7 +1147,7 @@ abstract class Driver
      *
      * @return mixed
      */
-    public function select($options = [])
+    public function select(array $options = [])
     {
         $this->model = $options['model'];
         $this->parseBind(!empty($options['bind']) ? $options['bind'] : []);
