@@ -28,7 +28,7 @@ namespace Think;
  * @method \Think\Model force($force)
  * @property-read string $tableName 数据表名（不包含表前缀）
  */
-abstract class Model
+class Model
 {
     /**
      * @const MODEL_INSERT 插入模型数据
