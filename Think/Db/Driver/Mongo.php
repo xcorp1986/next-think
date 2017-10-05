@@ -49,7 +49,7 @@ class Mongo extends Driver
      */
     public function __construct(array $config = [])
     {
-        if (!class_exists('mongoClient')) {
+        if (!class_exists('Mongo')) {
             E(L('_NOT_SUPPORT_').':Mongo');
         }
         if (!empty($config)) {
