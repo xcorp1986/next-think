@@ -176,6 +176,12 @@ final class Template
             [$this, 'restoreLiteral'],
             $tmplContent
         );
+        if (C('TMPL_STRIP_SPACE')) {
+            /* 去除html空格与换行 */
+            $find = ["~>\s+<~", "~>(\s+\n|\r)~"];
+            $replace = ['><', '>'];
+            $tmplContent = preg_replace($find, $replace, $tmplContent);
+        }
         // 添加安全代码
         $tmplContent = '<?php defined(\'APP_PATH\') || exit(-1);?>'.$tmplContent;
         // 模版编译过滤标签
