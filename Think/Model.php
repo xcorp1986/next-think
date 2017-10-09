@@ -1446,9 +1446,11 @@ class Model
         if ($this->autoCheckFields) {
             // 开启字段检测 则过滤非法字段数据
             $fields = $this->getDbFields();
-            foreach ($data as $key => $val) {
-                if (!in_array($key, $fields)) {
-                    unset($data[$key]);
+            if (is_array($fields)) {
+                foreach ($data as $key => $val) {
+                    if (!in_array($key, $fields)) {
+                        unset($data[$key]);
+                    }
                 }
             }
         }
