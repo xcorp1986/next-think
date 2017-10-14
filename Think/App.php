@@ -110,7 +110,7 @@ final class App
      * @throws BaseException
      * @throws ReflectionException
      */
-    protected static function invokeAction($module, $action)
+    public static function invokeAction($module, $action)
     {
         if (!preg_match('/^[A-Za-z](\w)*$/', $action)) {
             // 非法操作
