@@ -76,6 +76,7 @@ class Upload
      * @param array $config 配置
      * @param string $driver 要使用的上传驱动 LOCAL-本地上传驱动，FTP-FTP上传驱动
      * @param null $driverConfig 驱动配置
+     * @throws BaseException
      */
     public function __construct(array $config = [], $driver = '', $driverConfig = null)
     {
@@ -133,6 +134,7 @@ class Upload
     /**
      * @param $name
      * @param $value
+     * @throws BaseException
      */
     public function __set($name, $value)
     {
@@ -244,14 +246,16 @@ class Upload
             }
 
             /* 调用回调函数检测文件是否存在 */
-            $data = call_user_func($this->callback, $file);
-            if ($this->callback && $data) {
-                if (file_exists('.'.$data['path'])) {
-                    $info[$key] = $data;
-                    continue;
-                } elseif ($this->removeTrash) {
-                    //删除垃圾数据
-                    call_user_func($this->removeTrash, $data);
+            if(is_callable($this->callback)){
+                $data = call_user_func($this->callback, $file);
+                if (null !== $data) {
+                    if (file_exists('.'.$data['path'])) {
+                        $info[$key] = $data;
+                        continue;
+                    } elseif ($this->removeTrash) {
+                        //删除垃圾数据
+                        call_user_func($this->removeTrash, $data);
+                    }
                 }
             }
 
