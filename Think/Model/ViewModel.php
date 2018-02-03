@@ -15,7 +15,7 @@ abstract class ViewModel extends Model
 
     /**
      * 自动检测数据表信息
-     * @access protected
+
      * @return void
      */
     protected function _checkTableInfo()
@@ -24,7 +24,7 @@ abstract class ViewModel extends Model
 
     /**
      * 得到完整的数据表名
-     * @access public
+
      * @return string
      */
     public function getTableName()
@@ -67,7 +67,7 @@ abstract class ViewModel extends Model
 
     /**
      * 表达式过滤方法
-     * @access protected
+
      *
      * @param array $options 表达式
      *
@@ -93,7 +93,7 @@ abstract class ViewModel extends Model
 
     /**
      * 检查是否定义了所有字段
-     * @access protected
+
      *
      * @param string $name 模型名称
      * @param array $fields 字段数组
@@ -113,7 +113,7 @@ abstract class ViewModel extends Model
 
     /**
      * 检查条件中的视图字段
-     * @access protected
+
      *
      * @param array $where 条件表达式
      *
@@ -144,7 +144,7 @@ abstract class ViewModel extends Model
 
     /**
      * 检查Order表达式中的视图字段
-     * @access protected
+
      *
      * @param string $order 字段
      *
@@ -179,7 +179,7 @@ abstract class ViewModel extends Model
 
     /**
      * 检查Group表达式中的视图字段
-     * @access protected
+
      *
      * @param string $group 字段
      *
@@ -211,7 +211,7 @@ abstract class ViewModel extends Model
 
     /**
      * 检查fields表达式中的视图字段
-     * @access protected
+
      *
      * @param string $fields 字段
      *

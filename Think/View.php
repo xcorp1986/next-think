@@ -12,20 +12,18 @@ final class View
     /**
      * 模板输出变量
      * @var $tVar
-     * @access protected
      */
     protected $tVar = [];
 
     /**
      * 模板主题
      * @var $theme
-     * @access protected
+
      */
     protected $theme = '';
 
     /**
      * 模板变量赋值
-     * @access public
      *
      * @param mixed $name
      * @param mixed $value
@@ -41,7 +39,6 @@ final class View
 
     /**
      * 取得模板变量的值
-     * @access public
      *
      * @param string $name
      *
@@ -58,7 +55,6 @@ final class View
 
     /**
      * 加载模板和页面输出 可以返回输出内容
-     * @access public
      *
      * @param string $templateFile 模板文件名
      * @param string $charset 模板输出字符集
@@ -67,6 +63,7 @@ final class View
      * @param string $prefix 模板缓存前缀
      *
      * @return void
+     * @throws BaseException
      */
     public function display($templateFile = '', $charset = '', $contentType = '', $content = '', $prefix = '')
     {
@@ -83,7 +80,6 @@ final class View
 
     /**
      * 输出内容文本可以包括Html
-     * @access private
      *
      * @param string $content 输出内容
      * @param string $charset 模板输出字符集
@@ -112,7 +108,6 @@ final class View
 
     /**
      * 解析和获取模板内容 用于输出
-     * @access public
      *
      * @param string $templateFile 模板文件名
      * @param string $content 模板输出内容
@@ -158,7 +153,6 @@ final class View
 
     /**
      * 自动定位模板文件
-     * @access protected
      *
      * @param string $template 模板文件规则
      *
@@ -199,7 +193,6 @@ final class View
 
     /**
      * 获取当前的模板路径
-     * @access protected
      *
      * @param mixed|string $module 模块名
      *
@@ -224,7 +217,6 @@ final class View
 
     /**
      * 设置当前输出的模板主题
-     * @access public
      *
      * @param  mixed $theme 主题名称
      *
@@ -239,7 +231,6 @@ final class View
 
     /**
      * 获取当前的模板主题
-     * @access private
      * @return string
      */
     private function getTemplateTheme()

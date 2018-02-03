@@ -23,7 +23,7 @@ abstract class RelationModel extends Model
 
     /**
      * 动态方法实现
-     * @access public
+
      *
      * @param string $method 方法名称
      * @param array $args 调用参数
@@ -46,7 +46,7 @@ abstract class RelationModel extends Model
 
     /**
      * 进行关联查询
-     * @access public
+
      *
      * @param mixed $name 关联名称
      *
@@ -61,7 +61,7 @@ abstract class RelationModel extends Model
 
     /**
      * 关联数据获取 仅用于查询后
-     * @access public
+
      *
      * @param string $name 关联名称
      *
@@ -78,7 +78,7 @@ abstract class RelationModel extends Model
 
     /**
      * 获取返回数据的关联记录
-     * @access protected
+
      *
      * @param mixed $result 返回数据
      * @param string|array $name 关联名称
@@ -221,7 +221,7 @@ abstract class RelationModel extends Model
 
     /**
      * 得到关联的数据表名
-     * @access public
+
      *
      * @param Model $relation
      *
@@ -266,7 +266,7 @@ abstract class RelationModel extends Model
 
     /**
      * 获取返回数据集的关联记录
-     * @access protected
+
      *
      * @param array $resultSet 返回数据
      * @param string|array $name 关联名称
@@ -300,7 +300,7 @@ abstract class RelationModel extends Model
 
     /**
      * 操作关联数据
-     * @access protected
+
      *
      * @param string $opType 操作方式 ADD SAVE DEL
      * @param mixed $data 数据对象
@@ -529,7 +529,7 @@ abstract class RelationModel extends Model
 
     /**
      * 对保存到数据库的数据进行处理
-     * @access protected
+
      *
      * @param mixed $data 要操作的数据
      *

@@ -24,7 +24,7 @@ final class CheckLangBehavior extends Behavior
     /**
      * 语言检查
      * 检查浏览器支持语言，并自动加载语言包
-     * @access private
+
      * @return void
      */
     private static function _checkLanguage()

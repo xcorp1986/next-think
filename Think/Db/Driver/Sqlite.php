@@ -18,7 +18,7 @@ class Sqlite extends Driver
      *
      * @return string
      */
-    protected function parseDsn(array $config)
+    protected function parseDsn(array $config = [])
     {
         return 'sqlite:'.$config['database'];
     }

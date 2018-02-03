@@ -16,7 +16,7 @@ final class App
 
     /**
      * 应用程序初始化
-     * @access protected
+     
      * @return void
      */
     protected static function init()
@@ -66,7 +66,7 @@ final class App
 
     /**
      * 执行应用程序
-     * @access protected
+     
      * @return void
      * @throws BaseException
      */
@@ -173,7 +173,7 @@ final class App
 
     /**
      * 运行应用实例 入口文件使用的快捷方法
-     * @access public
+     
      * @return void
      */
     public static function run()

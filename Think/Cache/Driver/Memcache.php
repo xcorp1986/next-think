@@ -17,9 +17,8 @@ class Memcache extends Cache
      * @param array $options 缓存参数
      *
      * @throws BaseException
-     * @access public
      */
-    function __construct(array $options = [])
+    public function __construct(array $options = [])
     {
         if (!extension_loaded('memcache')) {
             throw new BaseException(L('_NOT_SUPPORT_').':memcache');
@@ -48,7 +47,6 @@ class Memcache extends Cache
 
     /**
      * 读取缓存
-     * @access public
      *
      * @param string $name 缓存变量名
      *
@@ -63,7 +61,6 @@ class Memcache extends Cache
 
     /**
      * 写入缓存
-     * @access public
      *
      * @param string $name 缓存变量名
      * @param mixed $value 存储数据
@@ -92,7 +89,6 @@ class Memcache extends Cache
 
     /**
      * 删除缓存
-     * @access public
      *
      * @param string $name 缓存变量名
      * @param bool $ttl
@@ -110,7 +106,6 @@ class Memcache extends Cache
 
     /**
      * 清除缓存
-     * @access public
      * @return bool
      */
     public function clear()

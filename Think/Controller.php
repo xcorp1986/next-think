@@ -13,13 +13,13 @@ abstract class Controller
     /**
      * 视图实例对象
      * @var View $view
-     * @access protected
+
      */
     protected $view = null;
 
     /**
      * 取得模板对象实例
-     * @access public
+
      */
     public function __construct()
     {
@@ -40,7 +40,7 @@ abstract class Controller
 
     /**
      * 模板显示 调用内置的模板引擎显示方法，
-     * @access protected
+
      *
      * @param string $templateFile 指定要调用的模板文件
      *                             默认为空 由系统自动定位模板文件
@@ -58,7 +58,7 @@ abstract class Controller
 
     /**
      * 输出内容文本可以包括Html 并支持内容解析
-     * @access protected
+
      *
      * @param string $content 输出内容
      * @param string $charset 模板输出字符集
@@ -75,7 +75,7 @@ abstract class Controller
     /**
      *  获取输出页面内容
      * 调用内置的模板引擎fetch方法，
-     * @access protected
+
      *
      * @param string $templateFile 指定要调用的模板文件
      *                             默认为空 由系统自动定位模板文件
@@ -91,7 +91,6 @@ abstract class Controller
 
     /**
      *  创建静态页面
-     * @access   protected
      *
      * @param string $htmlFile 生成的静态文件名称
      * @param string $htmlPath 生成的静态文件路径
@@ -112,7 +111,7 @@ abstract class Controller
 
     /**
      * 模板主题设置
-     * @access protected
+
      *
      * @param string $theme 模版主题
      *
@@ -127,7 +126,7 @@ abstract class Controller
 
     /**
      * 模板变量赋值
-     * @access protected
+
      *
      * @param mixed $name 要显示的模板变量
      * @param mixed $value 变量的值
@@ -152,7 +151,7 @@ abstract class Controller
 
     /**
      * 取得模板显示变量的值
-     * @access protected
+
      *
      * @param string $name 模板显示变量
      *
@@ -175,7 +174,7 @@ abstract class Controller
 
     /**
      * 检测模板变量的值
-     * @access public
+
      *
      * @param string $name 名称
      *
@@ -188,7 +187,6 @@ abstract class Controller
 
     /**
      * 魔术方法 有不存在的操作的时候执行
-     * @access public
      *
      * @param string $method 方法名
      * @param array $args 参数
@@ -213,7 +211,6 @@ abstract class Controller
 
     /**
      * 操作错误跳转的快捷方法
-     * @access protected
      *
      * @param string $message 错误信息
      * @param string $jumpUrl 页面跳转地址
@@ -228,7 +225,6 @@ abstract class Controller
 
     /**
      * 操作成功跳转的快捷方法
-     * @access protected
      *
      * @param string $message 提示信息
      * @param string $jumpUrl 页面跳转地址
@@ -243,7 +239,6 @@ abstract class Controller
 
     /**
      * Ajax方式返回数据到客户端
-     * @access protected
      *
      * @param mixed $data 要返回的数据
      * @param String $type AJAX返回数据格式
@@ -291,7 +286,6 @@ abstract class Controller
 
     /**
      * Action跳转(URL重定向） 支持指定模块和延时跳转
-     * @access protected
      *
      * @param string $url 跳转的URL表达式
      * @param array $params 其它URL参数
@@ -317,7 +311,7 @@ abstract class Controller
      * @param mixed $ajax 是否为Ajax方式 当数字时指定跳转时间
      *
      * @return void
-     * @access private
+
      */
     private function dispatchJump($message, $status = 1, $jumpUrl = '', $ajax = false)
     {
@@ -378,7 +372,6 @@ abstract class Controller
 
     /**
      * 析构方法
-     * @access public
      */
     public function __destruct()
     {

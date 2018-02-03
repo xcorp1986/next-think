@@ -30,8 +30,7 @@ class RestController extends Controller
     ];
 
     /**
-     * 架构函数
-     * @access public
+     * RestController constructor.
      */
     public function __construct()
     {
@@ -59,10 +58,11 @@ class RestController extends Controller
 
     /**
      * 魔术方法 有不存在的操作的时候执行
-     * @access public
      * @param string $method 方法名
      * @param array $args 参数
      * @return mixed
+     * @throws \ReflectionException
+     * @throws \Think\BaseException
      */
     public function __call($method, $args)
     {
@@ -124,7 +124,10 @@ class RestController extends Controller
         return false;
     }
 
-    // 发送Http状态信息
+    /**
+     * 发送Http状态信息
+     * @param $code
+     */
     protected function sendHttpStatus($code)
     {
         static $_status = [
@@ -185,7 +188,6 @@ class RestController extends Controller
 
     /**
      * 编码数据
-     * @access protected
      * @param mixed $data 要返回的数据
      * @param String $type 返回类型 JSON XML
      * @return string
@@ -212,7 +214,6 @@ class RestController extends Controller
 
     /**
      * 设置页面输出的CONTENT_TYPE和编码
-     * @access public
      * @param string $type content_type 类型对应的扩展名
      * @param string $charset 页面输出编码
      * @return void
@@ -234,7 +235,6 @@ class RestController extends Controller
 
     /**
      * 输出返回数据
-     * @access protected
      * @param mixed $data 要返回的数据
      * @param String $type 返回类型 JSON XML
      * @param integer $code HTTP状态

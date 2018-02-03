@@ -28,7 +28,7 @@ final class Html extends TagLib
     /**
      * editor标签解析 插入可视化编辑器
      * 格式： <html:editor id="editor" name="remark" type="FCKeditor" style="" >{$vo.remark}</html:editor>
-     * @access public
+     
      *
      * @param array $tag 标签属性
      * @param   string $content
@@ -73,7 +73,7 @@ final class Html extends TagLib
     /**
      * imageBtn标签解析
      * 格式： <html:imageBtn type="" value="" />
-     * @access public
+     
      *
      * @param array $tag 标签属性
      *
@@ -106,7 +106,7 @@ final class Html extends TagLib
     /**
      * imageLink标签解析
      * 格式： <html:imageLink type="" value="" />
-     * @access public
+     
      *
      * @param array $tag 标签属性
      *
@@ -136,7 +136,7 @@ final class Html extends TagLib
     /**
      * select标签解析
      * 格式： <html:select options="name" selected="value" />
-     * @access public
+     
      *
      * @param array $tag 标签属性
      *
@@ -195,7 +195,7 @@ final class Html extends TagLib
     /**
      * checkbox标签解析
      * 格式： <html:checkbox checkboxes="" checked="" />
-     * @access public
+     
      *
      * @param array $tag 标签属性
      *
@@ -224,7 +224,7 @@ final class Html extends TagLib
     /**
      * radio标签解析
      * 格式： <html:radio radios="name" checked="value" />
-     * @access public
+     
      *
      * @param array $tag 标签属性
      *
@@ -254,7 +254,7 @@ final class Html extends TagLib
     /**
      * list标签解析
      * 格式： <html:grid datasource="" show="vo" />
-     * @access public
+     
      *
      * @param array $tag 标签属性
      *
@@ -412,7 +412,7 @@ final class Html extends TagLib
     /**
      * list标签解析
      * 格式： <html:list datasource="" show="" />
-     * @access public
+     
      *
      * @param array $tag 标签属性
      *

@@ -57,7 +57,7 @@ class Log
     /**
      * 记录日志 并且会过滤未经设置的级别
      * @static
-     * @access public
+
      *
      * @param string $message 日志信息
      * @param string $level 日志级别
@@ -75,7 +75,7 @@ class Log
     /**
      * 日志保存
      * @static
-     * @access public
+
      *
      * @param string $type
      * @param string $destination 写入目标
@@ -105,7 +105,7 @@ class Log
     /**
      * 日志直接写入
      * @static
-     * @access public
+
      *
      * @param string $message 日志信息
      * @param string $level 日志级别

@@ -23,7 +23,7 @@ final class ContentReplaceBehavior extends Behavior
 
     /**
      * 模板内容替换
-     * @access protected
+
      *
      * @param string $content 模板内容
      *

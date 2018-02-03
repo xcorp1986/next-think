@@ -33,7 +33,7 @@ class ShowPageTraceBehavior extends Behavior
 
     /**
      * 显示页面Trace信息
-     * @access private
+
      */
     private function _showTrace()
     {

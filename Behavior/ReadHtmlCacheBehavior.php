@@ -143,7 +143,7 @@ final class ReadHtmlCacheBehavior extends Behavior
     /**
      * 检查静态HTML文件是否有效
      * 如果无效需要重新更新
-     * @access public
+     
      *
      * @param string $cacheFile 静态文件名
      * @param mixed $cacheTime 缓存有效期

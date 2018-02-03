@@ -15,7 +15,6 @@ final class Dispatcher
 
     /**
      * URL映射到控制器
-     * @access public
      * @return void
      * @throws BaseException
      */

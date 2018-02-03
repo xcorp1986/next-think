@@ -33,7 +33,7 @@ final class File
 
     /**
      * 日志写入接口
-     * @access public
+
      *
      * @param string $log 日志信息
      * @param string $destination 写入目标

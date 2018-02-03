@@ -14,7 +14,7 @@ class Mysql extends Driver
 
     /**
      * 取得数据表的字段信息
-     * @access public
+     
      *
      * @param string $tableName
      *
@@ -54,7 +54,6 @@ class Mysql extends Driver
 
     /**
      * 取得数据库的表信息
-     * @access public
      *
      * @param string $dbName
      *
@@ -74,7 +73,6 @@ class Mysql extends Driver
 
     /**
      * 批量插入记录
-     * @access public
      *
      * @param mixed $dataSet 数据集
      * @param array $options 参数表达式
@@ -122,7 +120,6 @@ class Mysql extends Driver
 
     /**
      * ON DUPLICATE KEY UPDATE 分析
-     * @access protected
      *
      * @param mixed $duplicate
      *
@@ -179,7 +176,6 @@ class Mysql extends Driver
 
     /**
      * 字段和表名处理
-     * @access protected
      *
      * @param string $key
      *
@@ -197,7 +193,6 @@ class Mysql extends Driver
 
     /**
      * 解析pdo连接的dsn信息
-     * @access protected
      *
      * @param array $config 连接信息
      *

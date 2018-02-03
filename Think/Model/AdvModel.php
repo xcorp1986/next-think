@@ -32,7 +32,7 @@ abstract class AdvModel extends Model
 
     /**
      * 利用__call方法重载 实现一些特殊的Model方法 （魔术方法）
-     * @access public
+
      *
      * @param string $method 方法名称
      * @param mixed $args 调用参数
@@ -54,7 +54,7 @@ abstract class AdvModel extends Model
 
     /**
      * 对保存到数据库的数据进行处理
-     * @access protected
+
      *
      * @param mixed $data 要操作的数据
      *
@@ -182,7 +182,7 @@ abstract class AdvModel extends Model
 
     /**
      * 记录乐观锁
-     * @access protected
+
      *
      * @param array $data 数据对象
      *
@@ -202,7 +202,7 @@ abstract class AdvModel extends Model
 
     /**
      * 缓存乐观锁
-     * @access protected
+
      *
      * @param array $data 数据对象
      *
@@ -220,7 +220,7 @@ abstract class AdvModel extends Model
 
     /**
      * 检查乐观锁
-     * @access protected
+
      *
      * @param int $id 当前主键
      * @param array $data 当前数据
@@ -258,7 +258,7 @@ abstract class AdvModel extends Model
 
     /**
      * 查找前N个记录
-     * @access public
+
      *
      * @param int $count 记录个数
      * @param array $options 查询表达式
@@ -275,7 +275,7 @@ abstract class AdvModel extends Model
     /**
      * 查询符合条件的第N条记录
      * 0 表示第一条记录 -1 表示最后一条记录
-     * @access public
+
      *
      * @param int $position 记录位置
      * @param array $options 查询表达式
@@ -300,7 +300,7 @@ abstract class AdvModel extends Model
 
     /**
      * 获取满足条件的第一条记录
-     * @access public
+
      *
      * @param array $options 查询表达式
      *
@@ -313,7 +313,7 @@ abstract class AdvModel extends Model
 
     /**
      * 获取满足条件的最后一条记录
-     * @access public
+
      *
      * @param array $options 查询表达式
      *
@@ -326,7 +326,7 @@ abstract class AdvModel extends Model
 
     /**
      * 返回数据
-     * @access public
+
      *
      * @param array $data 数据
      * @param string $type 返回类型 默认为数组
@@ -355,7 +355,7 @@ abstract class AdvModel extends Model
 
     /**
      * 获取数据的时候过滤数据字段
-     * @access protected
+
      *
      * @param mixed $result 查询的数据
      *
@@ -401,7 +401,7 @@ abstract class AdvModel extends Model
 
     /**
      * 写入数据的时候过滤数据字段
-     * @access protected
+
      *
      * @param mixed $data 查询的数据
      *
@@ -431,7 +431,7 @@ abstract class AdvModel extends Model
 
     /**
      * 返回数据列表
-     * @access protected
+
      *
      * @param array $resultSet 数据
      * @param string $type 返回类型 默认为数组
@@ -473,7 +473,7 @@ abstract class AdvModel extends Model
 
     /**
      * 获取数据集的文本字段
-     * @access protected
+
      *
      * @param array $resultSet 查询的数据
      * @param string $field 查询的字段
@@ -494,7 +494,7 @@ abstract class AdvModel extends Model
 
     /**
      * 获取数据的文本字段
-     * @access protected
+
      *
      * @param array $data 查询的数据
      * @param string $field 查询的字段
@@ -523,7 +523,7 @@ abstract class AdvModel extends Model
 
     /**
      * 保存File方式的字段
-     * @access protected
+
      *
      * @param array $data 保存的数据
      *
@@ -543,7 +543,7 @@ abstract class AdvModel extends Model
 
     /**
      * 删除File方式的字段
-     * @access protected
+
      *
      * @param array $data 保存的数据
      * @param string $field 查询的字段
@@ -569,7 +569,7 @@ abstract class AdvModel extends Model
 
     /**
      * 检查序列化数据字段
-     * @access protected
+
      *
      * @param array $data 数据
      *
@@ -654,7 +654,7 @@ abstract class AdvModel extends Model
 
     /**
      * 检查只读字段
-     * @access protected
+
      *
      * @param array $data 数据
      *
@@ -676,7 +676,7 @@ abstract class AdvModel extends Model
     /**
      * 批处理执行SQL语句
      * 批处理的指令都认为是execute操作
-     * @access public
+
      *
      * @param array $sql SQL批处理指令
      *
@@ -711,7 +711,7 @@ abstract class AdvModel extends Model
 
     /**
      * 得到分表的的数据表名
-     * @access public
+
      *
      * @param array $data 操作的数据
      *

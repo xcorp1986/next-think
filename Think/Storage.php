@@ -21,7 +21,6 @@ class Storage
     /**
      * 操作句柄
      * @var string
-     * @access protected
      */
     protected static $handler;
 

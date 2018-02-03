@@ -15,7 +15,7 @@ final class Think
 
     /**
      * 应用程序初始化
-     * @access public
+
      * @return void
      */
     public static function init()

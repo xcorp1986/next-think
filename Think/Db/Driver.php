@@ -92,7 +92,7 @@ abstract class Driver
 
     /**
      * 读取数据库配置信息
-     * @access public
+
      *
      * @param array $config 数据库配置数组
      */
@@ -108,7 +108,7 @@ abstract class Driver
 
     /**
      * 启动事务
-     * @access public
+
      * @return mixed
      */
     public function startTrans()
@@ -128,7 +128,7 @@ abstract class Driver
 
     /**
      * 初始化数据库连接
-     * @access protected
+
      * @return void
      */
     protected function initConnect()
@@ -141,7 +141,7 @@ abstract class Driver
 
     /**
      * 连接数据库方法
-     * @access public
+
      *
      * @param string $config
      * @param int $linkNum
@@ -181,7 +181,7 @@ abstract class Driver
 
     /**
      * 解析pdo连接的dsn信息
-     * @access public
+
      *
      * @param array $config 连接信息
      *
@@ -193,7 +193,7 @@ abstract class Driver
 
     /**
      * 用于非自动提交状态下面的查询提交
-     * @access public
+
      * @return bool
      */
     public function commit()
@@ -214,7 +214,7 @@ abstract class Driver
     /**
      * 数据库错误信息
      * 并显示当前的SQL语句
-     * @access public
+
      * @return string
      * @throws BaseException
      */
@@ -241,7 +241,7 @@ abstract class Driver
 
     /**
      * 事务回滚
-     * @access public
+
      * @return bool
      */
     public function rollback()
@@ -261,7 +261,7 @@ abstract class Driver
 
     /**
      * 获得查询次数
-     * @access public
+
      *
      * @param bool $execute 是否包含所有查询
      *
@@ -274,7 +274,7 @@ abstract class Driver
 
     /**
      * 获得执行次数
-     * @access public
+
      * @return int
      */
     public function getExecuteTimes()
@@ -284,7 +284,7 @@ abstract class Driver
 
     /**
      * 插入记录
-     * @access public
+
      *
      * @param array $data 数据
      * @param array $options 参数表达式
@@ -328,7 +328,7 @@ abstract class Driver
 
     /**
      * 参数绑定分析
-     * @access protected
+
      *
      * @param array $bind
      */
@@ -339,7 +339,7 @@ abstract class Driver
 
     /**
      * 字段名分析
-     * @access protected
+
      *
      * @param string $key
      *
@@ -352,7 +352,7 @@ abstract class Driver
 
     /**
      * value分析
-     * @access protected
+
      *
      * @param mixed $value
      *
@@ -379,7 +379,7 @@ abstract class Driver
 
     /**
      * SQL指令安全过滤
-     * @access public
+
      *
      * @param string $str SQL字符串
      *
@@ -392,7 +392,7 @@ abstract class Driver
 
     /**
      * 参数绑定
-     * @access protected
+
      *
      * @param string $name 绑定参数名
      * @param mixed $value 绑定值
@@ -406,7 +406,7 @@ abstract class Driver
 
     /**
      * table分析
-     * @access   protected
+
      *
      * @param string|array $tables
      *
@@ -435,7 +435,7 @@ abstract class Driver
 
     /**
      * ON DUPLICATE KEY UPDATE 分析
-     * @access protected
+
      *
      * @param mixed $duplicate
      *
@@ -448,7 +448,7 @@ abstract class Driver
 
     /**
      * comment分析
-     * @access protected
+
      *
      * @param string $comment
      *
@@ -461,7 +461,7 @@ abstract class Driver
 
     /**
      * 执行语句
-     * @access public
+
      *
      * @param string $str sql指令
      * @param bool $fetchSql 不执行只是获取SQL
@@ -539,7 +539,7 @@ abstract class Driver
 
     /**
      * 释放查询结果
-     * @access public
+
      */
     public function free()
     {
@@ -548,7 +548,7 @@ abstract class Driver
 
     /**
      * 数据库调试 记录当前SQL
-     * @access protected
+
      *
      * @param bool $start 调试开始标记 true 开始 false 结束
      */
@@ -593,7 +593,7 @@ abstract class Driver
 
     /**
      * 生成查询SQL
-     * @access public
+
      *
      * @param array $options 表达式
      *
@@ -617,7 +617,7 @@ abstract class Driver
 
     /**
      * 替换SQL语句中表达式
-     * @access public
+
      *
      * @param  string $sql
      * @param array $options 表达式
@@ -663,7 +663,7 @@ abstract class Driver
 
     /**
      * distinct分析
-     * @access protected
+
      *
      * @param mixed $distinct
      *
@@ -708,7 +708,7 @@ abstract class Driver
 
     /**
      * join分析
-     * @access protected
+
      *
      * @param mixed $join
      *
@@ -726,7 +726,7 @@ abstract class Driver
 
     /**
      * where分析
-     * @access protected
+
      *
      * @param string|array $where
      *
@@ -794,7 +794,7 @@ abstract class Driver
 
     /**
      * 特殊条件分析
-     * @access protected
+
      *
      * @param string $key
      * @param mixed $val
@@ -927,7 +927,7 @@ abstract class Driver
 
     /**
      * group分析
-     * @access protected
+
      *
      * @param mixed $group
      *
@@ -940,7 +940,7 @@ abstract class Driver
 
     /**
      * having分析
-     * @access protected
+
      *
      * @param string $having
      *
@@ -953,7 +953,7 @@ abstract class Driver
 
     /**
      * order分析
-     * @access protected
+
      *
      * @param mixed $order
      *
@@ -978,7 +978,7 @@ abstract class Driver
 
     /**
      * limit分析
-     * @access protected
+
      *
      * @param mixed $limit
      *
@@ -991,7 +991,7 @@ abstract class Driver
 
     /**
      * union分析
-     * @access protected
+
      *
      * @param mixed $union
      *
@@ -1017,7 +1017,7 @@ abstract class Driver
 
     /**
      * 设置锁机制
-     * @access protected
+
      *
      * @param bool $lock
      *
@@ -1030,7 +1030,7 @@ abstract class Driver
 
     /**
      * index分析，可在操作链中指定需要强制使用的索引
-     * @access protected
+
      *
      * @param mixed $index
      *
@@ -1050,7 +1050,7 @@ abstract class Driver
 
     /**
      * 更新记录
-     * @access public
+
      *
      * @param mixed $data 数据
      * @param array $options 表达式
@@ -1080,7 +1080,7 @@ abstract class Driver
 
     /**
      * set分析
-     * @access protected
+
      *
      * @param array $data
      *
@@ -1109,7 +1109,7 @@ abstract class Driver
 
     /**
      * 删除记录
-     * @access public
+
      *
      * @param array $options 表达式
      *
@@ -1141,7 +1141,7 @@ abstract class Driver
 
     /**
      * 查找记录
-     * @access public
+
      *
      * @param array $options 表达式
      *
@@ -1158,7 +1158,7 @@ abstract class Driver
 
     /**
      * 执行查询 返回数据集
-     * @access public
+
      *
      * @param string $str sql指令
      * @param bool $fetchSql 不执行只是获取SQL
@@ -1231,7 +1231,7 @@ abstract class Driver
 
     /**
      * 获得所有的查询数据
-     * @access private
+
      * @return array
      */
     private function getResult()
@@ -1248,7 +1248,7 @@ abstract class Driver
      *
      * @param string $model 模型名
      *
-     * @access public
+
      * @return string
      */
     public function getLastSql($model = '')
@@ -1258,7 +1258,7 @@ abstract class Driver
 
     /**
      * 获取最近插入的ID
-     * @access public
+
      * @return string
      */
     public function getLastInsID()
@@ -1268,7 +1268,7 @@ abstract class Driver
 
     /**
      * 获取最近的错误信息
-     * @access public
+
      * @return string
      */
     public function getError()
@@ -1278,7 +1278,7 @@ abstract class Driver
 
     /**
      * 设置当前操作模型
-     * @access public
+
      *
      * @param string $model 模型名
      *
@@ -1291,7 +1291,7 @@ abstract class Driver
 
     /**
      * 析构方法
-     * @access public
+
      */
     public function __destruct()
     {
@@ -1305,7 +1305,7 @@ abstract class Driver
 
     /**
      * 关闭数据库
-     * @access public
+
      */
     public function close()
     {

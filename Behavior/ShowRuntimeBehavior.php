@@ -36,7 +36,7 @@ final class ShowRuntimeBehavior extends Behavior
 
     /**
      * 显示运行时间、数据库操作、缓存次数、内存使用信息
-     * @access private
+
      * @return string
      */
     private function showTime()

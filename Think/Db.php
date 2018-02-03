@@ -25,8 +25,6 @@ class Db
 
     /**
      * 取得数据库类实例
-     * @static
-     * @access public
      *
      * @param mixed $config 连接配置
      * @return $this
@@ -59,7 +57,7 @@ class Db
     /**
      * 数据库连接参数解析
      * @static
-     * @access private
+
      * @return array
      */
     private static function getConfig()

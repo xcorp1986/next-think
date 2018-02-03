@@ -71,8 +71,7 @@ class Upload
     private $uploader;
 
     /**
-     * 构造方法，用于构造上传实例
-     *
+     * Upload constructor.
      * @param array $config 配置
      * @param string $driver 要使用的上传驱动 LOCAL-本地上传驱动，FTP-FTP上传驱动
      * @param null $driverConfig 驱动配置
@@ -302,7 +301,6 @@ class Upload
 
     /**
      * 转换上传文件数组变量为正确的方式
-     * @access private
      *
      * @param array $files 上传的文件变量
      *

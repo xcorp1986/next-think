@@ -447,7 +447,7 @@ class QiniuStorage
         foreach ($headers as $header) {
             $header = trim($header);
             if (strpos($header, '{') !== false) {
-                $items = json_decode($header, 1);
+                $items = json_decode($header, true);
                 break;
             }
         }
@@ -467,7 +467,7 @@ class QiniuStorage
         list($v, $code, $message) = explode(" ", $status, 3);
         $message = is_null($message) ? 'File Not Found' : "[{$status}]:{$message}]";
         $this->error = $message;
-        $this->errorStr = json_decode($body, 1);
+        $this->errorStr = json_decode($body, true);
         $this->errorStr = $this->errorStr['error'];
     }
 }

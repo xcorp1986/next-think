@@ -32,7 +32,7 @@ final class Template
     private $block = [];
 
     /**
-     * @access public
+     * Template constructor.
      */
     public function __construct()
     {
@@ -67,7 +67,7 @@ final class Template
 
     /**
      * 模板变量获取
-     * @access public
+
      *
      * @param $name
      *
@@ -85,7 +85,6 @@ final class Template
 
     /**
      * 模板变量设置
-     * @access public
      *
      * @param $name
      * @param $value
@@ -97,11 +96,11 @@ final class Template
 
     /**
      * 加载模板
-     * @access public
      *
      * @param string $templateFile 模板文件
      * @param array $templateVar 模板变量
      * @param string $prefix 模板标识前缀
+     * @throws BaseException
      */
     public function fetch($templateFile, $templateVar, $prefix = '')
     {
@@ -113,7 +112,7 @@ final class Template
 
     /**
      * 加载主模板并缓存
-     * @access public
+
      *
      * @param string $templateFile 模板文件
      * @param string $prefix 模板标识前缀
@@ -160,11 +159,11 @@ final class Template
 
     /**
      * 编译模板文件内容
-     * @access protected
      *
      * @param mixed $tmplContent 模板内容
      *
      * @return string
+     * @throws BaseException
      */
     protected function compiler($tmplContent)
     {
@@ -193,11 +192,11 @@ final class Template
     /**
      * 模板解析入口
      * 支持普通标签和TagLib解析 支持自定义标签库
-     * @access public
      *
      * @param string $content 要解析的模板内容
      *
      * @return string
+     * @throws BaseException
      */
     public function parse($content)
     {
@@ -248,7 +247,6 @@ final class Template
 
     /**
      * 解析PHP标签
-     * @access protected
      *
      * @param $content
      * @return mixed
@@ -270,11 +268,11 @@ final class Template
 
     /**
      * 解析模板中的布局标签
-     * @access protected
      *
      * @param $content
      *
      * @return mixed
+     * @throws BaseException
      */
     protected function parseLayout($content)
     {
@@ -305,12 +303,12 @@ final class Template
 
     /**
      * 解析模板中的include标签
-     * @access protected
      *
      * @param      $content
      * @param bool $extend
      *
      * @return mixed|string
+     * @throws BaseException
      */
     protected function parseInclude($content, $extend = true)
     {
@@ -341,11 +339,11 @@ final class Template
 
     /**
      * 解析模板中的extend标签
-     * @access protected
      *
      * @param $content
      *
      * @return mixed|string
+     * @throws BaseException
      */
     protected function parseExtend($content)
     {
@@ -384,7 +382,7 @@ final class Template
 
     /**
      * 分析XML属性
-     * @access private
+
      *
      * @param string $attr XML属性字符串
      * @return array
@@ -408,7 +406,7 @@ final class Template
 
     /**
      * 替换页面中的literal标签
-     * @access private
+
      *
      * @param string $content 模板内容
      *
@@ -431,7 +429,7 @@ final class Template
 
     /**
      * 还原被替换的literal标签
-     * @access private
+
      *
      * @param string $tag literal标签序号
      *
@@ -452,7 +450,7 @@ final class Template
 
     /**
      * 记录当前页面中的block标签
-     * @access private
+
      *
      * @param string $name block名称
      * @param string $content 模板内容
@@ -472,7 +470,7 @@ final class Template
 
     /**
      * 替换继承模板中的block标签
-     * @access private
+
      *
      * @param string $content 模板内容
      *
@@ -512,7 +510,7 @@ final class Template
 
     /**
      * TagLib库解析
-     * @access public
+
      *
      * @param TagLib $tagLib 要解析的标签库
      * @param string $content 要解析的模板内容
@@ -568,7 +566,7 @@ final class Template
     /**
      * 解析标签库的标签
      * 需要调用对应的标签库文件解析类
-     * @access public
+
      *
      * @param TagLib $tagLib 标签库对象实例
      * @param string $tag 标签名
@@ -589,7 +587,7 @@ final class Template
     /**
      * 模板标签解析
      * 格式： {TagName:args [|content] }
-     * @access public
+
      *
      * @param string $tagStr 标签内容
      *
@@ -632,7 +630,7 @@ final class Template
     /**
      * 模板变量解析,支持使用函数
      * 格式： {$varname|function1|function2=arg1,arg2}
-     * @access public
+
      *
      * @param string $varStr 变量数据
      *
@@ -706,7 +704,7 @@ final class Template
     /**
      * 对模板变量使用函数
      * 格式 {$varname|function1|function2=arg1,arg2}
-     * @access public
+
      *
      * @param string $name 变量名
      * @param array $varArray 函数列表
@@ -750,7 +748,7 @@ final class Template
 
     /**
      * 加载公共模板并缓存 和当前模板在同一路径，否则使用相对路径
-     * @access private
+
      *
      * @param string $tmplPublicName 公共模板文件名
      * @param array $vars 要传递的变量列表
@@ -773,7 +771,7 @@ final class Template
 
     /**
      * 分析加载的模板文件并读取内容 支持多个模板文件读取
-     * @access private
+
      *
      * @param string $templateName 模板文件名
      *

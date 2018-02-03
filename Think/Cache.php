@@ -16,20 +16,17 @@ class Cache
     /**
      * 操作句柄
      * @var string
-     * @access protected
      */
     protected $handler;
 
     /**
      * 缓存连接参数
      * @var int
-     * @access protected
      */
     protected $options = [];
 
     /**
      * 连接缓存
-     * @access public
      *
      * @param string $type 缓存类型
      * @param array $options 配置数组
@@ -54,13 +51,12 @@ class Cache
 
     /**
      * 取得缓存类实例
-     * @static
-     * @access public
      *
      * @param string $type
      * @param array $options
      *
      * @return mixed
+     * @throws BaseException
      */
     public static function getInstance($type = '', $options = [])
     {
@@ -124,7 +120,6 @@ class Cache
 
     /**
      * 队列缓存
-     * @access protected
      *
      * @param string $key 队列名
      *

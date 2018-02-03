@@ -22,14 +22,14 @@ class TagLib
     /**
      * 标签库标签列表
      * @var array $tagList
-     * @access protected
+     
      */
 //        protected $tagList = [];
 
     /**
      * 标签库分析数组
      * @var array $parse
-     * @access protected
+     
      */
 //        protected $parse = [];
 
@@ -37,14 +37,14 @@ class TagLib
      * 标签库是否有效
      * @var bool $valid
      * @deprecated
-     * @access protected
+     
      */
 //        protected $valid = false;
 
     /**
      * 当前模板对象
      * @var \Think\Template
-     * @access protected
+     
      */
     protected $tpl;
 
@@ -60,7 +60,7 @@ class TagLib
     ];
 
     /**
-     * @access public
+     
      */
     public function __construct()
     {
@@ -125,7 +125,7 @@ class TagLib
 
     /**
      * 解析条件表达式
-     * @access public
+     
      *
      * @param string $condition 表达式标签内容
      *
@@ -140,7 +140,7 @@ class TagLib
 
     /**
      * 自动识别构建变量
-     * @access public
+     
      *
      * @param string $name 变量描述
      *

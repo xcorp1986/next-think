@@ -60,7 +60,7 @@ final class ParseTemplateBehavior extends Behavior
     /**
      * 检查缓存文件是否有效
      * 如果无效则需要重新编译
-     * @access public
+     
      *
      * @param string $tmplTemplateFile 模板文件名
      * @param string $prefix
@@ -101,7 +101,7 @@ final class ParseTemplateBehavior extends Behavior
     /**
      * 检查缓存内容是否有效
      * 如果无效则需要重新编译
-     * @access public
+     
      *
      * @param string $tmplContent 模板内容
      * @param string $prefix

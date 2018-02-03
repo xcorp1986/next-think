@@ -24,7 +24,7 @@ abstract class MergeModel extends Model
 
     /**
      * 取得DB类的实例对象 字段检查
-     * @access public
+
      *
      * @param string $name 模型名称
      */
@@ -60,7 +60,7 @@ abstract class MergeModel extends Model
 
     /**
      * 得到完整的数据表名
-     * @access public
+
      * @return string
      */
     public function getTableName()
@@ -79,7 +79,7 @@ abstract class MergeModel extends Model
 
     /**
      * 自动检测数据表信息
-     * @access protected
+
      * @return void
      */
     protected function _checkTableInfo()
@@ -88,7 +88,7 @@ abstract class MergeModel extends Model
 
     /**
      * 新增聚合数据
-     * @access public
+
      *
      * @param mixed $data 数据
      * @param array $options 表达式
@@ -141,7 +141,7 @@ abstract class MergeModel extends Model
 
     /**
      * 对保存到数据库的数据进行处理
-     * @access protected
+
      *
      * @param mixed $data 要操作的数据
      *
@@ -184,7 +184,7 @@ abstract class MergeModel extends Model
 
     /**
      * 保存聚合模型数据
-     * @access public
+
      *
      * @param mixed $data 数据
      * @param array $options 表达式
@@ -303,7 +303,7 @@ abstract class MergeModel extends Model
 
     /**
      * 表达式过滤方法
-     * @access protected
+
      *
      * @param string $options 表达式
      *
@@ -334,7 +334,7 @@ abstract class MergeModel extends Model
 
     /**
      * 检查条件中的聚合字段
-     * @access   protected
+
      *
      * @param array $where
      *
@@ -360,7 +360,7 @@ abstract class MergeModel extends Model
 
     /**
      * 检查Order表达式中的聚合字段
-     * @access protected
+
      *
      * @param string $order 字段
      *
@@ -389,7 +389,7 @@ abstract class MergeModel extends Model
 
     /**
      * 检查Group表达式中的聚合字段
-     * @access protected
+
      *
      * @param string $group 字段
      *
@@ -416,7 +416,7 @@ abstract class MergeModel extends Model
 
     /**
      * 检查fields表达式中的聚合字段
-     * @access protected
+
      *
      * @param string $fields 字段
      *
@@ -448,7 +448,7 @@ abstract class MergeModel extends Model
 
     /**
      * 获取数据表字段信息
-     * @access public
+
      * @return array
      */
     public function getDbFields()

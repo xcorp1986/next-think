@@ -334,7 +334,7 @@ class Mongo extends Driver
 
     /**
      * 删除记录
-     * @access public
+
      * @param array $options 表达式
      * @return false | integer
      */
@@ -594,7 +594,7 @@ class Mongo extends Driver
 
     /**
      * 取得当前数据库的collection信息
-     * @access public
+
      */
     public function getTables()
     {
@@ -615,7 +615,7 @@ class Mongo extends Driver
 
     /**
      * 取得当前数据库的对象
-     * @access public
+
      * @return \MongoDB
      */
     public function getDB()

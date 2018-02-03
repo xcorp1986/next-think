@@ -28,7 +28,7 @@ class MongoModel extends Model
 
     /**
      * 利用__call方法实现一些特殊的Model方法
-     * @access public
+     
      * @param string $method 方法名称
      * @param array $args 调用参数
      * @return mixed
@@ -61,7 +61,7 @@ class MongoModel extends Model
 
     /**
      * 获取字段信息并缓存 主键和自增信息直接配置
-     * @access public
+     
      * @return void
      */
     public function flush()
@@ -101,7 +101,7 @@ class MongoModel extends Model
 
     /**
      * count统计 配合where连贯操作
-     * @access public
+     
      * @return integer
      */
     public function count()
@@ -114,7 +114,7 @@ class MongoModel extends Model
 
     /**
      * 获取唯一值
-     * @access public
+     
      * @return array | false
      */
     public function distinct($field, $where = [])
@@ -136,7 +136,7 @@ class MongoModel extends Model
 
     /**
      * 获取下一ID 用于自动增长型
-     * @access public
+     
      * @param string $pk 字段名 默认为主键
      * @return mixed
      */
@@ -151,7 +151,7 @@ class MongoModel extends Model
 
     /**
      * 新增数据
-     * @access public
+     
      * @param mixed $data 数据
      * @param array $options 表达式
      * @param boolean $replace 是否replace
@@ -215,7 +215,7 @@ class MongoModel extends Model
 
     /**
      * 获取MongoId
-     * @access protected
+     
      * @param array $result 返回数据
      * @return array
      */
@@ -239,7 +239,7 @@ class MongoModel extends Model
 
     /**
      * 查询数据
-     * @access public
+     
      * @param mixed $options 表达式参数
      * @return mixed
      */
@@ -270,7 +270,7 @@ class MongoModel extends Model
 
     /**
      * 字段值增长
-     * @access public
+     
      * @param string $field 字段名
      * @param integer $step 增长值
      * @return boolean
@@ -282,7 +282,7 @@ class MongoModel extends Model
 
     /**
      * 字段值减少
-     * @access public
+     
      * @param string $field 字段名
      * @param integer $step 减少值
      * @return boolean
@@ -294,7 +294,7 @@ class MongoModel extends Model
 
     /**
      * 获取一条记录的某个字段值
-     * @access public
+     
      * @param string $field 字段名
      * @param string $spea 字段数据间隔符号
      * @return mixed
@@ -352,7 +352,7 @@ class MongoModel extends Model
 
     /**
      * 执行Mongo指令
-     * @access public
+     
      * @param array $command 指令
      * @return mixed
      */
@@ -365,7 +365,7 @@ class MongoModel extends Model
 
     /**
      * 执行MongoCode
-     * @access public
+     
      * @param string $code MongoCode
      * @param array $args 参数
      * @return mixed
@@ -384,7 +384,7 @@ class MongoModel extends Model
 
     /**
      * 得到完整的数据表名 Mongo表名不带dbName
-     * @access public
+     
      * @return string
      */
     public function getTableName()
@@ -404,7 +404,7 @@ class MongoModel extends Model
 
     /**
      * 分组查询
-     * @access public
+     
      * @return string
      */
     public function group($key, $init, $reduce, $option = [])
@@ -421,7 +421,7 @@ class MongoModel extends Model
 
     /**
      * 返回Mongo运行错误信息
-     * @access public
+     
      * @return json
      */
     public function getLastError()
@@ -431,7 +431,7 @@ class MongoModel extends Model
 
     /**
      * 返回指定集合的统计信息，包括数据大小、已分配的存储空间和索引的大小
-     * @access public
+     
      * @return json
      */
     public function status()
@@ -443,7 +443,7 @@ class MongoModel extends Model
 
     /**
      * 取得当前数据库的对象
-     * @access public
+     
      * @return object
      */
     public function getDB()
@@ -453,7 +453,7 @@ class MongoModel extends Model
 
     /**
      * 取得集合对象，可以进行创建索引等查询
-     * @access public
+     
      * @return object
      */
     public function getCollection()
