@@ -26,15 +26,15 @@ abstract class Controller
         //实例化视图类
         $this->view = new View;
         //控制器初始化
-        if (method_exists($this, '_init')) {
-            $this->_init();
+        if (method_exists($this, '__init')) {
+            $this->__init();
         }
     }
 
     /**
      * 控制器初始化附加方法
      */
-    protected function _init()
+    protected function __init()
     {
     }
 
