@@ -322,7 +322,7 @@ abstract class RelationModel extends Model
             foreach ($this->_link as $key => $val) {
                 // 操作制定关联类型
                 // 映射名称
-                $mappingName = $val['mapping_name'] ? $val['mapping_name'] : $key;
+                $mappingName = $val['mapping_name'] ?? $key;
                 if (empty($name) || true === $name || $mappingName == $name || (is_array($name) && in_array(
                             $mappingName,
                             $name
