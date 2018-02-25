@@ -161,8 +161,8 @@ class Model
      */
     public function __construct($name = '')
     {
-        if (method_exists($this, '_init')) {
-            $this->_init();
+        if (method_exists($this, '__init')) {
+            $this->__init();
         }
         // 获取模型名称
         if (!empty($name)) {
@@ -179,7 +179,7 @@ class Model
     /**
      * 附加方法
      */
-    protected function _init()
+    protected function __init()
     {
     }
 
