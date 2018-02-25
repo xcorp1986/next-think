@@ -23,12 +23,12 @@ abstract class RelationModel extends Model
 
     /**
      * 动态方法实现
-
      *
      * @param string $method 方法名称
      * @param array $args 调用参数
      *
      * @return mixed
+     * @throws \Think\BaseException
      */
     public function __call($method, $args)
     {
@@ -91,28 +91,28 @@ abstract class RelationModel extends Model
         if (!empty($this->_link)) {
             foreach ($this->_link as $key => $val) {
                 // 映射名称
-                $mappingName = !empty($val['mapping_name']) ? $val['mapping_name'] : $key;
+                $mappingName = $val['mapping_name'] ?? $key;
                 if (empty($name) || true === $name || $mappingName == $name || (is_array($name) && in_array(
                             $mappingName,
                             $name
                         ))
                 ) {
                     //  关联类型
-                    $mappingType = !empty($val['mapping_type']) ? $val['mapping_type'] : $val;
+                    $mappingType = $val['mapping_type'] ?? $val;
                     //  关联类名
-                    $mappingClass = !empty($val['class_name']) ? $val['class_name'] : $key;
+                    $mappingClass = $val['class_name'] ?? $key;
                     // 映射字段
-                    $mappingFields = !empty($val['mapping_fields']) ? $val['mapping_fields'] : '*';
+                    $mappingFields = $val['mapping_fields'] ?? '*';
                     // 关联条件
-                    $mappingCondition = !empty($val['condition']) ? $val['condition'] : [];
+                    $mappingCondition = $val['condition'] ?? [];
                     // 关联键名
-                    $mappingKey = !empty($val['mapping_key']) ? $val['mapping_key'] : $this->getPk();
+                    $mappingKey = $val['mapping_key'] ?? $this->getPk();
                     if (strtoupper($mappingClass) == strtoupper($this->name)) {
                         // 自引用关联 获取父键名
-                        $mappingFk = !empty($val['parent_key']) ? $val['parent_key'] : 'parent_id';
+                        $mappingFk = $val['parent_key'] ?? 'parent_id';
                     } else {
                         //  关联外键
-                        $mappingFk = !empty($val['foreign_key']) ? $val['foreign_key'] : strtolower(
+                        $mappingFk = $val['foreign_key'] ?? strtolower(
                                 $this->name
                             ).'_id';
                     }
@@ -129,10 +129,10 @@ abstract class RelationModel extends Model
                         case static::BELONGS_TO:
                             if (strtoupper($mappingClass) == strtoupper($this->name)) {
                                 // 自引用关联 获取父键名
-                                $mappingFk = !empty($val['parent_key']) ? $val['parent_key'] : 'parent_id';
+                                $mappingFk = $val['parent_key'] ?? 'parent_id';
                             } else {
                                 //  关联外键
-                                $mappingFk = !empty($val['foreign_key']) ? $val['foreign_key'] : strtolower(
+                                $mappingFk = $val['foreign_key'] ?? strtolower(
                                         $model->getModelName()
                                     ).'_id';
                             }
@@ -145,8 +145,8 @@ abstract class RelationModel extends Model
                         case static::HAS_MANY:
                             $pk = $result[$mappingKey];
                             $mappingCondition[$mappingFk] = $pk;
-                            $mappingOrder = !empty($val['mapping_order']) ? $val['mapping_order'] : '';
-                            $mappingLimit = !empty($val['mapping_limit']) ? $val['mapping_limit'] : '';
+                            $mappingOrder = $val['mapping_order'] ?? '';
+                            $mappingLimit = $val['mapping_limit'] ?? '';
                             // 延时获取关联记录
                             $relationData = $model->where($mappingCondition)
                                 ->field($mappingFields)
@@ -160,7 +160,7 @@ abstract class RelationModel extends Model
                             $mappingCondition[$mappingFk] = $pk;
                             $mappingOrder = $val['mapping_order'];
                             $mappingLimit = $val['mapping_limit'];
-                            $mappingRelationFk = $val['relation_foreign_key'] ? $val['relation_foreign_key'] : $model->getModelName(
+                            $mappingRelationFk = $val['relation_foreign_key'] ?? $model->getModelName(
                                 ).'_id';
                             if (isset($val['relation_table'])) {
                                 $mappingRelationTable = preg_replace_callback(
@@ -229,8 +229,8 @@ abstract class RelationModel extends Model
      */
     public function getRelationTableName(Model $relation)
     {
-        $relationTable = !empty($this->tablePrefix) ? $this->tablePrefix : '';
-        $relationTable .= $this->tableName ? $this->tableName : $this->name;
+        $relationTable = $this->tablePrefix ?? '';
+        $relationTable .= $this->tableName ?? $this->name;
         $relationTable .= '_'.$relation->getModelName();
 
         return strtolower($relationTable);
@@ -339,10 +339,10 @@ abstract class RelationModel extends Model
                     $pk = $data[$mappingKey];
                     if (strtoupper($mappingClass) == strtoupper($this->name)) {
                         // 自引用关联 获取父键名
-                        $mappingFk = !empty($val['parent_key']) ? $val['parent_key'] : 'parent_id';
+                        $mappingFk = $val['parent_key'] ?? 'parent_id';
                     } else {
                         //  关联外键
-                        $mappingFk = !empty($val['foreign_key']) ? $val['foreign_key'] : strtolower(
+                        $mappingFk = $val['foreign_key'] ?? strtolower(
                                 $this->name
                             ).'_id';
                     }
@@ -354,7 +354,7 @@ abstract class RelationModel extends Model
                     }
                     // 获取关联model对象
                     $model = D($mappingClass);
-                    $mappingData = isset($data[$mappingName]) ? $data[$mappingName] : false;
+                    $mappingData = $data[$mappingName] ?? false;
                     if (!empty($mappingData) || $opType == 'DEL') {
                         switch ($mappingType) {
                             case static::HAS_ONE:
@@ -418,8 +418,7 @@ abstract class RelationModel extends Model
                                 break;
                             case static::MANY_TO_MANY:
                                 // 关联
-                                $mappingRelationFk = $val['relation_foreign_key'] ? $val['relation_foreign_key'] : $model->getModelName(
-                                    ).'_id';
+                                $mappingRelationFk = $val['relation_foreign_key'] ?? $model->getModelName().'_id';
                                 $prefix = $this->tablePrefix;
                                 if (isset($val['relation_table'])) {
                                     $mappingRelationTable = preg_replace_callback(

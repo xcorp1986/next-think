@@ -158,6 +158,7 @@ class Model
     /**
      * 取得DB类的实例对象
      * @param string $name 模型名称
+     * @throws BaseException
      */
     public function __construct($name = '')
     {
@@ -189,6 +190,7 @@ class Model
      * @param array $config 数据库连接信息
      *
      * @return $this
+     * @throws BaseException
      */
     public function connect($linkNum = 0, array $config = [])
     {
@@ -393,6 +395,7 @@ class Model
      * @param null $sepa 字段数据间隔符号 NULL返回数组
      *
      * @return mixed
+     * @throws BaseException
      */
     public function getField($field, $sepa = null)
     {
@@ -596,6 +599,7 @@ class Model
      * 查询数据
      * @param mixed $options 表达式参数
      * @return mixed
+     * @throws BaseException
      */
     public function find($options = null)
     {
@@ -644,7 +648,8 @@ class Model
         if (false === $resultSet) {
             return false;
         }
-        if (empty($resultSet)) {// 查询结果为空
+        // 查询结果为空
+        if (empty($resultSet)) {
             return null;
         }
         if (is_string($resultSet)) {
@@ -793,9 +798,10 @@ class Model
      * 新增数据
      * @param mixed $data 数据
      * @param array $options 表达式
-     * @param boolean $replace 是否replace
+     * @param bool $replace 是否replace
      *
      * @return mixed
+     * @throws BaseException
      */
     public function add($data = '', $options = [], $replace = false)
     {
@@ -918,6 +924,13 @@ class Model
     {
     }
 
+    /**
+     * @param array $dataList
+     * @param array $options
+     * @param bool $replace
+     * @return bool|mixed|string
+     * @throws BaseException
+     */
     public function addAll(array $dataList = [], array $options = [], $replace = false)
     {
         if (empty($dataList)) {
@@ -949,6 +962,7 @@ class Model
      * @param string $table 要插入的数据表名
      * @param array $options 表达式
      * @return bool
+     * @throws BaseException
      */
     public function selectAdd($fields = '', $table = '', $options = [])
     {
@@ -976,6 +990,7 @@ class Model
      * @param mixed $options 表达式
      *
      * @return mixed
+     * @throws BaseException
      */
     public function delete($options = [])
     {
@@ -1063,6 +1078,7 @@ class Model
     /**
      * 生成查询SQL 可用于子查询
      * @return string
+     * @throws BaseException
      */
     public function buildSql()
     {
@@ -1073,6 +1089,7 @@ class Model
      * 查询数据集
      * @param array $options 表达式参数
      * @return mixed
+     * @throws BaseException
      */
     public function select($options = [])
     {
@@ -1209,7 +1226,7 @@ class Model
      * @param int $step 写入步进值
      * @param int $lazyTime 延时时间(s)
      *
-     * @return false|integer
+     * @return false|int
      */
     protected function lazyWrite($guid, $step, $lazyTime)
     {
@@ -1244,6 +1261,7 @@ class Model
      * @param string $value 字段值
      *
      * @return bool
+     * @throws BaseException
      */
     public function setField($field, $value = '')
     {
@@ -1261,6 +1279,7 @@ class Model
      * @param mixed $data 数据
      * @param array $options 表达式
      * @return bool
+     * @throws BaseException
      */
     public function save($data = '', $options = [])
     {
@@ -1359,6 +1378,7 @@ class Model
      * @param int $lazyTime 延时时间(s)
      *
      * @return bool
+     * @throws BaseException
      */
     public function setDec($field, $step = 1, $lazyTime = 0)
     {
@@ -1383,6 +1403,7 @@ class Model
      * @param mixed $data 创建数据
      * @param string $type 状态
      * @return mixed
+     * @throws BaseException
      */
     public function create($data = '', $type = '')
     {
@@ -1470,12 +1491,13 @@ class Model
      * @param int $type 类型 0 写入 1 读取
      * @return array
      */
-    public function parseFieldsMap($data, $type = 1)
+    public function parseFieldsMap(array $data, $type = 1)
     {
         // 检查字段映射
         if (!empty($this->_map)) {
             foreach ($this->_map as $key => $val) {
-                if ($type == 1) { // 读取
+                // 读取
+                if ($type == 1) {
                     if (isset($data[$val])) {
                         $data[$key] = $data[$val];
                         unset($data[$val]);
@@ -1497,8 +1519,9 @@ class Model
      * @param array $data 创建数据
      * @param string $type 创建类型
      * @return bool
+     * @throws BaseException
      */
-    protected function autoValidation($data, $type)
+    protected function autoValidation(array $data, $type)
     {
         if (isset($this->options['validate']) && false === $this->options['validate']) {
             // 关闭自动验证
@@ -1569,8 +1592,9 @@ class Model
      * @param array $data 创建数据
      * @param array $val 验证因子
      * @return bool
+     * @throws BaseException
      */
-    protected function _validationField($data, $val)
+    protected function _validationField(array $data, array $val)
     {
         //当前字段已经有规则验证没有通过
         if ($this->patchValidate && isset($this->error[$val[0]])) {
@@ -1594,8 +1618,9 @@ class Model
      * @param array $data 创建数据
      * @param array $val 验证因子
      * @return bool
+     * @throws BaseException
      */
-    protected function _validationFieldItem($data, $val)
+    protected function _validationFieldItem(array $data, array $val)
     {
         switch (strtolower(trim($val[4]))) {
             // 使用函数进行验证
@@ -1755,10 +1780,10 @@ class Model
     /**
      * 自动表单令牌验证
      * @todo ajax无刷新多次提交暂不能满足
-     * @param $data
+     * @param array $data
      * @return bool
      */
-    public function autoCheckToken($data)
+    public function autoCheckToken(array $data)
     {
         // 支持使用token(false) 关闭令牌验证
         if (isset($this->options['token']) && !$this->options['token']) {
