@@ -1089,7 +1089,7 @@ abstract class Driver
     protected function parseSet($data)
     {
         foreach ($data as $key => $val) {
-            if (is_array($val) && 'exp' == $val[0]) {
+            if (is_array($val) && isset($val[0]) && 'exp' == $val[0]) {
                 $set[] = $this->parseKey($key).'='.$val[1];
             } elseif (is_null($val)) {
                 $set[] = $this->parseKey($key).'=NULL';
