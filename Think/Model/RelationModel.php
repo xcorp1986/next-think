@@ -330,11 +330,11 @@ abstract class RelationModel extends Model
                 ) {
                     // 操作制定的关联
                     //  关联类型
-                    $mappingType = !empty($val['mapping_type']) ? $val['mapping_type'] : $val;
+                    $mappingType = $val['mapping_type'] ?? $val;
                     //  关联类名
-                    $mappingClass = !empty($val['class_name']) ? $val['class_name'] : $key;
+                    $mappingClass = $val['class_name'] ?? $key;
                     // 关联键名
-                    $mappingKey = !empty($val['mapping_key']) ? $val['mapping_key'] : $this->getPk();
+                    $mappingKey = $val['mapping_key'] ?? $this->getPk();
                     // 当前数据对象主键值
                     $pk = $data[$mappingKey];
                     if (strtoupper($mappingClass) == strtoupper($this->name)) {
